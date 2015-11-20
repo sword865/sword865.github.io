@@ -46,15 +46,19 @@
 
 &lt;p&gt;在这个n维坐标系中，每个n-1维超平面都可一个用一个方程表示出来，这里设为。&lt;/p&gt;
 
-&lt;p&gt;&amp;nbsp;&lt;img src=&#34;http://sword865.com/blog/wp-content/ql-cache/quicklatex.com-d27c959f3a756918ba1b7c271c477f68_l3.png&#34; class=&#34;ql-img-inline-formula quicklatex-auto-format&#34; alt=&#34;&amp;#72;&amp;#40;&amp;#120;&amp;#41;&amp;#61;&amp;#97;&amp;#95;&amp;#123;&amp;#48;&amp;#125;&amp;#43;&amp;#115;&amp;#117;&amp;#109;&amp;#95;&amp;#123;&amp;#105;&amp;#61;&amp;#49;&amp;#125;&amp;#94;&amp;#123;&amp;#110;&amp;#125;&amp;#40;&amp;#97;&amp;#95;&amp;#123;&amp;#105;&amp;#125;&amp;#42;&amp;#120;&amp;#95;&amp;#123;&amp;#105;&amp;#125;&amp;#41;&#34; title=&#34;Rendered by QuickLaTeX.com&#34; height=&#34;20&#34; width=&#34;220&#34; style=&#34;vertical-align: -6px;&#34; /&gt;&lt;/p&gt;
+&lt;div&gt;$$H(x)=a_{0}+\sum_{i=1}^{n}(a_{i}*x_{i})$$&lt;/div&gt;
 
 &lt;p&gt;我们用一个变量Y表示一个点相对超平面的关系，在一侧为1.另一侧为-1.&lt;/p&gt;
 
 &lt;p&gt;可以证明:（证明过程略）&lt;/p&gt;
 
-&lt;p&gt;该平面在满足&lt;img src=&#34;http://sword865.com/blog/wp-content/ql-cache/quicklatex.com-c7e2be05f2c8695970cd424277218499_l3.png&#34; class=&#34;ql-img-inline-formula quicklatex-auto-format&#34; alt=&#34;&amp;#89;&amp;#95;&amp;#123;&amp;#105;&amp;#125;&amp;#72;&amp;#95;&amp;#40;&amp;#120;&amp;#95;&amp;#123;&amp;#105;&amp;#125;&amp;#41;&amp;#103;&amp;#101;&amp;#113;&amp;#32;&amp;#49;&#34; title=&#34;Rendered by QuickLaTeX.com&#34; height=&#34;21&#34; width=&#34;93&#34; style=&#34;vertical-align: -7px;&#34; /&gt;的约束下&lt;/p&gt;
+&lt;p&gt;该平面在满足下面的约束时：&lt;/p&gt;
 
-&lt;p&gt;极小化&lt;img src=&#34;http://sword865.com/blog/wp-content/ql-cache/quicklatex.com-93471a05a6a7ca3bff52580f03bf1a9d_l3.png&#34; class=&#34;ql-img-inline-formula quicklatex-auto-format&#34; alt=&#34;&amp;#40;&amp;#102;&amp;#114;&amp;#97;&amp;#99;&amp;#123;&amp;#49;&amp;#125;&amp;#123;&amp;#50;&amp;#125;&amp;#115;&amp;#117;&amp;#109;&amp;#95;&amp;#123;&amp;#106;&amp;#61;&amp;#49;&amp;#125;&amp;#94;&amp;#123;&amp;#110;&amp;#125;&amp;#40;&amp;#97;&amp;#95;&amp;#123;&amp;#106;&amp;#125;&amp;#94;&amp;#123;&amp;#50;&amp;#125;&amp;#41;&amp;#41;&#34; title=&#34;Rendered by QuickLaTeX.com&#34; height=&#34;23&#34; width=&#34;155&#34; style=&#34;vertical-align: -8px;&#34; /&gt;得到&lt;/p&gt;
+&lt;div&gt;$Y_{i}H_(x_{i})\geq 1$&lt;/div&gt;
+
+&lt;p&gt;极小化函数&lt;/p&gt;
+
+&lt;div&gt;$\frac{1}{2}\sum_{j=1}^{n}(a_{j}^{2})$&lt;/div&gt;
 
 &lt;p&gt;这是一个二次规划问题，我们对它求解就可以得到最优平面。&lt;/p&gt;
 
@@ -94,7 +98,7 @@
 
 &lt;p&gt;通过找到一个合适的映射，我们就可以前面的问题(2)了&lt;/p&gt;
 
-&lt;p&gt;这种映射称为核函数，核函数的选择是很有技巧的，它也有一些常见的模型，很多时候我们只要选择合适的模型并计算适当的参数就可以了。具体方法这里不说了，有兴趣的可以参见《[RBF核函数的支持向量机参数选择][2]》一文。&lt;/p&gt;
+&lt;p&gt;这种映射称为核函数，核函数的选择是很有技巧的，它也有一些常见的模型，很多时候我们只要选择合适的模型并计算适当的参数就可以了。具体方法这里不说了，有兴趣的可以参见《&lt;a href=&#34;http://download.csdn.net/source/1353188&#34;&gt;RBF核函数的支持向量机参数选择&lt;/a&gt;》一文。&lt;/p&gt;
 
 &lt;p&gt;找到核函数后，我们就完全解决上述问题了。&lt;/p&gt;
 
@@ -121,8 +125,6 @@
 &lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
   &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
 &lt;/p&gt;
-
-&lt;p&gt;[2]: &lt;a href=&#34;http://download.csdn.net/source/1353188&#34;&gt;http://download.csdn.net/source/1353188&lt;/a&gt;&lt;/p&gt;
 </description>
     </item>
     

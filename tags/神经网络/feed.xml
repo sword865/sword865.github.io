@@ -60,7 +60,7 @@
 
 &lt;p&gt;图示如下：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://upload.wikimedia.org/wikipedia/commons/9/97/Ncell.png&#34; alt=&#34;人工神经元&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img class=&#34;alignnone  wp-image-125&#34; src=&#34;http://upload.wikimedia.org/wikipedia/commons/9/97/Ncell.png&#34; alt=&#34;nn&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;a1~an为神经元的输入值&lt;/p&gt;
 
@@ -104,7 +104,7 @@
 
 &lt;p&gt;因此，MLP网络中至少有3个层次。&lt;/p&gt;
 
-&lt;p&gt;![][2]&lt;/p&gt;
+&lt;p&gt;&lt;img class=&#34;alignnone  wp-image-125&#34; src=&#34;http://pic002.cnblogs.com/images/2012/52809/2012063021381464.jpg&#34; alt=&#34;mlp&#34; /&gt;&lt;/p&gt;
 
 &lt;p align=&#34;center&#34;&gt;
   &amp;nbsp;
@@ -179,8 +179,6 @@
 &lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
   &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
 &lt;/p&gt;
-
-&lt;p&gt;[2]: &lt;a href=&#34;http://pic002.cnblogs.com/images/2012/52809/2012063021381464.jpg&#34;&gt;http://pic002.cnblogs.com/images/2012/52809/2012063021381464.jpg&lt;/a&gt;&lt;/p&gt;
 </description>
     </item>
     

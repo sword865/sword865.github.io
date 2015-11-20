@@ -22,6 +22,34 @@
 
   
   <link href="http://luosha865.github.io/index.xml" rel="alternate" type="application/rss+xml" title="悟剑阁" />
+
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    processEscapes: true
+    },
+  TeX: {
+              equationNumbers: {
+                  autoNumber: ["AMS"],
+                  useLabelIds: true
+              }
+          },
+          "HTML-CSS": {
+              linebreaks: {
+                  automatic: true
+              },
+              scale: 85
+          },
+          SVG: {
+              linebreaks: {
+                  automatic: true
+              }
+          }
+  });
+  </script>
+  <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
 </head>
 
 <body class="">
@@ -31,7 +59,7 @@
     <div class="sidebar-about">
       <a href="http://luosha865.github.io/"><h1>悟剑阁</h1></a>
       <p class="lead">
-      An elegant open source and mobile first theme for <a href="http://hugo.spf13.com">hugo</a> made by <a href="http://twitter.com/mdo">@mdo</a>. Originally made for Jekyll.
+       阁中悟剑，红尘练心。 
       </p>
     </div>
 
@@ -316,7 +344,7 @@ def start_serving(self, delegate):
 
 <p>最后抄一张图过来：</p>
 
-<p>[<img class="alignnone wp-image-108 size-large" src="http://sword865.com/blog/wp-content/uploads/2015/02/QQ20150205-1@2x-1024x593.png" alt="QQ20150205-1@2x" width="615" height="356" />][1]</p>
+<p><img class="alignnone wp-image-108 size-large" src="http://blog.sword865.com/wp-content/uploads/2015/02/QQ20150205-1@2x-1024x593.png" alt="QQ20150205-1@2x" width="615" height="356" />[1]</p>
 
 <p>参考：</p>
 
@@ -537,9 +565,7 @@ def start_serving(self, delegate):
 
 <p>每次传播(item-&gt;user-&gt;item)后用户Ui的兴趣向量：</p>
 
-<p class="ql-center-displayed-equation" style="line-height: 51px;">
-  <span class="ql-right-eqno"> &nbsp; </span><span class="ql-left-eqno"> &nbsp; </span><img src="http://blog.sword865.com/wp-content/ql-cache/quicklatex.com-72578d7b8cd811343615a8e13fcdbe2a_l3.png" height="51" width="259" class="ql-img-displayed-equation quicklatex-auto-format" alt="&#92;&#91;&#102;&#95;&#106;&#94;&#112;&#61;&#92;&#115;&#117;&#109;&#95;&#123;&#108;&#61;&#49;&#125;&#94;&#123;&#110;&#125;&#92;&#115;&#117;&#109;&#95;&#123;&#115;&#61;&#49;&#125;&#94;&#123;&#109;&#125;&#92;&#102;&#114;&#97;&#99;&#123;&#97;&#95;&#123;&#108;&#106;&#125;&#97;&#95;&#123;&#108;&#115;&#125;&#97;&#95;&#123;&#105;&#115;&#125;&#125;&#123;&#75;&#40;&#85;&#95;&#108;&#41;&#75;&#40;&#73;&#95;&#115;&#41;&#125;&#44;&#106;&#61;&#49;&#8230;&#109;&#92;&#93;" title="Rendered by QuickLaTeX.com" />
-</p>
+<div>$$f_j^p=\sum_{l=1}^{n}\sum_{s=1}^{m}\frac{a_{lj}a_{ls}a_{is}}{K(U_l)K(I_s)},j=1…m$$</div>
 
 <p>2.heat spreading</p>
 
@@ -547,13 +573,19 @@ def start_serving(self, delegate):
 
 <p>每次传播后用户Ui的兴趣向量：</p>
 
-<p class="ql-center-displayed-equation" style="line-height: 51px;">
-  <span class="ql-right-eqno"> &nbsp; </span><span class="ql-left-eqno"> &nbsp; </span><img src="http://blog.sword865.com/wp-content/ql-cache/quicklatex.com-b0998856c4f20c869185526c6f2d5dab_l3.png" height="51" width="281" class="ql-img-displayed-equation quicklatex-auto-format" alt="&#92;&#91;&#102;&#95;&#104;&#94;&#112;&#61;&#92;&#102;&#114;&#97;&#99;&#123;&#49;&#125;&#123;&#75;&#40;&#73;&#95;&#106;&#41;&#125;&#92;&#115;&#117;&#109;&#95;&#123;&#108;&#61;&#49;&#125;&#94;&#123;&#110;&#125;&#92;&#115;&#117;&#109;&#95;&#123;&#115;&#61;&#49;&#125;&#94;&#123;&#109;&#125;&#92;&#102;&#114;&#97;&#99;&#123;&#97;&#95;&#123;&#108;&#106;&#125;&#97;&#95;&#123;&#108;&#115;&#125;&#97;&#95;&#123;&#105;&#115;&#125;&#125;&#123;&#75;&#40;&#85;&#95;&#108;&#41;&#125;&#44;&#106;&#61;&#49;&#8230;&#109;&#92;&#93;" title="Rendered by QuickLaTeX.com" />
-</p>
+<div>$$f_h^p=\frac{1}{K(I_j)}\sum_{l=1}^{n}\sum_{s=1}^{m}\frac{a_{lj}a_{ls}a_{is}}{K(U_l)},j=1…m$$</div>
 
-<p>其中：<img src="http://blog.sword865.com/wp-content/ql-cache/quicklatex.com-b079522ca48af5742d3a92fad1cab60e_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#75;&#40;&#73;&#95;&#106;&#41;&#61;&#92;&#115;&#117;&#109;&#95;&#123;&#108;&#61;&#49;&#125;&#94;&#123;&#109;&#125;&#97;&#95;&#123;&#108;&#106;&#125;" title="Rendered by QuickLaTeX.com" height="20" width="133" style="vertical-align: -6px;" />是节目j的邻域大小，<img src="http://blog.sword865.com/wp-content/ql-cache/quicklatex.com-c00cedda4e5d5763a770835d673ba5c5_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#75;&#40;&#85;&#95;&#108;&#41;&#61;&#92;&#115;&#117;&#109;&#95;&#123;&#108;&#61;&#49;&#125;&#94;&#123;&#110;&#125;&#97;&#95;&#123;&#108;&#115;&#125;" title="Rendered by QuickLaTeX.com" height="20" width="135" style="vertical-align: -6px;" />是用户l的邻域大小。</p>
+<p>其中：</p>
 
-<p><img src="http://blog.sword865.com/wp-content/ql-cache/quicklatex.com-8b434a5adf074f8f0e25a42236e0c3ed_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#97;&#95;&#123;&#105;&#106;&#125;" title="Rendered by QuickLaTeX.com" height="14" width="20" style="vertical-align: -6px;" />是表示用户i和物品j之间是否有边存在的二元向量。</p>
+<div>$$K(I_j)=\sum_{l=1}^{m}a_{lj}$$</div>
+
+<p>是节目j的邻域大小，</p>
+
+<div>$$K(U_l)=\sum_{l=1}^{n}a_{ls}$$</div>
+
+<p>是用户l的邻域大小。</p>
+
+<p>$a_{ij}$是表示用户i和物品j之间是否有边存在的二元向量。</p>
 
 <p>相比之下，Heats算法倾向于降低热门item的权重，而Probs中与增强对热门item的推荐。</p>
 
@@ -565,11 +597,11 @@ def start_serving(self, delegate):
 
 <p>图中，用户i的每个item的权重（1 or 0）会同时像用户和标签进行传播，这样每次传播后的兴趣向量：</p>
 
-<p><img src="http://blog.sword865.com/wp-content/ql-cache/quicklatex.com-f78f41f2bf011c73a4bffd5e2472a3fe_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#102;&#95;&#106;&#94;&#116;&#61;&#92;&#108;&#97;&#109;&#98;&#100;&#97;&#32;&#102;&#95;&#106;&#94;&#112;&#32;&#43;&#32;&#40;&#49;&#45;&#92;&#108;&#97;&#109;&#98;&#100;&#97;&#41;&#32;&#102;&#95;&#106;&#94;&#123;&#112;&#116;&#125;" title="Rendered by QuickLaTeX.com" height="26" width="168" style="vertical-align: -8px;" />，其中<img src="http://blog.sword865.com/wp-content/ql-cache/quicklatex.com-2bde2cec73738ac0234706257f6dc449_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#102;&#95;&#106;&#94;&#112;" title="Rendered by QuickLaTeX.com" height="23" width="18" style="vertical-align: -8px;" />和<img src="http://blog.sword865.com/wp-content/ql-cache/quicklatex.com-71804ecfd1421a8904e2c9a4305983d6_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#102;&#95;&#106;&#94;&#123;&#112;&#116;&#125;" title="Rendered by QuickLaTeX.com" height="26" width="23" style="vertical-align: -8px;" />分别是从(item-&gt;user-&gt;item)和(item-&gt;tag-&gt;item)传播后得到的权重。</p>
+<p>$f_j^t=\lambda f_j^p + (1-\lambda) f_j^{pt}$，其中$f_j^p$和$f_j^{pt}$分别是从(item-&gt;user-&gt;item)和(item-&gt;tag-&gt;item)传播后得到的权重。</p>
 
 <p><span style="font-size: 14px;">二、矩阵分解的张量模型</span></p>
 
-<p>对三元阵<img src="http://blog.sword865.com/wp-content/ql-cache/quicklatex.com-067fe9c87c45494d6cab789cc05de1e9_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#89;&#95;&#123;&#40;&#110;&#92;&#116;&#105;&#109;&#101;&#115;&#32;&#109;&#92;&#116;&#105;&#109;&#101;&#115;&#32;&#116;&#41;&#125;" title="Rendered by QuickLaTeX.com" height="19" width="66" style="vertical-align: -7px;" />进行矩阵分解，C为核张量，U,I,T为用户特征，物品特征和标签特征矩阵。</p>
+<p>对三元阵$Y_{(n\times m\times t)}$进行矩阵分解，C为核张量，U,I,T为用户特征，物品特征和标签特征矩阵。</p>
 
 <p>根据分解结果对Y进行填充。</p>
 
@@ -612,7 +644,7 @@ def start_serving(self, delegate):
 
 <p><a href="http://images.cnitblog.com/blog/52809/201308/04011358-2e856d4483c64ef0a668ee8c8df2a548.png"><img style="background-image: none; padding-top: 0px; padding-left: 0px; display: inline; padding-right: 0px; border-width: 0px;" title="image" src="http://images.cnitblog.com/blog/52809/201308/04011359-6f55d3e1f55f4389979bec14102120b5.png" alt="image" width="187" height="39" border="0" /></a></p>
 
-<p>其中<img src="http://blog.sword865.com/wp-content/ql-cache/quicklatex.com-f489909a6f16a3b5a6ee23901d48d9b6_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#101;&#116;&#97;&#95;&#116;" title="Rendered by QuickLaTeX.com" height="12" width="14" style="vertical-align: -4px;" />是一个非增的学习率</p>
+<p>其中$\eta_t$是一个非增的学习率</p>
 
 <p>FTRL-Proximal通过下式迭代：</p>
 
@@ -620,7 +652,7 @@ def start_serving(self, delegate):
 
 <p>&nbsp;</p>
 
-<p>其中参数  <img src="http://blog.sword865.com/wp-content/ql-cache/quicklatex.com-a53d534bdda53a36b558f3ef61ab1d0f_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#115;&#105;&#103;&#109;&#97;&#95;&#115;" title="Rendered by QuickLaTeX.com" height="11" width="16" style="vertical-align: -3px;" />是学习率，一般我们有  <img src="http://blog.sword865.com/wp-content/ql-cache/quicklatex.com-a4b1e9e9035115afffdd00bcfa2f183c_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#115;&#117;&#109;&#95;&#123;&#115;&#61;&#49;&#125;&#94;&#116;&#92;&#115;&#105;&#103;&#109;&#97;&#95;&#115;&#61;&#92;&#102;&#114;&#97;&#99;&#123;&#49;&#125;&#123;&#92;&#101;&#116;&#97;&#95;&#116;&#125;" title="Rendered by QuickLaTeX.com" height="26" width="102" style="vertical-align: -9px;" />。</p>
+<p>参数$\sigma$是学习率，一般我们有 ${\sum_{s=1}^t\sigma_s=\frac{1}{\eta_t}}$。</p>
 
 <p>更新公式：</p>
 
@@ -630,11 +662,11 @@ def start_serving(self, delegate):
 
 <p><a href="http://images.cnitblog.com/blog/52809/201308/04011359-8100f10672694bffa4e1a46fc3b01719.png"><img style="background-image: none; padding-top: 0px; padding-left: 0px; display: inline; padding-right: 0px; border: 0px;" title="image" src="http://images.cnitblog.com/blog/52809/201308/04011400-cbd594724918403f8c25f0a88ee489ae.png" alt="image" width="428" height="368" border="0" /></a></p>
 
-<p>这里多个一个  <img src="http://blog.sword865.com/wp-content/ql-cache/quicklatex.com-8e8aa5c38c57b55921bdea4b91ec59b3_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#108;&#97;&#109;&#98;&#100;&#97;&#95;&#50;" title="Rendered by QuickLaTeX.com" height="16" width="17" style="vertical-align: -3px;" />是一个L2正则化参数。</p>
+<p>这里多个一个 $\lambda_2$ 是一个L2正则化参数。</p>
 
 <p>二、学习率</p>
 
-<p><img src="http://blog.sword865.com/wp-content/ql-cache/quicklatex.com-1c291523bb9229304e6ff8843fef467b_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#100;&#105;&#115;&#112;&#108;&#97;&#121;&#115;&#116;&#121;&#108;&#101;&#32;&#92;&#101;&#116;&#97;&#95;&#116;&#61;&#92;&#102;&#114;&#97;&#99;&#123;&#49;&#125;&#123;&#92;&#115;&#113;&#114;&#116;&#123;&#116;&#125;&#125;" title="Rendered by QuickLaTeX.com" height="40" width="62" style="vertical-align: -16px;" /></p>
+<p>$$\displaystyle \eta_t=\frac{1}{\sqrt{t}}$$</p>
 
 <p>由于在求解时，这样，对每一个坐标我们都使用了同样的参数，这样一些没有使用的坐标的参数也会下降，显然这不太合理。</p>
 
@@ -718,15 +750,13 @@ def start_serving(self, delegate):
 
 <p>矫正的数据<a href="http://images.cnitblog.com/blog/52809/201308/04011405-372b84501cc84940a965b739cf97a9d9.png"><img style="background-image: none; padding-top: 0px; padding-left: 0px; display: inline; padding-right: 0px; border: 0px;" title="image" src="http://images.cnitblog.com/blog/52809/201308/04011405-93a76b43c030441c9295ded6239bbb1c.png" alt="image" width="71" height="34" border="0" /></a>p是模型预测的CTR，d是一些训练数据。</p>
 
-<p>一个常用矫正：[<img style="background-image: none; padding-top: 0px; padding-left: 0px; margin: 0px; display: inline; padding-right: 0px; border: 0px;" title="image" src="http://images.cnitblog.com/blog/52809/201308/04011406-e83e0f3784944b10812b43ca5c74a2c4.png" alt="image" width="112" height="43" border="0" />][16]</p>
+<p>一个常用矫正：<a href="http://images.cnitblog.com/blog/52809/201308/04011406-75988e6dea0d4d83b698e96019c9753b.png"><img style="background-image: none; padding-top: 0px; padding-left: 0px; margin: 0px; display: inline; padding-right: 0px; border: 0px;" title="image" src="http://images.cnitblog.com/blog/52809/201308/04011406-e83e0f3784944b10812b43ca5c74a2c4.png" alt="image" width="112" height="43" border="0" /></a></p>
 
 <p>两个参数可以用Poisson regression在数据上训练。</p>
 
 <p style="margin:0;padding:0;height:1px;overflow:hidden;">
   <a href="http://www.wumii.com/widget/relatedItems" style="border:0;"><img src="http://static.wumii.cn/images/pixel.png" alt="无觅相关文章插件，快速提升流量" style="border:0;padding:0;margin:0;" /></a>
 </p>
-
-<p>[16]: <a href="http://images.cnitblog.com/blog/52809/201308/04011406-75988e6dea0d4d83b698e96019c9753b.png">http://images.cnitblog.com/blog/52809/201308/04011406-75988e6dea0d4d83b698e96019c9753b.png</a></p>
 
   </div>
   
@@ -1093,7 +1123,7 @@ def start_serving(self, delegate):
 
 <p>就从一个最简单的正态分布的方差已知时，求均值的置信区间开始吧。</p>
 
-<p>书上的公式告诉我们这个区间是 <img src="http://sword865.com/blog/wp-content/ql-cache/quicklatex.com-23dc436f241aa40067d71af513a9d926_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#111;&#118;&#101;&#114;&#108;&#105;&#110;&#101;&#123;&#120;&#125;&#92;&#112;&#109;&#40;&#92;&#115;&#105;&#103;&#109;&#97;&#47;&#92;&#115;&#113;&#114;&#116;&#123;&#110;&#125;&#41;&#122;&#95;&#123;&#40;&#49;&#45;&#92;&#115;&#105;&#103;&#109;&#97;&#47;&#50;&#41;&#125;" title="Rendered by QuickLaTeX.com" height="21" width="148" style="vertical-align: -7px;" />,其中Z<sub>p</sub>表示的是正态分布N(0,1)下侧的p分位数。</p>
+<p>书上的公式告诉我们这个区间是 $$\overline{x}\pm(\sigma/\sqrt{n})z_{(1-\sigma/2)}$$ ,其中Z<sub>p</sub>表示的是正态分布N(0,1)下侧的p分位数。</p>
 
 <p>我们用R来实现求得这一结果的过程。下面设x里存储了给出的样本，sigma表示已知的方差，n表示样本的个数， alpha则是(1-置信水平)</p>
 
@@ -1111,7 +1141,7 @@ ans&lt;-c(mean-sigma*qnorm(1-alpha / 2)/sqrt(n) , mean+sigma*qnorm(1-alpha / 2)/
 
 <p>第一个参数就不用解释了，第二,三个参数mean=0,sd=1，表示这是一个标准正态分布(不同于前面，这里增加了mean=和sd=，这种做法的好处是可以改变参数的顺序，但是结果是一样的)，最后一个参数lower.tail这个参数的意思就比较有意思了，官方解释如下：</p>
 
-<p>if TRUE (default), probabilities are <em>P[X &lt;= x]</em>, otherwise, <em>P[X &gt; x]</em>.</p>
+<p>if TRUE (default), probabilities are $P[X &lt;= x]$, otherwise, $P[X &gt; x]$.</p>
 
 <p>明白了么?等于真的话，得出的就是X&lt;=x的分位数，为假的话就是从X&gt;x的方法寻找这个值。一般我们用默认的真就可以了。</p>
 
@@ -1133,7 +1163,7 @@ z.test(x,10,1.5,0.05)</pre>
 
 <p>则返回置信区间：</p>
 
-<p>[1] 173.7703 175.6297</p>
+<p>[1]173.7703 175.6297</p>
 
 <p style="margin:0;padding:0;height:1px;overflow:hidden;">
   <a href="http://www.wumii.com/widget/relatedItems" style="border:0;"><img src="http://static.wumii.cn/images/pixel.png" alt="无觅相关文章插件，快速提升流量" style="border:0;padding:0;margin:0;" /></a>
@@ -1428,7 +1458,7 @@ predict(lm.sol,ex,interval="prediction",level=0.95)</pre>
 
 <p>MS3D全名为MilkShape3D，是一款简单小巧的3D可视化图形建模工具，可以简单的使用各种点、线面等基本图形元素组合建立模型，并进行贴图，分组。进一步的，该工具还支持简单的骨骼动画制作，是一款非常好用的3D图形构建工具。</p>
 
-<p><a href="http://blog.sword865.com/wp-content/uploads/2015/02/ms3d.jpg"><img class="alignnone  wp-image-125" src="http://blog.sword865.com/wp-content/uploads/2015/02/ms3d-300x164.jpg" alt="ms3d" width="428" height="234" /></a></p>
+<p>[<img class="alignnone  wp-image-125" src="http://blog.sword865.com/wp-content/uploads/2015/02/ms3d-300x164.jpg" alt="ms3d" width="428" height="234" />][1]</p>
 
 <p>在建立了MS3D中完成模型建立后可保存为.ms3d的文件格式，通过对该文件格式进行分析，就可以了解文件结构，以在程序中通过读取该文件重现所见模型。</p>
 
@@ -1560,19 +1590,17 @@ for ( int i = 0; i &lt; m_numMeshes; i++ )
 
 <p>通过这种方法，就可以在程序中绘制一个个的具体模型：</p>
 
-<p>[<img class="alignnone  wp-image-127" src="http://blog.sword865.com/wp-content/uploads/2015/02/ballfight-300x168.jpg" alt="ballfight" width="352" height="197" />][2]</p>
+<p><img class="alignnone  wp-image-127" src="http://blog.sword865.com/wp-content/uploads/2015/02/ballfight-300x168.jpg" alt="ballfight" width="352" height="197" /></p>
 
 <p>&nbsp;</p>
 
-<p><a href="http://blog.sina.com.cn/s/blog_62d98a550100g5hh.html">http://blog.sina.com.cn/s/blog_62d98a550100g5hh.html</a></p>
+<p>[1]<a href="http://blog.sina.com.cn/s/blog_62d98a550100g5hh.html">http://blog.sina.com.cn/s/blog_62d98a550100g5hh.html</a></p>
 
-<p><a href="http://www.yakergong.net/nehe/course/tutorial_31.html">http://www.yakergong.net/nehe/course/tutorial_31.html</a></p>
+<p>[2]<a href="http://www.yakergong.net/nehe/course/tutorial_31.html">http://www.yakergong.net/nehe/course/tutorial_31.html</a></p>
 
 <p style="margin:0;padding:0;height:1px;overflow:hidden;">
   <a href="http://www.wumii.com/widget/relatedItems" style="border:0;"><img src="http://static.wumii.cn/images/pixel.png" alt="无觅相关文章插件，快速提升流量" style="border:0;padding:0;margin:0;" /></a>
 </p>
-
-<p>[2]: <a href="http://blog.sword865.com/wp-content/uploads/2015/02/ballfight.jpg">http://blog.sword865.com/wp-content/uploads/2015/02/ballfight.jpg</a></p>
 
   </div>
   
@@ -1927,15 +1955,19 @@ for ( int i = 0; i &lt; m_numMeshes; i++ )
 
 <p>在这个n维坐标系中，每个n-1维超平面都可一个用一个方程表示出来，这里设为。</p>
 
-<p>&nbsp;<img src="http://sword865.com/blog/wp-content/ql-cache/quicklatex.com-d27c959f3a756918ba1b7c271c477f68_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#72;&#40;&#120;&#41;&#61;&#97;&#95;&#123;&#48;&#125;&#43;&#115;&#117;&#109;&#95;&#123;&#105;&#61;&#49;&#125;&#94;&#123;&#110;&#125;&#40;&#97;&#95;&#123;&#105;&#125;&#42;&#120;&#95;&#123;&#105;&#125;&#41;" title="Rendered by QuickLaTeX.com" height="20" width="220" style="vertical-align: -6px;" /></p>
+<div>$$H(x)=a_{0}+\sum_{i=1}^{n}(a_{i}*x_{i})$$</div>
 
 <p>我们用一个变量Y表示一个点相对超平面的关系，在一侧为1.另一侧为-1.</p>
 
 <p>可以证明:（证明过程略）</p>
 
-<p>该平面在满足<img src="http://sword865.com/blog/wp-content/ql-cache/quicklatex.com-c7e2be05f2c8695970cd424277218499_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#89;&#95;&#123;&#105;&#125;&#72;&#95;&#40;&#120;&#95;&#123;&#105;&#125;&#41;&#103;&#101;&#113;&#32;&#49;" title="Rendered by QuickLaTeX.com" height="21" width="93" style="vertical-align: -7px;" />的约束下</p>
+<p>该平面在满足下面的约束时：</p>
 
-<p>极小化<img src="http://sword865.com/blog/wp-content/ql-cache/quicklatex.com-93471a05a6a7ca3bff52580f03bf1a9d_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#40;&#102;&#114;&#97;&#99;&#123;&#49;&#125;&#123;&#50;&#125;&#115;&#117;&#109;&#95;&#123;&#106;&#61;&#49;&#125;&#94;&#123;&#110;&#125;&#40;&#97;&#95;&#123;&#106;&#125;&#94;&#123;&#50;&#125;&#41;&#41;" title="Rendered by QuickLaTeX.com" height="23" width="155" style="vertical-align: -8px;" />得到</p>
+<div>$Y_{i}H_(x_{i})\geq 1$</div>
+
+<p>极小化函数</p>
+
+<div>$\frac{1}{2}\sum_{j=1}^{n}(a_{j}^{2})$</div>
 
 <p>这是一个二次规划问题，我们对它求解就可以得到最优平面。</p>
 
@@ -1975,7 +2007,7 @@ for ( int i = 0; i &lt; m_numMeshes; i++ )
 
 <p>通过找到一个合适的映射，我们就可以前面的问题(2)了</p>
 
-<p>这种映射称为核函数，核函数的选择是很有技巧的，它也有一些常见的模型，很多时候我们只要选择合适的模型并计算适当的参数就可以了。具体方法这里不说了，有兴趣的可以参见《[RBF核函数的支持向量机参数选择][2]》一文。</p>
+<p>这种映射称为核函数，核函数的选择是很有技巧的，它也有一些常见的模型，很多时候我们只要选择合适的模型并计算适当的参数就可以了。具体方法这里不说了，有兴趣的可以参见《<a href="http://download.csdn.net/source/1353188">RBF核函数的支持向量机参数选择</a>》一文。</p>
 
 <p>找到核函数后，我们就完全解决上述问题了。</p>
 
@@ -2002,8 +2034,6 @@ for ( int i = 0; i &lt; m_numMeshes; i++ )
 <p style="margin:0;padding:0;height:1px;overflow:hidden;">
   <a href="http://www.wumii.com/widget/relatedItems" style="border:0;"><img src="http://static.wumii.cn/images/pixel.png" alt="无觅相关文章插件，快速提升流量" style="border:0;padding:0;margin:0;" /></a>
 </p>
-
-<p>[2]: <a href="http://download.csdn.net/source/1353188">http://download.csdn.net/source/1353188</a></p>
 
   </div>
   
@@ -2038,7 +2068,7 @@ for ( int i = 0; i &lt; m_numMeshes; i++ )
 
 <p>图示如下：</p>
 
-<p><img src="http://upload.wikimedia.org/wikipedia/commons/9/97/Ncell.png" alt="人工神经元" /></p>
+<p><img class="alignnone  wp-image-125" src="http://upload.wikimedia.org/wikipedia/commons/9/97/Ncell.png" alt="nn" /></p>
 
 <p>a1~an为神经元的输入值</p>
 
@@ -2082,7 +2112,7 @@ for ( int i = 0; i &lt; m_numMeshes; i++ )
 
 <p>因此，MLP网络中至少有3个层次。</p>
 
-<p>![][2]</p>
+<p><img class="alignnone  wp-image-125" src="http://pic002.cnblogs.com/images/2012/52809/2012063021381464.jpg" alt="mlp" /></p>
 
 <p align="center">
   &nbsp;
@@ -2157,8 +2187,6 @@ for ( int i = 0; i &lt; m_numMeshes; i++ )
 <p style="margin:0;padding:0;height:1px;overflow:hidden;">
   <a href="http://www.wumii.com/widget/relatedItems" style="border:0;"><img src="http://static.wumii.cn/images/pixel.png" alt="无觅相关文章插件，快速提升流量" style="border:0;padding:0;margin:0;" /></a>
 </p>
-
-<p>[2]: <a href="http://pic002.cnblogs.com/images/2012/52809/2012063021381464.jpg">http://pic002.cnblogs.com/images/2012/52809/2012063021381464.jpg</a></p>
 
   </div>
   
@@ -2298,8 +2326,6 @@ for ( int i = 0; i &lt; m_numMeshes; i++ )
 <p style="margin:0;padding:0;height:1px;overflow:hidden;">
   <a href="http://www.wumii.com/widget/relatedItems" style="border:0;"><img src="http://static.wumii.cn/images/pixel.png" alt="无觅相关文章插件，快速提升流量" style="border:0;padding:0;margin:0;" /></a>
 </p>
-
-<p>[2]: <a href="http://www.swordman865.cn/blog/?p=30">http://www.swordman865.cn/blog/?p=30</a></p>
 
   </div>
   

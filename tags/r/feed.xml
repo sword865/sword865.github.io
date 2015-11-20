@@ -20,7 +20,7 @@
 
 &lt;p&gt;就从一个最简单的正态分布的方差已知时，求均值的置信区间开始吧。&lt;/p&gt;
 
-&lt;p&gt;书上的公式告诉我们这个区间是 &lt;img src=&#34;http://sword865.com/blog/wp-content/ql-cache/quicklatex.com-23dc436f241aa40067d71af513a9d926_l3.png&#34; class=&#34;ql-img-inline-formula quicklatex-auto-format&#34; alt=&#34;&amp;#92;&amp;#111;&amp;#118;&amp;#101;&amp;#114;&amp;#108;&amp;#105;&amp;#110;&amp;#101;&amp;#123;&amp;#120;&amp;#125;&amp;#92;&amp;#112;&amp;#109;&amp;#40;&amp;#92;&amp;#115;&amp;#105;&amp;#103;&amp;#109;&amp;#97;&amp;#47;&amp;#92;&amp;#115;&amp;#113;&amp;#114;&amp;#116;&amp;#123;&amp;#110;&amp;#125;&amp;#41;&amp;#122;&amp;#95;&amp;#123;&amp;#40;&amp;#49;&amp;#45;&amp;#92;&amp;#115;&amp;#105;&amp;#103;&amp;#109;&amp;#97;&amp;#47;&amp;#50;&amp;#41;&amp;#125;&#34; title=&#34;Rendered by QuickLaTeX.com&#34; height=&#34;21&#34; width=&#34;148&#34; style=&#34;vertical-align: -7px;&#34; /&gt;,其中Z&lt;sub&gt;p&lt;/sub&gt;表示的是正态分布N(0,1)下侧的p分位数。&lt;/p&gt;
+&lt;p&gt;书上的公式告诉我们这个区间是 $$\overline{x}\pm(\sigma/\sqrt{n})z_{(1-\sigma/2)}$$ ,其中Z&lt;sub&gt;p&lt;/sub&gt;表示的是正态分布N(0,1)下侧的p分位数。&lt;/p&gt;
 
 &lt;p&gt;我们用R来实现求得这一结果的过程。下面设x里存储了给出的样本，sigma表示已知的方差，n表示样本的个数， alpha则是(1-置信水平)&lt;/p&gt;
 
@@ -38,7 +38,7 @@ ans&amp;lt;-c(mean-sigma*qnorm(1-alpha / 2)/sqrt(n) , mean+sigma*qnorm(1-alpha /
 
 &lt;p&gt;第一个参数就不用解释了，第二,三个参数mean=0,sd=1，表示这是一个标准正态分布(不同于前面，这里增加了mean=和sd=，这种做法的好处是可以改变参数的顺序，但是结果是一样的)，最后一个参数lower.tail这个参数的意思就比较有意思了，官方解释如下：&lt;/p&gt;
 
-&lt;p&gt;if TRUE (default), probabilities are &lt;em&gt;P[X &amp;lt;= x]&lt;/em&gt;, otherwise, &lt;em&gt;P[X &amp;gt; x]&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;if TRUE (default), probabilities are $P[X &amp;lt;= x]$, otherwise, $P[X &amp;gt; x]$.&lt;/p&gt;
 
 &lt;p&gt;明白了么?等于真的话，得出的就是X&amp;lt;=x的分位数，为假的话就是从X&amp;gt;x的方法寻找这个值。一般我们用默认的真就可以了。&lt;/p&gt;
 
@@ -60,7 +60,7 @@ z.test(x,10,1.5,0.05)&lt;/pre&gt;
 
 &lt;p&gt;则返回置信区间：&lt;/p&gt;
 
-&lt;p&gt;[1] 173.7703 175.6297&lt;/p&gt;
+&lt;p&gt;[1]173.7703 175.6297&lt;/p&gt;
 
 &lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
   &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
