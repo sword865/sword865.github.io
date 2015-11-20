@@ -1,0 +1,764 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>编译原理 on 悟剑阁</title>
+    <link>http://luosha865.github.io/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/</link>
+    <description>Recent content in 编译原理 on 悟剑阁</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <copyright>Copyright (c) 2015. All rights reserved.</copyright>
+    <lastBuildDate>Sat, 14 Mar 2009 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://luosha865.github.io/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/feed/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>编译原理虎书java版本–Chapter 2-3</title>
+      <link>http://luosha865.github.io/archives/25</link>
+      <pubDate>Sat, 14 Mar 2009 00:00:00 +0000</pubDate>
+      
+      <guid>http://luosha865.github.io/archives/25</guid>
+      <description>&lt;p&gt;options {&lt;/p&gt;
+
+&lt;p&gt;JAVA_UNICODE_ESCAPE = true;&lt;/p&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;p&gt;PARSER_BEGIN(MiniJavaParser)&lt;/p&gt;
+
+&lt;p&gt;public class MiniJavaParser {}&lt;/p&gt;
+
+&lt;p&gt;PARSER_END(MiniJavaParser)&lt;/p&gt;
+
+&lt;p&gt;// Insert a specification of a lexical analysis here.&lt;/p&gt;
+
+&lt;p&gt;TOKEN :&lt;/p&gt;
+
+&lt;p&gt;{&lt;/p&gt;
+
+&lt;p&gt;&amp;lt; LPAREN: &amp;#8220;(&amp;#8221; &amp;gt;&lt;/p&gt;
+
+&lt;p&gt;| &amp;lt; RPAREN: &amp;#8220;)&amp;#8221; &amp;gt;&lt;/p&gt;
+
+&lt;p&gt;| &amp;lt; LSQPAREN: &amp;#8220;[&amp;#8221; &amp;gt;&lt;/p&gt;
+
+&lt;p&gt;| &amp;lt; RSQPAREN: &amp;#8220;]&amp;#8221; &amp;gt;&lt;/p&gt;
+
+&lt;p&gt;| &amp;lt; LBRACE: &amp;#8220;{&amp;#8221; &amp;gt;&lt;/p&gt;
+
+&lt;p&gt;| &amp;lt; RBRACE: &amp;#8220;}&amp;#8221; &amp;gt;&lt;/p&gt;
+
+&lt;p&gt;| &amp;lt; DOT: &amp;#8220;.&amp;#8221; &amp;gt;&lt;/p&gt;
+
+&lt;p&gt;| &amp;lt; ASSIGN: &amp;#8220;=&amp;#8221; &amp;gt;&lt;/p&gt;
+
+&lt;p&gt;| &amp;lt; LT: &amp;#8220;&amp;lt;&amp;#8221; &amp;gt;&lt;/p&gt;
+
+&lt;p&gt;| &amp;lt; PLUS: &amp;#8220;+&amp;#8221; &amp;gt;&lt;/p&gt;
+
+&lt;p&gt;| &amp;lt; MINUS: &amp;#8220;-&amp;#8221; &amp;gt;&lt;/p&gt;
+
+&lt;p&gt;| &amp;lt; AND : &amp;#8220;&amp;amp;&amp;amp;&amp;#8221; &amp;gt;&lt;/p&gt;
+
+&lt;p&gt;| &amp;lt; NOT : &amp;#8220;!&amp;#8221; &amp;gt;&lt;/p&gt;
+
+&lt;p&gt;| &amp;lt; SEMICOLON: &amp;#8220;;&amp;#8221; &amp;gt;&lt;/p&gt;
+
+&lt;p&gt;| &amp;lt; PUBLIC: &amp;#8220;public&amp;#8221; &amp;gt;&lt;/p&gt;
+
+&lt;p&gt;| &amp;lt; RETURN: &amp;#8220;return&amp;#8221; &amp;gt;&lt;/p&gt;
+
+&lt;p&gt;| &amp;lt; BOOLEAN: &amp;#8220;boolean&amp;#8221; &amp;gt;&lt;/p&gt;
+
+&lt;p&gt;| &amp;lt; CLASS: &amp;#8220;class&amp;#8221; &amp;gt;&lt;/p&gt;
+
+&lt;p&gt;| &amp;lt; INTERFACE: &amp;#8220;interface&amp;#8221; &amp;gt;&lt;/p&gt;
+
+&lt;p&gt;| &amp;lt; ELSE: &amp;#8220;else&amp;#8221; &amp;gt;&lt;/p&gt;
+
+&lt;p&gt;| &amp;lt; EXTENDS: &amp;#8220;extends&amp;#8221; &amp;gt;&lt;/p&gt;
+
+&lt;p&gt;| &amp;lt; FALSE: &amp;#8220;false&amp;#8221; &amp;gt;&lt;/p&gt;
+
+&lt;p&gt;| &amp;lt; IF: &amp;#8220;if&amp;#8221; &amp;gt;&lt;/p&gt;
+
+&lt;p&gt;| &amp;lt; WHILE: &amp;#8220;while&amp;#8221; &amp;gt;&lt;/p&gt;
+
+&lt;p&gt;| &amp;lt; INTEGER: &amp;#8220;int&amp;#8221; &amp;gt;&lt;/p&gt;
+
+&lt;p&gt;| &amp;lt; LENGTH: &amp;#8220;length&amp;#8221; &amp;gt;&lt;/p&gt;
+
+&lt;p&gt;| &amp;lt; MAIN: &amp;#8220;main&amp;#8221; &amp;gt;&lt;/p&gt;
+
+&lt;p&gt;| &amp;lt; NEW: &amp;#8220;new&amp;#8221; &amp;gt;&lt;/p&gt;
+
+&lt;p&gt;| &amp;lt; STATIC: &amp;#8220;static&amp;#8221; &amp;gt;&lt;/p&gt;
+
+&lt;p&gt;| &amp;lt; STRING: &amp;#8220;String&amp;#8221; &amp;gt;&lt;/p&gt;
+
+&lt;p&gt;| &amp;lt; THIS: &amp;#8220;this&amp;#8221; &amp;gt;&lt;/p&gt;
+
+&lt;p&gt;| &amp;lt; TRUE: &amp;#8220;true&amp;#8221; &amp;gt;&lt;/p&gt;
+
+&lt;p&gt;| &amp;lt; PRINT: &amp;#8220;System.out.println&amp;#8221; &amp;gt;&lt;/p&gt;
+
+&lt;p&gt;| &amp;lt; VOID: &amp;#8220;void&amp;#8221; &amp;gt;&lt;/p&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;p&gt;TOKEN : /* LITERALS */&lt;/p&gt;
+
+&lt;p&gt;{&lt;/p&gt;
+
+&lt;p&gt;&amp;lt; INTEGER_LITERAL: ( [&amp;#8220;1&amp;#8243;-&amp;#8220;9&amp;#8243;] ([&amp;#8220;0&amp;#8243;-&amp;#8220;9&amp;#8243;])* | &amp;#8220;0&amp;#8221; ) &amp;gt;&lt;/p&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;p&gt;TOKEN : /* IDENTIFIERS */&lt;/p&gt;
+
+&lt;p&gt;{&lt;/p&gt;
+
+&lt;p&gt;&amp;lt; IDENTIFIER: &lt;LETTER&gt; (&lt;LETTER&gt;|&lt;DIGIT&gt;)* &amp;gt;&lt;/p&gt;
+
+&lt;p&gt;|&lt;/p&gt;
+
+&lt;p&gt;&amp;lt; #LETTER:&lt;/p&gt;
+
+&lt;p&gt;[&lt;/p&gt;
+
+&lt;p&gt;&amp;#8220;u0024&amp;#8243;,&lt;/p&gt;
+
+&lt;p&gt;&amp;#8220;u0041&amp;#8243;-&amp;#8220;u005a&amp;#8221;,&lt;/p&gt;
+
+&lt;p&gt;&amp;#8220;u005f&amp;#8221;,&lt;/p&gt;
+
+&lt;p&gt;&amp;#8220;u0061&amp;#8243;-&amp;#8220;u007a&amp;#8221;,&lt;/p&gt;
+
+&lt;p&gt;&amp;#8220;u00c0&amp;#8243;-&amp;#8220;u00d6&amp;#8243;,&lt;/p&gt;
+
+&lt;p&gt;&amp;#8220;u00d8&amp;#8243;-&amp;#8220;u00f6&amp;#8243;,&lt;/p&gt;
+
+&lt;p&gt;&amp;#8220;u00f8&amp;#8243;-&amp;#8220;u00ff&amp;#8221;,&lt;/p&gt;
+
+&lt;p&gt;&amp;#8220;u0100&amp;#8243;-&amp;#8220;u1fff&amp;#8221;,&lt;/p&gt;
+
+&lt;p&gt;&amp;#8220;u3040&amp;#8243;-&amp;#8220;u318f&amp;#8221;,&lt;/p&gt;
+
+&lt;p&gt;&amp;#8220;u3300&amp;#8243;-&amp;#8220;u337f&amp;#8221;,&lt;/p&gt;
+
+&lt;p&gt;&amp;#8220;u3400&amp;#8243;-&amp;#8220;u3d2d&amp;#8221;,&lt;/p&gt;
+
+&lt;p&gt;&amp;#8220;u4e00&amp;#8243;-&amp;#8220;u9fff&amp;#8221;,&lt;/p&gt;
+
+&lt;p&gt;&amp;#8220;uf900&amp;#8243;-&amp;#8220;ufaff&amp;#8221;&lt;/p&gt;
+
+&lt;p&gt;]&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;|&lt;/p&gt;
+
+&lt;p&gt;&amp;lt; #DIGIT:&lt;/p&gt;
+
+&lt;p&gt;[&lt;/p&gt;
+
+&lt;p&gt;&amp;#8220;u0030&amp;#8243;-&amp;#8220;u0039&amp;#8243;,&lt;/p&gt;
+
+&lt;p&gt;&amp;#8220;u0660&amp;#8243;-&amp;#8220;u0669&amp;#8243;,&lt;/p&gt;
+
+&lt;p&gt;&amp;#8220;u06f0&amp;#8243;-&amp;#8220;u06f9&amp;#8243;,&lt;/p&gt;
+
+&lt;p&gt;&amp;#8220;u0966&amp;#8243;-&amp;#8220;u096f&amp;#8221;,&lt;/p&gt;
+
+&lt;p&gt;&amp;#8220;u09e6&amp;#8243;-&amp;#8220;u09ef&amp;#8221;,&lt;/p&gt;
+
+&lt;p&gt;&amp;#8220;u0a66&amp;#8243;-&amp;#8220;u0a6f&amp;#8221;,&lt;/p&gt;
+
+&lt;p&gt;&amp;#8220;u0ae6&amp;#8243;-&amp;#8220;u0aef&amp;#8221;,&lt;/p&gt;
+
+&lt;p&gt;&amp;#8220;u0b66&amp;#8243;-&amp;#8220;u0b6f&amp;#8221;,&lt;/p&gt;
+
+&lt;p&gt;&amp;#8220;u0be7&amp;#8243;-&amp;#8220;u0bef&amp;#8221;,&lt;/p&gt;
+
+&lt;p&gt;&amp;#8220;u0c66&amp;#8243;-&amp;#8220;u0c6f&amp;#8221;,&lt;/p&gt;
+
+&lt;p&gt;&amp;#8220;u0ce6&amp;#8243;-&amp;#8220;u0cef&amp;#8221;,&lt;/p&gt;
+
+&lt;p&gt;&amp;#8220;u0d66&amp;#8243;-&amp;#8220;u0d6f&amp;#8221;,&lt;/p&gt;
+
+&lt;p&gt;&amp;#8220;u0e50&amp;#8243;-&amp;#8220;u0e59&amp;#8243;,&lt;/p&gt;
+
+&lt;p&gt;&amp;#8220;u0ed0&amp;#8243;-&amp;#8220;u0ed9&amp;#8243;,&lt;/p&gt;
+
+&lt;p&gt;&amp;#8220;u1040&amp;#8243;-&amp;#8220;u1049&amp;#8243;&lt;/p&gt;
+
+&lt;p&gt;]&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;p&gt;SKIP :&lt;/p&gt;
+
+&lt;p&gt;{&lt;/p&gt;
+
+&lt;p&gt;&amp;lt; &amp;#8221; &amp;#8221; &amp;gt;&lt;/p&gt;
+
+&lt;p&gt;| &amp;lt; &amp;#8220;t&amp;#8221; &amp;gt;&lt;/p&gt;
+
+&lt;p&gt;| &amp;lt; &amp;#8220;n&amp;#8221; &amp;gt;&lt;/p&gt;
+
+&lt;p&gt;| &amp;lt; &amp;#8220;r&amp;#8221; &amp;gt;&lt;/p&gt;
+
+&lt;p&gt;| &amp;lt; &amp;#8220;//&amp;#8221; (~[&amp;#8220;n&amp;#8221;])* &amp;#8220;n&amp;#8221; &amp;gt;&lt;/p&gt;
+
+&lt;p&gt;| &amp;lt;&amp;#8220;/*&amp;#8221; (~[&amp;#8220;*&amp;#8221;])* &amp;#8220;*&amp;#8221; (~[&amp;#8220;/&amp;#8221;] (~[&amp;#8220;*&amp;#8221;])* &amp;#8220;*&amp;#8221;)* &amp;#8220;/&amp;#8221;&amp;gt;&lt;/p&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;p&gt;// The following is a simple grammar that will allow you&lt;/p&gt;
+
+&lt;p&gt;// to test the generated lexer.&lt;/p&gt;
+
+&lt;p&gt;void Program() :&lt;/p&gt;
+
+&lt;p&gt;{}&lt;/p&gt;
+
+&lt;p&gt;{&lt;/p&gt;
+
+&lt;p&gt;MainClass() (ClassDecl())*&lt;/p&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;p&gt;void MainClass() :&lt;/p&gt;
+
+&lt;p&gt;{}&lt;/p&gt;
+
+&lt;p&gt;{&lt;/p&gt;
+
+&lt;p&gt;&amp;#8220;class&amp;#8221; &lt;IDENTIFIER&gt; &amp;#8220;{&amp;#8221; &amp;#8220;public&amp;#8221; &amp;#8220;static&amp;#8221; &amp;#8220;void&amp;#8221; &amp;#8220;main&amp;#8221; &amp;#8220;(&amp;#8221; &amp;#8220;String&amp;#8221; &amp;#8220;[&amp;#8221; &amp;#8220;]&amp;#8221; &lt;IDENTIFIER&gt; &amp;#8220;{&amp;#8221; Statement() &amp;#8220;}&amp;#8221; &amp;#8220;}&amp;#8221;&lt;/p&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;p&gt;void ext() :&lt;/p&gt;
+
+&lt;p&gt;{}&lt;/p&gt;
+
+&lt;p&gt;{&lt;/p&gt;
+
+&lt;p&gt;(&amp;#8220;extends&amp;#8221;  &lt;IDENTIFIER&gt; )?&lt;/p&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;p&gt;void ClassDecl() :&lt;/p&gt;
+
+&lt;p&gt;{}&lt;/p&gt;
+
+&lt;p&gt;{&lt;/p&gt;
+
+&lt;p&gt;&amp;#8220;class&amp;#8221; &lt;IDENTIFIER&gt; ext()  &amp;#8220;{&amp;#8221; (VarDecl())* (MethodDecl())* &amp;#8220;}&amp;#8221;&lt;/p&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;p&gt;void VarDecl():&lt;/p&gt;
+
+&lt;p&gt;{}&lt;/p&gt;
+
+&lt;p&gt;{ Type() &lt;IDENTIFIER&gt; &amp;#8220;;&amp;#8221;}&lt;/p&gt;
+
+&lt;p&gt;void MethodDecl():&lt;/p&gt;
+
+&lt;p&gt;{}&lt;/p&gt;
+
+&lt;p&gt;{&amp;#8220;public&amp;#8221; Type() &lt;IDENTIFIER&gt;&lt;/p&gt;
+
+&lt;p&gt;&amp;#8220;(&amp;#8221; FormaList() &amp;#8220;)&amp;#8221;&lt;/p&gt;
+
+&lt;p&gt;&amp;#8220;{&amp;#8221; ( LOOKAHEAD(2) VarDecl() )* (Statement())*  &amp;#8220;return&amp;#8221; Exp() &amp;#8220;;&amp;#8221; &amp;#8220;}&amp;#8221;&lt;/p&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;p&gt;&amp;nbsp;&lt;/p&gt;
+
+&lt;p&gt;void FormaList():&lt;/p&gt;
+
+&lt;p&gt;{}&lt;/p&gt;
+
+&lt;p&gt;{(Type()  &lt;IDENTIFIER&gt; &amp;#8220;FormalRest()&amp;#8221;)?}&lt;/p&gt;
+
+&lt;p&gt;void FormaRest():&lt;/p&gt;
+
+&lt;p&gt;{}&lt;/p&gt;
+
+&lt;p&gt;{&amp;#8220;,&amp;#8221; Type() &lt;IDENTIFIER&gt;}&lt;/p&gt;
+
+&lt;p&gt;void Type():&lt;/p&gt;
+
+&lt;p&gt;{}&lt;/p&gt;
+
+&lt;p&gt;{&lt;IDENTIFIER&gt;&lt;/p&gt;
+
+&lt;p&gt;|&amp;#8221;boolean&amp;#8221;&lt;/p&gt;
+
+&lt;p&gt;|LOOKAHEAD(2)&lt;/p&gt;
+
+&lt;p&gt;&amp;#8220;int&amp;#8221;&lt;/p&gt;
+
+&lt;p&gt;|&amp;#8221;int&amp;#8221; &amp;#8220;[&amp;#8221; &amp;#8220;]&amp;#8221;&lt;/p&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;p&gt;void Statement():&lt;/p&gt;
+
+&lt;p&gt;{}&lt;/p&gt;
+
+&lt;p&gt;{&amp;#8220;{&amp;#8221; (Statement())* &amp;#8220;}&amp;#8221;&lt;/p&gt;
+
+&lt;p&gt;|&amp;#8221;while&amp;#8221; &amp;#8220;(&amp;#8221; Exp() &amp;#8220;)&amp;#8221; Statement()&lt;/p&gt;
+
+&lt;p&gt;|&amp;#8221;System.out.println&amp;#8221;  &amp;#8220;(&amp;#8221; Exp() &amp;#8220;)&amp;#8221;&lt;/p&gt;
+
+&lt;p&gt;|&lt;IDENTIFIER&gt; instat1() &amp;#8220;=&amp;#8221; Exp() &amp;#8220;;&amp;#8221;&lt;/p&gt;
+
+&lt;p&gt;|&amp;#8221;if&amp;#8221; &amp;#8220;(&amp;#8221; Exp() &amp;#8220;)&amp;#8221; Statement() inif()&lt;/p&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;p&gt;void inif():&lt;/p&gt;
+
+&lt;p&gt;{}&lt;/p&gt;
+
+&lt;p&gt;{(LOOKAHEAD(2) &amp;#8220;else&amp;#8221; Statement())?}&lt;/p&gt;
+
+&lt;p&gt;void instat1():&lt;/p&gt;
+
+&lt;p&gt;{}&lt;/p&gt;
+
+&lt;p&gt;{(&amp;#8220;[&amp;#8221; Exp() &amp;#8220;]&amp;#8221;)?}&lt;/p&gt;
+
+&lt;p&gt;void Exp():&lt;/p&gt;
+
+&lt;p&gt;{}&lt;/p&gt;
+
+&lt;p&gt;{Expa() (LOOKAHEAD(2) (Expb()))?&lt;/p&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;p&gt;void Expa():&lt;/p&gt;
+
+&lt;p&gt;{}&lt;/p&gt;
+
+&lt;p&gt;{&amp;#8220;true&amp;#8221;&lt;/p&gt;
+
+&lt;p&gt;|&amp;#8221;false&amp;#8221;&lt;/p&gt;
+
+&lt;p&gt;|&lt;IDENTIFIER&gt;&lt;/p&gt;
+
+&lt;p&gt;|&amp;#8221;this&amp;#8221;&lt;/p&gt;
+
+&lt;p&gt;|&amp;#8221;!&amp;#8221; Exp()&lt;/p&gt;
+
+&lt;p&gt;|&amp;#8221;(&amp;#8221; Exp() &amp;#8220;)&amp;#8221;&lt;/p&gt;
+
+&lt;p&gt;|LOOKAHEAD(2)&lt;/p&gt;
+
+&lt;p&gt;&amp;#8220;new&amp;#8221; &amp;#8220;int&amp;#8221; &amp;#8220;[&amp;#8221; Exp() &amp;#8220;]&amp;#8221;&lt;/p&gt;
+
+&lt;p&gt;|&amp;#8221;new&amp;#8221; &lt;IDENTIFIER&gt; &amp;#8220;(&amp;#8221; &amp;#8220;)&amp;#8221;&lt;/p&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;p&gt;void Expb():&lt;/p&gt;
+
+&lt;p&gt;{}&lt;/p&gt;
+
+&lt;p&gt;{&lt;/p&gt;
+
+&lt;p&gt;op() Exp()&lt;/p&gt;
+
+&lt;p&gt;|&amp;#8221;[&amp;#8221; Exp() &amp;#8220;]&amp;#8221;Exp()&lt;/p&gt;
+
+&lt;p&gt;|LOOKAHEAD(2)&lt;/p&gt;
+
+&lt;p&gt;&amp;#8220;.&amp;#8221; &amp;#8220;length&amp;#8221;&lt;/p&gt;
+
+&lt;p&gt;|&amp;#8221;.&amp;#8221; &lt;IDENTIFIER&gt;&lt;/p&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;p&gt;void op():&lt;/p&gt;
+
+&lt;p&gt;{}&lt;/p&gt;
+
+&lt;p&gt;{&amp;#8220;&amp;amp;&amp;amp;&amp;#8221;&lt;/p&gt;
+
+&lt;p&gt;|&amp;#8221;&amp;lt;&amp;#8221;&lt;/p&gt;
+
+&lt;p&gt;|&amp;#8221;+&amp;#8221;&lt;/p&gt;
+
+&lt;p&gt;|&amp;#8221;-&amp;#8221;&lt;/p&gt;
+
+&lt;p&gt;|&amp;#8221;*&amp;#8221;}&lt;/p&gt;
+
+&lt;p&gt;&amp;nbsp;&lt;/p&gt;
+
+&lt;p&gt;void ExpList():&lt;/p&gt;
+
+&lt;p&gt;{}&lt;/p&gt;
+
+&lt;p&gt;{(Exp()  (ExpRest())*)?}&lt;/p&gt;
+
+&lt;p&gt;void ExpRest():&lt;/p&gt;
+
+&lt;p&gt;{}&lt;/p&gt;
+
+&lt;p&gt;{&amp;#8220;,&amp;#8221; Exp()}&lt;/p&gt;
+
+&lt;p&gt;void Goal() :&lt;/p&gt;
+
+&lt;p&gt;{}&lt;/p&gt;
+
+&lt;p&gt;{&lt;/p&gt;
+
+&lt;p&gt;( MiniJavaToken() )*&lt;/p&gt;
+
+&lt;p&gt;&lt;EOF&gt;&lt;/p&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;p&gt;void MiniJavaToken():&lt;/p&gt;
+
+&lt;p&gt;{}&lt;/p&gt;
+
+&lt;p&gt;{&lt;/p&gt;
+
+&lt;p&gt;&amp;#8220;class&amp;#8221;  |  &lt;IDENTIFIER&gt; | &amp;#8220;{&amp;#8221; | &amp;#8220;public&amp;#8221; | &amp;#8220;static&amp;#8221; | &amp;#8220;void&amp;#8221; |&lt;/p&gt;
+
+&lt;p&gt;&amp;#8220;main&amp;#8221; | &amp;#8220;(&amp;#8221; | &amp;#8220;String&amp;#8221;  | &amp;#8220;[&amp;#8221; | &amp;#8220;]&amp;#8221; | &amp;#8220;)&amp;#8221; | &amp;#8220;}&amp;#8221; | &amp;#8220;extends&amp;#8221; | &amp;#8220;;&amp;#8221;&lt;/p&gt;
+
+&lt;p&gt;| &amp;#8220;return&amp;#8221; | &amp;#8220;,&amp;#8221; | &amp;#8220;int&amp;#8221; | &amp;#8220;boolean&amp;#8221; | &amp;#8220;=&amp;#8221; | &amp;#8220;if&amp;#8221; | &amp;#8220;else&amp;#8221; | &amp;#8220;while&amp;#8221;&lt;/p&gt;
+
+&lt;p&gt;| &amp;#8220;System.out.println&amp;#8221; | &amp;#8220;&amp;amp;&amp;amp;&amp;#8221; | &amp;#8220;&amp;lt;&amp;#8221; | &amp;#8220;+&amp;#8221; | &amp;#8220;-&amp;#8221; | &amp;#8220;*&amp;#8221; | &amp;#8220;.&amp;#8221; |&lt;/p&gt;
+
+&lt;p&gt;&amp;#8220;length&amp;#8221; | &lt;INTEGER_LITERAL&gt; | &amp;#8220;true&amp;#8221; | &amp;#8220;false&amp;#8221; | &amp;#8220;this&amp;#8221; | &amp;#8220;new&amp;#8221; |&lt;/p&gt;
+
+&lt;p&gt;&amp;#8220;!&amp;#8221;&lt;/p&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;p&gt;&amp;nbsp;&lt;/p&gt;
+
+&lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
+  &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
+&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>编译原理虎书java版本–Chapter 1</title>
+      <link>http://luosha865.github.io/archives/28</link>
+      <pubDate>Sun, 08 Mar 2009 00:00:00 +0000</pubDate>
+      
+      <guid>http://luosha865.github.io/archives/28</guid>
+      <description>&lt;p&gt;Count.java&lt;/p&gt;
+
+&lt;p&gt;public class  Count&lt;/p&gt;
+
+&lt;p&gt;{&lt;/p&gt;
+
+&lt;p&gt;int resolveStm(Stm stm){&lt;/p&gt;
+
+&lt;p&gt;int temp1=0,temp2=0;&lt;/p&gt;
+
+&lt;p&gt;if(stm.kind==1){&lt;/p&gt;
+
+&lt;p&gt;temp1=resolveStm(((CompoundStm)stm).stm1);&lt;/p&gt;
+
+&lt;p&gt;temp2=resolveStm(((CompoundStm)stm).stm2);&lt;/p&gt;
+
+&lt;p&gt;return temp1&amp;gt;temp2? temp1:temp2;&lt;/p&gt;
+
+&lt;p&gt;}else if(stm.kind==2){&lt;/p&gt;
+
+&lt;p&gt;return resolveExp(((AssignStm)stm).exp);&lt;/p&gt;
+
+&lt;p&gt;}else if (stm.kind==3){&lt;/p&gt;
+
+&lt;p&gt;return countExpInExpList(((PrintStm)stm).exps);&lt;/p&gt;
+
+&lt;p&gt;}else{&lt;/p&gt;
+
+&lt;p&gt;return 0;&lt;/p&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;p&gt;int countExpInExpList(ExpList expList){&lt;/p&gt;
+
+&lt;p&gt;if(expList.kind==1){&lt;/p&gt;
+
+&lt;p&gt;return 1;&lt;/p&gt;
+
+&lt;p&gt;}else if(expList.kind==2){&lt;/p&gt;
+
+&lt;p&gt;return 1+countExpInExpList(((PairExpList)expList).tail);&lt;/p&gt;
+
+&lt;p&gt;}else{&lt;/p&gt;
+
+&lt;p&gt;return 0;&lt;/p&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;p&gt;int resolveExp(Exp exp){&lt;/p&gt;
+
+&lt;p&gt;int temp1,temp2;&lt;/p&gt;
+
+&lt;p&gt;if(exp.kind==1){&lt;/p&gt;
+
+&lt;p&gt;return 0;&lt;/p&gt;
+
+&lt;p&gt;}else if(exp.kind==2){&lt;/p&gt;
+
+&lt;p&gt;return 0;&lt;/p&gt;
+
+&lt;p&gt;}else if(exp.kind==3){&lt;/p&gt;
+
+&lt;p&gt;temp1 = resolveExp(((OpExp)exp).left);&lt;/p&gt;
+
+&lt;p&gt;temp2 = resolveExp(((OpExp)exp).right);&lt;/p&gt;
+
+&lt;p&gt;return temp1&amp;gt;temp2?temp1:temp2;&lt;/p&gt;
+
+&lt;p&gt;}else if(exp.kind==4){&lt;/p&gt;
+
+&lt;p&gt;temp1=resolveStm(((EseqExp)exp).stm);&lt;/p&gt;
+
+&lt;p&gt;temp2=resolveExp(((EseqExp)exp).exp);&lt;/p&gt;
+
+&lt;p&gt;return temp1&amp;gt;temp2?temp1:temp2;&lt;/p&gt;
+
+&lt;p&gt;}else{&lt;/p&gt;
+
+&lt;p&gt;return 0;&lt;/p&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;p&gt;int resolveExpList(ExpList expList){&lt;/p&gt;
+
+&lt;p&gt;int temp1,temp2;&lt;/p&gt;
+
+&lt;p&gt;if(expList.kind==2){&lt;/p&gt;
+
+&lt;p&gt;temp1 = resolveExp(((PairExpList)expList).head);&lt;/p&gt;
+
+&lt;p&gt;temp2 = resolveExpList(((PairExpList)expList).tail);&lt;/p&gt;
+
+&lt;p&gt;return temp1&amp;gt;temp2?temp1:temp2;&lt;/p&gt;
+
+&lt;p&gt;}else if(expList.kind==1){&lt;/p&gt;
+
+&lt;p&gt;return resolveExp(((LastExpList)expList).last);&lt;/p&gt;
+
+&lt;p&gt;}else{&lt;/p&gt;
+
+&lt;p&gt;return 0;&lt;/p&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;p&gt;Interp.java&lt;/p&gt;
+
+&lt;p&gt;public class  Interp&lt;/p&gt;
+
+&lt;p&gt;{&lt;/p&gt;
+
+&lt;p&gt;void startinterpStm(Stm stm){&lt;/p&gt;
+
+&lt;p&gt;Table t=new Table(null,0,null);&lt;/p&gt;
+
+&lt;p&gt;interpStm(stm,t);&lt;/p&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;p&gt;Table interpStm(Stm stm,Table t){&lt;/p&gt;
+
+&lt;p&gt;if(stm.kind==1){&lt;/p&gt;
+
+&lt;p&gt;Table t1=interpStm(((CompoundStm)stm).stm1,t);&lt;/p&gt;
+
+&lt;p&gt;Table t2=interpStm(((CompoundStm)stm).stm2,t1);&lt;/p&gt;
+
+&lt;p&gt;return t2;&lt;/p&gt;
+
+&lt;p&gt;}else if(stm.kind==2){&lt;/p&gt;
+
+&lt;p&gt;IntAndTable it1 = interExp(((AssignStm)stm).exp,t);&lt;/p&gt;
+
+&lt;p&gt;Table t1=update(it1.t,((AssignStm)stm).id,it1.i);&lt;/p&gt;
+
+&lt;p&gt;return t1;&lt;/p&gt;
+
+&lt;p&gt;}else if(stm.kind==3){&lt;/p&gt;
+
+&lt;p&gt;printExplist(((PrintStm)stm).exps,t);&lt;/p&gt;
+
+&lt;p&gt;return t;&lt;/p&gt;
+
+&lt;p&gt;}else{&lt;/p&gt;
+
+&lt;p&gt;return t;&lt;/p&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;p&gt;IntAndTable interExp(Exp exp,Table t){&lt;/p&gt;
+
+&lt;p&gt;if(exp.kind==1){&lt;/p&gt;
+
+&lt;p&gt;int temp=lookup(t,((IdExp)exp).id);&lt;/p&gt;
+
+&lt;p&gt;return new IntAndTable(temp,t);&lt;/p&gt;
+
+&lt;p&gt;}else if(exp.kind==2){&lt;/p&gt;
+
+&lt;p&gt;return new IntAndTable(((NumExp)exp).num,t);&lt;/p&gt;
+
+&lt;p&gt;}else if(exp.kind==3){&lt;/p&gt;
+
+&lt;p&gt;IntAndTable it1= interExp(((OpExp)exp).left,t);&lt;/p&gt;
+
+&lt;p&gt;IntAndTable it2= interExp(((OpExp)exp).right,it1.t);&lt;/p&gt;
+
+&lt;p&gt;int x1,x2,result;&lt;/p&gt;
+
+&lt;p&gt;x1=it1.i;&lt;/p&gt;
+
+&lt;p&gt;x2=it2.i;&lt;/p&gt;
+
+&lt;p&gt;if(((OpExp)exp).oper==1){&lt;/p&gt;
+
+&lt;p&gt;result=x1+x2;&lt;/p&gt;
+
+&lt;p&gt;}else if(((OpExp)exp).oper==2){&lt;/p&gt;
+
+&lt;p&gt;result=x1-x2;&lt;/p&gt;
+
+&lt;p&gt;}else if(((OpExp)exp).oper==3){&lt;/p&gt;
+
+&lt;p&gt;result=x1*x2;&lt;/p&gt;
+
+&lt;p&gt;}else if(((OpExp)exp).oper==4){&lt;/p&gt;
+
+&lt;p&gt;result=x1/x2;&lt;/p&gt;
+
+&lt;p&gt;}else{&lt;/p&gt;
+
+&lt;p&gt;result=0;&lt;/p&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;p&gt;return new IntAndTable(result,t);&lt;/p&gt;
+
+&lt;p&gt;}else if(exp.kind==4){&lt;/p&gt;
+
+&lt;p&gt;Table t1=interpStm(((EseqExp)exp).stm,t);&lt;/p&gt;
+
+&lt;p&gt;IntAndTable t3= interExp(((EseqExp)exp).exp,t1);&lt;/p&gt;
+
+&lt;p&gt;return t3;&lt;/p&gt;
+
+&lt;p&gt;}else{&lt;/p&gt;
+
+&lt;p&gt;return new IntAndTable(0,t);&lt;/p&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;p&gt;Table update(Table t1,String i,int v){&lt;/p&gt;
+
+&lt;p&gt;Table t2=new Table(i,v,t1);&lt;/p&gt;
+
+&lt;p&gt;return t2;&lt;/p&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;p&gt;int lookup(Table t,String key){&lt;/p&gt;
+
+&lt;p&gt;if(key.compareTo(t.id)==0){&lt;/p&gt;
+
+&lt;p&gt;return t.value;&lt;/p&gt;
+
+&lt;p&gt;}else return lookup(t.tail,key);&lt;/p&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;p&gt;void printExplist(ExpList exps,Table t){&lt;/p&gt;
+
+&lt;p&gt;if(exps.kind==1){&lt;/p&gt;
+
+&lt;p&gt;IntAndTable temp=interExp(((LastExpList)exps).last,t);&lt;/p&gt;
+
+&lt;p&gt;System.out.println(temp.i);&lt;/p&gt;
+
+&lt;p&gt;}else if(exps.kind==2){&lt;/p&gt;
+
+&lt;p&gt;IntAndTable temp=interExp(((PairExpList)exps).head,t);&lt;/p&gt;
+
+&lt;p&gt;System.out.print(temp.i+&amp;#8221; &amp;#8220;);&lt;/p&gt;
+
+&lt;p&gt;printExplist(((PairExpList)exps).tail,t);&lt;/p&gt;
+
+&lt;p&gt;}else return;&lt;/p&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;p&gt;// IntAndTable interExpList(ExpList explist,Table t){&lt;/p&gt;
+
+&lt;p&gt;// }&lt;/p&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;p&gt;class Table&lt;/p&gt;
+
+&lt;p&gt;{&lt;/p&gt;
+
+&lt;p&gt;String id;&lt;/p&gt;
+
+&lt;p&gt;int value;&lt;/p&gt;
+
+&lt;p&gt;Table tail;&lt;/p&gt;
+
+&lt;p&gt;Table(String i,int v,Table t){id=i;value=v;tail=t;}&lt;/p&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;p&gt;class IntAndTable&lt;/p&gt;
+
+&lt;p&gt;{&lt;/p&gt;
+
+&lt;p&gt;int i;&lt;/p&gt;
+
+&lt;p&gt;Table t;&lt;/p&gt;
+
+&lt;p&gt;IntAndTable(int ii,Table tt){i=ii;t=tt;};&lt;/p&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
+  &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
+&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
