@@ -1,0 +1,187 @@
+	<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.15-DEV" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title> 算法总结2—决策树分类器 &middot;  </title>
+
+  
+  <link rel="stylesheet" href="http://luosha865.github.io/css/poole.css">
+  <link rel="stylesheet" href="http://luosha865.github.io/css/syntax.css">
+  <link rel="stylesheet" href="http://luosha865.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="" />
+</head>
+
+	<body class="">
+		<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://luosha865.github.io/"><h1></h1></a>
+      <p class="lead">
+      An elegant open source and mobile first theme for <a href="http://hugo.spf13.com">hugo</a> made by <a href="http://twitter.com/mdo">@mdo</a>. Originally made for Jekyll.
+      </p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li><a href="/">Home</a> </li>
+      
+    </ul>
+
+    <p>&copy; 2015. All rights reserved. </p>
+  </div>
+</div>
+
+
+		<div class="content container">
+			<div class="post">
+			 	<h1>算法总结2—决策树分类器</h1>
+			  <span class="post-date">Sun, Sep 6, 2009</span>
+			      <p><strong>数学基础：</strong></p>
+
+<p>树：树是一种数据结构，它是由n（n&gt;=1）个有限结点组成一个具有层次关系的集合。把它叫做&ldquo;树&rdquo;是因为它看起来像一棵倒挂的树，也就是说它是根朝上，而叶朝下的。它具有以下的特点：</p>
+
+<p>每个结点有零个或多个子结点；</p>
+
+<p>每一个子结点只有一个父结点；</p>
+
+<p>没有前驱的结点为根结点；</p>
+
+<p>除了根结点外，每个子结点可以分为m个不相交的子树；</p>
+
+<p>没有子节点的节点称为叶节点。</p>
+
+<p>&nbsp;</p>
+
+<p><strong>决策树分类器原理：</strong></p>
+
+<p>决策树是一颗树，要分类的样本从树根进入，在树的每个节点通过对样本的某种属性的判断选择不同的路径逐步下降到底,得出其所属类别。</p>
+
+<p>例图:</p>
+
+<p><img src="http://pic002.cnblogs.com/images/2012/52809/2012063021362216.jpg" alt="" /></p>
+
+<p align="center">
+  &nbsp;
+</p>
+
+<p>为了建立一棵决策树,我们首先应向程序输入大量训练数据(包含所属类别的数据)，程序将根据训练数据按某一算法自动生成决策树。</p>
+
+<p><strong>&nbsp;</strong></p>
+
+<p><strong>决策树生成算法:</strong></p>
+
+<p>&nbsp;&nbsp; 为了构造决策树，算法首先创建一个根节点，然后通过分析训练数据，逐步选出适合的变量对数据进行拆分(即逐步构造上图中的非叶子节点。)</p>
+
+<p>&nbsp;&nbsp; 为了选择适合的变量对数据进行拆分，我们需要一个方法来评估一种拆分方案的好坏，<strong>其评估方法包括：</strong></p>
+
+<p><strong>1)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong> <strong>基尼不纯度：</strong></p>
+
+<p>定义：基尼不存度是指来自集合的某种结果随机应用于集合中某一数据的预期误差。（如果集合中所有结果属于同一类，则误差为0）</p>
+
+<p>使用：利用这一思想，我们可以将集合中每种类别的数据出现的次数除以数据总数计算相应概率，再将这些概率的乘积相加（所有概率两两相乘后在相加），这样就会得到某一数据被随机分配到错误结果的总概率。</p>
+
+<p>伪代码：</p>
+
+<p>imp=0</p>
+
+<p>for &nbsp;k1 in kinds</p>
+
+<p>p1=count(k1) / total</p>
+
+<p>for k2 in counts</p>
+
+<p>&nbsp;&nbsp; if (k1==k2)continue</p>
+
+<p>&nbsp; &nbsp;p2=count(k2) / total</p>
+
+<p>&nbsp;&nbsp; imp+=p1*p2</p>
+
+<p>&nbsp;&nbsp;&nbsp; ans=imp</p>
+
+<p align="left">
+  &nbsp;&nbsp; (p1*p2是一个p1类别的数据被当作p2的概率)
+</p>
+
+<p>2)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>熵：</strong>在信息论中，熵代表的是集合的无序程度&#8212;&#8211;基本上就相当于我们在此处所说的集合的混杂程度。</p>
+
+<p>熵的值是遍历所有结果后得到的pi*log2(pi)的和的绝对值</p>
+
+<p>伪代码：</p>
+
+<p>ent=0.0</p>
+
+<p>for k in kinds</p>
+
+<p>p=count(k) / total</p>
+
+<p>ent=ent &ndash; p*log2(p)&nbsp;&nbsp;&nbsp;&nbsp; // 因为0&lt;p&lt;=1，所以必有log2(p)&lt;=0</p>
+
+<p>ans=ent</p>
+
+<p>&nbsp;</p>
+
+<p>有了上述评估方法后，我们就可以不断尝试各种拆分方法，然后选出最好的拆分方法构造树中的节点了。我们将计算拆分前的熵（基尼不存度）值，与拆分后的熵（基尼不存度）的值的加权平均，将其差值作为<strong>信息增益</strong>。最终对能得到最大信息增益的属性进行拆分。然后再分别对拆分后得集合选择属性进行拆分，直到最大信息增益为非正时停止拆分，这时决策树就构建完毕了。</p>
+
+<p>&nbsp;</p>
+
+<p><strong>优化：</strong></p>
+
+<p>为了防止决策树变的过度拟合（过度针对训练数据），我们可以在信息增益小于某个值后就停止拆分。但是我们可能遇到这样的数据―――某次拆分信息增益很小，但下一次就会很大。为了防止这一状况，我们可以在用先前的方法构造整棵树后，在尝试消除多余的节点。这个过程就是<strong>剪枝</strong>。</p>
+
+<p>剪枝的过程就是对具有相同父节点的节点进行检查，判断将其合并后，信息增益是否会小于某个指定发值。若是，则合并这些节点。合并后节点包括所有可能的结果值。</p>
+
+<p><strong>在处理数值型数据时，熵和基尼不存度并不是一个好的选择，因为有些数值相差很近，有些相差很远，不能简单用是否为同一类别进行判断。所以我们可以用方差代替它们。</strong></p>
+
+<p>&nbsp;</p>
+
+<p><strong>决策树对缺失数据的处理：</strong></p>
+
+<p>当我们要判断类别的样本缺少某些决策树作判断时必须的数据时，我们可以选择同时走两个分支，不过我们不是平均统计各分支的结果值，而是进行加权统计。为了达到这一目标，决策树中每个节点都有一个值为１的权重，即观测数据对于数据向是否属于某个特定分类的概率具有１００％的影响，而如果走多个分支，我们将给每个分支一个权重，其值等于所有位于该分支的其他数据所占的比重。</p>
+
+<p>&nbsp;</p>
+
+<p><strong>优点：</strong></p>
+
+<p>决策树最大的优势是它可以轻易对一个受训模型给予解释。（解释分类原理）</p>
+
+<p>决策树可以同时接受分类型和数值型数据。</p>
+
+<p>比起贝叶斯分类器（参考<strong>[&lt;集体智慧编程&gt;算法总结1&mdash;贝叶斯分类器][2]</strong>）决策树可以更好的处理变量间的相互影响。</p>
+
+<p><strong>缺点：</strong></p>
+
+<p>决策树无法单独对某一数据进行训练。</p>
+
+<p>面对有大量可能结果的数据集时，决策树不够有效。当可能的分类结果较多时，决策树就会过度复杂，预测效果也会较差。</p>
+
+<p>另外，决策树不适合处理大量的数值型输入输出，因为它只能创建一些简单的&gt; ，&lt;，＝等节点，但数值之间可能存在更多更复杂的关系。</p>
+
+<p>&nbsp;</p>
+
+<p>呼&hellip;.这个写的不怎么累了&hellip;.很多都是书上的原话哈，不像昨天那个几乎都是自己写的&hellip;&hellip;</p>
+
+<p style="margin:0;padding:0;height:1px;overflow:hidden;">
+  <a href="http://www.wumii.com/widget/relatedItems" style="border:0;"><img src="http://static.wumii.cn/images/pixel.png" alt="无觅相关文章插件，快速提升流量" style="border:0;padding:0;margin:0;" /></a>
+</p>
+
+<p>[2]: <a href="http://www.swordman865.cn/blog/?p=30">http://www.swordman865.cn/blog/?p=30</a></p>
+
+			</div>
+
+			
+		</div>
+
+  </body>
+</html>

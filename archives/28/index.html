@@ -1,0 +1,355 @@
+	<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.15-DEV" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title> 编译原理虎书java版本–Chapter 1 &middot;  </title>
+
+  
+  <link rel="stylesheet" href="http://luosha865.github.io/css/poole.css">
+  <link rel="stylesheet" href="http://luosha865.github.io/css/syntax.css">
+  <link rel="stylesheet" href="http://luosha865.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="" />
+</head>
+
+	<body class="">
+		<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://luosha865.github.io/"><h1></h1></a>
+      <p class="lead">
+      An elegant open source and mobile first theme for <a href="http://hugo.spf13.com">hugo</a> made by <a href="http://twitter.com/mdo">@mdo</a>. Originally made for Jekyll.
+      </p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li><a href="/">Home</a> </li>
+      
+    </ul>
+
+    <p>&copy; 2015. All rights reserved. </p>
+  </div>
+</div>
+
+
+		<div class="content container">
+			<div class="post">
+			 	<h1>编译原理虎书java版本–Chapter 1</h1>
+			  <span class="post-date">Sun, Mar 8, 2009</span>
+			      <p>Count.java</p>
+
+<p>public class  Count</p>
+
+<p>{</p>
+
+<p>int resolveStm(Stm stm){</p>
+
+<p>int temp1=0,temp2=0;</p>
+
+<p>if(stm.kind==1){</p>
+
+<p>temp1=resolveStm(((CompoundStm)stm).stm1);</p>
+
+<p>temp2=resolveStm(((CompoundStm)stm).stm2);</p>
+
+<p>return temp1&gt;temp2? temp1:temp2;</p>
+
+<p>}else if(stm.kind==2){</p>
+
+<p>return resolveExp(((AssignStm)stm).exp);</p>
+
+<p>}else if (stm.kind==3){</p>
+
+<p>return countExpInExpList(((PrintStm)stm).exps);</p>
+
+<p>}else{</p>
+
+<p>return 0;</p>
+
+<p>}</p>
+
+<p>}</p>
+
+<p>int countExpInExpList(ExpList expList){</p>
+
+<p>if(expList.kind==1){</p>
+
+<p>return 1;</p>
+
+<p>}else if(expList.kind==2){</p>
+
+<p>return 1+countExpInExpList(((PairExpList)expList).tail);</p>
+
+<p>}else{</p>
+
+<p>return 0;</p>
+
+<p>}</p>
+
+<p>}</p>
+
+<p>int resolveExp(Exp exp){</p>
+
+<p>int temp1,temp2;</p>
+
+<p>if(exp.kind==1){</p>
+
+<p>return 0;</p>
+
+<p>}else if(exp.kind==2){</p>
+
+<p>return 0;</p>
+
+<p>}else if(exp.kind==3){</p>
+
+<p>temp1 = resolveExp(((OpExp)exp).left);</p>
+
+<p>temp2 = resolveExp(((OpExp)exp).right);</p>
+
+<p>return temp1&gt;temp2?temp1:temp2;</p>
+
+<p>}else if(exp.kind==4){</p>
+
+<p>temp1=resolveStm(((EseqExp)exp).stm);</p>
+
+<p>temp2=resolveExp(((EseqExp)exp).exp);</p>
+
+<p>return temp1&gt;temp2?temp1:temp2;</p>
+
+<p>}else{</p>
+
+<p>return 0;</p>
+
+<p>}</p>
+
+<p>}</p>
+
+<p>int resolveExpList(ExpList expList){</p>
+
+<p>int temp1,temp2;</p>
+
+<p>if(expList.kind==2){</p>
+
+<p>temp1 = resolveExp(((PairExpList)expList).head);</p>
+
+<p>temp2 = resolveExpList(((PairExpList)expList).tail);</p>
+
+<p>return temp1&gt;temp2?temp1:temp2;</p>
+
+<p>}else if(expList.kind==1){</p>
+
+<p>return resolveExp(((LastExpList)expList).last);</p>
+
+<p>}else{</p>
+
+<p>return 0;</p>
+
+<p>}</p>
+
+<p>}</p>
+
+<p>}</p>
+
+<p>Interp.java</p>
+
+<p>public class  Interp</p>
+
+<p>{</p>
+
+<p>void startinterpStm(Stm stm){</p>
+
+<p>Table t=new Table(null,0,null);</p>
+
+<p>interpStm(stm,t);</p>
+
+<p>}</p>
+
+<p>Table interpStm(Stm stm,Table t){</p>
+
+<p>if(stm.kind==1){</p>
+
+<p>Table t1=interpStm(((CompoundStm)stm).stm1,t);</p>
+
+<p>Table t2=interpStm(((CompoundStm)stm).stm2,t1);</p>
+
+<p>return t2;</p>
+
+<p>}else if(stm.kind==2){</p>
+
+<p>IntAndTable it1 = interExp(((AssignStm)stm).exp,t);</p>
+
+<p>Table t1=update(it1.t,((AssignStm)stm).id,it1.i);</p>
+
+<p>return t1;</p>
+
+<p>}else if(stm.kind==3){</p>
+
+<p>printExplist(((PrintStm)stm).exps,t);</p>
+
+<p>return t;</p>
+
+<p>}else{</p>
+
+<p>return t;</p>
+
+<p>}</p>
+
+<p>}</p>
+
+<p>IntAndTable interExp(Exp exp,Table t){</p>
+
+<p>if(exp.kind==1){</p>
+
+<p>int temp=lookup(t,((IdExp)exp).id);</p>
+
+<p>return new IntAndTable(temp,t);</p>
+
+<p>}else if(exp.kind==2){</p>
+
+<p>return new IntAndTable(((NumExp)exp).num,t);</p>
+
+<p>}else if(exp.kind==3){</p>
+
+<p>IntAndTable it1= interExp(((OpExp)exp).left,t);</p>
+
+<p>IntAndTable it2= interExp(((OpExp)exp).right,it1.t);</p>
+
+<p>int x1,x2,result;</p>
+
+<p>x1=it1.i;</p>
+
+<p>x2=it2.i;</p>
+
+<p>if(((OpExp)exp).oper==1){</p>
+
+<p>result=x1+x2;</p>
+
+<p>}else if(((OpExp)exp).oper==2){</p>
+
+<p>result=x1-x2;</p>
+
+<p>}else if(((OpExp)exp).oper==3){</p>
+
+<p>result=x1*x2;</p>
+
+<p>}else if(((OpExp)exp).oper==4){</p>
+
+<p>result=x1/x2;</p>
+
+<p>}else{</p>
+
+<p>result=0;</p>
+
+<p>}</p>
+
+<p>return new IntAndTable(result,t);</p>
+
+<p>}else if(exp.kind==4){</p>
+
+<p>Table t1=interpStm(((EseqExp)exp).stm,t);</p>
+
+<p>IntAndTable t3= interExp(((EseqExp)exp).exp,t1);</p>
+
+<p>return t3;</p>
+
+<p>}else{</p>
+
+<p>return new IntAndTable(0,t);</p>
+
+<p>}</p>
+
+<p>}</p>
+
+<p>Table update(Table t1,String i,int v){</p>
+
+<p>Table t2=new Table(i,v,t1);</p>
+
+<p>return t2;</p>
+
+<p>}</p>
+
+<p>int lookup(Table t,String key){</p>
+
+<p>if(key.compareTo(t.id)==0){</p>
+
+<p>return t.value;</p>
+
+<p>}else return lookup(t.tail,key);</p>
+
+<p>}</p>
+
+<p>void printExplist(ExpList exps,Table t){</p>
+
+<p>if(exps.kind==1){</p>
+
+<p>IntAndTable temp=interExp(((LastExpList)exps).last,t);</p>
+
+<p>System.out.println(temp.i);</p>
+
+<p>}else if(exps.kind==2){</p>
+
+<p>IntAndTable temp=interExp(((PairExpList)exps).head,t);</p>
+
+<p>System.out.print(temp.i+&#8221; &#8220;);</p>
+
+<p>printExplist(((PairExpList)exps).tail,t);</p>
+
+<p>}else return;</p>
+
+<p>}</p>
+
+<p>// IntAndTable interExpList(ExpList explist,Table t){</p>
+
+<p>// }</p>
+
+<p>}</p>
+
+<p>class Table</p>
+
+<p>{</p>
+
+<p>String id;</p>
+
+<p>int value;</p>
+
+<p>Table tail;</p>
+
+<p>Table(String i,int v,Table t){id=i;value=v;tail=t;}</p>
+
+<p>}</p>
+
+<p>class IntAndTable</p>
+
+<p>{</p>
+
+<p>int i;</p>
+
+<p>Table t;</p>
+
+<p>IntAndTable(int ii,Table tt){i=ii;t=tt;};</p>
+
+<p>}</p>
+
+<p style="margin:0;padding:0;height:1px;overflow:hidden;">
+  <a href="http://www.wumii.com/widget/relatedItems" style="border:0;"><img src="http://static.wumii.cn/images/pixel.png" alt="无觅相关文章插件，快速提升流量" style="border:0;padding:0;margin:0;" /></a>
+</p>
+
+			</div>
+
+			
+		</div>
+
+  </body>
+</html>

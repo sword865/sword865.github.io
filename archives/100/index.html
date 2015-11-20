@@ -1,0 +1,234 @@
+	<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.15-DEV" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title> Tornado框架简析 &middot;  </title>
+
+  
+  <link rel="stylesheet" href="http://luosha865.github.io/css/poole.css">
+  <link rel="stylesheet" href="http://luosha865.github.io/css/syntax.css">
+  <link rel="stylesheet" href="http://luosha865.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="" />
+</head>
+
+	<body class="">
+		<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://luosha865.github.io/"><h1></h1></a>
+      <p class="lead">
+      An elegant open source and mobile first theme for <a href="http://hugo.spf13.com">hugo</a> made by <a href="http://twitter.com/mdo">@mdo</a>. Originally made for Jekyll.
+      </p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li><a href="/">Home</a> </li>
+      
+    </ul>
+
+    <p>&copy; 2015. All rights reserved. </p>
+  </div>
+</div>
+
+
+		<div class="content container">
+			<div class="post">
+			 	<h1>Tornado框架简析</h1>
+			  <span class="post-date">Thu, Feb 5, 2015</span>
+			      <p>Tornado是一款轻量级的Web服务器，同时又是一个开发框架。采用单线程非阻塞I/O模型(epoll)，主要是为了应对高并发 访问量而被开发出来，尤其适用于comet应用。</p>
+
+<p>Tornado服务器3大核心模块:</p>
+
+<p>(1) IOLoop</p>
+
+<p>Tornado为了实现高并发和高性能，使用了一个IOLoop来处理socket的读写事件，IOLoop基于epoll，可以高效的响应网络事件。这是Tornado高效的保证。</p>
+
+<p>tornado.ioloop.IOLoop.instance().start()</p>
+
+<p>IOLoop使用了单例模式，处理所有IO事件，</p>
+
+<p>实现为EPollIOLoop-&gt;PollIOLoop-&gt;IOLoop-&gt;Configurable</p>
+
+<p>IOLoop中有四个重要的数据集： _events 和 _handlers 保存I/O事件和对应的处理器， _callbacks 和 _timeouts 保存（超时）回调。</p>
+
+<p>关键函数：</p>
+
+<pre class="lang:python decode:true ">def initialize(self, impl, time_func=None):
+    super(PollIOLoop, self).initialize()
+    self._impl = impl
+    if hasattr(self._impl, 'fileno'):
+        set_close_exec(self._impl.fileno())
+    self.time_func = time_func or time.time
+    #handlers 是一个函数集字典
+    self._handlers = {}
+    self._events = {}
+    #回调函数集合
+    self._callbacks = []
+    self._callback_lock = threading.Lock()
+    self._timeouts = []
+    self._cancellations = 0
+    self._running = False
+    self._stopped = False
+    self._closing = False
+    self._thread_ident = None
+    self._blocking_signal_threshold = None
+    self._timeout_counter = itertools.count()
+
+    # Create a pipe that we send bogus data to when we want to wake
+    # the I/O loop when it is idle
+    self._waker = Waker()
+    self.add_handler(self._waker.fileno(),
+                     lambda fd, events: self._waker.consume(),
+                     self.READ)</pre>
+
+<p>其中，waker是一个发伪数据用的类，在需要时，我们可以用它唤醒空闲的I/O Loop。当我们调用add_callback时，为了让回调函数运行，可能会需要使用它发送一个伪数据。</p>
+
+<pre class="lang:python decode:true">#将文件描述符发生相应的事件时的回调函数对应
+def add_handler(self, fd, handler, events):
+    """Registers the given handler to receive the given events for fd."""
+    self._handlers[fd] = stack_context.wrap(handler)
+    #在 epoll 中注册对应事件
+    #epoll_ctl
+    self._impl.register(fd, events | self.ERROR)
+</pre>
+
+<p>其中stack_context.wrap()对handler进行封装，封装后记录了上下文信息。而_impl是对epoll的封装。</p>
+
+<p>所以，只要把所有事件在IOLoop中进行注册，运行start函数后，就会进入进程的监听循环，循环监听所有的fd，并调用fd对应的handler。循环过程参考start()函数。</p>
+
+<pre class="lang:python decode:true">def start(self):
+    while True:
+        with self._callback_lock:
+            callbacks = self._callbacks
+            self._callbacks = []
+        #运行所有callback
+        for callback in callbacks:
+            self._run_callback(callback)
+        #取事件
+        event_pairs = self._impl.poll(poll_timeout)
+        self._events.update(event_pairs)
+        while self._events:
+            fd, events = self._events.popitem()
+            try:
+                #调用事件handler
+                fd_obj, handler_func = self._handlers[fd]
+                handler_func(fd_obj, events)
+            except (OSError, IOError) as e:
+                if errno_from_exception(e) == errno.EPIPE:
+                    # Happens when the client closes the connection
+                    pass
+                else:
+                    self.handle_callback_exception(self._handlers.get(fd))
+            except Exception:
+                self.handle_callback_exception(self._handlers.get(fd))
+</pre>
+
+<p>当poll中发现fp有read事件时，会调用对应的callback方法。如果fd是监听的fd，那么这个回调handler就是accept_handler函数(见下面HttpConnection的bind和add_scokets函数)。该方法会Accept连接并且紧跟着创建IOStream对象，read_until方法读完数据后，则调用_run_callback把处理函数（self._header_callback）加到IOLoop中，等到下次轮询时在最前面处理。</p>
+
+<p>(2) IOStream</p>
+
+<p>为了在处理请求的时候，实现对socket的异步读写， Tornado实现了IOStream类，用来处理socket的异步读写，负责异步通讯。</p>
+
+<p>主要包括3个函数，</p>
+
+<p>1.read_bytes(bytes,callback)在有固定的字节的数据到来的时候调用回调函数</p>
+
+<p>2.read_until(delimiter,callback)在读取到固定的字符序列结尾后调用回调函数</p>
+
+<p>3.write(data)：异步写</p>
+
+<p>(3) HTTPConnection</p>
+
+<p>这个类用来处理http的请求， 包括读取http请求头， 读取post过来的数据，调用用户自定义的处理方法。以及把响应数据写给客户端socket。</p>
+
+<pre class="lang:python decode:true">def bind(self, port, address=None, family=socket.AF_UNSPEC, backlog=128): 
+    sockets = bind_sockets(port, address=address, family=family,backlog=backlog)
+        if self._started:
+            self.add_sockets(sockets)
+        else:
+            self._pending_sockets.extend(sockets)
+def add_sockets(self, sockets):
+    if self.io_loop is None:
+        self.io_loop = IOLoop.current()
+    for sock in sockets:
+        self._sockets[sock.fileno()] = sock
+        add_accept_handler(sock, self._handle_connection,io_loop=self.io_loop)
+</pre>
+
+<p>socket启动后，监听各个sockets，事件到来时，调用_handle_connection。</p>
+
+<pre class="lang:python decode:true ">def _handle_connection(self, connection, address):
+    if self.ssl_options is not None:
+        connection = ssl_wrap_socket(connection,self.ssl_options,
+                                     server_side=True,
+                                     do_handshake_on_connect=False)
+        if self.ssl_options is not None:
+            stream = SSLIOStream(connection, io_loop=self.io_loop,
+                                 max_buffer_size=self.max_buffer_size,
+                                 read_chunk_size=self.read_chunk_size)
+        else:
+            stream = IOStream(connection, io_loop=self.io_loop,
+                              max_buffer_size=self.max_buffer_size,
+                              read_chunk_size=self.read_chunk_size)
+        self.handle_stream(stream, address)
+def handle_stream(self, stream, address):
+    context = _HTTPRequestContext(stream, address,
+                                  self.protocol)
+    conn = HTTP1ServerConnection(
+        stream, self.conn_params, context)
+    self._connections.add(conn)
+    conn.start_serving(self)
+def start_serving(self, delegate):
+    assert isinstance(delegate, httputil.HTTPServerConnectionDelegate)
+    self._serving_future = self._server_request_loop(delegate)
+    # Register the future on the IOLoop so its errors get logged.
+    self.stream.io_loop.add_future(self._serving_future,
+                                   lambda f: f.result())
+</pre>
+
+<p>如前面所述，这里Accept连接并且紧跟着创建IOStream对象(不考虑https)，调用handle_stream-&gt;start_serving-&gt;_server_request_loop处理请求。最后会调用_read_message读取数据，并注册回调函数。</p>
+
+<p>最后抄一张图过来：</p>
+
+<p>[<img class="alignnone wp-image-108 size-large" src="http://sword865.com/blog/wp-content/uploads/2015/02/QQ20150205-1@2x-1024x593.png" alt="QQ20150205-1@2x" width="615" height="356" />][1]</p>
+
+<p>参考：</p>
+
+<p><a href="http://www.cnblogs.com/Bozh/archive/2012/07/22/2603976.html">http://www.cnblogs.com/Bozh/archive/2012/07/22/2603976.html</a></p>
+
+<p><a href="http://kenby.iteye.com/blog/1159621">http://kenby.iteye.com/blog/1159621</a></p>
+
+<p><a href="http://www.nowamagic.net/academy/detail/13321030">http://www.nowamagic.net/academy/detail/13321030</a></p>
+
+<p><a href="http://www.yeolar.com/note/2013/02/09/tornado-async-networking/">http://www.yeolar.com/note/2013/02/09/tornado-async-networking/</a></p>
+
+<p>源码：</p>
+
+<p><a href="https://github.com/tornadoweb/tornado">https://github.com/tornadoweb/tornado</a></p>
+
+<p style="margin:0;padding:0;height:1px;overflow:hidden;">
+  <a href="http://www.wumii.com/widget/relatedItems" style="border:0;"><img src="http://static.wumii.cn/images/pixel.png" alt="无觅相关文章插件，快速提升流量" style="border:0;padding:0;margin:0;" /></a>
+</p>
+
+<p>[1]: <a href="http://sword865.com/blog/wp-content/uploads/2015/02/QQ20150205-1@2x.png">http://sword865.com/blog/wp-content/uploads/2015/02/QQ20150205-1@2x.png</a></p>
+
+			</div>
+
+			
+		</div>
+
+  </body>
+</html>

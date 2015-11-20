@@ -1,0 +1,86 @@
+	<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.15-DEV" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title> 有重复组合数 &middot;  </title>
+
+  
+  <link rel="stylesheet" href="http://luosha865.github.io/css/poole.css">
+  <link rel="stylesheet" href="http://luosha865.github.io/css/syntax.css">
+  <link rel="stylesheet" href="http://luosha865.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="" />
+</head>
+
+	<body class="">
+		<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://luosha865.github.io/"><h1></h1></a>
+      <p class="lead">
+      An elegant open source and mobile first theme for <a href="http://hugo.spf13.com">hugo</a> made by <a href="http://twitter.com/mdo">@mdo</a>. Originally made for Jekyll.
+      </p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li><a href="/">Home</a> </li>
+      
+    </ul>
+
+    <p>&copy; 2015. All rights reserved. </p>
+  </div>
+</div>
+
+
+		<div class="content container">
+			<div class="post">
+			 	<h1>有重复组合数</h1>
+			  <span class="post-date">Thu, Apr 2, 2009</span>
+			      <p>从n个元素中有重复地取r个，不计顺序，则不同的取法有多少种？<br />
+这个问题的答案被称为有重复组合数。结果很简洁，是C(n+r-1,r)。(注：这表示从n+r-1个数中取出r个数的组合数)<br />
+【证明1】<br />
+我们先把原命题具体化。假设这n个元素就是1~n这n个数。&nbsp;<br />
+对于每一种选出来的组合a1，a2，a3，&hellip; ，am，我们要求：a1&lt;=a2&lt;=a3&lt;=&hellip;&lt;=ar<br />
+我们的目的就是找出这样的a(i)组数<br />
+这里我们构造b1=a1，b2= a2+1，&hellip; ，b(i)= a(i)+(i-1)，&hellip; ，b&reg;= a&reg;+(r-1)<br />
+于是b(i)和a(i)一一对应，即所求a(i)组数对应于b(i)组数<br />
+又：b1<b2<b3<&hellip;<br 且b(i)取值于1~ n+(r-1)  
+亦即原命题等价于从1~ n+r-1中取得r个不重复排列数  
+来源：<http://zhidao.baidu.com/question/16706714.html><br />
+【证明2】<br />
+将n个元素看做n个盒子,r看作r个无区别的球,则相当于:<br />
+把r个同样的球放入n个顺次排列的盒子,求不计放球顺序的放法种数<br />
+用0表示盒子,1表示球<br />
+我们把这n个0和r个1写在一行上。<br />
+由于球必须放在盒子中,规定某个0之前,到上一个0为止的1的个数,表示该盒子中装的球数<br />
+注意到最后一个数必须是0<br />
+所以相当于从前面n+r-1个位置中挑出r个位置放1，其余n-1个位置放0<br />
+来源：<a href="http://pengzhe0302.spaces.live.com/blog/cns!529d86ea9ec40ca2!113.entry">http://pengzhe0302.spaces.live.com/blog/cns!529d86ea9ec40ca2!113.entry</a></p>
+
+<div>
+  <embed id="lingoes_plugin_object" width="0" height="0" type="application/lingoes-npruntime-capture-word-plugin" hidden="true" />
+</div>
+
+<p style="margin:0;padding:0;height:1px;overflow:hidden;">
+  <a href="http://www.wumii.com/widget/relatedItems" style="border:0;"><img src="http://static.wumii.cn/images/pixel.png" alt="无觅相关文章插件，快速提升流量" style="border:0;padding:0;margin:0;" /></a>
+</p>
+
+			</div>
+
+			
+		</div>
+
+  </body>
+</html>

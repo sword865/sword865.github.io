@@ -1,0 +1,83 @@
+	<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.15-DEV" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title> KMP算法复杂度分析 &middot;  </title>
+
+  
+  <link rel="stylesheet" href="http://luosha865.github.io/css/poole.css">
+  <link rel="stylesheet" href="http://luosha865.github.io/css/syntax.css">
+  <link rel="stylesheet" href="http://luosha865.github.io/css/hyde.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="" />
+</head>
+
+	<body class="">
+		<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://luosha865.github.io/"><h1></h1></a>
+      <p class="lead">
+      An elegant open source and mobile first theme for <a href="http://hugo.spf13.com">hugo</a> made by <a href="http://twitter.com/mdo">@mdo</a>. Originally made for Jekyll.
+      </p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li><a href="/">Home</a> </li>
+      
+    </ul>
+
+    <p>&copy; 2015. All rights reserved. </p>
+  </div>
+</div>
+
+
+		<div class="content container">
+			<div class="post">
+			 	<h1>KMP算法复杂度分析</h1>
+			  <span class="post-date">Wed, Mar 11, 2009</span>
+			      <p>KMP算法也算接触很久了，今天却突然发现不知道那个的复杂度是怎么来的<br />
+于是想啊想，查啊查，总结如下<br />
+设代码为<br />
+s=0;<br />
+for(i=1;i&lt;=m,i++){<br />
+while(s&gt;0&amp;&amp;a[i]!=b[s+1])s=next(s)<br />
+if(a[i]==b[s+1])s++;<br />
+if(s==n) return (i-n)</p>
+
+<p>分析的关键是那个while循环循环会让s减少<br />
+而s又只会在第五行增加，于是j最多增加m次，<br />
+在然后我们就知道j最多减少m次(因为不能为负)<br />
+平摊到每个for上就是一次<br />
+所以复杂度就是O(m)了<br />
+不过也有书上说是O(m+n)<br />
+这个就不是很明白了&#8230;<br />
+想想在说&#8230;..</p>
+
+<div>
+  <embed type="application/lingoes-npruntime-capture-word-plugin" width="0" height="0" id="lingoes_plugin_object" hidden="true" />
+</div>
+
+<p style="margin:0;padding:0;height:1px;overflow:hidden;">
+  <a href="http://www.wumii.com/widget/relatedItems" style="border:0;"><img src="http://static.wumii.cn/images/pixel.png" alt="无觅相关文章插件，快速提升流量" style="border:0;padding:0;margin:0;" /></a>
+</p>
+
+			</div>
+
+			
+		</div>
+
+  </body>
+</html>
