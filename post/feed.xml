@@ -99,8 +99,6 @@
 &lt;p&gt;&lt;a href=&#34;http://my.oschina.net/flashsword/blog/178561&#34;&gt;http://my.oschina.net/flashsword/blog/178561&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&#34;http://my.oschina.net/flashsword/blog/197963&#34;&gt;http://my.oschina.net/flashsword/blog/197963&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     
@@ -284,8 +282,6 @@ def start_serving(self, delegate):
 &lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
   &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
 &lt;/p&gt;
-
-&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     
@@ -438,8 +434,6 @@ def start_serving(self, delegate):
 &lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;&lt;a href=&#34;http://lucene.apache.org/core/4_9_0/core/org/apache/lucene/codecs/lucene49/package-summary.html#File_Naming&#34;&gt;http://lucene.apache.org/core/4_9_0/core/org/apache/lucene/codecs/lucene49/package-summary.html#File_Naming&lt;/a&gt;&lt;/span&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;&lt;a href=&#34;http://www.cnblogs.com/forfuture1978/category/300665.html&#34;&gt;http://www.cnblogs.com/forfuture1978/category/300665.html&lt;/a&gt;&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt; {{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     
@@ -504,8 +498,6 @@ def start_serving(self, delegate):
 &lt;p&gt;填充后即得到评分矩阵&lt;/p&gt;
 
 &lt;p&gt;&lt;span style=&#34;font-size: 14px;&#34;&gt; &lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     
@@ -646,8 +638,6 @@ def start_serving(self, delegate):
 &lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
   &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
 &lt;/p&gt;
-
-&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     
@@ -666,8 +656,6 @@ def start_serving(self, delegate):
 &lt;p&gt;顺便附上翻译的UFLDL&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&#34;http://deeplearning.stanford.edu/wiki/index.php/UFLDL%E6%95%99%E7%A8%8B&#34;&gt;http://deeplearning.stanford.edu/wiki/index.php/UFLDL%E6%95%99%E7%A8%8B&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     
@@ -988,8 +976,6 @@ def start_serving(self, delegate):
 &lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
   &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
 &lt;/p&gt;
-
-&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     
@@ -1044,8 +1030,6 @@ z.test(x,10,1.5,0.05)&lt;/pre&gt;
 &lt;p&gt;则返回置信区间：&lt;/p&gt;
 
 &lt;p&gt;[1]173.7703 175.6297&lt;/p&gt;
-
-&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     
@@ -1198,8 +1182,6 @@ kurtosis(x)&lt;/pre&gt;
      基本的就是这些了，当然还可以更加复杂，比如多组数据的图形与数值描述等等。即使是我们在上面使用的函数其实也是非常强大的，只是我们在上面使用了很多的默认的参数而简化了它们的调用而已。
   &lt;/p&gt;
 &lt;/div&gt;
-
-&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     
@@ -1304,8 +1286,6 @@ ex&amp;lt;-data.frame(x1=200,x2=3000)
 predict(lm.sol,ex,interval=&#34;prediction&#34;,level=0.95)&lt;/pre&gt;
 
 &lt;p&gt;&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     
@@ -1462,8 +1442,6 @@ for ( int i = 0; i &amp;lt; m_numMeshes; i++ )
 &lt;p&gt;[1]&lt;a href=&#34;http://blog.sina.com.cn/s/blog_62d98a550100g5hh.html&#34;&gt;http://blog.sina.com.cn/s/blog_62d98a550100g5hh.html&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;[2]&lt;a href=&#34;http://www.yakergong.net/nehe/course/tutorial_31.html&#34;&gt;http://www.yakergong.net/nehe/course/tutorial_31.html&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     
@@ -1517,8 +1495,6 @@ for ( int i = 0; i &amp;lt; m_numMeshes; i++ )
 &lt;p&gt;&amp;nbsp;&lt;/p&gt;
 
 &lt;p&gt;该系列结束，恩，也许以后学了更多，有了更好的了解后会回来改一改，谁知道呢？&lt;/p&gt;
-
-&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     
@@ -1578,8 +1554,6 @@ for ( int i = 0; i &amp;lt; m_numMeshes; i++ )
 &lt;div&gt;
   &lt;embed id=&#34;lingoes_plugin_object&#34; width=&#34;0&#34; height=&#34;0&#34; type=&#34;application/lingoes-npruntime-capture-word-plugin&#34; hidden=&#34;true&#34; /&gt;
 &lt;/div&gt;
-
-&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     
@@ -1635,8 +1609,6 @@ for ( int i = 0; i &amp;lt; m_numMeshes; i++ )
 &lt;p&gt;&amp;nbsp;&lt;/p&gt;
 
 &lt;p&gt;恩，就是这样….最近这几个算法都不是很难恩………..&lt;/p&gt;
-
-&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     
@@ -1713,8 +1685,6 @@ for ( int i = 0; i &amp;lt; m_numMeshes; i++ )
 &lt;div&gt;
   &lt;embed id=&#34;lingoes_plugin_object&#34; width=&#34;0&#34; height=&#34;0&#34; type=&#34;application/lingoes-npruntime-capture-word-plugin&#34; hidden=&#34;true&#34; /&gt;
 &lt;/div&gt;
-
-&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     

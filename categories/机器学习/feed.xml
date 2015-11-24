@@ -190,8 +190,6 @@ def start_serving(self, delegate):
 &lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
   &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
 &lt;/p&gt;
-
-&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     
@@ -256,8 +254,6 @@ def start_serving(self, delegate):
 &lt;p&gt;填充后即得到评分矩阵&lt;/p&gt;
 
 &lt;p&gt;&lt;span style=&#34;font-size: 14px;&#34;&gt; &lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     
@@ -398,8 +394,6 @@ def start_serving(self, delegate):
 &lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
   &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
 &lt;/p&gt;
-
-&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     
@@ -418,8 +412,6 @@ def start_serving(self, delegate):
 &lt;p&gt;顺便附上翻译的UFLDL&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&#34;http://deeplearning.stanford.edu/wiki/index.php/UFLDL%E6%95%99%E7%A8%8B&#34;&gt;http://deeplearning.stanford.edu/wiki/index.php/UFLDL%E6%95%99%E7%A8%8B&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     
@@ -740,8 +732,6 @@ def start_serving(self, delegate):
 &lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
   &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
 &lt;/p&gt;
-
-&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     
@@ -795,8 +785,6 @@ def start_serving(self, delegate):
 &lt;p&gt;&amp;nbsp;&lt;/p&gt;
 
 &lt;p&gt;该系列结束，恩，也许以后学了更多，有了更好的了解后会回来改一改，谁知道呢？&lt;/p&gt;
-
-&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     
@@ -856,8 +844,6 @@ def start_serving(self, delegate):
 &lt;div&gt;
   &lt;embed id=&#34;lingoes_plugin_object&#34; width=&#34;0&#34; height=&#34;0&#34; type=&#34;application/lingoes-npruntime-capture-word-plugin&#34; hidden=&#34;true&#34; /&gt;
 &lt;/div&gt;
-
-&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     
@@ -913,8 +899,6 @@ def start_serving(self, delegate):
 &lt;p&gt;&amp;nbsp;&lt;/p&gt;
 
 &lt;p&gt;恩，就是这样….最近这几个算法都不是很难恩………..&lt;/p&gt;
-
-&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     
@@ -991,8 +975,6 @@ def start_serving(self, delegate):
 &lt;div&gt;
   &lt;embed id=&#34;lingoes_plugin_object&#34; width=&#34;0&#34; height=&#34;0&#34; type=&#34;application/lingoes-npruntime-capture-word-plugin&#34; hidden=&#34;true&#34; /&gt;
 &lt;/div&gt;
-
-&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     
@@ -1111,8 +1093,6 @@ def start_serving(self, delegate):
 &lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
   &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
 &lt;/p&gt;
-
-&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     
@@ -1259,8 +1239,6 @@ def start_serving(self, delegate):
 &lt;p&gt;神经网络是一种黑盒方法，这使得我们无法得知其处理输入和输出的方法与原因，尤其是较大的神经网络有数百的节点和上千的连接，更是如此。&lt;/p&gt;
 
 &lt;p&gt;在训练神经网络时，在选择训练数据的比例及与问题相适应的网络规模方面，没有明确的 规则。如果训练数据比率太大，可能导致网络对噪音数据产生过度归纳，而训练比率太低，网络就不够精准。&lt;/p&gt;
-
-&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     
@@ -1397,8 +1375,6 @@ def start_serving(self, delegate):
 &lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
   &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
 &lt;/p&gt;
-
-&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     
@@ -1503,8 +1479,6 @@ def start_serving(self, delegate):
 &lt;p&gt;朴素的贝叶斯分类最大的缺陷是它无法处理特征符合所产生的变化(即前面提到过的实际上难以满足的相互独立)&lt;/p&gt;
 
 &lt;p&gt;终于写完了&amp;hellip;好累啊&amp;hellip;还有8个算法&amp;hellip;&amp;hellip;&lt;/p&gt;
-
-&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     

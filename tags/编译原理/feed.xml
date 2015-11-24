@@ -447,8 +447,6 @@
 &lt;p&gt;}&lt;/p&gt;
 
 &lt;p&gt;&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     
@@ -751,8 +749,6 @@
 &lt;p&gt;IntAndTable(int ii,Table tt){i=ii;t=tt;};&lt;/p&gt;
 
 &lt;p&gt;}&lt;/p&gt;
-
-&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     

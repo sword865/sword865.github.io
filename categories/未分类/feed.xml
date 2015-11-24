@@ -163,8 +163,6 @@ for ( int i = 0; i &amp;lt; m_numMeshes; i++ )
 &lt;p&gt;[1]&lt;a href=&#34;http://blog.sina.com.cn/s/blog_62d98a550100g5hh.html&#34;&gt;http://blog.sina.com.cn/s/blog_62d98a550100g5hh.html&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;[2]&lt;a href=&#34;http://www.yakergong.net/nehe/course/tutorial_31.html&#34;&gt;http://www.yakergong.net/nehe/course/tutorial_31.html&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     
@@ -199,8 +197,6 @@ for ( int i = 0; i &amp;lt; m_numMeshes; i++ )
 &lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; 最后，把我上课时写在书上的话记录下来吧：&lt;/p&gt;
 
 &lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;nbsp;统计学&amp;#8212;以理性研究感性，我们的直觉从过去的经验去推导未来，这种推断不能解释结果的原因。（因为它在历史上倾向于如此，所以它很可能如此。）统计学将这种感性理性化，并出除了一些直觉上的错误（如：小概率事件经常发生），但其根本上还是一种感性的判断，因此解释这种感性推断背后的原因，事物呈现这种状态的原因，就是人的工作了。所以统计学也可以用来在没有线索时，作为一种&amp;ldquo;事后诸葛亮&amp;rdquo;式的推断的第一步（即先找出最可能答案，在设法解释它，不过这种方法具有不可证伪性，所以不是科学严谨的――毕竟是直觉么）。同时，统计的机器学习可以就可用来模拟人的直觉学习了（而且是一种没有错误的直觉）。&lt;/p&gt;
-
-&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     
@@ -369,8 +365,6 @@ for ( int i = 0; i &amp;lt; m_numMeshes; i++ )
 &lt;p align=&#34;left&#34;&gt;
   再次解决：把第一章扔了，再把第二章称为第一章
 &lt;/p&gt;
-
-&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     
@@ -382,8 +376,6 @@ for ( int i = 0; i &amp;lt; m_numMeshes; i++ )
       <guid>http://luosha865.github.io/archives/27</guid>
       <description>&lt;p&gt;RT&lt;br /&gt;
 以后常来看看吧&lt;/p&gt;
-
-&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     

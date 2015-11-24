@@ -25,8 +25,6 @@
 &lt;p&gt;顺便附上翻译的UFLDL&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&#34;http://deeplearning.stanford.edu/wiki/index.php/UFLDL%E6%95%99%E7%A8%8B&#34;&gt;http://deeplearning.stanford.edu/wiki/index.php/UFLDL%E6%95%99%E7%A8%8B&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     
@@ -173,8 +171,6 @@
 &lt;p&gt;神经网络是一种黑盒方法，这使得我们无法得知其处理输入和输出的方法与原因，尤其是较大的神经网络有数百的节点和上千的连接，更是如此。&lt;/p&gt;
 
 &lt;p&gt;在训练神经网络时，在选择训练数据的比例及与问题相适应的网络规模方面，没有明确的 规则。如果训练数据比率太大，可能导致网络对噪音数据产生过度归纳，而训练比率太低，网络就不够精准。&lt;/p&gt;
-
-&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     

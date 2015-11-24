@@ -71,8 +71,6 @@
 &lt;p&gt;填充后即得到评分矩阵&lt;/p&gt;
 
 &lt;p&gt;&lt;span style=&#34;font-size: 14px;&#34;&gt; &lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     

@@ -111,8 +111,6 @@
 &lt;p&gt;朴素的贝叶斯分类最大的缺陷是它无法处理特征符合所产生的变化(即前面提到过的实际上难以满足的相互独立)&lt;/p&gt;
 
 &lt;p&gt;终于写完了&amp;hellip;好累啊&amp;hellip;还有8个算法&amp;hellip;&amp;hellip;&lt;/p&gt;
-
-&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     

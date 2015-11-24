@@ -61,8 +61,6 @@ z.test(x,10,1.5,0.05)&lt;/pre&gt;
 &lt;p&gt;则返回置信区间：&lt;/p&gt;
 
 &lt;p&gt;[1]173.7703 175.6297&lt;/p&gt;
-
-&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     
@@ -215,8 +213,6 @@ kurtosis(x)&lt;/pre&gt;
      基本的就是这些了，当然还可以更加复杂，比如多组数据的图形与数值描述等等。即使是我们在上面使用的函数其实也是非常强大的，只是我们在上面使用了很多的默认的参数而简化了它们的调用而已。
   &lt;/p&gt;
 &lt;/div&gt;
-
-&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     
@@ -321,8 +317,6 @@ ex&amp;lt;-data.frame(x1=200,x2=3000)
 predict(lm.sol,ex,interval=&#34;prediction&#34;,level=0.95)&lt;/pre&gt;
 
 &lt;p&gt;&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     
