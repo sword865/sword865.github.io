@@ -171,7 +171,7 @@ def start_serving(self, delegate):
 
 &lt;p&gt;最后抄一张图过来：&lt;/p&gt;
 
-&lt;p&gt;&lt;img class=&#34;alignnone wp-image-108 size-large&#34; src=&#34;http://blog.sword865.com/wp-content/uploads/2015/02/QQ20150205-1@2x-1024x593.png&#34; alt=&#34;QQ20150205-1@2x&#34; width=&#34;615&#34; height=&#34;356&#34; /&gt;[1]&lt;/p&gt;
+&lt;p&gt;&lt;img class=&#34;alignnone wp-image-108 size-large&#34; src=&#34;http://blog.sword865.com/wp-content/uploads/2015/02/QQ20150205-1@2x-1024x593.png&#34; alt=&#34;QQ20150205-1@2x&#34; width=&#34;615&#34; height=&#34;356&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;参考：&lt;/p&gt;
 
@@ -191,7 +191,7 @@ def start_serving(self, delegate):
   &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
 &lt;/p&gt;
 
-&lt;p&gt;[1]: &lt;a href=&#34;http://sword865.com/blog/wp-content/uploads/2015/02/QQ20150205-1@2x.png&#34;&gt;http://sword865.com/blog/wp-content/uploads/2015/02/QQ20150205-1@2x.png&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     

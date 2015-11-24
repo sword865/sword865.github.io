@@ -100,9 +100,7 @@
 
 &lt;p&gt;&lt;a href=&#34;http://my.oschina.net/flashsword/blog/197963&#34;&gt;http://my.oschina.net/flashsword/blog/197963&lt;/a&gt;&lt;/p&gt;
 
-&lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
-  &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
-&lt;/p&gt;
+&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     
@@ -267,7 +265,7 @@ def start_serving(self, delegate):
 
 &lt;p&gt;最后抄一张图过来：&lt;/p&gt;
 
-&lt;p&gt;&lt;img class=&#34;alignnone wp-image-108 size-large&#34; src=&#34;http://blog.sword865.com/wp-content/uploads/2015/02/QQ20150205-1@2x-1024x593.png&#34; alt=&#34;QQ20150205-1@2x&#34; width=&#34;615&#34; height=&#34;356&#34; /&gt;[1]&lt;/p&gt;
+&lt;p&gt;&lt;img class=&#34;alignnone wp-image-108 size-large&#34; src=&#34;http://blog.sword865.com/wp-content/uploads/2015/02/QQ20150205-1@2x-1024x593.png&#34; alt=&#34;QQ20150205-1@2x&#34; width=&#34;615&#34; height=&#34;356&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;参考：&lt;/p&gt;
 
@@ -287,7 +285,7 @@ def start_serving(self, delegate):
   &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
 &lt;/p&gt;
 
-&lt;p&gt;[1]: &lt;a href=&#34;http://sword865.com/blog/wp-content/uploads/2015/02/QQ20150205-1@2x.png&#34;&gt;http://sword865.com/blog/wp-content/uploads/2015/02/QQ20150205-1@2x.png&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     
@@ -441,11 +439,7 @@ def start_serving(self, delegate):
 
 &lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;&lt;a href=&#34;http://www.cnblogs.com/forfuture1978/category/300665.html&#34;&gt;http://www.cnblogs.com/forfuture1978/category/300665.html&lt;/a&gt;&lt;/span&gt;&lt;/p&gt;
 
-&lt;p&gt; &lt;/p&gt;
-
-&lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
-  &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
-&lt;/p&gt;
+&lt;p&gt; {{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     
@@ -525,9 +519,7 @@ def start_serving(self, delegate):
 
 &lt;p&gt;&lt;span style=&#34;font-size: 14px;&#34;&gt; &lt;/span&gt;&lt;/p&gt;
 
-&lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
-  &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
-&lt;/p&gt;
+&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     
@@ -668,6 +660,8 @@ def start_serving(self, delegate):
 &lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
   &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
 &lt;/p&gt;
+
+&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     
@@ -687,9 +681,7 @@ def start_serving(self, delegate):
 
 &lt;p&gt;&lt;a href=&#34;http://deeplearning.stanford.edu/wiki/index.php/UFLDL%E6%95%99%E7%A8%8B&#34;&gt;http://deeplearning.stanford.edu/wiki/index.php/UFLDL%E6%95%99%E7%A8%8B&lt;/a&gt;&lt;/p&gt;
 
-&lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
-  &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
-&lt;/p&gt;
+&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     
@@ -945,7 +937,7 @@ def start_serving(self, delegate):
 
 &lt;p&gt;2.4.2贝叶斯方法与不确定度量&lt;/p&gt;
 
-&lt;p&gt;基于贝叶斯思想，我们可以得出![][64]等多种公式，这些公式和度量函数可以很好的描述信息表即导出规则的各种属性。&lt;a href=&#34;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABcAAAAfCAIAAACDG8GaAAAAlUlEQVRIie3SwQ3EIAwEwK2LglwP1bgZinEedyQo8dpwukce+AcSw7IC9o/BVrYyTKsFfUR/UVotQKnNzMxUXAdACLVaTqKTjpIHyZFEUcGIqIyrWaUjKrzYVLklMRUGBcodoa1EygNxdlLFR0gzTPkUejE8R6B8D10/nwtm7O/GN09mCRqYV5YRR1l9DcuyPlt5v3IAOP7MKTnaHTcAAAAASUVORK5CYII=&#34;&gt;5&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;基于贝叶斯思想，我们可以得出&lt;img src=&#34;data:image/png;base64,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&#34; alt=&#34;&#34; /&gt;等多种公式，这些公式和度量函数可以很好的描述信息表即导出规则的各种属性。&lt;a href=&#34;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABcAAAAfCAIAAACDG8GaAAAAlUlEQVRIie3SwQ3EIAwEwK2LglwP1bgZinEedyQo8dpwukce+AcSw7IC9o/BVrYyTKsFfUR/UVotQKnNzMxUXAdACLVaTqKTjpIHyZFEUcGIqIyrWaUjKrzYVLklMRUGBcodoa1EygNxdlLFR0gzTPkUejE8R6B8D10/nwtm7O/GN09mCRqYV5YRR1l9DcuyPlt5v3IAOP7MKTnaHTcAAAAASUVORK5CYII=&#34;&gt;5&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;另一种不确定测量方式是以信息熵理论为基础的，通过将这些参数类比于信息熵理论中的概率分布，引入了类似于信息熵，互信息熵计算的各种公式，用以完成对规则和整个信息系统的的度量。&lt;a href=&#34;data:image/png;base64,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&#34;&gt;10&lt;/a&gt;&lt;/p&gt;
 
@@ -1011,7 +1003,7 @@ def start_serving(self, delegate):
   &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
 &lt;/p&gt;
 
-&lt;p&gt;[64]: data:image/png;base64,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&lt;/p&gt;
+&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     
@@ -1067,9 +1059,7 @@ z.test(x,10,1.5,0.05)&lt;/pre&gt;
 
 &lt;p&gt;[1]173.7703 175.6297&lt;/p&gt;
 
-&lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
-  &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
-&lt;/p&gt;
+&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     
@@ -1223,9 +1213,7 @@ kurtosis(x)&lt;/pre&gt;
   &lt;/p&gt;
 &lt;/div&gt;
 
-&lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
-  &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
-&lt;/p&gt;
+&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     
@@ -1331,9 +1319,7 @@ predict(lm.sol,ex,interval=&#34;prediction&#34;,level=0.95)&lt;/pre&gt;
 
 &lt;p&gt;&amp;nbsp;&lt;/p&gt;
 
-&lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
-  &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
-&lt;/p&gt;
+&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     
@@ -1491,9 +1477,7 @@ for ( int i = 0; i &amp;lt; m_numMeshes; i++ )
 
 &lt;p&gt;[2]&lt;a href=&#34;http://www.yakergong.net/nehe/course/tutorial_31.html&#34;&gt;http://www.yakergong.net/nehe/course/tutorial_31.html&lt;/a&gt;&lt;/p&gt;
 
-&lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
-  &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
-&lt;/p&gt;
+&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     
@@ -1548,9 +1532,7 @@ for ( int i = 0; i &amp;lt; m_numMeshes; i++ )
 
 &lt;p&gt;该系列结束，恩，也许以后学了更多，有了更好的了解后会回来改一改，谁知道呢？&lt;/p&gt;
 
-&lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
-  &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
-&lt;/p&gt;
+&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     
@@ -1611,9 +1593,7 @@ for ( int i = 0; i &amp;lt; m_numMeshes; i++ )
   &lt;embed id=&#34;lingoes_plugin_object&#34; width=&#34;0&#34; height=&#34;0&#34; type=&#34;application/lingoes-npruntime-capture-word-plugin&#34; hidden=&#34;true&#34; /&gt;
 &lt;/div&gt;
 
-&lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
-  &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
-&lt;/p&gt;
+&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     
@@ -1670,9 +1650,7 @@ for ( int i = 0; i &amp;lt; m_numMeshes; i++ )
 
 &lt;p&gt;恩，就是这样….最近这几个算法都不是很难恩………..&lt;/p&gt;
 
-&lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
-  &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
-&lt;/p&gt;
+&lt;p&gt;{{ template &amp;ldquo;_internal/disqus.html&amp;rdquo; . }}&lt;/p&gt;
 </description>
     </item>
     
