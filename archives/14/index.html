@@ -1,86 +1,178 @@
-	<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]> <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
 <head>
-  <link href="http://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="generator" content="Hugo 0.15-DEV" />
+  <title>算法总结8—非负矩阵因式分解  &middot; 悟剑阁</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<meta name="description" content="" />
+
+<meta name="keywords" content="矩阵, ">
+
+
+<meta property="og:title" content="算法总结8—非负矩阵因式分解  &middot; 悟剑阁 ">
+<meta property="og:site_name" content="悟剑阁"/>
+<meta property="og:url" content="http://luosha865.github.io/archives/14" />
+<meta property="og:locale" content="zh-CN">
+
+
+<meta property="og:type" content="article" />
+<meta property="og:description" content=""/>
+<meta property="og:article:published_time" content="2009-09-25T00:00:00Z" />
+<meta property="og:article:modified_time" content="2009-09-25T00:00:00Z" />
 
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-
-  <title> 算法总结8—非负矩阵因式分解 &middot; 悟剑阁 </title>
+    
+<meta property="og:article:tag" content="矩阵">
+    
+  
 
   
-  <link rel="stylesheet" href="http://luosha865.github.io/css/poole.css">
-  <link rel="stylesheet" href="http://luosha865.github.io/css/syntax.css">
-  <link rel="stylesheet" href="http://luosha865.github.io/css/hyde.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
 
-  
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://luosha865.github.io/apple-touch-icon-144-precomposed.png">
-  <link rel="shortcut icon" href="http://luosha865.github.io/favicon.png">
-
-  
-  <link href="" rel="alternate" type="application/rss+xml" title="悟剑阁" />
-
-  <script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-  tex2jax: {
-    inlineMath: [['$','$'], ['\\(','\\)']],
-    processEscapes: true
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "headline": "算法总结8—非负矩阵因式分解",
+    "author": {
+      "@type": "Person",
+      "name": "http://profiles.google.com/+?rel=author"
     },
-  TeX: {
-              equationNumbers: {
-                  autoNumber: ["AMS"],
-                  useLabelIds: true
-              }
-          },
-          "HTML-CSS": {
-              linebreaks: {
-                  automatic: true
-              },
-              scale: 85
-          },
-          SVG: {
-              linebreaks: {
-                  automatic: true
-              }
-          }
-  });
-  </script>
-  <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    "datePublished": "2009-09-25",
+    "description": "",
+    "wordCount":  889 
+  }
 </script>
+
+
+
+<link rel="canonical" href="http://luosha865.github.io/archives/14" />
+
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://luosha865.github.io/touch-icon-144-precomposed.png">
+<link href="http://luosha865.github.io/favicon.png" rel="icon">
+
+<meta name="generator" content="Hugo 0.16" />
+
+  <!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+<link href='https://fonts.googleapis.com/css?family=Merriweather:300%7CRaleway%7COpen+Sans' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="http://luosha865.github.io/css/font-awesome.min.css">
+<link rel="stylesheet" href="http://luosha865.github.io/css/style.css">
+<link rel="stylesheet" href="http://luosha865.github.io/css/highlight/default.css">
+
+  
 </head>
+<body>
+  <main id="main-wrapper" class="container main_wrapper has-sidebar">
+    <header id="main-header" class="container main_header">
+  <div class="container brand">
+  <div class="container title h1-like">
+  <a class="baselink" href="http://luosha865.github.io/">
+  悟剑阁
 
-	<body class="">
-		<div class="sidebar">
-  <div class="container sidebar-sticky">
-    <div class="sidebar-about">
-      <a href="http://luosha865.github.io/"><h1>悟剑阁</h1></a>
-      <p class="lead">
-       阁中悟剑，红尘练心。 
-      </p>
-    </div>
+</a>
 
-    <ul class="sidebar-nav">
-      <li><a href="http://luosha865.github.io/">Home</a> </li>
-      
-        <li><a href="http://luosha865.github.io/post/"> 归档 </a></li>
-      
-        <li><a href="http://luosha865.github.io/about/"> 关于我 </a></li>
-      
-    </ul>
+</div>
 
-    <p>&copy; 2015. All rights reserved. </p>
-  </div>
+  
+<div class="container topline">
+  
+  阁中悟剑，红尘练心
+
+
 </div>
 
 
-		<div class="content container">
-			<div class="post">
-			 	<h1>算法总结8—非负矩阵因式分解</h1>
-			  <span class="post-date">Fri, Sep 25, 2009</span>
-			      <p><strong>数学基础:</strong></p>
+</div>
+
+  <nav class="container nav primary no-print">
+  
+
+
+  
+<a href="http://luosha865.github.io/about">关于我</a>
+
+<a href="http://luosha865.github.io/post" title="Show list of posts">我的文章</a>
+
+<a href="http://luosha865.github.io/tags" title="Show list of tags">标签列表</a>
+
+
+</nav>
+
+<div class="container nav secondary no-print">
+  
+<a id="contact-link-email" class="contact_link" href="mailto:luosha865@gmail.com">
+  <span class="fa fa-envelope-square"></span><span>email</span></a>
+
+
+
+<a id="contact-link-github" class="contact_link" href="https://github.com/luosha865">
+  <span class="fa fa-github-square"></span><span>github</span></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+
+  
+
+</header>
+
+
+<article id="main-content" class="container main_content single">
+  <header class="container hat">
+  <h1>算法总结8—非负矩阵因式分解
+</h1>
+
+  <div class="metas">
+<time datetime="2009-09-25">25 Sep, 2009</time>
+
+
+  
+    &middot; by luosha865
+  
+  &middot; Read in about 2 min
+  &middot; (889 Words)
+  <br>
+  
+<a class="label" href="http://luosha865.github.io/tags/%E7%9F%A9%E9%98%B5">矩阵</a>
+
+
+
+</div>
+
+</header>
+
+  <div class="container content">
+  <p><strong>数学基础:</strong></p>
 
 <p>线性代数的矩阵乘法运算。</p>
 
@@ -131,26 +223,138 @@
   <embed id="lingoes_plugin_object" width="0" height="0" type="application/lingoes-npruntime-capture-word-plugin" hidden="true" />
 </div>
 
-			</div>
-
-			
-				<h2>Comments</h2>
-				<div id="disqus_thread"></div>
-<script type="text/javascript">
-     
-    var disqus_shortname = 'sword865'; 
-
-     
-    (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 </div>
-			
-		</div>
 
+
+  <footer class="container">
+  <div class="container navigation no-print">
+  <h2>Navigation</h2>
+  
+  
+
+    
+    <a class="prev" href="http://luosha865.github.io/archives/15" title="算法总结7—多维缩放">
+      Previous
+    </a>
+    
+
+    
+    <a class="next" href="http://luosha865.github.io/archives/13" title="算法总结9—优化">
+      Next
+    </a>
+    
+
+  
+
+
+</div>
+
+  <div class="container comments">
+  <h2>Comments</h2>
+  
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  (function() {
+    
+    
+    if (window.location.hostname == "localhost")
+      return;
+
+    var dsq = document.createElement('script'); dsq.async = true; dsq.type = 'text/javascript';
+    dsq.src = '//sword865.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+</div>
+
+</footer>
+
+</article>
+      <footer id="main-footer" class="container main_footer">
+  
+
+  <div class="container nav foot no-print">
+  
+
+  <a class="toplink" href="#">back to top</a>
+
+</div>
+
+  <div class="container credits">
+  
+<div class="container footline">
+  
+
+</div>
+
+
+  
+<div class="container copyright">
+  
+  Copyright &copy; 2015. All rights reserved.
+
+
+</div>
+
+
+</div>
+
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    processEscapes: true
+    },
+  TeX: {
+              equationNumbers: {
+                  autoNumber: ["AMS"],
+                  useLabelIds: true
+              }
+          },
+          "HTML-CSS": {
+              linebreaks: {
+                  automatic: true
+              },
+              scale: 85
+          },
+          SVG: {
+              linebreaks: {
+                  automatic: true
+              }
+          }
+  });
+  </script>
+  <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+</footer>
+
+    </main>
+    
+<script type="text/javascript">
+  (function() {
+    
+    
+    if (window.location.hostname == "localhost")
+      return;
+
+    var dsq = document.createElement('script'); dsq.async = true; dsq.type = 'text/javascript';
+    dsq.src = '//sword865.disqus.com/count.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+
+<script src="http://luosha865.github.io/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+    
   </body>
 </html>
+

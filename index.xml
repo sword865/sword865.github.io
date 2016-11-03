@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title></title>
+    <title>悟剑阁</title>
     <link>http://luosha865.github.io/</link>
-    <description>Recent content on </description>
+    <description>Recent content on 悟剑阁</description>
     <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <managingEditor>luosha865@gmail.com (罗刹剑客)</managingEditor>
+    <webMaster>luosha865@gmail.com (罗刹剑客)</webMaster>
+    <copyright>Copyright (c) 2015. All rights reserved.</copyright>
     <lastBuildDate>Mon, 27 Jul 2015 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://luosha865.github.io/index.xml" rel="self" type="application/rss+xml" />
     
@@ -12,7 +16,7 @@
       <title>Elasticsearch-HttpServerModule</title>
       <link>http://luosha865.github.io/archives/150</link>
       <pubDate>Mon, 27 Jul 2015 00:00:00 +0000</pubDate>
-      
+      <author>luosha865@gmail.com (罗刹剑客)</author>
       <guid>http://luosha865.github.io/archives/150</guid>
       <description>&lt;p&gt;HttpServerModule的请求主要由HttpServer中的HttpServerTransport(默认为NettyHttpServerTransport）类处理。&lt;/p&gt;
 
@@ -97,10 +101,6 @@
 &lt;p&gt;&lt;a href=&#34;http://my.oschina.net/flashsword/blog/178561&#34;&gt;http://my.oschina.net/flashsword/blog/178561&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&#34;http://my.oschina.net/flashsword/blog/197963&#34;&gt;http://my.oschina.net/flashsword/blog/197963&lt;/a&gt;&lt;/p&gt;
-
-&lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
-  &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
-&lt;/p&gt;
 </description>
     </item>
     
@@ -108,7 +108,7 @@
       <title>Tornado框架简析</title>
       <link>http://luosha865.github.io/archives/100</link>
       <pubDate>Thu, 05 Feb 2015 00:00:00 +0000</pubDate>
-      
+      <author>luosha865@gmail.com (罗刹剑客)</author>
       <guid>http://luosha865.github.io/archives/100</guid>
       <description>&lt;p&gt;Tornado是一款轻量级的Web服务器，同时又是一个开发框架。采用单线程非阻塞I/O模型(epoll)，主要是为了应对高并发 访问量而被开发出来，尤其适用于comet应用。&lt;/p&gt;
 
@@ -265,7 +265,7 @@ def start_serving(self, delegate):
 
 &lt;p&gt;最后抄一张图过来：&lt;/p&gt;
 
-&lt;p&gt;[&lt;img class=&#34;alignnone wp-image-108 size-large&#34; src=&#34;http://sword865.com/blog/wp-content/uploads/2015/02/QQ20150205-1@2x-1024x593.png&#34; alt=&#34;QQ20150205-1@2x&#34; width=&#34;615&#34; height=&#34;356&#34; /&gt;][1]&lt;/p&gt;
+&lt;p&gt;&lt;img class=&#34;alignnone wp-image-108 size-large&#34; src=&#34;http://blog.sword865.com/wp-content/uploads/2015/02/QQ20150205-1@2x-1024x593.png&#34; alt=&#34;QQ20150205-1@2x&#34; width=&#34;615&#34; height=&#34;356&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;参考：&lt;/p&gt;
 
@@ -284,8 +284,6 @@ def start_serving(self, delegate):
 &lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
   &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
 &lt;/p&gt;
-
-&lt;p&gt;[1]: &lt;a href=&#34;http://sword865.com/blog/wp-content/uploads/2015/02/QQ20150205-1@2x.png&#34;&gt;http://sword865.com/blog/wp-content/uploads/2015/02/QQ20150205-1@2x.png&lt;/a&gt;&lt;/p&gt;
 </description>
     </item>
     
@@ -293,13 +291,13 @@ def start_serving(self, delegate):
       <title>Lucene索引文件学习</title>
       <link>http://luosha865.github.io/archives/86</link>
       <pubDate>Wed, 04 Feb 2015 00:00:00 +0000</pubDate>
-      
+      <author>luosha865@gmail.com (罗刹剑客)</author>
       <guid>http://luosha865.github.io/archives/86</guid>
       <description>&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt; 最近在做搜索，抽空看一下lucene，资料挺多的，不过大部分都是3.x了……在对着官方文档大概看一下。&lt;/span&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;优化后的lucene索引文件(4.9.0)&lt;/span&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;&lt;img title=&#34;NewImage.png&#34; src=&#34;http://sword865.com/blog/wp-content/uploads/2015/02/NewImage.png&#34; alt=&#34;NewImage&#34; width=&#34;200&#34; height=&#34;146&#34; border=&#34;0&#34; /&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;&lt;img title=&#34;NewImage.png&#34; src=&#34;http://blog.sword865.com/wp-content/uploads/2015/02/NewImage.png&#34; alt=&#34;NewImage&#34; width=&#34;200&#34; height=&#34;146&#34; border=&#34;0&#34; /&gt;&lt;/span&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;一、段文件&lt;/span&gt;&lt;/p&gt;
 
@@ -438,32 +436,20 @@ def start_serving(self, delegate):
 &lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;&lt;a href=&#34;http://lucene.apache.org/core/4_9_0/core/org/apache/lucene/codecs/lucene49/package-summary.html#File_Naming&#34;&gt;http://lucene.apache.org/core/4_9_0/core/org/apache/lucene/codecs/lucene49/package-summary.html#File_Naming&lt;/a&gt;&lt;/span&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;&lt;a href=&#34;http://www.cnblogs.com/forfuture1978/category/300665.html&#34;&gt;http://www.cnblogs.com/forfuture1978/category/300665.html&lt;/a&gt;&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt; &lt;/p&gt;
-
-&lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
-  &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
-&lt;/p&gt;
 </description>
     </item>
     
     <item>
       <title>关于</title>
-      <link>http://luosha865.github.io/sample-page/</link>
+      <link>http://luosha865.github.io/about/</link>
       <pubDate>Sun, 07 Dec 2014 00:00:00 +0000</pubDate>
-      
-      <guid>http://luosha865.github.io/sample-page/</guid>
+      <author>luosha865@gmail.com (罗刹剑客)</author>
+      <guid>http://luosha865.github.io/about/</guid>
       <description>&lt;p&gt;这里是我的技术博客。&lt;/p&gt;
 
 &lt;p&gt;后台/算法工程师&lt;/p&gt;
 
 &lt;p&gt;&lt;del&gt;机器学习方向研究生&lt;/del&gt;&lt;/p&gt;
-
-&lt;p&gt;&amp;nbsp;&lt;/p&gt;
-
-&lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
-  &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
-&lt;/p&gt;
 </description>
     </item>
     
@@ -471,7 +457,7 @@ def start_serving(self, delegate):
       <title>基于标签的推荐系统</title>
       <link>http://luosha865.github.io/archives/5</link>
       <pubDate>Mon, 17 Nov 2014 00:00:00 +0000</pubDate>
-      
+      <author>luosha865@gmail.com (罗刹剑客)</author>
       <guid>http://luosha865.github.io/archives/5</guid>
       <description>&lt;p&gt;一、基于图模型的推荐&lt;/p&gt;
 
@@ -483,9 +469,7 @@ def start_serving(self, delegate):
 
 &lt;p&gt;每次传播(item-&amp;gt;user-&amp;gt;item)后用户Ui的兴趣向量：&lt;/p&gt;
 
-&lt;p class=&#34;ql-center-displayed-equation&#34; style=&#34;line-height: 51px;&#34;&gt;
-  &lt;span class=&#34;ql-right-eqno&#34;&gt; &amp;nbsp; &lt;/span&gt;&lt;span class=&#34;ql-left-eqno&#34;&gt; &amp;nbsp; &lt;/span&gt;&lt;img src=&#34;http://sword865.com/blog/wp-content/ql-cache/quicklatex.com-72578d7b8cd811343615a8e13fcdbe2a_l3.png&#34; height=&#34;51&#34; width=&#34;259&#34; class=&#34;ql-img-displayed-equation quicklatex-auto-format&#34; alt=&#34;&amp;#92;&amp;#91;&amp;#102;&amp;#95;&amp;#106;&amp;#94;&amp;#112;&amp;#61;&amp;#92;&amp;#115;&amp;#117;&amp;#109;&amp;#95;&amp;#123;&amp;#108;&amp;#61;&amp;#49;&amp;#125;&amp;#94;&amp;#123;&amp;#110;&amp;#125;&amp;#92;&amp;#115;&amp;#117;&amp;#109;&amp;#95;&amp;#123;&amp;#115;&amp;#61;&amp;#49;&amp;#125;&amp;#94;&amp;#123;&amp;#109;&amp;#125;&amp;#92;&amp;#102;&amp;#114;&amp;#97;&amp;#99;&amp;#123;&amp;#97;&amp;#95;&amp;#123;&amp;#108;&amp;#106;&amp;#125;&amp;#97;&amp;#95;&amp;#123;&amp;#108;&amp;#115;&amp;#125;&amp;#97;&amp;#95;&amp;#123;&amp;#105;&amp;#115;&amp;#125;&amp;#125;&amp;#123;&amp;#75;&amp;#40;&amp;#85;&amp;#95;&amp;#108;&amp;#41;&amp;#75;&amp;#40;&amp;#73;&amp;#95;&amp;#115;&amp;#41;&amp;#125;&amp;#44;&amp;#106;&amp;#61;&amp;#49;&amp;#8230;&amp;#109;&amp;#92;&amp;#93;&#34; title=&#34;Rendered by QuickLaTeX.com&#34; /&gt;
-&lt;/p&gt;
+&lt;div&gt;$$f_j^p=\sum_{l=1}^{n}\sum_{s=1}^{m}\frac{a_{lj}a_{ls}a_{is}}{K(U_l)K(I_s)},j=1…m$$&lt;/div&gt;
 
 &lt;p&gt;2.heat spreading&lt;/p&gt;
 
@@ -493,13 +477,19 @@ def start_serving(self, delegate):
 
 &lt;p&gt;每次传播后用户Ui的兴趣向量：&lt;/p&gt;
 
-&lt;p class=&#34;ql-center-displayed-equation&#34; style=&#34;line-height: 51px;&#34;&gt;
-  &lt;span class=&#34;ql-right-eqno&#34;&gt; &amp;nbsp; &lt;/span&gt;&lt;span class=&#34;ql-left-eqno&#34;&gt; &amp;nbsp; &lt;/span&gt;&lt;img src=&#34;http://sword865.com/blog/wp-content/ql-cache/quicklatex.com-b0998856c4f20c869185526c6f2d5dab_l3.png&#34; height=&#34;51&#34; width=&#34;281&#34; class=&#34;ql-img-displayed-equation quicklatex-auto-format&#34; alt=&#34;&amp;#92;&amp;#91;&amp;#102;&amp;#95;&amp;#104;&amp;#94;&amp;#112;&amp;#61;&amp;#92;&amp;#102;&amp;#114;&amp;#97;&amp;#99;&amp;#123;&amp;#49;&amp;#125;&amp;#123;&amp;#75;&amp;#40;&amp;#73;&amp;#95;&amp;#106;&amp;#41;&amp;#125;&amp;#92;&amp;#115;&amp;#117;&amp;#109;&amp;#95;&amp;#123;&amp;#108;&amp;#61;&amp;#49;&amp;#125;&amp;#94;&amp;#123;&amp;#110;&amp;#125;&amp;#92;&amp;#115;&amp;#117;&amp;#109;&amp;#95;&amp;#123;&amp;#115;&amp;#61;&amp;#49;&amp;#125;&amp;#94;&amp;#123;&amp;#109;&amp;#125;&amp;#92;&amp;#102;&amp;#114;&amp;#97;&amp;#99;&amp;#123;&amp;#97;&amp;#95;&amp;#123;&amp;#108;&amp;#106;&amp;#125;&amp;#97;&amp;#95;&amp;#123;&amp;#108;&amp;#115;&amp;#125;&amp;#97;&amp;#95;&amp;#123;&amp;#105;&amp;#115;&amp;#125;&amp;#125;&amp;#123;&amp;#75;&amp;#40;&amp;#85;&amp;#95;&amp;#108;&amp;#41;&amp;#125;&amp;#44;&amp;#106;&amp;#61;&amp;#49;&amp;#8230;&amp;#109;&amp;#92;&amp;#93;&#34; title=&#34;Rendered by QuickLaTeX.com&#34; /&gt;
-&lt;/p&gt;
+&lt;div&gt;$$f_h^p=\frac{1}{K(I_j)}\sum_{l=1}^{n}\sum_{s=1}^{m}\frac{a_{lj}a_{ls}a_{is}}{K(U_l)},j=1…m$$&lt;/div&gt;
 
-&lt;p&gt;其中：&lt;img src=&#34;http://sword865.com/blog/wp-content/ql-cache/quicklatex.com-b079522ca48af5742d3a92fad1cab60e_l3.png&#34; class=&#34;ql-img-inline-formula quicklatex-auto-format&#34; alt=&#34;&amp;#75;&amp;#40;&amp;#73;&amp;#95;&amp;#106;&amp;#41;&amp;#61;&amp;#92;&amp;#115;&amp;#117;&amp;#109;&amp;#95;&amp;#123;&amp;#108;&amp;#61;&amp;#49;&amp;#125;&amp;#94;&amp;#123;&amp;#109;&amp;#125;&amp;#97;&amp;#95;&amp;#123;&amp;#108;&amp;#106;&amp;#125;&#34; title=&#34;Rendered by QuickLaTeX.com&#34; height=&#34;20&#34; width=&#34;133&#34; style=&#34;vertical-align: -6px;&#34; /&gt;是节目j的邻域大小，&lt;img src=&#34;http://sword865.com/blog/wp-content/ql-cache/quicklatex.com-c00cedda4e5d5763a770835d673ba5c5_l3.png&#34; class=&#34;ql-img-inline-formula quicklatex-auto-format&#34; alt=&#34;&amp;#75;&amp;#40;&amp;#85;&amp;#95;&amp;#108;&amp;#41;&amp;#61;&amp;#92;&amp;#115;&amp;#117;&amp;#109;&amp;#95;&amp;#123;&amp;#108;&amp;#61;&amp;#49;&amp;#125;&amp;#94;&amp;#123;&amp;#110;&amp;#125;&amp;#97;&amp;#95;&amp;#123;&amp;#108;&amp;#115;&amp;#125;&#34; title=&#34;Rendered by QuickLaTeX.com&#34; height=&#34;20&#34; width=&#34;135&#34; style=&#34;vertical-align: -6px;&#34; /&gt;是用户l的邻域大小。&lt;/p&gt;
+&lt;p&gt;其中：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://sword865.com/blog/wp-content/ql-cache/quicklatex.com-8b434a5adf074f8f0e25a42236e0c3ed_l3.png&#34; class=&#34;ql-img-inline-formula quicklatex-auto-format&#34; alt=&#34;&amp;#97;&amp;#95;&amp;#123;&amp;#105;&amp;#106;&amp;#125;&#34; title=&#34;Rendered by QuickLaTeX.com&#34; height=&#34;14&#34; width=&#34;20&#34; style=&#34;vertical-align: -6px;&#34; /&gt;是表示用户i和物品j之间是否有边存在的二元向量。&lt;/p&gt;
+&lt;div&gt;$$K(I_j)=\sum_{l=1}^{m}a_{lj}$$&lt;/div&gt;
+
+&lt;p&gt;是节目j的邻域大小，&lt;/p&gt;
+
+&lt;div&gt;$$K(U_l)=\sum_{l=1}^{n}a_{ls}$$&lt;/div&gt;
+
+&lt;p&gt;是用户l的邻域大小。&lt;/p&gt;
+
+&lt;p&gt;$a_{ij}$是表示用户i和物品j之间是否有边存在的二元向量。&lt;/p&gt;
 
 &lt;p&gt;相比之下，Heats算法倾向于降低热门item的权重，而Probs中与增强对热门item的推荐。&lt;/p&gt;
 
@@ -511,11 +501,11 @@ def start_serving(self, delegate):
 
 &lt;p&gt;图中，用户i的每个item的权重（1 or 0）会同时像用户和标签进行传播，这样每次传播后的兴趣向量：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://sword865.com/blog/wp-content/ql-cache/quicklatex.com-f78f41f2bf011c73a4bffd5e2472a3fe_l3.png&#34; class=&#34;ql-img-inline-formula quicklatex-auto-format&#34; alt=&#34;&amp;#102;&amp;#95;&amp;#106;&amp;#94;&amp;#116;&amp;#61;&amp;#92;&amp;#108;&amp;#97;&amp;#109;&amp;#98;&amp;#100;&amp;#97;&amp;#32;&amp;#102;&amp;#95;&amp;#106;&amp;#94;&amp;#112;&amp;#32;&amp;#43;&amp;#32;&amp;#40;&amp;#49;&amp;#45;&amp;#92;&amp;#108;&amp;#97;&amp;#109;&amp;#98;&amp;#100;&amp;#97;&amp;#41;&amp;#32;&amp;#102;&amp;#95;&amp;#106;&amp;#94;&amp;#123;&amp;#112;&amp;#116;&amp;#125;&#34; title=&#34;Rendered by QuickLaTeX.com&#34; height=&#34;26&#34; width=&#34;168&#34; style=&#34;vertical-align: -8px;&#34; /&gt;，其中&lt;img src=&#34;http://sword865.com/blog/wp-content/ql-cache/quicklatex.com-2bde2cec73738ac0234706257f6dc449_l3.png&#34; class=&#34;ql-img-inline-formula quicklatex-auto-format&#34; alt=&#34;&amp;#102;&amp;#95;&amp;#106;&amp;#94;&amp;#112;&#34; title=&#34;Rendered by QuickLaTeX.com&#34; height=&#34;23&#34; width=&#34;18&#34; style=&#34;vertical-align: -8px;&#34; /&gt;和&lt;img src=&#34;http://sword865.com/blog/wp-content/ql-cache/quicklatex.com-71804ecfd1421a8904e2c9a4305983d6_l3.png&#34; class=&#34;ql-img-inline-formula quicklatex-auto-format&#34; alt=&#34;&amp;#102;&amp;#95;&amp;#106;&amp;#94;&amp;#123;&amp;#112;&amp;#116;&amp;#125;&#34; title=&#34;Rendered by QuickLaTeX.com&#34; height=&#34;26&#34; width=&#34;23&#34; style=&#34;vertical-align: -8px;&#34; /&gt;分别是从(item-&amp;gt;user-&amp;gt;item)和(item-&amp;gt;tag-&amp;gt;item)传播后得到的权重。&lt;/p&gt;
+&lt;p&gt;$f_j^t=\lambda f_j^p + (1-\lambda) f_j^{pt}$，其中$f_j^p$和$f_j^{pt}$分别是从(item-&amp;gt;user-&amp;gt;item)和(item-&amp;gt;tag-&amp;gt;item)传播后得到的权重。&lt;/p&gt;
 
 &lt;p&gt;&lt;span style=&#34;font-size: 14px;&#34;&gt;二、矩阵分解的张量模型&lt;/span&gt;&lt;/p&gt;
 
-&lt;p&gt;对三元阵&lt;img src=&#34;http://sword865.com/blog/wp-content/ql-cache/quicklatex.com-067fe9c87c45494d6cab789cc05de1e9_l3.png&#34; class=&#34;ql-img-inline-formula quicklatex-auto-format&#34; alt=&#34;&amp;#89;&amp;#95;&amp;#123;&amp;#40;&amp;#110;&amp;#92;&amp;#116;&amp;#105;&amp;#109;&amp;#101;&amp;#115;&amp;#32;&amp;#109;&amp;#92;&amp;#116;&amp;#105;&amp;#109;&amp;#101;&amp;#115;&amp;#32;&amp;#116;&amp;#41;&amp;#125;&#34; title=&#34;Rendered by QuickLaTeX.com&#34; height=&#34;19&#34; width=&#34;66&#34; style=&#34;vertical-align: -7px;&#34; /&gt;进行矩阵分解，C为核张量，U,I,T为用户特征，物品特征和标签特征矩阵。&lt;/p&gt;
+&lt;p&gt;对三元阵$Y_{(n\times m\times t)}$进行矩阵分解，C为核张量，U,I,T为用户特征，物品特征和标签特征矩阵。&lt;/p&gt;
 
 &lt;p&gt;根据分解结果对Y进行填充。&lt;/p&gt;
 
@@ -524,10 +514,6 @@ def start_serving(self, delegate):
 &lt;p&gt;填充后即得到评分矩阵&lt;/p&gt;
 
 &lt;p&gt;&lt;span style=&#34;font-size: 14px;&#34;&gt; &lt;/span&gt;&lt;/p&gt;
-
-&lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
-  &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
-&lt;/p&gt;
 </description>
     </item>
     
@@ -535,7 +521,7 @@ def start_serving(self, delegate):
       <title>Google在KDD2013上关于CTR的一篇论文</title>
       <link>http://luosha865.github.io/archives/6</link>
       <pubDate>Sat, 03 Aug 2013 00:00:00 +0000</pubDate>
-      
+      <author>luosha865@gmail.com (罗刹剑客)</author>
       <guid>http://luosha865.github.io/archives/6</guid>
       <description>&lt;p&gt;最近在做CTR，刚好Google在KDD发了一篇文章，讲了他们的一些尝试，总结一下：&lt;/p&gt;
 
@@ -555,7 +541,7 @@ def start_serving(self, delegate):
 
 &lt;p&gt;&lt;a href=&#34;http://images.cnitblog.com/blog/52809/201308/04011358-2e856d4483c64ef0a668ee8c8df2a548.png&#34;&gt;&lt;img style=&#34;background-image: none; padding-top: 0px; padding-left: 0px; display: inline; padding-right: 0px; border-width: 0px;&#34; title=&#34;image&#34; src=&#34;http://images.cnitblog.com/blog/52809/201308/04011359-6f55d3e1f55f4389979bec14102120b5.png&#34; alt=&#34;image&#34; width=&#34;187&#34; height=&#34;39&#34; border=&#34;0&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;其中&lt;img src=&#34;http://sword865.com/blog/wp-content/ql-cache/quicklatex.com-f489909a6f16a3b5a6ee23901d48d9b6_l3.png&#34; class=&#34;ql-img-inline-formula quicklatex-auto-format&#34; alt=&#34;&amp;#92;&amp;#101;&amp;#116;&amp;#97;&amp;#95;&amp;#116;&#34; title=&#34;Rendered by QuickLaTeX.com&#34; height=&#34;12&#34; width=&#34;14&#34; style=&#34;vertical-align: -4px;&#34; /&gt;是一个非增的学习率&lt;/p&gt;
+&lt;p&gt;其中$\eta_t$是一个非增的学习率&lt;/p&gt;
 
 &lt;p&gt;FTRL-Proximal通过下式迭代：&lt;/p&gt;
 
@@ -563,7 +549,7 @@ def start_serving(self, delegate):
 
 &lt;p&gt;&amp;nbsp;&lt;/p&gt;
 
-&lt;p&gt;其中参数  &lt;img src=&#34;http://sword865.com/blog/wp-content/ql-cache/quicklatex.com-a53d534bdda53a36b558f3ef61ab1d0f_l3.png&#34; class=&#34;ql-img-inline-formula quicklatex-auto-format&#34; alt=&#34;&amp;#92;&amp;#115;&amp;#105;&amp;#103;&amp;#109;&amp;#97;&amp;#95;&amp;#115;&#34; title=&#34;Rendered by QuickLaTeX.com&#34; height=&#34;11&#34; width=&#34;16&#34; style=&#34;vertical-align: -3px;&#34; /&gt;是学习率，一般我们有  &lt;img src=&#34;http://sword865.com/blog/wp-content/ql-cache/quicklatex.com-a4b1e9e9035115afffdd00bcfa2f183c_l3.png&#34; class=&#34;ql-img-inline-formula quicklatex-auto-format&#34; alt=&#34;&amp;#92;&amp;#115;&amp;#117;&amp;#109;&amp;#95;&amp;#123;&amp;#115;&amp;#61;&amp;#49;&amp;#125;&amp;#94;&amp;#116;&amp;#92;&amp;#115;&amp;#105;&amp;#103;&amp;#109;&amp;#97;&amp;#95;&amp;#115;&amp;#61;&amp;#92;&amp;#102;&amp;#114;&amp;#97;&amp;#99;&amp;#123;&amp;#49;&amp;#125;&amp;#123;&amp;#92;&amp;#101;&amp;#116;&amp;#97;&amp;#95;&amp;#116;&amp;#125;&#34; title=&#34;Rendered by QuickLaTeX.com&#34; height=&#34;26&#34; width=&#34;102&#34; style=&#34;vertical-align: -9px;&#34; /&gt;。&lt;/p&gt;
+&lt;p&gt;参数$\sigma$是学习率，一般我们有 ${\sum_{s=1}^t\sigma_s=\frac{1}{\eta_t}}$。&lt;/p&gt;
 
 &lt;p&gt;更新公式：&lt;/p&gt;
 
@@ -573,11 +559,11 @@ def start_serving(self, delegate):
 
 &lt;p&gt;&lt;a href=&#34;http://images.cnitblog.com/blog/52809/201308/04011359-8100f10672694bffa4e1a46fc3b01719.png&#34;&gt;&lt;img style=&#34;background-image: none; padding-top: 0px; padding-left: 0px; display: inline; padding-right: 0px; border: 0px;&#34; title=&#34;image&#34; src=&#34;http://images.cnitblog.com/blog/52809/201308/04011400-cbd594724918403f8c25f0a88ee489ae.png&#34; alt=&#34;image&#34; width=&#34;428&#34; height=&#34;368&#34; border=&#34;0&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;这里多个一个  &lt;img src=&#34;http://sword865.com/blog/wp-content/ql-cache/quicklatex.com-8e8aa5c38c57b55921bdea4b91ec59b3_l3.png&#34; class=&#34;ql-img-inline-formula quicklatex-auto-format&#34; alt=&#34;&amp;#92;&amp;#108;&amp;#97;&amp;#109;&amp;#98;&amp;#100;&amp;#97;&amp;#95;&amp;#50;&#34; title=&#34;Rendered by QuickLaTeX.com&#34; height=&#34;16&#34; width=&#34;17&#34; style=&#34;vertical-align: -3px;&#34; /&gt;是一个L2正则化参数。&lt;/p&gt;
+&lt;p&gt;这里多个一个 $\lambda_2$ 是一个L2正则化参数。&lt;/p&gt;
 
 &lt;p&gt;二、学习率&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://sword865.com/blog/wp-content/ql-cache/quicklatex.com-1c291523bb9229304e6ff8843fef467b_l3.png&#34; class=&#34;ql-img-inline-formula quicklatex-auto-format&#34; alt=&#34;&amp;#92;&amp;#100;&amp;#105;&amp;#115;&amp;#112;&amp;#108;&amp;#97;&amp;#121;&amp;#115;&amp;#116;&amp;#121;&amp;#108;&amp;#101;&amp;#32;&amp;#92;&amp;#101;&amp;#116;&amp;#97;&amp;#95;&amp;#116;&amp;#61;&amp;#92;&amp;#102;&amp;#114;&amp;#97;&amp;#99;&amp;#123;&amp;#49;&amp;#125;&amp;#123;&amp;#92;&amp;#115;&amp;#113;&amp;#114;&amp;#116;&amp;#123;&amp;#116;&amp;#125;&amp;#125;&#34; title=&#34;Rendered by QuickLaTeX.com&#34; height=&#34;40&#34; width=&#34;62&#34; style=&#34;vertical-align: -16px;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;$$\displaystyle \eta_t=\frac{1}{\sqrt{t}}$$&lt;/p&gt;
 
 &lt;p&gt;由于在求解时，这样，对每一个坐标我们都使用了同样的参数，这样一些没有使用的坐标的参数也会下降，显然这不太合理。&lt;/p&gt;
 
@@ -661,15 +647,13 @@ def start_serving(self, delegate):
 
 &lt;p&gt;矫正的数据&lt;a href=&#34;http://images.cnitblog.com/blog/52809/201308/04011405-372b84501cc84940a965b739cf97a9d9.png&#34;&gt;&lt;img style=&#34;background-image: none; padding-top: 0px; padding-left: 0px; display: inline; padding-right: 0px; border: 0px;&#34; title=&#34;image&#34; src=&#34;http://images.cnitblog.com/blog/52809/201308/04011405-93a76b43c030441c9295ded6239bbb1c.png&#34; alt=&#34;image&#34; width=&#34;71&#34; height=&#34;34&#34; border=&#34;0&#34; /&gt;&lt;/a&gt;p是模型预测的CTR，d是一些训练数据。&lt;/p&gt;
 
-&lt;p&gt;一个常用矫正：[&lt;img style=&#34;background-image: none; padding-top: 0px; padding-left: 0px; margin: 0px; display: inline; padding-right: 0px; border: 0px;&#34; title=&#34;image&#34; src=&#34;http://images.cnitblog.com/blog/52809/201308/04011406-e83e0f3784944b10812b43ca5c74a2c4.png&#34; alt=&#34;image&#34; width=&#34;112&#34; height=&#34;43&#34; border=&#34;0&#34; /&gt;][16]&lt;/p&gt;
+&lt;p&gt;一个常用矫正：&lt;a href=&#34;http://images.cnitblog.com/blog/52809/201308/04011406-75988e6dea0d4d83b698e96019c9753b.png&#34;&gt;&lt;img style=&#34;background-image: none; padding-top: 0px; padding-left: 0px; margin: 0px; display: inline; padding-right: 0px; border: 0px;&#34; title=&#34;image&#34; src=&#34;http://images.cnitblog.com/blog/52809/201308/04011406-e83e0f3784944b10812b43ca5c74a2c4.png&#34; alt=&#34;image&#34; width=&#34;112&#34; height=&#34;43&#34; border=&#34;0&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;两个参数可以用Poisson regression在数据上训练。&lt;/p&gt;
 
 &lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
   &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
 &lt;/p&gt;
-
-&lt;p&gt;[16]: &lt;a href=&#34;http://images.cnitblog.com/blog/52809/201308/04011406-75988e6dea0d4d83b698e96019c9753b.png&#34;&gt;http://images.cnitblog.com/blog/52809/201308/04011406-75988e6dea0d4d83b698e96019c9753b.png&lt;/a&gt;&lt;/p&gt;
 </description>
     </item>
     
@@ -677,7 +661,7 @@ def start_serving(self, delegate):
       <title>[转] Deep Learning（深度学习）学习笔记整理系列</title>
       <link>http://luosha865.github.io/archives/7</link>
       <pubDate>Fri, 26 Apr 2013 00:00:00 +0000</pubDate>
-      
+      <author>luosha865@gmail.com (罗刹剑客)</author>
       <guid>http://luosha865.github.io/archives/7</guid>
       <description>&lt;p&gt;转一套Deep Learning的文章&lt;/p&gt;
 
@@ -688,10 +672,6 @@ def start_serving(self, delegate):
 &lt;p&gt;顺便附上翻译的UFLDL&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&#34;http://deeplearning.stanford.edu/wiki/index.php/UFLDL%E6%95%99%E7%A8%8B&#34;&gt;http://deeplearning.stanford.edu/wiki/index.php/UFLDL%E6%95%99%E7%A8%8B&lt;/a&gt;&lt;/p&gt;
-
-&lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
-  &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
-&lt;/p&gt;
 </description>
     </item>
     
@@ -699,7 +679,7 @@ def start_serving(self, delegate):
       <title>决策粗糙集</title>
       <link>http://luosha865.github.io/archives/8</link>
       <pubDate>Thu, 25 Apr 2013 00:00:00 +0000</pubDate>
-      
+      <author>luosha865@gmail.com (罗刹剑客)</author>
       <guid>http://luosha865.github.io/archives/8</guid>
       <description>&lt;p&gt;今天收拾资料，发现了以前刚接触粗糙集时写的一个综述，好久没写博客，发上来充数好了&lt;/p&gt;
 
@@ -947,7 +927,7 @@ def start_serving(self, delegate):
 
 &lt;p&gt;2.4.2贝叶斯方法与不确定度量&lt;/p&gt;
 
-&lt;p&gt;基于贝叶斯思想，我们可以得出![][64]等多种公式，这些公式和度量函数可以很好的描述信息表即导出规则的各种属性。&lt;a href=&#34;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABcAAAAfCAIAAACDG8GaAAAAlUlEQVRIie3SwQ3EIAwEwK2LglwP1bgZinEedyQo8dpwukce+AcSw7IC9o/BVrYyTKsFfUR/UVotQKnNzMxUXAdACLVaTqKTjpIHyZFEUcGIqIyrWaUjKrzYVLklMRUGBcodoa1EygNxdlLFR0gzTPkUejE8R6B8D10/nwtm7O/GN09mCRqYV5YRR1l9DcuyPlt5v3IAOP7MKTnaHTcAAAAASUVORK5CYII=&#34;&gt;5&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;基于贝叶斯思想，我们可以得出&lt;img src=&#34;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAATQAAABBCAIAAADQe88OAAAFsElEQVR4nO2c25msIBCEjcuAiIdoSMZgeh+8NdAgjoCNW//T+c6OCFVbzWV0JwIAqGR6uwMAABmEEwClIJwAKAXhBEApCCcASkE4AVAKwgmAUhBOAJSCcAKgFIQTAKUgnAAoBeEEQCkIJwBKQTgBUArCCYBSEE4AlIJwAqAUhBMApSCcACgF4QRAKQgnAEoZPpzOTLeY7fJ2l0Ep/9zcBuF05lKjxc7G1brfYufNm4s2Fzu/6F+BLL9RVUyf3laKzb9tbjPj6Eo9IZzZclUgUeoji53PUS52rijl0eWrJlsKnaFYlt+bF9sY0MqY5uYGKvFGGhtHefUSM6czsRa5jhZ8IBrLZXt3KK2wznYP501Zat9kOCvl3rQy15u71hvtY+tiXO4+cjjlOC/W5rRxJlfbpLHU9bS4wvblviy/kRBzSCvFHrUxN21AL+NIVm+aJjGci515kVqsue7GhTuJseQFuEvxBqUfv8nyG5KYo1op96qNuc4Ioe9pHCXUE8PpDFMg2l+c+jhz/DO9dD5FFXQ9Lsvtju6YUbnCnp2P13Gsd7Vl8UdzNMCt2AbKr5Ru9oKV7Wg2fW4Ns2a7Gpe6nxTOKCh+Q1vInZmM2fMeFOjwllvnhGok7YieUa3C8oLK1eVjZZpWlcXvxHmz/WP8v/0P+2K+bWWm5v7keuXpc+/eWWCZrx2NI1m9xGmtV2Ajv2frgiNgMWNH1d7bEMpDQoVnVKiwfr/Y/ONNRWzYdWXxRhJZnPraIBJzfCtjak2fcbLYADobR4J60yTsOcNPBUdgzkyzMeHORRjM2fPjl8L7xfbvVmtZy5t94GBqQj9H4B/s1ZaFD+OcvFl9EC8IrXvHyuY8NZdI1jwfzpbGkaxeFM4LiRPZjwdTOJZ2jj45P8xlUywZtWWJr/ctLqq+Cqysvazl93rwWyMqw+fBzsYluhSFM78JTPkd/3/hGqD+nvPoUK01LRHRssjbse0rieqysMuP34jMgos1zn72EStjHplLJE9h4dFZT+MSPw7CmVkUxyMIL/SuK9s7Nzric+bZbOwdrrM++vKcY6okyzrPSOvSzeLruAWnseNbGfPUXIr2JELfuxon9oB4OM+DsPSiIzORJ/bX8zznFjEtvhx7XFe3RkQpuEp8w1lDlr1t7z+9hWH+l9J5B65fsFLsW527eLomDtd6GUd3vuf8Dan9fJV7uHNI9aLHoUQ5t2WJH0JbSh4urymmDitjuprbyzhKqlf1rZRoOHkx69faanW1KrdkER6sK7K4spivWxnT39wuxkn32aj8ypi/dM6NpYGdZXX1hUffS2WRdyYFw2q0O3jPSvEmL5jb2jjKqtfyfc5050pLyg0K62qDOxdSIEviuouPNxzSO1aKN3nP3GbG0VWPh/9LCCtlui38CS0wCv/W3C+E0z+cvELhphSk+c/mDh/Oe+Z9rbZ+nH9u7vDhBOCrIJwAKAXhBEApnwzn/uTUbBdn9m2IcGq9WOvopT/IB36nyN/9oYCB/f1eONlDo+e7BeIXZad9Hzvl+zSF/rIHdob1d4xwHg9qbH+gynsWkR3pGSc/pRhXz/WlIWOC93rAK6T99cyl1FOogb++uTSsv2OEc1d39c4rk4Ev4hQZZtOZyThnjKN9VaTucfl/RsLfuKhe+xubS6P6O0Y4j5forAvKoP9NWGLm9D1er9/si15XBy+Q8Dc0lxIzpwvnSN9cGtXfMcK5Fr7Vu2gJc/FG+2wXv246sx8knNeOWVk/Q8rfyFy68lcyl0b1d4xwRlsPDnurNdqniMsjZ1Y8jwf07kMk/Y3MpQt/Y3NpWH8HCSeJ78vduXgO4+lc4ofgFar565tLA/s7TDgfebc2wP6yb7jKfdQyqEA1f8Ol8MD+DhNOAP4bCCcASkE4AVAKwgmAUhBOAJSCcAKgFIQTAKUgnAAoBeEEQCkIJwBK+QPmlMkXGr9UlwAAAABJRU5ErkJggg==&#34; alt=&#34;&#34; /&gt;等多种公式，这些公式和度量函数可以很好的描述信息表即导出规则的各种属性。&lt;a href=&#34;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABcAAAAfCAIAAACDG8GaAAAAlUlEQVRIie3SwQ3EIAwEwK2LglwP1bgZinEedyQo8dpwukce+AcSw7IC9o/BVrYyTKsFfUR/UVotQKnNzMxUXAdACLVaTqKTjpIHyZFEUcGIqIyrWaUjKrzYVLklMRUGBcodoa1EygNxdlLFR0gzTPkUejE8R6B8D10/nwtm7O/GN09mCRqYV5YRR1l9DcuyPlt5v3IAOP7MKTnaHTcAAAAASUVORK5CYII=&#34;&gt;5&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;另一种不确定测量方式是以信息熵理论为基础的，通过将这些参数类比于信息熵理论中的概率分布，引入了类似于信息熵，互信息熵计算的各种公式，用以完成对规则和整个信息系统的的度量。&lt;a href=&#34;data:image/png;base64,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&#34;&gt;10&lt;/a&gt;&lt;/p&gt;
 
@@ -1012,8 +992,6 @@ def start_serving(self, delegate):
 &lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
   &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
 &lt;/p&gt;
-
-&lt;p&gt;[64]: data:image/png;base64,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&lt;/p&gt;
 </description>
     </item>
     
@@ -1021,13 +999,13 @@ def start_serving(self, delegate):
       <title>R语言系列—-区间估计</title>
       <link>http://luosha865.github.io/archives/11</link>
       <pubDate>Sat, 30 Jun 2012 00:00:00 +0000</pubDate>
-      
+      <author>luosha865@gmail.com (罗刹剑客)</author>
       <guid>http://luosha865.github.io/archives/11</guid>
       <description>&lt;p&gt;这一篇讲的是区间估计…..因为这不是一个关于统计学的系列，所以对文中出现的公式不会给予任何证明…..就是这样。&lt;/p&gt;
 
 &lt;p&gt;就从一个最简单的正态分布的方差已知时，求均值的置信区间开始吧。&lt;/p&gt;
 
-&lt;p&gt;书上的公式告诉我们这个区间是 &lt;img src=&#34;http://sword865.com/blog/wp-content/ql-cache/quicklatex.com-23dc436f241aa40067d71af513a9d926_l3.png&#34; class=&#34;ql-img-inline-formula quicklatex-auto-format&#34; alt=&#34;&amp;#92;&amp;#111;&amp;#118;&amp;#101;&amp;#114;&amp;#108;&amp;#105;&amp;#110;&amp;#101;&amp;#123;&amp;#120;&amp;#125;&amp;#92;&amp;#112;&amp;#109;&amp;#40;&amp;#92;&amp;#115;&amp;#105;&amp;#103;&amp;#109;&amp;#97;&amp;#47;&amp;#92;&amp;#115;&amp;#113;&amp;#114;&amp;#116;&amp;#123;&amp;#110;&amp;#125;&amp;#41;&amp;#122;&amp;#95;&amp;#123;&amp;#40;&amp;#49;&amp;#45;&amp;#92;&amp;#115;&amp;#105;&amp;#103;&amp;#109;&amp;#97;&amp;#47;&amp;#50;&amp;#41;&amp;#125;&#34; title=&#34;Rendered by QuickLaTeX.com&#34; height=&#34;21&#34; width=&#34;148&#34; style=&#34;vertical-align: -7px;&#34; /&gt;,其中Z&lt;sub&gt;p&lt;/sub&gt;表示的是正态分布N(0,1)下侧的p分位数。&lt;/p&gt;
+&lt;p&gt;书上的公式告诉我们这个区间是 $$\overline{x}\pm(\sigma/\sqrt{n})z_{(1-\sigma/2)}$$ ,其中Z&lt;sub&gt;p&lt;/sub&gt;表示的是正态分布N(0,1)下侧的p分位数。&lt;/p&gt;
 
 &lt;p&gt;我们用R来实现求得这一结果的过程。下面设x里存储了给出的样本，sigma表示已知的方差，n表示样本的个数， alpha则是(1-置信水平)&lt;/p&gt;
 
@@ -1045,7 +1023,7 @@ ans&amp;lt;-c(mean-sigma*qnorm(1-alpha / 2)/sqrt(n) , mean+sigma*qnorm(1-alpha /
 
 &lt;p&gt;第一个参数就不用解释了，第二,三个参数mean=0,sd=1，表示这是一个标准正态分布(不同于前面，这里增加了mean=和sd=，这种做法的好处是可以改变参数的顺序，但是结果是一样的)，最后一个参数lower.tail这个参数的意思就比较有意思了，官方解释如下：&lt;/p&gt;
 
-&lt;p&gt;if TRUE (default), probabilities are &lt;em&gt;P[X &amp;lt;= x]&lt;/em&gt;, otherwise, &lt;em&gt;P[X &amp;gt; x]&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;if TRUE (default), probabilities are $P[X &amp;lt;= x]$, otherwise, $P[X &amp;gt; x]$.&lt;/p&gt;
 
 &lt;p&gt;明白了么?等于真的话，得出的就是X&amp;lt;=x的分位数，为假的话就是从X&amp;gt;x的方法寻找这个值。一般我们用默认的真就可以了。&lt;/p&gt;
 
@@ -1067,11 +1045,7 @@ z.test(x,10,1.5,0.05)&lt;/pre&gt;
 
 &lt;p&gt;则返回置信区间：&lt;/p&gt;
 
-&lt;p&gt;[1] 173.7703 175.6297&lt;/p&gt;
-
-&lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
-  &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
-&lt;/p&gt;
+&lt;p&gt;[1]173.7703 175.6297&lt;/p&gt;
 </description>
     </item>
     
@@ -1079,7 +1053,7 @@ z.test(x,10,1.5,0.05)&lt;/pre&gt;
       <title>R语言系列—-数据描述</title>
       <link>http://luosha865.github.io/archives/10</link>
       <pubDate>Sat, 30 Jun 2012 00:00:00 +0000</pubDate>
-      
+      <author>luosha865@gmail.com (罗刹剑客)</author>
       <guid>http://luosha865.github.io/archives/10</guid>
       <description>&lt;p&gt;简单来说，R语言是一种主要用于统计分析、绘图的语言和操作环境。的源代码可自由下载使用，亦有已编译的执行档版本可以下载，可在多种平台下运行，包括UNIX（也包括FreeBSD和Linux）、Windows和MacOS。R主要是以命令行操作，同时有人开发了几种图形用户界面。&lt;/p&gt;
 
@@ -1224,10 +1198,6 @@ kurtosis(x)&lt;/pre&gt;
      基本的就是这些了，当然还可以更加复杂，比如多组数据的图形与数值描述等等。即使是我们在上面使用的函数其实也是非常强大的，只是我们在上面使用了很多的默认的参数而简化了它们的调用而已。
   &lt;/p&gt;
 &lt;/div&gt;
-
-&lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
-  &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
-&lt;/p&gt;
 </description>
     </item>
     
@@ -1235,7 +1205,7 @@ kurtosis(x)&lt;/pre&gt;
       <title>R语言系列—回归分析</title>
       <link>http://luosha865.github.io/archives/12</link>
       <pubDate>Sat, 30 Jun 2012 00:00:00 +0000</pubDate>
-      
+      <author>luosha865@gmail.com (罗刹剑客)</author>
       <guid>http://luosha865.github.io/archives/12</guid>
       <description>&lt;p&gt;&lt;strong&gt;         &lt;/strong&gt;一元线形回归模型：有变量x,y。假设有关系y=c+bx+e,其中c+bx 是y随x变化的部分，e是随机误差。&lt;/p&gt;
 
@@ -1332,10 +1302,6 @@ ex&amp;lt;-data.frame(x1=200,x2=3000)
 predict(lm.sol,ex,interval=&#34;prediction&#34;,level=0.95)&lt;/pre&gt;
 
 &lt;p&gt;&amp;nbsp;&lt;/p&gt;
-
-&lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
-  &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
-&lt;/p&gt;
 </description>
     </item>
     
@@ -1343,7 +1309,7 @@ predict(lm.sol,ex,interval=&#34;prediction&#34;,level=0.95)&lt;/pre&gt;
       <title>简单讲一下使用MS3D为opengl建模</title>
       <link>http://luosha865.github.io/archives/124</link>
       <pubDate>Wed, 16 Mar 2011 00:00:00 +0000</pubDate>
-      
+      <author>luosha865@gmail.com (罗刹剑客)</author>
       <guid>http://luosha865.github.io/archives/124</guid>
       <description>&lt;p&gt;做毕设的时候写的东西，贴上来吧…………&lt;/p&gt;
 
@@ -1353,7 +1319,7 @@ predict(lm.sol,ex,interval=&#34;prediction&#34;,level=0.95)&lt;/pre&gt;
 
 &lt;p&gt;MS3D全名为MilkShape3D，是一款简单小巧的3D可视化图形建模工具，可以简单的使用各种点、线面等基本图形元素组合建立模型，并进行贴图，分组。进一步的，该工具还支持简单的骨骼动画制作，是一款非常好用的3D图形构建工具。&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://sword865.com/blog/wp-content/uploads/2015/02/ms3d.jpg&#34;&gt;&lt;img class=&#34;alignnone  wp-image-125&#34; src=&#34;http://sword865.com/blog/wp-content/uploads/2015/02/ms3d-300x164.jpg&#34; alt=&#34;ms3d&#34; width=&#34;428&#34; height=&#34;234&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;[&lt;img class=&#34;alignnone  wp-image-125&#34; src=&#34;http://blog.sword865.com/wp-content/uploads/2015/02/ms3d-300x164.jpg&#34; alt=&#34;ms3d&#34; width=&#34;428&#34; height=&#34;234&#34; /&gt;][1]&lt;/p&gt;
 
 &lt;p&gt;在建立了MS3D中完成模型建立后可保存为.ms3d的文件格式，通过对该文件格式进行分析，就可以了解文件结构，以在程序中通过读取该文件重现所见模型。&lt;/p&gt;
 
@@ -1485,19 +1451,13 @@ for ( int i = 0; i &amp;lt; m_numMeshes; i++ )
 
 &lt;p&gt;通过这种方法，就可以在程序中绘制一个个的具体模型：&lt;/p&gt;
 
-&lt;p&gt;[&lt;img class=&#34;alignnone  wp-image-127&#34; src=&#34;http://sword865.com/blog/wp-content/uploads/2015/02/ballfight-300x168.jpg&#34; alt=&#34;ballfight&#34; width=&#34;352&#34; height=&#34;197&#34; /&gt;][2]&lt;/p&gt;
+&lt;p&gt;&lt;img class=&#34;alignnone  wp-image-127&#34; src=&#34;http://blog.sword865.com/wp-content/uploads/2015/02/ballfight-300x168.jpg&#34; alt=&#34;ballfight&#34; width=&#34;352&#34; height=&#34;197&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;&amp;nbsp;&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://blog.sina.com.cn/s/blog_62d98a550100g5hh.html&#34;&gt;http://blog.sina.com.cn/s/blog_62d98a550100g5hh.html&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;[1]&lt;a href=&#34;http://blog.sina.com.cn/s/blog_62d98a550100g5hh.html&#34;&gt;http://blog.sina.com.cn/s/blog_62d98a550100g5hh.html&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://www.yakergong.net/nehe/course/tutorial_31.html&#34;&gt;http://www.yakergong.net/nehe/course/tutorial_31.html&lt;/a&gt;&lt;/p&gt;
-
-&lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
-  &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
-&lt;/p&gt;
-
-&lt;p&gt;[2]: &lt;a href=&#34;http://sword865.com/blog/wp-content/uploads/2015/02/ballfight.jpg&#34;&gt;http://sword865.com/blog/wp-content/uploads/2015/02/ballfight.jpg&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;[2]&lt;a href=&#34;http://www.yakergong.net/nehe/course/tutorial_31.html&#34;&gt;http://www.yakergong.net/nehe/course/tutorial_31.html&lt;/a&gt;&lt;/p&gt;
 </description>
     </item>
     
@@ -1505,7 +1465,7 @@ for ( int i = 0; i &amp;lt; m_numMeshes; i++ )
       <title>算法总结9—优化</title>
       <link>http://luosha865.github.io/archives/13</link>
       <pubDate>Wed, 30 Sep 2009 00:00:00 +0000</pubDate>
-      
+      <author>luosha865@gmail.com (罗刹剑客)</author>
       <guid>http://luosha865.github.io/archives/13</guid>
       <description>&lt;p&gt;不同于之前的分类和聚类算法，优化的目的是尝试找到一个使成本函数输出最小化的值。这里主要包括两个算法：模拟退火算法和遗传算法。&lt;/p&gt;
 
@@ -1551,10 +1511,6 @@ for ( int i = 0; i &amp;lt; m_numMeshes; i++ )
 &lt;p&gt;&amp;nbsp;&lt;/p&gt;
 
 &lt;p&gt;该系列结束，恩，也许以后学了更多，有了更好的了解后会回来改一改，谁知道呢？&lt;/p&gt;
-
-&lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
-  &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
-&lt;/p&gt;
 </description>
     </item>
     
@@ -1562,7 +1518,7 @@ for ( int i = 0; i &amp;lt; m_numMeshes; i++ )
       <title>算法总结8—非负矩阵因式分解</title>
       <link>http://luosha865.github.io/archives/14</link>
       <pubDate>Fri, 25 Sep 2009 00:00:00 +0000</pubDate>
-      
+      <author>luosha865@gmail.com (罗刹剑客)</author>
       <guid>http://luosha865.github.io/archives/14</guid>
       <description>&lt;p&gt;&lt;strong&gt;数学基础:&lt;/strong&gt;&lt;/p&gt;
 
@@ -1614,10 +1570,6 @@ for ( int i = 0; i &amp;lt; m_numMeshes; i++ )
 &lt;div&gt;
   &lt;embed id=&#34;lingoes_plugin_object&#34; width=&#34;0&#34; height=&#34;0&#34; type=&#34;application/lingoes-npruntime-capture-word-plugin&#34; hidden=&#34;true&#34; /&gt;
 &lt;/div&gt;
-
-&lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
-  &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
-&lt;/p&gt;
 </description>
     </item>
     
@@ -1625,7 +1577,7 @@ for ( int i = 0; i &amp;lt; m_numMeshes; i++ )
       <title>算法总结7—多维缩放</title>
       <link>http://luosha865.github.io/archives/15</link>
       <pubDate>Sun, 20 Sep 2009 00:00:00 +0000</pubDate>
-      
+      <author>luosha865@gmail.com (罗刹剑客)</author>
       <guid>http://luosha865.github.io/archives/15</guid>
       <description>&lt;p&gt;一直没有时间写…..唉&lt;/p&gt;
 
@@ -1673,10 +1625,6 @@ for ( int i = 0; i &amp;lt; m_numMeshes; i++ )
 &lt;p&gt;&amp;nbsp;&lt;/p&gt;
 
 &lt;p&gt;恩，就是这样….最近这几个算法都不是很难恩………..&lt;/p&gt;
-
-&lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
-  &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
-&lt;/p&gt;
 </description>
     </item>
     

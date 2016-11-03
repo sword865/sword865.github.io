@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>神经网络 on </title>
+    <title>神经网络 on 悟剑阁</title>
     <link>http://luosha865.github.io/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/</link>
-    <description>Recent content in 神经网络 on </description>
+    <description>Recent content in 神经网络 on 悟剑阁</description>
     <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <managingEditor>luosha865@gmail.com (罗刹剑客)</managingEditor>
+    <webMaster>luosha865@gmail.com (罗刹剑客)</webMaster>
+    <copyright>Copyright (c) 2015. All rights reserved.</copyright>
     <lastBuildDate>Fri, 26 Apr 2013 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://luosha865.github.io/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/index.xml" rel="self" type="application/rss+xml" />
     
@@ -12,7 +16,7 @@
       <title>[转] Deep Learning（深度学习）学习笔记整理系列</title>
       <link>http://luosha865.github.io/archives/7</link>
       <pubDate>Fri, 26 Apr 2013 00:00:00 +0000</pubDate>
-      
+      <author>luosha865@gmail.com (罗刹剑客)</author>
       <guid>http://luosha865.github.io/archives/7</guid>
       <description>&lt;p&gt;转一套Deep Learning的文章&lt;/p&gt;
 
@@ -23,10 +27,6 @@
 &lt;p&gt;顺便附上翻译的UFLDL&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&#34;http://deeplearning.stanford.edu/wiki/index.php/UFLDL%E6%95%99%E7%A8%8B&#34;&gt;http://deeplearning.stanford.edu/wiki/index.php/UFLDL%E6%95%99%E7%A8%8B&lt;/a&gt;&lt;/p&gt;
-
-&lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
-  &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
-&lt;/p&gt;
 </description>
     </item>
     
@@ -34,7 +34,7 @@
       <title>算法总结3—神经网络</title>
       <link>http://luosha865.github.io/archives/19</link>
       <pubDate>Mon, 07 Sep 2009 00:00:00 +0000</pubDate>
-      
+      <author>luosha865@gmail.com (罗刹剑客)</author>
       <guid>http://luosha865.github.io/archives/19</guid>
       <description>&lt;p&gt;&lt;strong&gt;生物神经网络：&lt;/strong&gt;&lt;/p&gt;
 
@@ -58,7 +58,7 @@
 
 &lt;p&gt;图示如下：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://upload.wikimedia.org/wikipedia/commons/9/97/Ncell.png&#34; alt=&#34;人工神经元&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img class=&#34;alignnone  wp-image-125&#34; src=&#34;http://upload.wikimedia.org/wikipedia/commons/9/97/Ncell.png&#34; alt=&#34;nn&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;a1~an为神经元的输入值&lt;/p&gt;
 
@@ -102,7 +102,7 @@
 
 &lt;p&gt;因此，MLP网络中至少有3个层次。&lt;/p&gt;
 
-&lt;p&gt;![][2]&lt;/p&gt;
+&lt;p&gt;&lt;img class=&#34;alignnone  wp-image-125&#34; src=&#34;http://pic002.cnblogs.com/images/2012/52809/2012063021381464.jpg&#34; alt=&#34;mlp&#34; /&gt;&lt;/p&gt;
 
 &lt;p align=&#34;center&#34;&gt;
   &amp;nbsp;
@@ -173,12 +173,6 @@
 &lt;p&gt;神经网络是一种黑盒方法，这使得我们无法得知其处理输入和输出的方法与原因，尤其是较大的神经网络有数百的节点和上千的连接，更是如此。&lt;/p&gt;
 
 &lt;p&gt;在训练神经网络时，在选择训练数据的比例及与问题相适应的网络规模方面，没有明确的 规则。如果训练数据比率太大，可能导致网络对噪音数据产生过度归纳，而训练比率太低，网络就不够精准。&lt;/p&gt;
-
-&lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
-  &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
-&lt;/p&gt;
-
-&lt;p&gt;[2]: &lt;a href=&#34;http://pic002.cnblogs.com/images/2012/52809/2012063021381464.jpg&#34;&gt;http://pic002.cnblogs.com/images/2012/52809/2012063021381464.jpg&lt;/a&gt;&lt;/p&gt;
 </description>
     </item>
     

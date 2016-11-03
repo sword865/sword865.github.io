@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>决策树 on </title>
+    <title>决策树 on 悟剑阁</title>
     <link>http://luosha865.github.io/tags/%E5%86%B3%E7%AD%96%E6%A0%91/</link>
-    <description>Recent content in 决策树 on </description>
+    <description>Recent content in 决策树 on 悟剑阁</description>
     <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <managingEditor>luosha865@gmail.com (罗刹剑客)</managingEditor>
+    <webMaster>luosha865@gmail.com (罗刹剑客)</webMaster>
+    <copyright>Copyright (c) 2015. All rights reserved.</copyright>
     <lastBuildDate>Sun, 06 Sep 2009 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://luosha865.github.io/tags/%E5%86%B3%E7%AD%96%E6%A0%91/index.xml" rel="self" type="application/rss+xml" />
     
@@ -12,7 +16,7 @@
       <title>算法总结2—决策树分类器</title>
       <link>http://luosha865.github.io/archives/20</link>
       <pubDate>Sun, 06 Sep 2009 00:00:00 +0000</pubDate>
-      
+      <author>luosha865@gmail.com (罗刹剑客)</author>
       <guid>http://luosha865.github.io/archives/20</guid>
       <description>&lt;p&gt;&lt;strong&gt;数学基础：&lt;/strong&gt;&lt;/p&gt;
 
@@ -141,8 +145,6 @@
 &lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
   &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
 &lt;/p&gt;
-
-&lt;p&gt;[2]: &lt;a href=&#34;http://www.swordman865.cn/blog/?p=30&#34;&gt;http://www.swordman865.cn/blog/?p=30&lt;/a&gt;&lt;/p&gt;
 </description>
     </item>
     

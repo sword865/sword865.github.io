@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Acm on </title>
+    <title>Acm on 悟剑阁</title>
     <link>http://luosha865.github.io/tags/acm/</link>
-    <description>Recent content in Acm on </description>
+    <description>Recent content in Acm on 悟剑阁</description>
     <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <managingEditor>luosha865@gmail.com (罗刹剑客)</managingEditor>
+    <webMaster>luosha865@gmail.com (罗刹剑客)</webMaster>
+    <copyright>Copyright (c) 2015. All rights reserved.</copyright>
     <lastBuildDate>Wed, 19 Aug 2009 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://luosha865.github.io/tags/acm/index.xml" rel="self" type="application/rss+xml" />
     
@@ -12,7 +16,7 @@
       <title>ACM暑假集训总结</title>
       <link>http://luosha865.github.io/archives/23</link>
       <pubDate>Wed, 19 Aug 2009 00:00:00 +0000</pubDate>
-      
+      <author>luosha865@gmail.com (罗刹剑客)</author>
       <guid>http://luosha865.github.io/archives/23</guid>
       <description>&lt;p&gt;ACM的暑假集训结束了，趁着军训还没开始，对整个暑假接触到的东西作了一个总结，因为刚参加ACM不久，所以内容大都比较基础吧，文章中提到了些参考资料，如果需要的话，请留下邮箱。&lt;/p&gt;
 
@@ -469,7 +473,8 @@
 &lt;p&gt;最大流算法(3种)&lt;/p&gt;
 
 &lt;ol&gt;
-&lt;li&gt;基本最大流算法 &amp;mdash;&amp;ndash; Edmonds-Karp算法&lt;/li&gt;
+&lt;li&gt;基本最大流算法 &amp;mdash;&amp;ndash; Edmonds-Karp算法
+&lt;br /&gt;&lt;/li&gt;
 &lt;/ol&gt;
 
 &lt;p&gt;O(VE2)&lt;/p&gt;
@@ -491,7 +496,8 @@
 &lt;p&gt;Dinic 算法每次用一遍 BFS 构建分层网络 AN(f)，然后在 AN(f) 中一遍 DFS 找到所有到终点 t 的路径增广；之后重新构造 AN(f)，若终点 t 不在 AN(f) 中则算法结束。&lt;/p&gt;
 
 &lt;ol&gt;
-&lt;li&gt;ISAP O(VE2)&lt;/li&gt;
+&lt;li&gt;ISAP O(VE2)
+&lt;br /&gt;&lt;/li&gt;
 &lt;/ol&gt;
 
 &lt;p&gt;　通常的 SAP 类算法在寻找增广路时总要先进行 BFS，BFS 的最坏情况下复杂度为 O(E)，这样使得普通SAP 类算法最坏情况下时间复杂度达到了 O(VE2)。为了避免这种情况，Ahuja 和 Orlin 在1987年提出&lt;/p&gt;
@@ -853,10 +859,6 @@
 &lt;div&gt;
   &lt;embed id=&#34;lingoes_plugin_object&#34; width=&#34;0&#34; height=&#34;0&#34; type=&#34;application/lingoes-npruntime-capture-word-plugin&#34; hidden=&#34;true&#34; /&gt;
 &lt;/div&gt;
-
-&lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
-  &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
-&lt;/p&gt;
 </description>
     </item>
     
@@ -864,7 +866,7 @@
       <title>有重复组合数</title>
       <link>http://luosha865.github.io/archives/24</link>
       <pubDate>Thu, 02 Apr 2009 00:00:00 +0000</pubDate>
-      
+      <author>luosha865@gmail.com (罗刹剑客)</author>
       <guid>http://luosha865.github.io/archives/24</guid>
       <description>&lt;p&gt;从n个元素中有重复地取r个，不计顺序，则不同的取法有多少种？&lt;br /&gt;
 这个问题的答案被称为有重复组合数。结果很简洁，是C(n+r-1,r)。(注：这表示从n+r-1个数中取出r个数的组合数)&lt;br /&gt;
@@ -890,10 +892,6 @@
 &lt;div&gt;
   &lt;embed id=&#34;lingoes_plugin_object&#34; width=&#34;0&#34; height=&#34;0&#34; type=&#34;application/lingoes-npruntime-capture-word-plugin&#34; hidden=&#34;true&#34; /&gt;
 &lt;/div&gt;
-
-&lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
-  &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
-&lt;/p&gt;
 </description>
     </item>
     
@@ -901,7 +899,7 @@
       <title>KMP算法复杂度分析</title>
       <link>http://luosha865.github.io/archives/26</link>
       <pubDate>Wed, 11 Mar 2009 00:00:00 +0000</pubDate>
-      
+      <author>luosha865@gmail.com (罗刹剑客)</author>
       <guid>http://luosha865.github.io/archives/26</guid>
       <description>&lt;p&gt;KMP算法也算接触很久了，今天却突然发现不知道那个的复杂度是怎么来的&lt;br /&gt;
 于是想啊想，查啊查，总结如下&lt;br /&gt;
@@ -924,10 +922,6 @@ if(s==n) return (i-n)&lt;/p&gt;
 &lt;div&gt;
   &lt;embed type=&#34;application/lingoes-npruntime-capture-word-plugin&#34; width=&#34;0&#34; height=&#34;0&#34; id=&#34;lingoes_plugin_object&#34; hidden=&#34;true&#34; /&gt;
 &lt;/div&gt;
-
-&lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
-  &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
-&lt;/p&gt;
 </description>
     </item>
     

@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>聚类 on </title>
+    <title>聚类 on 悟剑阁</title>
     <link>http://luosha865.github.io/tags/%E8%81%9A%E7%B1%BB/</link>
-    <description>Recent content in 聚类 on </description>
+    <description>Recent content in 聚类 on 悟剑阁</description>
     <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <managingEditor>luosha865@gmail.com (罗刹剑客)</managingEditor>
+    <webMaster>luosha865@gmail.com (罗刹剑客)</webMaster>
+    <copyright>Copyright (c) 2015. All rights reserved.</copyright>
     <lastBuildDate>Mon, 14 Sep 2009 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://luosha865.github.io/tags/%E8%81%9A%E7%B1%BB/index.xml" rel="self" type="application/rss+xml" />
     
@@ -12,7 +16,7 @@
       <title>算法总结5&amp;6—-k-最近邻与聚类</title>
       <link>http://luosha865.github.io/archives/16</link>
       <pubDate>Mon, 14 Sep 2009 00:00:00 +0000</pubDate>
-      
+      <author>luosha865@gmail.com (罗刹剑客)</author>
       <guid>http://luosha865.github.io/archives/16</guid>
       <description>&lt;p&gt;因为这两个算法比较简单，又有些相似，所以这里放在一起。&lt;/p&gt;
 
@@ -81,10 +85,6 @@
 &lt;div&gt;
   &lt;embed id=&#34;lingoes_plugin_object&#34; width=&#34;0&#34; height=&#34;0&#34; type=&#34;application/lingoes-npruntime-capture-word-plugin&#34; hidden=&#34;true&#34; /&gt;
 &lt;/div&gt;
-
-&lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
-  &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
-&lt;/p&gt;
 </description>
     </item>
     

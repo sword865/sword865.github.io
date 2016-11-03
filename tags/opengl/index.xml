@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Opengl on </title>
+    <title>Opengl on 悟剑阁</title>
     <link>http://luosha865.github.io/tags/opengl/</link>
-    <description>Recent content in Opengl on </description>
+    <description>Recent content in Opengl on 悟剑阁</description>
     <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <managingEditor>luosha865@gmail.com (罗刹剑客)</managingEditor>
+    <webMaster>luosha865@gmail.com (罗刹剑客)</webMaster>
+    <copyright>Copyright (c) 2015. All rights reserved.</copyright>
     <lastBuildDate>Wed, 16 Mar 2011 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://luosha865.github.io/tags/opengl/index.xml" rel="self" type="application/rss+xml" />
     
@@ -12,7 +16,7 @@
       <title>简单讲一下使用MS3D为opengl建模</title>
       <link>http://luosha865.github.io/archives/124</link>
       <pubDate>Wed, 16 Mar 2011 00:00:00 +0000</pubDate>
-      
+      <author>luosha865@gmail.com (罗刹剑客)</author>
       <guid>http://luosha865.github.io/archives/124</guid>
       <description>&lt;p&gt;做毕设的时候写的东西，贴上来吧…………&lt;/p&gt;
 
@@ -22,7 +26,7 @@
 
 &lt;p&gt;MS3D全名为MilkShape3D，是一款简单小巧的3D可视化图形建模工具，可以简单的使用各种点、线面等基本图形元素组合建立模型，并进行贴图，分组。进一步的，该工具还支持简单的骨骼动画制作，是一款非常好用的3D图形构建工具。&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://sword865.com/blog/wp-content/uploads/2015/02/ms3d.jpg&#34;&gt;&lt;img class=&#34;alignnone  wp-image-125&#34; src=&#34;http://sword865.com/blog/wp-content/uploads/2015/02/ms3d-300x164.jpg&#34; alt=&#34;ms3d&#34; width=&#34;428&#34; height=&#34;234&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;[&lt;img class=&#34;alignnone  wp-image-125&#34; src=&#34;http://blog.sword865.com/wp-content/uploads/2015/02/ms3d-300x164.jpg&#34; alt=&#34;ms3d&#34; width=&#34;428&#34; height=&#34;234&#34; /&gt;][1]&lt;/p&gt;
 
 &lt;p&gt;在建立了MS3D中完成模型建立后可保存为.ms3d的文件格式，通过对该文件格式进行分析，就可以了解文件结构，以在程序中通过读取该文件重现所见模型。&lt;/p&gt;
 
@@ -154,19 +158,13 @@ for ( int i = 0; i &amp;lt; m_numMeshes; i++ )
 
 &lt;p&gt;通过这种方法，就可以在程序中绘制一个个的具体模型：&lt;/p&gt;
 
-&lt;p&gt;[&lt;img class=&#34;alignnone  wp-image-127&#34; src=&#34;http://sword865.com/blog/wp-content/uploads/2015/02/ballfight-300x168.jpg&#34; alt=&#34;ballfight&#34; width=&#34;352&#34; height=&#34;197&#34; /&gt;][2]&lt;/p&gt;
+&lt;p&gt;&lt;img class=&#34;alignnone  wp-image-127&#34; src=&#34;http://blog.sword865.com/wp-content/uploads/2015/02/ballfight-300x168.jpg&#34; alt=&#34;ballfight&#34; width=&#34;352&#34; height=&#34;197&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;&amp;nbsp;&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://blog.sina.com.cn/s/blog_62d98a550100g5hh.html&#34;&gt;http://blog.sina.com.cn/s/blog_62d98a550100g5hh.html&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;[1]&lt;a href=&#34;http://blog.sina.com.cn/s/blog_62d98a550100g5hh.html&#34;&gt;http://blog.sina.com.cn/s/blog_62d98a550100g5hh.html&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://www.yakergong.net/nehe/course/tutorial_31.html&#34;&gt;http://www.yakergong.net/nehe/course/tutorial_31.html&lt;/a&gt;&lt;/p&gt;
-
-&lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
-  &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
-&lt;/p&gt;
-
-&lt;p&gt;[2]: &lt;a href=&#34;http://sword865.com/blog/wp-content/uploads/2015/02/ballfight.jpg&#34;&gt;http://sword865.com/blog/wp-content/uploads/2015/02/ballfight.jpg&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;[2]&lt;a href=&#34;http://www.yakergong.net/nehe/course/tutorial_31.html&#34;&gt;http://www.yakergong.net/nehe/course/tutorial_31.html&lt;/a&gt;&lt;/p&gt;
 </description>
     </item>
     

@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Logistic on </title>
+    <title>Logistic on 悟剑阁</title>
     <link>http://luosha865.github.io/tags/logistic/</link>
-    <description>Recent content in Logistic on </description>
+    <description>Recent content in Logistic on 悟剑阁</description>
     <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <managingEditor>luosha865@gmail.com (罗刹剑客)</managingEditor>
+    <webMaster>luosha865@gmail.com (罗刹剑客)</webMaster>
+    <copyright>Copyright (c) 2015. All rights reserved.</copyright>
     <lastBuildDate>Sat, 03 Aug 2013 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://luosha865.github.io/tags/logistic/index.xml" rel="self" type="application/rss+xml" />
     
@@ -12,7 +16,7 @@
       <title>Google在KDD2013上关于CTR的一篇论文</title>
       <link>http://luosha865.github.io/archives/6</link>
       <pubDate>Sat, 03 Aug 2013 00:00:00 +0000</pubDate>
-      
+      <author>luosha865@gmail.com (罗刹剑客)</author>
       <guid>http://luosha865.github.io/archives/6</guid>
       <description>&lt;p&gt;最近在做CTR，刚好Google在KDD发了一篇文章，讲了他们的一些尝试，总结一下：&lt;/p&gt;
 
@@ -32,7 +36,7 @@
 
 &lt;p&gt;&lt;a href=&#34;http://images.cnitblog.com/blog/52809/201308/04011358-2e856d4483c64ef0a668ee8c8df2a548.png&#34;&gt;&lt;img style=&#34;background-image: none; padding-top: 0px; padding-left: 0px; display: inline; padding-right: 0px; border-width: 0px;&#34; title=&#34;image&#34; src=&#34;http://images.cnitblog.com/blog/52809/201308/04011359-6f55d3e1f55f4389979bec14102120b5.png&#34; alt=&#34;image&#34; width=&#34;187&#34; height=&#34;39&#34; border=&#34;0&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;其中&lt;img src=&#34;http://sword865.com/blog/wp-content/ql-cache/quicklatex.com-f489909a6f16a3b5a6ee23901d48d9b6_l3.png&#34; class=&#34;ql-img-inline-formula quicklatex-auto-format&#34; alt=&#34;&amp;#92;&amp;#101;&amp;#116;&amp;#97;&amp;#95;&amp;#116;&#34; title=&#34;Rendered by QuickLaTeX.com&#34; height=&#34;12&#34; width=&#34;14&#34; style=&#34;vertical-align: -4px;&#34; /&gt;是一个非增的学习率&lt;/p&gt;
+&lt;p&gt;其中$\eta_t$是一个非增的学习率&lt;/p&gt;
 
 &lt;p&gt;FTRL-Proximal通过下式迭代：&lt;/p&gt;
 
@@ -40,7 +44,7 @@
 
 &lt;p&gt;&amp;nbsp;&lt;/p&gt;
 
-&lt;p&gt;其中参数  &lt;img src=&#34;http://sword865.com/blog/wp-content/ql-cache/quicklatex.com-a53d534bdda53a36b558f3ef61ab1d0f_l3.png&#34; class=&#34;ql-img-inline-formula quicklatex-auto-format&#34; alt=&#34;&amp;#92;&amp;#115;&amp;#105;&amp;#103;&amp;#109;&amp;#97;&amp;#95;&amp;#115;&#34; title=&#34;Rendered by QuickLaTeX.com&#34; height=&#34;11&#34; width=&#34;16&#34; style=&#34;vertical-align: -3px;&#34; /&gt;是学习率，一般我们有  &lt;img src=&#34;http://sword865.com/blog/wp-content/ql-cache/quicklatex.com-a4b1e9e9035115afffdd00bcfa2f183c_l3.png&#34; class=&#34;ql-img-inline-formula quicklatex-auto-format&#34; alt=&#34;&amp;#92;&amp;#115;&amp;#117;&amp;#109;&amp;#95;&amp;#123;&amp;#115;&amp;#61;&amp;#49;&amp;#125;&amp;#94;&amp;#116;&amp;#92;&amp;#115;&amp;#105;&amp;#103;&amp;#109;&amp;#97;&amp;#95;&amp;#115;&amp;#61;&amp;#92;&amp;#102;&amp;#114;&amp;#97;&amp;#99;&amp;#123;&amp;#49;&amp;#125;&amp;#123;&amp;#92;&amp;#101;&amp;#116;&amp;#97;&amp;#95;&amp;#116;&amp;#125;&#34; title=&#34;Rendered by QuickLaTeX.com&#34; height=&#34;26&#34; width=&#34;102&#34; style=&#34;vertical-align: -9px;&#34; /&gt;。&lt;/p&gt;
+&lt;p&gt;参数$\sigma$是学习率，一般我们有 ${\sum_{s=1}^t\sigma_s=\frac{1}{\eta_t}}$。&lt;/p&gt;
 
 &lt;p&gt;更新公式：&lt;/p&gt;
 
@@ -50,11 +54,11 @@
 
 &lt;p&gt;&lt;a href=&#34;http://images.cnitblog.com/blog/52809/201308/04011359-8100f10672694bffa4e1a46fc3b01719.png&#34;&gt;&lt;img style=&#34;background-image: none; padding-top: 0px; padding-left: 0px; display: inline; padding-right: 0px; border: 0px;&#34; title=&#34;image&#34; src=&#34;http://images.cnitblog.com/blog/52809/201308/04011400-cbd594724918403f8c25f0a88ee489ae.png&#34; alt=&#34;image&#34; width=&#34;428&#34; height=&#34;368&#34; border=&#34;0&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;这里多个一个  &lt;img src=&#34;http://sword865.com/blog/wp-content/ql-cache/quicklatex.com-8e8aa5c38c57b55921bdea4b91ec59b3_l3.png&#34; class=&#34;ql-img-inline-formula quicklatex-auto-format&#34; alt=&#34;&amp;#92;&amp;#108;&amp;#97;&amp;#109;&amp;#98;&amp;#100;&amp;#97;&amp;#95;&amp;#50;&#34; title=&#34;Rendered by QuickLaTeX.com&#34; height=&#34;16&#34; width=&#34;17&#34; style=&#34;vertical-align: -3px;&#34; /&gt;是一个L2正则化参数。&lt;/p&gt;
+&lt;p&gt;这里多个一个 $\lambda_2$ 是一个L2正则化参数。&lt;/p&gt;
 
 &lt;p&gt;二、学习率&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://sword865.com/blog/wp-content/ql-cache/quicklatex.com-1c291523bb9229304e6ff8843fef467b_l3.png&#34; class=&#34;ql-img-inline-formula quicklatex-auto-format&#34; alt=&#34;&amp;#92;&amp;#100;&amp;#105;&amp;#115;&amp;#112;&amp;#108;&amp;#97;&amp;#121;&amp;#115;&amp;#116;&amp;#121;&amp;#108;&amp;#101;&amp;#32;&amp;#92;&amp;#101;&amp;#116;&amp;#97;&amp;#95;&amp;#116;&amp;#61;&amp;#92;&amp;#102;&amp;#114;&amp;#97;&amp;#99;&amp;#123;&amp;#49;&amp;#125;&amp;#123;&amp;#92;&amp;#115;&amp;#113;&amp;#114;&amp;#116;&amp;#123;&amp;#116;&amp;#125;&amp;#125;&#34; title=&#34;Rendered by QuickLaTeX.com&#34; height=&#34;40&#34; width=&#34;62&#34; style=&#34;vertical-align: -16px;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;$$\displaystyle \eta_t=\frac{1}{\sqrt{t}}$$&lt;/p&gt;
 
 &lt;p&gt;由于在求解时，这样，对每一个坐标我们都使用了同样的参数，这样一些没有使用的坐标的参数也会下降，显然这不太合理。&lt;/p&gt;
 
@@ -138,15 +142,13 @@
 
 &lt;p&gt;矫正的数据&lt;a href=&#34;http://images.cnitblog.com/blog/52809/201308/04011405-372b84501cc84940a965b739cf97a9d9.png&#34;&gt;&lt;img style=&#34;background-image: none; padding-top: 0px; padding-left: 0px; display: inline; padding-right: 0px; border: 0px;&#34; title=&#34;image&#34; src=&#34;http://images.cnitblog.com/blog/52809/201308/04011405-93a76b43c030441c9295ded6239bbb1c.png&#34; alt=&#34;image&#34; width=&#34;71&#34; height=&#34;34&#34; border=&#34;0&#34; /&gt;&lt;/a&gt;p是模型预测的CTR，d是一些训练数据。&lt;/p&gt;
 
-&lt;p&gt;一个常用矫正：[&lt;img style=&#34;background-image: none; padding-top: 0px; padding-left: 0px; margin: 0px; display: inline; padding-right: 0px; border: 0px;&#34; title=&#34;image&#34; src=&#34;http://images.cnitblog.com/blog/52809/201308/04011406-e83e0f3784944b10812b43ca5c74a2c4.png&#34; alt=&#34;image&#34; width=&#34;112&#34; height=&#34;43&#34; border=&#34;0&#34; /&gt;][16]&lt;/p&gt;
+&lt;p&gt;一个常用矫正：&lt;a href=&#34;http://images.cnitblog.com/blog/52809/201308/04011406-75988e6dea0d4d83b698e96019c9753b.png&#34;&gt;&lt;img style=&#34;background-image: none; padding-top: 0px; padding-left: 0px; margin: 0px; display: inline; padding-right: 0px; border: 0px;&#34; title=&#34;image&#34; src=&#34;http://images.cnitblog.com/blog/52809/201308/04011406-e83e0f3784944b10812b43ca5c74a2c4.png&#34; alt=&#34;image&#34; width=&#34;112&#34; height=&#34;43&#34; border=&#34;0&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;两个参数可以用Poisson regression在数据上训练。&lt;/p&gt;
 
 &lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
   &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
 &lt;/p&gt;
-
-&lt;p&gt;[16]: &lt;a href=&#34;http://images.cnitblog.com/blog/52809/201308/04011406-75988e6dea0d4d83b698e96019c9753b.png&#34;&gt;http://images.cnitblog.com/blog/52809/201308/04011406-75988e6dea0d4d83b698e96019c9753b.png&lt;/a&gt;&lt;/p&gt;
 </description>
     </item>
     

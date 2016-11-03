@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>推荐系统 on </title>
+    <title>推荐系统 on 悟剑阁</title>
     <link>http://luosha865.github.io/tags/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/</link>
-    <description>Recent content in 推荐系统 on </description>
+    <description>Recent content in 推荐系统 on 悟剑阁</description>
     <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <managingEditor>luosha865@gmail.com (罗刹剑客)</managingEditor>
+    <webMaster>luosha865@gmail.com (罗刹剑客)</webMaster>
+    <copyright>Copyright (c) 2015. All rights reserved.</copyright>
     <lastBuildDate>Mon, 17 Nov 2014 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://luosha865.github.io/tags/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/index.xml" rel="self" type="application/rss+xml" />
     
@@ -12,7 +16,7 @@
       <title>基于标签的推荐系统</title>
       <link>http://luosha865.github.io/archives/5</link>
       <pubDate>Mon, 17 Nov 2014 00:00:00 +0000</pubDate>
-      
+      <author>luosha865@gmail.com (罗刹剑客)</author>
       <guid>http://luosha865.github.io/archives/5</guid>
       <description>&lt;p&gt;一、基于图模型的推荐&lt;/p&gt;
 
@@ -24,9 +28,7 @@
 
 &lt;p&gt;每次传播(item-&amp;gt;user-&amp;gt;item)后用户Ui的兴趣向量：&lt;/p&gt;
 
-&lt;p class=&#34;ql-center-displayed-equation&#34; style=&#34;line-height: 51px;&#34;&gt;
-  &lt;span class=&#34;ql-right-eqno&#34;&gt; &amp;nbsp; &lt;/span&gt;&lt;span class=&#34;ql-left-eqno&#34;&gt; &amp;nbsp; &lt;/span&gt;&lt;img src=&#34;http://sword865.com/blog/wp-content/ql-cache/quicklatex.com-72578d7b8cd811343615a8e13fcdbe2a_l3.png&#34; height=&#34;51&#34; width=&#34;259&#34; class=&#34;ql-img-displayed-equation quicklatex-auto-format&#34; alt=&#34;&amp;#92;&amp;#91;&amp;#102;&amp;#95;&amp;#106;&amp;#94;&amp;#112;&amp;#61;&amp;#92;&amp;#115;&amp;#117;&amp;#109;&amp;#95;&amp;#123;&amp;#108;&amp;#61;&amp;#49;&amp;#125;&amp;#94;&amp;#123;&amp;#110;&amp;#125;&amp;#92;&amp;#115;&amp;#117;&amp;#109;&amp;#95;&amp;#123;&amp;#115;&amp;#61;&amp;#49;&amp;#125;&amp;#94;&amp;#123;&amp;#109;&amp;#125;&amp;#92;&amp;#102;&amp;#114;&amp;#97;&amp;#99;&amp;#123;&amp;#97;&amp;#95;&amp;#123;&amp;#108;&amp;#106;&amp;#125;&amp;#97;&amp;#95;&amp;#123;&amp;#108;&amp;#115;&amp;#125;&amp;#97;&amp;#95;&amp;#123;&amp;#105;&amp;#115;&amp;#125;&amp;#125;&amp;#123;&amp;#75;&amp;#40;&amp;#85;&amp;#95;&amp;#108;&amp;#41;&amp;#75;&amp;#40;&amp;#73;&amp;#95;&amp;#115;&amp;#41;&amp;#125;&amp;#44;&amp;#106;&amp;#61;&amp;#49;&amp;#8230;&amp;#109;&amp;#92;&amp;#93;&#34; title=&#34;Rendered by QuickLaTeX.com&#34; /&gt;
-&lt;/p&gt;
+&lt;div&gt;$$f_j^p=\sum_{l=1}^{n}\sum_{s=1}^{m}\frac{a_{lj}a_{ls}a_{is}}{K(U_l)K(I_s)},j=1…m$$&lt;/div&gt;
 
 &lt;p&gt;2.heat spreading&lt;/p&gt;
 
@@ -34,13 +36,19 @@
 
 &lt;p&gt;每次传播后用户Ui的兴趣向量：&lt;/p&gt;
 
-&lt;p class=&#34;ql-center-displayed-equation&#34; style=&#34;line-height: 51px;&#34;&gt;
-  &lt;span class=&#34;ql-right-eqno&#34;&gt; &amp;nbsp; &lt;/span&gt;&lt;span class=&#34;ql-left-eqno&#34;&gt; &amp;nbsp; &lt;/span&gt;&lt;img src=&#34;http://sword865.com/blog/wp-content/ql-cache/quicklatex.com-b0998856c4f20c869185526c6f2d5dab_l3.png&#34; height=&#34;51&#34; width=&#34;281&#34; class=&#34;ql-img-displayed-equation quicklatex-auto-format&#34; alt=&#34;&amp;#92;&amp;#91;&amp;#102;&amp;#95;&amp;#104;&amp;#94;&amp;#112;&amp;#61;&amp;#92;&amp;#102;&amp;#114;&amp;#97;&amp;#99;&amp;#123;&amp;#49;&amp;#125;&amp;#123;&amp;#75;&amp;#40;&amp;#73;&amp;#95;&amp;#106;&amp;#41;&amp;#125;&amp;#92;&amp;#115;&amp;#117;&amp;#109;&amp;#95;&amp;#123;&amp;#108;&amp;#61;&amp;#49;&amp;#125;&amp;#94;&amp;#123;&amp;#110;&amp;#125;&amp;#92;&amp;#115;&amp;#117;&amp;#109;&amp;#95;&amp;#123;&amp;#115;&amp;#61;&amp;#49;&amp;#125;&amp;#94;&amp;#123;&amp;#109;&amp;#125;&amp;#92;&amp;#102;&amp;#114;&amp;#97;&amp;#99;&amp;#123;&amp;#97;&amp;#95;&amp;#123;&amp;#108;&amp;#106;&amp;#125;&amp;#97;&amp;#95;&amp;#123;&amp;#108;&amp;#115;&amp;#125;&amp;#97;&amp;#95;&amp;#123;&amp;#105;&amp;#115;&amp;#125;&amp;#125;&amp;#123;&amp;#75;&amp;#40;&amp;#85;&amp;#95;&amp;#108;&amp;#41;&amp;#125;&amp;#44;&amp;#106;&amp;#61;&amp;#49;&amp;#8230;&amp;#109;&amp;#92;&amp;#93;&#34; title=&#34;Rendered by QuickLaTeX.com&#34; /&gt;
-&lt;/p&gt;
+&lt;div&gt;$$f_h^p=\frac{1}{K(I_j)}\sum_{l=1}^{n}\sum_{s=1}^{m}\frac{a_{lj}a_{ls}a_{is}}{K(U_l)},j=1…m$$&lt;/div&gt;
 
-&lt;p&gt;其中：&lt;img src=&#34;http://sword865.com/blog/wp-content/ql-cache/quicklatex.com-b079522ca48af5742d3a92fad1cab60e_l3.png&#34; class=&#34;ql-img-inline-formula quicklatex-auto-format&#34; alt=&#34;&amp;#75;&amp;#40;&amp;#73;&amp;#95;&amp;#106;&amp;#41;&amp;#61;&amp;#92;&amp;#115;&amp;#117;&amp;#109;&amp;#95;&amp;#123;&amp;#108;&amp;#61;&amp;#49;&amp;#125;&amp;#94;&amp;#123;&amp;#109;&amp;#125;&amp;#97;&amp;#95;&amp;#123;&amp;#108;&amp;#106;&amp;#125;&#34; title=&#34;Rendered by QuickLaTeX.com&#34; height=&#34;20&#34; width=&#34;133&#34; style=&#34;vertical-align: -6px;&#34; /&gt;是节目j的邻域大小，&lt;img src=&#34;http://sword865.com/blog/wp-content/ql-cache/quicklatex.com-c00cedda4e5d5763a770835d673ba5c5_l3.png&#34; class=&#34;ql-img-inline-formula quicklatex-auto-format&#34; alt=&#34;&amp;#75;&amp;#40;&amp;#85;&amp;#95;&amp;#108;&amp;#41;&amp;#61;&amp;#92;&amp;#115;&amp;#117;&amp;#109;&amp;#95;&amp;#123;&amp;#108;&amp;#61;&amp;#49;&amp;#125;&amp;#94;&amp;#123;&amp;#110;&amp;#125;&amp;#97;&amp;#95;&amp;#123;&amp;#108;&amp;#115;&amp;#125;&#34; title=&#34;Rendered by QuickLaTeX.com&#34; height=&#34;20&#34; width=&#34;135&#34; style=&#34;vertical-align: -6px;&#34; /&gt;是用户l的邻域大小。&lt;/p&gt;
+&lt;p&gt;其中：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://sword865.com/blog/wp-content/ql-cache/quicklatex.com-8b434a5adf074f8f0e25a42236e0c3ed_l3.png&#34; class=&#34;ql-img-inline-formula quicklatex-auto-format&#34; alt=&#34;&amp;#97;&amp;#95;&amp;#123;&amp;#105;&amp;#106;&amp;#125;&#34; title=&#34;Rendered by QuickLaTeX.com&#34; height=&#34;14&#34; width=&#34;20&#34; style=&#34;vertical-align: -6px;&#34; /&gt;是表示用户i和物品j之间是否有边存在的二元向量。&lt;/p&gt;
+&lt;div&gt;$$K(I_j)=\sum_{l=1}^{m}a_{lj}$$&lt;/div&gt;
+
+&lt;p&gt;是节目j的邻域大小，&lt;/p&gt;
+
+&lt;div&gt;$$K(U_l)=\sum_{l=1}^{n}a_{ls}$$&lt;/div&gt;
+
+&lt;p&gt;是用户l的邻域大小。&lt;/p&gt;
+
+&lt;p&gt;$a_{ij}$是表示用户i和物品j之间是否有边存在的二元向量。&lt;/p&gt;
 
 &lt;p&gt;相比之下，Heats算法倾向于降低热门item的权重，而Probs中与增强对热门item的推荐。&lt;/p&gt;
 
@@ -52,11 +60,11 @@
 
 &lt;p&gt;图中，用户i的每个item的权重（1 or 0）会同时像用户和标签进行传播，这样每次传播后的兴趣向量：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://sword865.com/blog/wp-content/ql-cache/quicklatex.com-f78f41f2bf011c73a4bffd5e2472a3fe_l3.png&#34; class=&#34;ql-img-inline-formula quicklatex-auto-format&#34; alt=&#34;&amp;#102;&amp;#95;&amp;#106;&amp;#94;&amp;#116;&amp;#61;&amp;#92;&amp;#108;&amp;#97;&amp;#109;&amp;#98;&amp;#100;&amp;#97;&amp;#32;&amp;#102;&amp;#95;&amp;#106;&amp;#94;&amp;#112;&amp;#32;&amp;#43;&amp;#32;&amp;#40;&amp;#49;&amp;#45;&amp;#92;&amp;#108;&amp;#97;&amp;#109;&amp;#98;&amp;#100;&amp;#97;&amp;#41;&amp;#32;&amp;#102;&amp;#95;&amp;#106;&amp;#94;&amp;#123;&amp;#112;&amp;#116;&amp;#125;&#34; title=&#34;Rendered by QuickLaTeX.com&#34; height=&#34;26&#34; width=&#34;168&#34; style=&#34;vertical-align: -8px;&#34; /&gt;，其中&lt;img src=&#34;http://sword865.com/blog/wp-content/ql-cache/quicklatex.com-2bde2cec73738ac0234706257f6dc449_l3.png&#34; class=&#34;ql-img-inline-formula quicklatex-auto-format&#34; alt=&#34;&amp;#102;&amp;#95;&amp;#106;&amp;#94;&amp;#112;&#34; title=&#34;Rendered by QuickLaTeX.com&#34; height=&#34;23&#34; width=&#34;18&#34; style=&#34;vertical-align: -8px;&#34; /&gt;和&lt;img src=&#34;http://sword865.com/blog/wp-content/ql-cache/quicklatex.com-71804ecfd1421a8904e2c9a4305983d6_l3.png&#34; class=&#34;ql-img-inline-formula quicklatex-auto-format&#34; alt=&#34;&amp;#102;&amp;#95;&amp;#106;&amp;#94;&amp;#123;&amp;#112;&amp;#116;&amp;#125;&#34; title=&#34;Rendered by QuickLaTeX.com&#34; height=&#34;26&#34; width=&#34;23&#34; style=&#34;vertical-align: -8px;&#34; /&gt;分别是从(item-&amp;gt;user-&amp;gt;item)和(item-&amp;gt;tag-&amp;gt;item)传播后得到的权重。&lt;/p&gt;
+&lt;p&gt;$f_j^t=\lambda f_j^p + (1-\lambda) f_j^{pt}$，其中$f_j^p$和$f_j^{pt}$分别是从(item-&amp;gt;user-&amp;gt;item)和(item-&amp;gt;tag-&amp;gt;item)传播后得到的权重。&lt;/p&gt;
 
 &lt;p&gt;&lt;span style=&#34;font-size: 14px;&#34;&gt;二、矩阵分解的张量模型&lt;/span&gt;&lt;/p&gt;
 
-&lt;p&gt;对三元阵&lt;img src=&#34;http://sword865.com/blog/wp-content/ql-cache/quicklatex.com-067fe9c87c45494d6cab789cc05de1e9_l3.png&#34; class=&#34;ql-img-inline-formula quicklatex-auto-format&#34; alt=&#34;&amp;#89;&amp;#95;&amp;#123;&amp;#40;&amp;#110;&amp;#92;&amp;#116;&amp;#105;&amp;#109;&amp;#101;&amp;#115;&amp;#32;&amp;#109;&amp;#92;&amp;#116;&amp;#105;&amp;#109;&amp;#101;&amp;#115;&amp;#32;&amp;#116;&amp;#41;&amp;#125;&#34; title=&#34;Rendered by QuickLaTeX.com&#34; height=&#34;19&#34; width=&#34;66&#34; style=&#34;vertical-align: -7px;&#34; /&gt;进行矩阵分解，C为核张量，U,I,T为用户特征，物品特征和标签特征矩阵。&lt;/p&gt;
+&lt;p&gt;对三元阵$Y_{(n\times m\times t)}$进行矩阵分解，C为核张量，U,I,T为用户特征，物品特征和标签特征矩阵。&lt;/p&gt;
 
 &lt;p&gt;根据分解结果对Y进行填充。&lt;/p&gt;
 
@@ -65,10 +73,6 @@
 &lt;p&gt;填充后即得到评分矩阵&lt;/p&gt;
 
 &lt;p&gt;&lt;span style=&#34;font-size: 14px;&#34;&gt; &lt;/span&gt;&lt;/p&gt;
-
-&lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
-  &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
-&lt;/p&gt;
 </description>
     </item>
     
