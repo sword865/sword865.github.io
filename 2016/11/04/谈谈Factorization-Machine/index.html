@@ -49,7 +49,7 @@
     },
     "datePublished": "2016-11-04",
     "description": "聊聊因子分解机模型的基本形式和一些变化",
-    "wordCount":  1360 
+    "wordCount":  1370 
   }
 </script>
 
@@ -162,7 +162,7 @@
     &middot; by author
   
   &middot; Read in about 3 min
-  &middot; (1360 Words)
+  &middot; (1370 Words)
   <br>
   
 <a class="label" href="http://luosha865.github.io/tags/CTR">CTR</a>
@@ -188,7 +188,7 @@
 
 <p>我们先写出带有所有二阶组合特征的目标函数，其中矩阵W中有n^2个参数，求解非常复杂：</p>
 
-<p>$$y(x) = w<em>0 + \sum</em>{i=1}^{n} w_i x<em>i } + \sum</em>{i=1}^{n} \sum<em>{j=i+1}^{n} w</em>{ij} x_i x_j$$</p>
+<p>$$y(x) = w<em>0 + \sum</em>{i=1}^{n} w_i x<em>i + \sum</em>{i=1}^{n} \sum<em>{j=i+1}^{n} w</em>{ij} x_i x_j$$</p>
 
 <p>我们都知道在矩阵分解的协同过滤中中，我们认为每个用户可以表示成一个K维的特征向量u_k,每个物品也能表示成一个高维向量i_k，这样用户与物品的相关性就可以用两个向量的点击表示，所有用户与所有物品的相关性就可以用两个矩阵相乘的形式表示出来了。</p>
 
@@ -196,11 +196,11 @@
 
 <p>其中矩阵W中代表了特征的特征向量的內积，既：$w_{ij}=v{i}v{j}$，所以，公式可以改写为:</p>
 
-<p>$$y(x) = w<em>0 + \sum</em>{i=1}^{n} w_i x<em>i } + \sum</em>{i=1}^{n} \sum<em>{j=i+1}^{n} v</em>{i} v_{j} x_i x_j$$</p>
+<p>$$y(x) = w<em>0 + \sum</em>{i=1}^{n} w_i x<em>i + \sum</em>{i=1}^{n} \sum<em>{j=i+1}^{n} v</em>{i} v_{j} x_i x_j$$</p>
 
 <p>也就是：</p>
 
-<p>$$y(x) = w<em>0 + \sum</em>{i=1}^{n} w_i x<em>i } + \sum</em>{i=1}^{n} \sum<em>{j=i+1}^{n} \sum</em>{h=i}^{k} v<em>{i,h} v</em>{j,h} x_i x_j$$</p>
+<p>$$y(x) = w<em>0 + \sum</em>{i=1}^{n} w_i x<em>i + \sum</em>{i=1}^{n} \sum<em>{j=i+1}^{n} \sum</em>{h=i}^{k} v<em>{i,h} v</em>{j,h} x_i x_j$$</p>
 
 <p>可以看出，W中的参数现在只有nk个了，因为一般有k&lt;&lt;n，所以FM大大降低的目标函数的复杂度。</p>
 
@@ -208,7 +208,7 @@
 
 <p>$δy/δw_{0}=1$</p>
 
-<p>$δy/δw<em>{i}=x</em>{i}$</p>
+<p>$δy/δw<em>{i}=x</em>{i},i=1&hellip;n$</p>
 
 <p>$δy/δv<em>{i,k}=x</em>{i}\sum{j \neq i} v<em>{j,k}x</em>{j}$</p>
 
