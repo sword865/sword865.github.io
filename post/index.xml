@@ -42,7 +42,7 @@
 
 &lt;p&gt;也就是：&lt;/p&gt;
 
-&lt;p&gt;$$y(x) = w&lt;em&gt;0 + \sum&lt;/em&gt;{i=1}^{n} w_i x&lt;em&gt;i } + \sum&lt;/em&gt;{i=1}^{n} \sum&lt;em&gt;{j=i+1}^{n} \sum&lt;/em&gt;{h=i}^{k} v&lt;em&gt;{i,k} v&lt;/em&gt;{j,k} x_i x_j$$&lt;/p&gt;
+&lt;p&gt;$$y(x) = w&lt;em&gt;0 + \sum&lt;/em&gt;{i=1}^{n} w_i x&lt;em&gt;i } + \sum&lt;/em&gt;{i=1}^{n} \sum&lt;em&gt;{j=i+1}^{n} \sum&lt;/em&gt;{h=i}^{k} v&lt;em&gt;{i,h} v&lt;/em&gt;{j,h} x_i x_j$$&lt;/p&gt;
 
 &lt;p&gt;可以看出，W中的参数现在只有nk个了，因为一般有k&amp;lt;&amp;lt;n，所以FM大大降低的目标函数的复杂度。&lt;/p&gt;
 
