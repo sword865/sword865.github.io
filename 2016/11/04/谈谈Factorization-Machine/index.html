@@ -49,7 +49,7 @@
     },
     "datePublished": "2016-11-04",
     "description": "聊聊因子分解机模型的基本形式和一些变化",
-    "wordCount":  1370 
+    "wordCount":  1365 
   }
 </script>
 
@@ -162,7 +162,7 @@
     &middot; by author
   
   &middot; Read in about 3 min
-  &middot; (1370 Words)
+  &middot; (1365 Words)
   <br>
   
 <a class="label" href="http://luosha865.github.io/tags/CTR">CTR</a>
@@ -188,34 +188,31 @@
 
 <p>我们先写出带有所有二阶组合特征的目标函数，其中矩阵W中有n^2个参数，求解非常复杂：</p>
 
-<p>$$y(x) = w<em>0 + \sum</em>{i=1}^{n} w_i x<em>i + \sum</em>{i=1}^{n} \sum<em>{j=i+1}^{n} w</em>{ij} x_i x_j$$</p>
+<div>$$y(x) = w_0 + \sum_{i=1}^{n} w_i x_i + \sum_{i=1}^{n} \sum_{j=i+1}^{n} w_{ij} x_i x_j$$</div>
 
-<p>我们都知道在矩阵分解的协同过滤中中，我们认为每个用户可以表示成一个K维的特征向量u_k,每个物品也能表示成一个高维向量i_k，这样用户与物品的相关性就可以用两个向量的点击表示，所有用户与所有物品的相关性就可以用两个矩阵相乘的形式表示出来了。</p>
+<p>我们都知道在矩阵分解的协同过滤中中，我们认为每个用户可以表示成一个K维的特征向量$u_k$,每个物品也能表示成一个高维向量$i_k$，这样用户与物品的相关性就可以用两个向量的点击表示，所有用户与所有物品的相关性就可以用两个矩阵相乘的形式表示出来了。</p>
 
-<p>FM的模型参考了矩阵分解的思想，认为每个特征x<em>{i}都可以用一个K维的特征向量$v</em>{i}$表示，那么所有特征之前的相关性就也就可以用两个矩阵的相乘进行表示了，模型表示如下：</p>
+<p>FM的模型参考了矩阵分解的思想，认为每个特征 $x_i$都可以用一个K维的特征向量$v_i$表示，那么所有特征之前的相关性就也就可以用两个矩阵的相乘进行表示了，模型表示如下：</p>
 
-<p>其中矩阵W中代表了特征的特征向量的內积，既：$w_{ij}=v{i}v{j}$，所以，公式可以改写为:</p>
+<p>其中矩阵W中代表了特征的特征向量的內积，既：$w_{ij}=v_i v_j$，所以，公式可以改写为:</p>
 
-<p>$$y(x) = w<em>0 + \sum</em>{i=1}^{n} w_i x<em>i + \sum</em>{i=1}^{n} \sum<em>{j=i+1}^{n} v</em>{i} v_{j} x_i x_j$$</p>
+<div>$$y(x) = w_0 + \sum_{i=1}^{n} w_i x_i + \sum_{i=1}^{n} \sum_{j=i+1}^{n} v_{i} v_{j} x_i x_j$$</div>
 
 <p>也就是：</p>
 
-<p>$$y(x) = w<em>0 + \sum</em>{i=1}^{n} w_i x<em>i + \sum</em>{i=1}^{n} \sum<em>{j=i+1}^{n} \sum</em>{h=i}^{k} v<em>{i,h} v</em>{j,h} x_i x_j$$</p>
+<div>$$y(x) = w_0 + \sum_{i=1}^{n} w_i x_i + \sum_{i=1}^{n} \sum_{j=i+1}^{n} \sum_{h=i}^{k} v_{i,h} v_{j,h} x_i x_j$$</div>
 
-<p>可以看出，W中的参数现在只有nk个了，因为一般有k&lt;&lt;n，所以FM大大降低的目标函数的复杂度。</p>
+<p>可以看出，W中的参数现在只有nk个了，因为一般有k&lt;&lt;n，所以FM大大降低的目标函数的复杂度。推导可得梯度公式：</p>
 
-<p>推导可得梯度公式：</p>
+<div>$δy/δw_{0}=1$</div>
 
-<p>$δy/δw_{0}=1$</p>
+<div>$δy/δw_{i}=x_{i},i=1...n$</div>
 
-<p>$δy/δw<em>{i}=x</em>{i},i=1&hellip;n$</p>
-
-<p>$δy/δv<em>{i,k}=x</em>{i}\sum{j \neq i} v<em>{j,k}x</em>{j}$</p>
+<div>$δy/δv_{i,k}=x_{i}\sum{j \neq i} v_{j,k}x_{j}$</div>
 
 <p>FM的优化可以用SGD来做，不过这里推荐带动量（momentum）的min-batch SGD算法，试验中比普通的SGD效果似乎更好。带momentum的SGD模拟了物品运动中的惯性。</p>
 
-<p>在传统的SGD中：$x<em>{t+1}=x</em>{t}+Δx<em>{t},Δx</em>{t}=-ŋg<em>{t}$,其中$g</em>{t}$代表了梯度。
-而在momentum的SGD中：$Δx<em>{t}=px</em>{t-1}-ŋg_{t}$。</p>
+<p>在传统的SGD中：<span>$x_{t+1}=x_t+Δx_t,Δx_t=-ŋg_t$</span> ,其中 $g_t$代表了梯度。而在momentum的SGD中：$Δx_t=px_{t-1}-ŋg_t$。</p>
 
 <p>不过比起LR, FM有一个缺点&ndash;目标函数是非凸的，虽然针对这个缺点也有一些研究比如一些凸函数形式的FM，不过在实践中似乎这并不是一个很严重的问题，合适的初始化方式和优化方法一般是能够给出一个可以接受的解的。</p>
 

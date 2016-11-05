@@ -30,34 +30,31 @@
 
 &lt;p&gt;我们先写出带有所有二阶组合特征的目标函数，其中矩阵W中有n^2个参数，求解非常复杂：&lt;/p&gt;
 
-&lt;p&gt;$$y(x) = w&lt;em&gt;0 + \sum&lt;/em&gt;{i=1}^{n} w_i x&lt;em&gt;i + \sum&lt;/em&gt;{i=1}^{n} \sum&lt;em&gt;{j=i+1}^{n} w&lt;/em&gt;{ij} x_i x_j$$&lt;/p&gt;
+&lt;div&gt;$$y(x) = w_0 + \sum_{i=1}^{n} w_i x_i + \sum_{i=1}^{n} \sum_{j=i+1}^{n} w_{ij} x_i x_j$$&lt;/div&gt;
 
-&lt;p&gt;我们都知道在矩阵分解的协同过滤中中，我们认为每个用户可以表示成一个K维的特征向量u_k,每个物品也能表示成一个高维向量i_k，这样用户与物品的相关性就可以用两个向量的点击表示，所有用户与所有物品的相关性就可以用两个矩阵相乘的形式表示出来了。&lt;/p&gt;
+&lt;p&gt;我们都知道在矩阵分解的协同过滤中中，我们认为每个用户可以表示成一个K维的特征向量$u_k$,每个物品也能表示成一个高维向量$i_k$，这样用户与物品的相关性就可以用两个向量的点击表示，所有用户与所有物品的相关性就可以用两个矩阵相乘的形式表示出来了。&lt;/p&gt;
 
-&lt;p&gt;FM的模型参考了矩阵分解的思想，认为每个特征x&lt;em&gt;{i}都可以用一个K维的特征向量$v&lt;/em&gt;{i}$表示，那么所有特征之前的相关性就也就可以用两个矩阵的相乘进行表示了，模型表示如下：&lt;/p&gt;
+&lt;p&gt;FM的模型参考了矩阵分解的思想，认为每个特征 $x_i$都可以用一个K维的特征向量$v_i$表示，那么所有特征之前的相关性就也就可以用两个矩阵的相乘进行表示了，模型表示如下：&lt;/p&gt;
 
-&lt;p&gt;其中矩阵W中代表了特征的特征向量的內积，既：$w_{ij}=v{i}v{j}$，所以，公式可以改写为:&lt;/p&gt;
+&lt;p&gt;其中矩阵W中代表了特征的特征向量的內积，既：$w_{ij}=v_i v_j$，所以，公式可以改写为:&lt;/p&gt;
 
-&lt;p&gt;$$y(x) = w&lt;em&gt;0 + \sum&lt;/em&gt;{i=1}^{n} w_i x&lt;em&gt;i + \sum&lt;/em&gt;{i=1}^{n} \sum&lt;em&gt;{j=i+1}^{n} v&lt;/em&gt;{i} v_{j} x_i x_j$$&lt;/p&gt;
+&lt;div&gt;$$y(x) = w_0 + \sum_{i=1}^{n} w_i x_i + \sum_{i=1}^{n} \sum_{j=i+1}^{n} v_{i} v_{j} x_i x_j$$&lt;/div&gt;
 
 &lt;p&gt;也就是：&lt;/p&gt;
 
-&lt;p&gt;$$y(x) = w&lt;em&gt;0 + \sum&lt;/em&gt;{i=1}^{n} w_i x&lt;em&gt;i + \sum&lt;/em&gt;{i=1}^{n} \sum&lt;em&gt;{j=i+1}^{n} \sum&lt;/em&gt;{h=i}^{k} v&lt;em&gt;{i,h} v&lt;/em&gt;{j,h} x_i x_j$$&lt;/p&gt;
+&lt;div&gt;$$y(x) = w_0 + \sum_{i=1}^{n} w_i x_i + \sum_{i=1}^{n} \sum_{j=i+1}^{n} \sum_{h=i}^{k} v_{i,h} v_{j,h} x_i x_j$$&lt;/div&gt;
 
-&lt;p&gt;可以看出，W中的参数现在只有nk个了，因为一般有k&amp;lt;&amp;lt;n，所以FM大大降低的目标函数的复杂度。&lt;/p&gt;
+&lt;p&gt;可以看出，W中的参数现在只有nk个了，因为一般有k&amp;lt;&amp;lt;n，所以FM大大降低的目标函数的复杂度。推导可得梯度公式：&lt;/p&gt;
 
-&lt;p&gt;推导可得梯度公式：&lt;/p&gt;
+&lt;div&gt;$δy/δw_{0}=1$&lt;/div&gt;
 
-&lt;p&gt;$δy/δw_{0}=1$&lt;/p&gt;
+&lt;div&gt;$δy/δw_{i}=x_{i},i=1...n$&lt;/div&gt;
 
-&lt;p&gt;$δy/δw&lt;em&gt;{i}=x&lt;/em&gt;{i},i=1&amp;hellip;n$&lt;/p&gt;
-
-&lt;p&gt;$δy/δv&lt;em&gt;{i,k}=x&lt;/em&gt;{i}\sum{j \neq i} v&lt;em&gt;{j,k}x&lt;/em&gt;{j}$&lt;/p&gt;
+&lt;div&gt;$δy/δv_{i,k}=x_{i}\sum{j \neq i} v_{j,k}x_{j}$&lt;/div&gt;
 
 &lt;p&gt;FM的优化可以用SGD来做，不过这里推荐带动量（momentum）的min-batch SGD算法，试验中比普通的SGD效果似乎更好。带momentum的SGD模拟了物品运动中的惯性。&lt;/p&gt;
 
-&lt;p&gt;在传统的SGD中：$x&lt;em&gt;{t+1}=x&lt;/em&gt;{t}+Δx&lt;em&gt;{t},Δx&lt;/em&gt;{t}=-ŋg&lt;em&gt;{t}$,其中$g&lt;/em&gt;{t}$代表了梯度。
-而在momentum的SGD中：$Δx&lt;em&gt;{t}=px&lt;/em&gt;{t-1}-ŋg_{t}$。&lt;/p&gt;
+&lt;p&gt;在传统的SGD中：&lt;span&gt;$x_{t+1}=x_t+Δx_t,Δx_t=-ŋg_t$&lt;/span&gt; ,其中 $g_t$代表了梯度。而在momentum的SGD中：$Δx_t=px_{t-1}-ŋg_t$。&lt;/p&gt;
 
 &lt;p&gt;不过比起LR, FM有一个缺点&amp;ndash;目标函数是非凸的，虽然针对这个缺点也有一些研究比如一些凸函数形式的FM，不过在实践中似乎这并不是一个很严重的问题，合适的初始化方式和优化方法一般是能够给出一个可以接受的解的。&lt;/p&gt;
 
