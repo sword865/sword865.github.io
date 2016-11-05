@@ -717,8 +717,6 @@ def start_serving(self, delegate):
 
 &lt;p&gt;&lt;a href=&#34;http://blog.csdn.net/zouxy09/article/details/8775360&#34;&gt;http://blog.csdn.net/zouxy09/article/details/8775360&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&amp;nbsp;&lt;/p&gt;
-
 &lt;p&gt;顺便附上翻译的UFLDL&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&#34;http://deeplearning.stanford.edu/wiki/index.php/UFLDL%E6%95%99%E7%A8%8B&#34;&gt;http://deeplearning.stanford.edu/wiki/index.php/UFLDL%E6%95%99%E7%A8%8B&lt;/a&gt;&lt;/p&gt;
