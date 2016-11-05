@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Acm on 悟剑阁</title>
-    <link>http://luosha865.github.io/tags/acm/</link>
+    <link>http://blog.sword865.com/tags/acm/</link>
     <description>Recent content in Acm on 悟剑阁</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
@@ -10,14 +10,14 @@
     <webMaster>luosha865@gmail.com (罗刹剑客)</webMaster>
     <copyright>Copyright (c) 2015. All rights reserved.</copyright>
     <lastBuildDate>Wed, 19 Aug 2009 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://luosha865.github.io/tags/acm/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://blog.sword865.com/tags/acm/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>ACM暑假集训总结</title>
-      <link>http://luosha865.github.io/archives/23</link>
+      <link>http://blog.sword865.com/archives/23</link>
       <pubDate>Wed, 19 Aug 2009 00:00:00 +0000</pubDate>
       <author>luosha865@gmail.com (罗刹剑客)</author>
-      <guid>http://luosha865.github.io/archives/23</guid>
+      <guid>http://blog.sword865.com/archives/23</guid>
       <description>&lt;p&gt;ACM的暑假集训结束了，趁着军训还没开始，对整个暑假接触到的东西作了一个总结，因为刚参加ACM不久，所以内容大都比较基础吧，文章中提到了些参考资料，如果需要的话，请留下邮箱。&lt;/p&gt;
 
 &lt;p&gt;目录&lt;/p&gt;
@@ -864,10 +864,10 @@
     
     <item>
       <title>有重复组合数</title>
-      <link>http://luosha865.github.io/archives/24</link>
+      <link>http://blog.sword865.com/archives/24</link>
       <pubDate>Thu, 02 Apr 2009 00:00:00 +0000</pubDate>
       <author>luosha865@gmail.com (罗刹剑客)</author>
-      <guid>http://luosha865.github.io/archives/24</guid>
+      <guid>http://blog.sword865.com/archives/24</guid>
       <description>&lt;p&gt;从n个元素中有重复地取r个，不计顺序，则不同的取法有多少种？&lt;br /&gt;
 这个问题的答案被称为有重复组合数。结果很简洁，是C(n+r-1,r)。(注：这表示从n+r-1个数中取出r个数的组合数)&lt;br /&gt;
 【证明1】&lt;br /&gt;
@@ -897,10 +897,10 @@
     
     <item>
       <title>KMP算法复杂度分析</title>
-      <link>http://luosha865.github.io/archives/26</link>
+      <link>http://blog.sword865.com/archives/26</link>
       <pubDate>Wed, 11 Mar 2009 00:00:00 +0000</pubDate>
       <author>luosha865@gmail.com (罗刹剑客)</author>
-      <guid>http://luosha865.github.io/archives/26</guid>
+      <guid>http://blog.sword865.com/archives/26</guid>
       <description>&lt;p&gt;KMP算法也算接触很久了，今天却突然发现不知道那个的复杂度是怎么来的&lt;br /&gt;
 于是想啊想，查啊查，总结如下&lt;br /&gt;
 设代码为&lt;br /&gt;

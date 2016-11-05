@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>未分类 on </title>
-    <link>http://luosha865.github.io/categories/%E6%9C%AA%E5%88%86%E7%B1%BB/</link>
-    <description>Recent content in 未分类 on </description>
+    <title>未分类 on 悟剑阁</title>
+    <link>http://blog.sword865.com/categories/%E6%9C%AA%E5%88%86%E7%B1%BB/</link>
+    <description>Recent content in 未分类 on 悟剑阁</description>
     <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <managingEditor>luosha865@gmail.com (罗刹剑客)</managingEditor>
+    <webMaster>luosha865@gmail.com (罗刹剑客)</webMaster>
+    <copyright>Copyright (c) 2015. All rights reserved.</copyright>
     <lastBuildDate>Wed, 16 Mar 2011 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://luosha865.github.io/categories/%E6%9C%AA%E5%88%86%E7%B1%BB/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://blog.sword865.com/categories/%E6%9C%AA%E5%88%86%E7%B1%BB/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>简单讲一下使用MS3D为opengl建模</title>
-      <link>http://luosha865.github.io/archives/124</link>
+      <link>http://blog.sword865.com/archives/124</link>
       <pubDate>Wed, 16 Mar 2011 00:00:00 +0000</pubDate>
-      
-      <guid>http://luosha865.github.io/archives/124</guid>
+      <author>luosha865@gmail.com (罗刹剑客)</author>
+      <guid>http://blog.sword865.com/archives/124</guid>
       <description>&lt;p&gt;做毕设的时候写的东西，贴上来吧…………&lt;/p&gt;
 
 &lt;p&gt;由于在OPENGL只能通过程序语言绘制模型，远不能达到可见既可得的目的。因此，比起3DMAX、MAYA等可视化3D建模工具，OPENGL模型的建立就相当的困难，为了简化这一问题的处理，可以使用简单小巧的MS3D来完成可见即可得的绘制过程。&lt;/p&gt;
@@ -22,7 +26,7 @@
 
 &lt;p&gt;MS3D全名为MilkShape3D，是一款简单小巧的3D可视化图形建模工具，可以简单的使用各种点、线面等基本图形元素组合建立模型，并进行贴图，分组。进一步的，该工具还支持简单的骨骼动画制作，是一款非常好用的3D图形构建工具。&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://sword865.com/blog/wp-content/uploads/2015/02/ms3d.jpg&#34;&gt;&lt;img class=&#34;alignnone  wp-image-125&#34; src=&#34;http://sword865.com/blog/wp-content/uploads/2015/02/ms3d-300x164.jpg&#34; alt=&#34;ms3d&#34; width=&#34;428&#34; height=&#34;234&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;[&lt;img class=&#34;alignnone  wp-image-125&#34; src=&#34;http://blog.sword865.com/wp-content/uploads/2015/02/ms3d-300x164.jpg&#34; alt=&#34;ms3d&#34; width=&#34;428&#34; height=&#34;234&#34; /&gt;][1]&lt;/p&gt;
 
 &lt;p&gt;在建立了MS3D中完成模型建立后可保存为.ms3d的文件格式，通过对该文件格式进行分析，就可以了解文件结构，以在程序中通过读取该文件重现所见模型。&lt;/p&gt;
 
@@ -154,28 +158,22 @@ for ( int i = 0; i &amp;lt; m_numMeshes; i++ )
 
 &lt;p&gt;通过这种方法，就可以在程序中绘制一个个的具体模型：&lt;/p&gt;
 
-&lt;p&gt;[&lt;img class=&#34;alignnone  wp-image-127&#34; src=&#34;http://sword865.com/blog/wp-content/uploads/2015/02/ballfight-300x168.jpg&#34; alt=&#34;ballfight&#34; width=&#34;352&#34; height=&#34;197&#34; /&gt;][2]&lt;/p&gt;
+&lt;p&gt;&lt;img class=&#34;alignnone  wp-image-127&#34; src=&#34;http://blog.sword865.com/wp-content/uploads/2015/02/ballfight-300x168.jpg&#34; alt=&#34;ballfight&#34; width=&#34;352&#34; height=&#34;197&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;&amp;nbsp;&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://blog.sina.com.cn/s/blog_62d98a550100g5hh.html&#34;&gt;http://blog.sina.com.cn/s/blog_62d98a550100g5hh.html&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;[1]&lt;a href=&#34;http://blog.sina.com.cn/s/blog_62d98a550100g5hh.html&#34;&gt;http://blog.sina.com.cn/s/blog_62d98a550100g5hh.html&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://www.yakergong.net/nehe/course/tutorial_31.html&#34;&gt;http://www.yakergong.net/nehe/course/tutorial_31.html&lt;/a&gt;&lt;/p&gt;
-
-&lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
-  &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
-&lt;/p&gt;
-
-&lt;p&gt;[2]: &lt;a href=&#34;http://sword865.com/blog/wp-content/uploads/2015/02/ballfight.jpg&#34;&gt;http://sword865.com/blog/wp-content/uploads/2015/02/ballfight.jpg&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;[2]&lt;a href=&#34;http://www.yakergong.net/nehe/course/tutorial_31.html&#34;&gt;http://www.yakergong.net/nehe/course/tutorial_31.html&lt;/a&gt;&lt;/p&gt;
 </description>
     </item>
     
     <item>
       <title>统计,逻辑与智能</title>
-      <link>http://luosha865.github.io/archives/17</link>
+      <link>http://blog.sword865.com/archives/17</link>
       <pubDate>Thu, 10 Sep 2009 00:00:00 +0000</pubDate>
-      
-      <guid>http://luosha865.github.io/archives/17</guid>
+      <author>luosha865@gmail.com (罗刹剑客)</author>
+      <guid>http://blog.sword865.com/archives/17</guid>
       <description>&lt;p&gt;&amp;nbsp; &amp;nbsp;&amp;nbsp;&amp;nbsp; 今天上了开学的第一节统计学，开了很久的小差，想了不少东西。&lt;/p&gt;
 
 &lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;nbsp;以前虽然自学过概率论与数理统计，但是也只是了解了一些公式与原理，一直对于统计学的一些应用不甚理解(或者说不能接受)，尤其是基于统计的机器学习，一直不能接受它作为一种实现的人工智能的手段。因为我心中的人工智能是绝对理性，严谨，逻辑的。虽然我可以接受统计学的理论，却不能把它作为一种严谨的逻辑。&lt;/p&gt;
@@ -201,19 +199,15 @@ for ( int i = 0; i &amp;lt; m_numMeshes; i++ )
 &lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; 最后，把我上课时写在书上的话记录下来吧：&lt;/p&gt;
 
 &lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;nbsp;统计学&amp;#8212;以理性研究感性，我们的直觉从过去的经验去推导未来，这种推断不能解释结果的原因。（因为它在历史上倾向于如此，所以它很可能如此。）统计学将这种感性理性化，并出除了一些直觉上的错误（如：小概率事件经常发生），但其根本上还是一种感性的判断，因此解释这种感性推断背后的原因，事物呈现这种状态的原因，就是人的工作了。所以统计学也可以用来在没有线索时，作为一种&amp;ldquo;事后诸葛亮&amp;rdquo;式的推断的第一步（即先找出最可能答案，在设法解释它，不过这种方法具有不可证伪性，所以不是科学严谨的――毕竟是直觉么）。同时，统计的机器学习可以就可用来模拟人的直觉学习了（而且是一种没有错误的直觉）。&lt;/p&gt;
-
-&lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
-  &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
-&lt;/p&gt;
 </description>
     </item>
     
     <item>
       <title>读《你的灯亮这么》—走出问题的乌托邦</title>
-      <link>http://luosha865.github.io/archives/22</link>
+      <link>http://blog.sword865.com/archives/22</link>
       <pubDate>Tue, 25 Aug 2009 00:00:00 +0000</pubDate>
-      
-      <guid>http://luosha865.github.io/archives/22</guid>
+      <author>luosha865@gmail.com (罗刹剑客)</author>
+      <guid>http://blog.sword865.com/archives/22</guid>
       <description>&lt;p align=&#34;left&#34;&gt;
   军训期间闲着无聊时,决定读一些&amp;ldquo;杂书&amp;rdquo;，其中有一本叫《你的灯亮着么?》的小册子，刚读完不久，趁着今晚休息的时间作以记录。
 &lt;/p&gt;
@@ -373,25 +367,17 @@ for ( int i = 0; i &amp;lt; m_numMeshes; i++ )
 &lt;p align=&#34;left&#34;&gt;
   再次解决：把第一章扔了，再把第二章称为第一章
 &lt;/p&gt;
-
-&lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
-  &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
-&lt;/p&gt;
 </description>
     </item>
     
     <item>
       <title>终于还是开了个blog。。。</title>
-      <link>http://luosha865.github.io/archives/27</link>
+      <link>http://blog.sword865.com/archives/27</link>
       <pubDate>Sun, 08 Mar 2009 00:00:00 +0000</pubDate>
-      
-      <guid>http://luosha865.github.io/archives/27</guid>
+      <author>luosha865@gmail.com (罗刹剑客)</author>
+      <guid>http://blog.sword865.com/archives/27</guid>
       <description>&lt;p&gt;RT&lt;br /&gt;
 以后常来看看吧&lt;/p&gt;
-
-&lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
-  &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
-&lt;/p&gt;
 </description>
     </item>
     

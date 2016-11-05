@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Logistic on 悟剑阁</title>
-    <link>http://luosha865.github.io/tags/logistic/</link>
+    <link>http://blog.sword865.com/tags/logistic/</link>
     <description>Recent content in Logistic on 悟剑阁</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
@@ -10,14 +10,14 @@
     <webMaster>luosha865@gmail.com (罗刹剑客)</webMaster>
     <copyright>Copyright (c) 2015. All rights reserved.</copyright>
     <lastBuildDate>Sat, 03 Aug 2013 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://luosha865.github.io/tags/logistic/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://blog.sword865.com/tags/logistic/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Google在KDD2013上关于CTR的一篇论文</title>
-      <link>http://luosha865.github.io/archives/6</link>
+      <link>http://blog.sword865.com/archives/6</link>
       <pubDate>Sat, 03 Aug 2013 00:00:00 +0000</pubDate>
       <author>luosha865@gmail.com (罗刹剑客)</author>
-      <guid>http://luosha865.github.io/archives/6</guid>
+      <guid>http://blog.sword865.com/archives/6</guid>
       <description>&lt;p&gt;最近在做CTR，刚好Google在KDD发了一篇文章，讲了他们的一些尝试，总结一下：&lt;/p&gt;
 
 &lt;p&gt;先是一些公式的符号说明：&lt;/p&gt;

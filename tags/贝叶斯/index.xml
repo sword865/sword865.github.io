@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>贝叶斯 on 悟剑阁</title>
-    <link>http://luosha865.github.io/tags/%E8%B4%9D%E5%8F%B6%E6%96%AF/</link>
+    <link>http://blog.sword865.com/tags/%E8%B4%9D%E5%8F%B6%E6%96%AF/</link>
     <description>Recent content in 贝叶斯 on 悟剑阁</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
@@ -10,14 +10,14 @@
     <webMaster>luosha865@gmail.com (罗刹剑客)</webMaster>
     <copyright>Copyright (c) 2015. All rights reserved.</copyright>
     <lastBuildDate>Sat, 05 Sep 2009 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://luosha865.github.io/tags/%E8%B4%9D%E5%8F%B6%E6%96%AF/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://blog.sword865.com/tags/%E8%B4%9D%E5%8F%B6%E6%96%AF/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>算法总结1—贝叶斯分类器</title>
-      <link>http://luosha865.github.io/archives/21</link>
+      <link>http://blog.sword865.com/archives/21</link>
       <pubDate>Sat, 05 Sep 2009 00:00:00 +0000</pubDate>
       <author>luosha865@gmail.com (罗刹剑客)</author>
-      <guid>http://luosha865.github.io/archives/21</guid>
+      <guid>http://blog.sword865.com/archives/21</guid>
       <description>&lt;p&gt;&amp;nbsp;这几天以很快的速度翻完了&amp;lt;集体智慧编程&amp;gt;,因为只是对里面的算法感兴趣,对那些web2.0的应用没什么感觉,所以很多地方都是一扫而过,现在按最后一章的顺序来对所有相关的算法作一个详细的复习&amp;hellip;.&lt;/p&gt;
 
 &lt;p&gt;这个是第一篇&amp;hellip;&amp;hellip;贝叶斯分类器&lt;/p&gt;

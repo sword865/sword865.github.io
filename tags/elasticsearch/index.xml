@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Elasticsearch on 悟剑阁</title>
-    <link>http://luosha865.github.io/tags/elasticsearch/</link>
+    <link>http://blog.sword865.com/tags/elasticsearch/</link>
     <description>Recent content in Elasticsearch on 悟剑阁</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
@@ -10,14 +10,14 @@
     <webMaster>luosha865@gmail.com (罗刹剑客)</webMaster>
     <copyright>Copyright (c) 2015. All rights reserved.</copyright>
     <lastBuildDate>Mon, 27 Jul 2015 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://luosha865.github.io/tags/elasticsearch/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://blog.sword865.com/tags/elasticsearch/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Elasticsearch-HttpServerModule</title>
-      <link>http://luosha865.github.io/archives/150</link>
+      <link>http://blog.sword865.com/archives/150</link>
       <pubDate>Mon, 27 Jul 2015 00:00:00 +0000</pubDate>
       <author>luosha865@gmail.com (罗刹剑客)</author>
-      <guid>http://luosha865.github.io/archives/150</guid>
+      <guid>http://blog.sword865.com/archives/150</guid>
       <description>&lt;p&gt;HttpServerModule的请求主要由HttpServer中的HttpServerTransport(默认为NettyHttpServerTransport）类处理。&lt;/p&gt;
 
 &lt;p&gt;NettyHttpServerTransport基于netty框架，负责监听并建立连接，信息的处理由内部类HttpChannelPipelineFactory完成。&lt;/p&gt;

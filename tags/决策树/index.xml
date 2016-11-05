@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>决策树 on 悟剑阁</title>
-    <link>http://luosha865.github.io/tags/%E5%86%B3%E7%AD%96%E6%A0%91/</link>
+    <link>http://blog.sword865.com/tags/%E5%86%B3%E7%AD%96%E6%A0%91/</link>
     <description>Recent content in 决策树 on 悟剑阁</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
@@ -10,14 +10,14 @@
     <webMaster>luosha865@gmail.com (罗刹剑客)</webMaster>
     <copyright>Copyright (c) 2015. All rights reserved.</copyright>
     <lastBuildDate>Sun, 06 Sep 2009 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://luosha865.github.io/tags/%E5%86%B3%E7%AD%96%E6%A0%91/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://blog.sword865.com/tags/%E5%86%B3%E7%AD%96%E6%A0%91/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>算法总结2—决策树分类器</title>
-      <link>http://luosha865.github.io/archives/20</link>
+      <link>http://blog.sword865.com/archives/20</link>
       <pubDate>Sun, 06 Sep 2009 00:00:00 +0000</pubDate>
       <author>luosha865@gmail.com (罗刹剑客)</author>
-      <guid>http://luosha865.github.io/archives/20</guid>
+      <guid>http://blog.sword865.com/archives/20</guid>
       <description>&lt;p&gt;&lt;strong&gt;数学基础：&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;树：树是一种数据结构，它是由n（n&amp;gt;=1）个有限结点组成一个具有层次关系的集合。把它叫做&amp;ldquo;树&amp;rdquo;是因为它看起来像一棵倒挂的树，也就是说它是根朝上，而叶朝下的。它具有以下的特点：&lt;/p&gt;

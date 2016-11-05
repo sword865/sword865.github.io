@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Opengl on 悟剑阁</title>
-    <link>http://luosha865.github.io/tags/opengl/</link>
+    <link>http://blog.sword865.com/tags/opengl/</link>
     <description>Recent content in Opengl on 悟剑阁</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
@@ -10,14 +10,14 @@
     <webMaster>luosha865@gmail.com (罗刹剑客)</webMaster>
     <copyright>Copyright (c) 2015. All rights reserved.</copyright>
     <lastBuildDate>Wed, 16 Mar 2011 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://luosha865.github.io/tags/opengl/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://blog.sword865.com/tags/opengl/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>简单讲一下使用MS3D为opengl建模</title>
-      <link>http://luosha865.github.io/archives/124</link>
+      <link>http://blog.sword865.com/archives/124</link>
       <pubDate>Wed, 16 Mar 2011 00:00:00 +0000</pubDate>
       <author>luosha865@gmail.com (罗刹剑客)</author>
-      <guid>http://luosha865.github.io/archives/124</guid>
+      <guid>http://blog.sword865.com/archives/124</guid>
       <description>&lt;p&gt;做毕设的时候写的东西，贴上来吧…………&lt;/p&gt;
 
 &lt;p&gt;由于在OPENGL只能通过程序语言绘制模型，远不能达到可见既可得的目的。因此，比起3DMAX、MAYA等可视化3D建模工具，OPENGL模型的建立就相当的困难，为了简化这一问题的处理，可以使用简单小巧的MS3D来完成可见即可得的绘制过程。&lt;/p&gt;

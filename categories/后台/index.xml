@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>后台 on </title>
-    <link>http://luosha865.github.io/categories/%E5%90%8E%E5%8F%B0/</link>
-    <description>Recent content in 后台 on </description>
+    <title>后台 on 悟剑阁</title>
+    <link>http://blog.sword865.com/categories/%E5%90%8E%E5%8F%B0/</link>
+    <description>Recent content in 后台 on 悟剑阁</description>
     <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <managingEditor>luosha865@gmail.com (罗刹剑客)</managingEditor>
+    <webMaster>luosha865@gmail.com (罗刹剑客)</webMaster>
+    <copyright>Copyright (c) 2015. All rights reserved.</copyright>
     <lastBuildDate>Mon, 27 Jul 2015 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://luosha865.github.io/categories/%E5%90%8E%E5%8F%B0/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://blog.sword865.com/categories/%E5%90%8E%E5%8F%B0/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Elasticsearch-HttpServerModule</title>
-      <link>http://luosha865.github.io/archives/150</link>
+      <link>http://blog.sword865.com/archives/150</link>
       <pubDate>Mon, 27 Jul 2015 00:00:00 +0000</pubDate>
-      
-      <guid>http://luosha865.github.io/archives/150</guid>
+      <author>luosha865@gmail.com (罗刹剑客)</author>
+      <guid>http://blog.sword865.com/archives/150</guid>
       <description>&lt;p&gt;HttpServerModule的请求主要由HttpServer中的HttpServerTransport(默认为NettyHttpServerTransport）类处理。&lt;/p&gt;
 
 &lt;p&gt;NettyHttpServerTransport基于netty框架，负责监听并建立连接，信息的处理由内部类HttpChannelPipelineFactory完成。&lt;/p&gt;
@@ -26,7 +30,7 @@
 
 &lt;p&gt;在流Pipeline里有一个Map(name2ctx)和一个链表(记录head和tail)，pipeline里面会调度关联的多个channelhandler的运行。&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://static.oschina.net/uploads/space/2013/1109/075339_Kjw6_190591.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://static.oschina.net/uploads/space/2013/1109/075339_Kjw6_190591.png&#34; alt=&#34;channel pipeline&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://static.oschina.net/uploads/space/2013/1109/075339_Kjw6_190591.png&#34;&gt;&lt;img src=&#34;http://static.oschina.net/uploads/space/2013/1109/075339_Kjw6_190591.png&#34; alt=&#34;channel pipeline&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;在NettyHttpServerTransport中，会流过的channelhandler就包括解码http请求(把多个HttpChunk拼起来并按http协议进行解析)和http请求处理。&lt;/p&gt;
 
@@ -97,19 +101,15 @@
 &lt;p&gt;&lt;a href=&#34;http://my.oschina.net/flashsword/blog/178561&#34;&gt;http://my.oschina.net/flashsword/blog/178561&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&#34;http://my.oschina.net/flashsword/blog/197963&#34;&gt;http://my.oschina.net/flashsword/blog/197963&lt;/a&gt;&lt;/p&gt;
-
-&lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
-  &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
-&lt;/p&gt;
 </description>
     </item>
     
     <item>
       <title>Tornado框架简析</title>
-      <link>http://luosha865.github.io/archives/100</link>
+      <link>http://blog.sword865.com/archives/100</link>
       <pubDate>Thu, 05 Feb 2015 00:00:00 +0000</pubDate>
-      
-      <guid>http://luosha865.github.io/archives/100</guid>
+      <author>luosha865@gmail.com (罗刹剑客)</author>
+      <guid>http://blog.sword865.com/archives/100</guid>
       <description>&lt;p&gt;Tornado是一款轻量级的Web服务器，同时又是一个开发框架。采用单线程非阻塞I/O模型(epoll)，主要是为了应对高并发 访问量而被开发出来，尤其适用于comet应用。&lt;/p&gt;
 
 &lt;p&gt;Tornado服务器3大核心模块:&lt;/p&gt;
@@ -265,7 +265,7 @@ def start_serving(self, delegate):
 
 &lt;p&gt;最后抄一张图过来：&lt;/p&gt;
 
-&lt;p&gt;[&lt;img class=&#34;alignnone wp-image-108 size-large&#34; src=&#34;http://sword865.com/blog/wp-content/uploads/2015/02/QQ20150205-1@2x-1024x593.png&#34; alt=&#34;QQ20150205-1@2x&#34; width=&#34;615&#34; height=&#34;356&#34; /&gt;][1]&lt;/p&gt;
+&lt;p&gt;&lt;img class=&#34;alignnone wp-image-108 size-large&#34; src=&#34;http://blog.sword865.com/wp-content/uploads/2015/02/QQ20150205-1@2x-1024x593.png&#34; alt=&#34;QQ20150205-1@2x&#34; width=&#34;615&#34; height=&#34;356&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;参考：&lt;/p&gt;
 
@@ -284,22 +284,20 @@ def start_serving(self, delegate):
 &lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
   &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
 &lt;/p&gt;
-
-&lt;p&gt;[1]: &lt;a href=&#34;http://sword865.com/blog/wp-content/uploads/2015/02/QQ20150205-1@2x.png&#34;&gt;http://sword865.com/blog/wp-content/uploads/2015/02/QQ20150205-1@2x.png&lt;/a&gt;&lt;/p&gt;
 </description>
     </item>
     
     <item>
       <title>Lucene索引文件学习</title>
-      <link>http://luosha865.github.io/archives/86</link>
+      <link>http://blog.sword865.com/archives/86</link>
       <pubDate>Wed, 04 Feb 2015 00:00:00 +0000</pubDate>
-      
-      <guid>http://luosha865.github.io/archives/86</guid>
+      <author>luosha865@gmail.com (罗刹剑客)</author>
+      <guid>http://blog.sword865.com/archives/86</guid>
       <description>&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt; 最近在做搜索，抽空看一下lucene，资料挺多的，不过大部分都是3.x了……在对着官方文档大概看一下。&lt;/span&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;优化后的lucene索引文件(4.9.0)&lt;/span&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;&lt;img title=&#34;NewImage.png&#34; src=&#34;http://sword865.com/blog/wp-content/uploads/2015/02/NewImage.png&#34; alt=&#34;NewImage&#34; width=&#34;200&#34; height=&#34;146&#34; border=&#34;0&#34; /&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;&lt;img title=&#34;NewImage.png&#34; src=&#34;http://blog.sword865.com/wp-content/uploads/2015/02/NewImage.png&#34; alt=&#34;NewImage&#34; width=&#34;200&#34; height=&#34;146&#34; border=&#34;0&#34; /&gt;&lt;/span&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;一、段文件&lt;/span&gt;&lt;/p&gt;
 
@@ -438,12 +436,6 @@ def start_serving(self, delegate):
 &lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;&lt;a href=&#34;http://lucene.apache.org/core/4_9_0/core/org/apache/lucene/codecs/lucene49/package-summary.html#File_Naming&#34;&gt;http://lucene.apache.org/core/4_9_0/core/org/apache/lucene/codecs/lucene49/package-summary.html#File_Naming&lt;/a&gt;&lt;/span&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;&lt;a href=&#34;http://www.cnblogs.com/forfuture1978/category/300665.html&#34;&gt;http://www.cnblogs.com/forfuture1978/category/300665.html&lt;/a&gt;&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt; &lt;/p&gt;
-
-&lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
-  &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
-&lt;/p&gt;
 </description>
     </item>
     

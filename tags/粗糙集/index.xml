@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>粗糙集 on 悟剑阁</title>
-    <link>http://luosha865.github.io/tags/%E7%B2%97%E7%B3%99%E9%9B%86/</link>
+    <link>http://blog.sword865.com/tags/%E7%B2%97%E7%B3%99%E9%9B%86/</link>
     <description>Recent content in 粗糙集 on 悟剑阁</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
@@ -10,14 +10,14 @@
     <webMaster>luosha865@gmail.com (罗刹剑客)</webMaster>
     <copyright>Copyright (c) 2015. All rights reserved.</copyright>
     <lastBuildDate>Thu, 25 Apr 2013 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://luosha865.github.io/tags/%E7%B2%97%E7%B3%99%E9%9B%86/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://blog.sword865.com/tags/%E7%B2%97%E7%B3%99%E9%9B%86/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>决策粗糙集</title>
-      <link>http://luosha865.github.io/archives/8</link>
+      <link>http://blog.sword865.com/archives/8</link>
       <pubDate>Thu, 25 Apr 2013 00:00:00 +0000</pubDate>
       <author>luosha865@gmail.com (罗刹剑客)</author>
-      <guid>http://luosha865.github.io/archives/8</guid>
+      <guid>http://blog.sword865.com/archives/8</guid>
       <description>&lt;p&gt;今天收拾资料，发现了以前刚接触粗糙集时写的一个综述，好久没写博客，发上来充数好了&lt;/p&gt;
 
 &lt;p&gt;一、粗糙集模型&lt;a href=&#34;data:image/png;base64,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&#34;&gt;1&lt;/a&gt;&lt;/p&gt;

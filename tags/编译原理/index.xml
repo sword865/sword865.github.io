@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>编译原理 on 悟剑阁</title>
-    <link>http://luosha865.github.io/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/</link>
+    <link>http://blog.sword865.com/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/</link>
     <description>Recent content in 编译原理 on 悟剑阁</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
@@ -10,14 +10,14 @@
     <webMaster>luosha865@gmail.com (罗刹剑客)</webMaster>
     <copyright>Copyright (c) 2015. All rights reserved.</copyright>
     <lastBuildDate>Sat, 14 Mar 2009 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://luosha865.github.io/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://blog.sword865.com/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>编译原理虎书java版本–Chapter 2-3</title>
-      <link>http://luosha865.github.io/archives/25</link>
+      <link>http://blog.sword865.com/archives/25</link>
       <pubDate>Sat, 14 Mar 2009 00:00:00 +0000</pubDate>
       <author>luosha865@gmail.com (罗刹剑客)</author>
-      <guid>http://luosha865.github.io/archives/25</guid>
+      <guid>http://blog.sword865.com/archives/25</guid>
       <description>&lt;p&gt;options {&lt;/p&gt;
 
 &lt;p&gt;JAVA_UNICODE_ESCAPE = true;&lt;/p&gt;
@@ -454,10 +454,10 @@
     
     <item>
       <title>编译原理虎书java版本–Chapter 1</title>
-      <link>http://luosha865.github.io/archives/28</link>
+      <link>http://blog.sword865.com/archives/28</link>
       <pubDate>Sun, 08 Mar 2009 00:00:00 +0000</pubDate>
       <author>luosha865@gmail.com (罗刹剑客)</author>
-      <guid>http://luosha865.github.io/archives/28</guid>
+      <guid>http://blog.sword865.com/archives/28</guid>
       <description>&lt;p&gt;Count.java&lt;/p&gt;
 
 &lt;p&gt;public class  Count&lt;/p&gt;

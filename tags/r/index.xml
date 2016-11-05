@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>R on 悟剑阁</title>
-    <link>http://luosha865.github.io/tags/r/</link>
+    <link>http://blog.sword865.com/tags/r/</link>
     <description>Recent content in R on 悟剑阁</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
@@ -10,14 +10,14 @@
     <webMaster>luosha865@gmail.com (罗刹剑客)</webMaster>
     <copyright>Copyright (c) 2015. All rights reserved.</copyright>
     <lastBuildDate>Sat, 30 Jun 2012 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://luosha865.github.io/tags/r/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://blog.sword865.com/tags/r/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>R语言系列—-区间估计</title>
-      <link>http://luosha865.github.io/archives/11</link>
+      <link>http://blog.sword865.com/archives/11</link>
       <pubDate>Sat, 30 Jun 2012 00:00:00 +0000</pubDate>
       <author>luosha865@gmail.com (罗刹剑客)</author>
-      <guid>http://luosha865.github.io/archives/11</guid>
+      <guid>http://blog.sword865.com/archives/11</guid>
       <description>&lt;p&gt;这一篇讲的是区间估计…..因为这不是一个关于统计学的系列，所以对文中出现的公式不会给予任何证明…..就是这样。&lt;/p&gt;
 
 &lt;p&gt;就从一个最简单的正态分布的方差已知时，求均值的置信区间开始吧。&lt;/p&gt;
@@ -68,10 +68,10 @@ z.test(x,10,1.5,0.05)&lt;/pre&gt;
     
     <item>
       <title>R语言系列—-数据描述</title>
-      <link>http://luosha865.github.io/archives/10</link>
+      <link>http://blog.sword865.com/archives/10</link>
       <pubDate>Sat, 30 Jun 2012 00:00:00 +0000</pubDate>
       <author>luosha865@gmail.com (罗刹剑客)</author>
-      <guid>http://luosha865.github.io/archives/10</guid>
+      <guid>http://blog.sword865.com/archives/10</guid>
       <description>&lt;p&gt;简单来说，R语言是一种主要用于统计分析、绘图的语言和操作环境。的源代码可自由下载使用，亦有已编译的执行档版本可以下载，可在多种平台下运行，包括UNIX（也包括FreeBSD和Linux）、Windows和MacOS。R主要是以命令行操作，同时有人开发了几种图形用户界面。&lt;/p&gt;
 
 &lt;div&gt;
@@ -220,10 +220,10 @@ kurtosis(x)&lt;/pre&gt;
     
     <item>
       <title>R语言系列—回归分析</title>
-      <link>http://luosha865.github.io/archives/12</link>
+      <link>http://blog.sword865.com/archives/12</link>
       <pubDate>Sat, 30 Jun 2012 00:00:00 +0000</pubDate>
       <author>luosha865@gmail.com (罗刹剑客)</author>
-      <guid>http://luosha865.github.io/archives/12</guid>
+      <guid>http://blog.sword865.com/archives/12</guid>
       <description>&lt;p&gt;&lt;strong&gt;         &lt;/strong&gt;一元线形回归模型：有变量x,y。假设有关系y=c+bx+e,其中c+bx 是y随x变化的部分，e是随机误差。&lt;/p&gt;
 
 &lt;p&gt;可以很容易的用函数lm()求出回归参数b,c并作相应的假设检验，如：&lt;/p&gt;

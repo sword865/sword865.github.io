@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>降维 on 悟剑阁</title>
-    <link>http://luosha865.github.io/tags/%E9%99%8D%E7%BB%B4/</link>
+    <link>http://blog.sword865.com/tags/%E9%99%8D%E7%BB%B4/</link>
     <description>Recent content in 降维 on 悟剑阁</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
@@ -10,14 +10,14 @@
     <webMaster>luosha865@gmail.com (罗刹剑客)</webMaster>
     <copyright>Copyright (c) 2015. All rights reserved.</copyright>
     <lastBuildDate>Sun, 20 Sep 2009 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://luosha865.github.io/tags/%E9%99%8D%E7%BB%B4/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://blog.sword865.com/tags/%E9%99%8D%E7%BB%B4/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>算法总结7—多维缩放</title>
-      <link>http://luosha865.github.io/archives/15</link>
+      <link>http://blog.sword865.com/archives/15</link>
       <pubDate>Sun, 20 Sep 2009 00:00:00 +0000</pubDate>
       <author>luosha865@gmail.com (罗刹剑客)</author>
-      <guid>http://luosha865.github.io/archives/15</guid>
+      <guid>http://blog.sword865.com/archives/15</guid>
       <description>&lt;p&gt;一直没有时间写…..唉&lt;/p&gt;
 
 &lt;p&gt;这个东西好像是属于数据可视化？反正就是把多维的数据降到低维空间但是仍然尽可能的保持原来数据之间的距离关系(就是在原来维度下离的远的点仍然离得远，接近的点仍然接近) 。最常见的应该就是降到2维以方便打印和屏幕输出。&lt;/p&gt;
