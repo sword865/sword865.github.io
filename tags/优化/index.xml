@@ -6,8 +6,8 @@
     <description>Recent content in 优化 on 悟剑阁</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <managingEditor>luosha865@gmail.com (罗刹剑客)</managingEditor>
-    <webMaster>luosha865@gmail.com (罗刹剑客)</webMaster>
+    <managingEditor>sword865@163.com (罗刹剑客)</managingEditor>
+    <webMaster>sword865@163.com (罗刹剑客)</webMaster>
     <copyright>Copyright (c) 2015. All rights reserved.</copyright>
     <lastBuildDate>Wed, 30 Sep 2009 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://blog.sword865.com/tags/%E4%BC%98%E5%8C%96/index.xml" rel="self" type="application/rss+xml" />
@@ -16,7 +16,7 @@
       <title>算法总结9—优化</title>
       <link>http://blog.sword865.com/archives/13</link>
       <pubDate>Wed, 30 Sep 2009 00:00:00 +0000</pubDate>
-      <author>luosha865@gmail.com (罗刹剑客)</author>
+      <author>sword865@163.com (罗刹剑客)</author>
       <guid>http://blog.sword865.com/archives/13</guid>
       <description>&lt;p&gt;不同于之前的分类和聚类算法，优化的目的是尝试找到一个使成本函数输出最小化的值。这里主要包括两个算法：模拟退火算法和遗传算法。&lt;/p&gt;
 

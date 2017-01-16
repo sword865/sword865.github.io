@@ -6,8 +6,8 @@
     <description>Recent content in 编程语言 on 悟剑阁</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <managingEditor>luosha865@gmail.com (罗刹剑客)</managingEditor>
-    <webMaster>luosha865@gmail.com (罗刹剑客)</webMaster>
+    <managingEditor>sword865@163.com (罗刹剑客)</managingEditor>
+    <webMaster>sword865@163.com (罗刹剑客)</webMaster>
     <copyright>Copyright (c) 2015. All rights reserved.</copyright>
     <lastBuildDate>Sat, 30 Jun 2012 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://blog.sword865.com/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/index.xml" rel="self" type="application/rss+xml" />
@@ -16,7 +16,7 @@
       <title>R语言系列—-区间估计</title>
       <link>http://blog.sword865.com/archives/11</link>
       <pubDate>Sat, 30 Jun 2012 00:00:00 +0000</pubDate>
-      <author>luosha865@gmail.com (罗刹剑客)</author>
+      <author>sword865@163.com (罗刹剑客)</author>
       <guid>http://blog.sword865.com/archives/11</guid>
       <description>&lt;p&gt;这一篇讲的是区间估计…..因为这不是一个关于统计学的系列，所以对文中出现的公式不会给予任何证明…..就是这样。&lt;/p&gt;
 
@@ -70,7 +70,7 @@ z.test(x,10,1.5,0.05)&lt;/pre&gt;
       <title>R语言系列—-数据描述</title>
       <link>http://blog.sword865.com/archives/10</link>
       <pubDate>Sat, 30 Jun 2012 00:00:00 +0000</pubDate>
-      <author>luosha865@gmail.com (罗刹剑客)</author>
+      <author>sword865@163.com (罗刹剑客)</author>
       <guid>http://blog.sword865.com/archives/10</guid>
       <description>&lt;p&gt;简单来说，R语言是一种主要用于统计分析、绘图的语言和操作环境。的源代码可自由下载使用，亦有已编译的执行档版本可以下载，可在多种平台下运行，包括UNIX（也包括FreeBSD和Linux）、Windows和MacOS。R主要是以命令行操作，同时有人开发了几种图形用户界面。&lt;/p&gt;
 
@@ -222,7 +222,7 @@ kurtosis(x)&lt;/pre&gt;
       <title>R语言系列—回归分析</title>
       <link>http://blog.sword865.com/archives/12</link>
       <pubDate>Sat, 30 Jun 2012 00:00:00 +0000</pubDate>
-      <author>luosha865@gmail.com (罗刹剑客)</author>
+      <author>sword865@163.com (罗刹剑客)</author>
       <guid>http://blog.sword865.com/archives/12</guid>
       <description>&lt;p&gt;&lt;strong&gt;         &lt;/strong&gt;一元线形回归模型：有变量x,y。假设有关系y=c+bx+e,其中c+bx 是y随x变化的部分，e是随机误差。&lt;/p&gt;
 
@@ -326,7 +326,7 @@ predict(lm.sol,ex,interval=&#34;prediction&#34;,level=0.95)&lt;/pre&gt;
       <title>编译原理虎书java版本–Chapter 2-3</title>
       <link>http://blog.sword865.com/archives/25</link>
       <pubDate>Sat, 14 Mar 2009 00:00:00 +0000</pubDate>
-      <author>luosha865@gmail.com (罗刹剑客)</author>
+      <author>sword865@163.com (罗刹剑客)</author>
       <guid>http://blog.sword865.com/archives/25</guid>
       <description>&lt;p&gt;options {&lt;/p&gt;
 
@@ -766,7 +766,7 @@ predict(lm.sol,ex,interval=&#34;prediction&#34;,level=0.95)&lt;/pre&gt;
       <title>编译原理虎书java版本–Chapter 1</title>
       <link>http://blog.sword865.com/archives/28</link>
       <pubDate>Sun, 08 Mar 2009 00:00:00 +0000</pubDate>
-      <author>luosha865@gmail.com (罗刹剑客)</author>
+      <author>sword865@163.com (罗刹剑客)</author>
       <guid>http://blog.sword865.com/archives/28</guid>
       <description>&lt;p&gt;Count.java&lt;/p&gt;
 

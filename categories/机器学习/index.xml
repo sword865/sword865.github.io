@@ -6,8 +6,8 @@
     <description>Recent content in 机器学习 on 悟剑阁</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <managingEditor>luosha865@gmail.com (罗刹剑客)</managingEditor>
-    <webMaster>luosha865@gmail.com (罗刹剑客)</webMaster>
+    <managingEditor>sword865@163.com (罗刹剑客)</managingEditor>
+    <webMaster>sword865@163.com (罗刹剑客)</webMaster>
     <copyright>Copyright (c) 2015. All rights reserved.</copyright>
     <lastBuildDate>Fri, 04 Nov 2016 22:47:21 +0800</lastBuildDate>
     <atom:link href="http://blog.sword865.com/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.xml" rel="self" type="application/rss+xml" />
@@ -16,7 +16,7 @@
       <title>谈谈Factorization Machine</title>
       <link>http://blog.sword865.com/2016/11/04/%E8%B0%88%E8%B0%88Factorization-Machine/</link>
       <pubDate>Fri, 04 Nov 2016 22:47:21 +0800</pubDate>
-      <author>luosha865@gmail.com (罗刹剑客)</author>
+      <author>sword865@163.com (罗刹剑客)</author>
       <guid>http://blog.sword865.com/2016/11/04/%E8%B0%88%E8%B0%88Factorization-Machine/</guid>
       <description>&lt;p&gt;因子分解机(Factorization Machine, 简称FM)是一种不错的CTR预估模型，也是我们现在在使用的广告点击率预估模型，比起著名的Logistic Regression, FM能够把握一些组合的高阶特征，因此拥有更强的表现力。&lt;/p&gt;
 
@@ -68,7 +68,7 @@
       <title>Tornado框架简析</title>
       <link>http://blog.sword865.com/archives/100</link>
       <pubDate>Thu, 05 Feb 2015 00:00:00 +0000</pubDate>
-      <author>luosha865@gmail.com (罗刹剑客)</author>
+      <author>sword865@163.com (罗刹剑客)</author>
       <guid>http://blog.sword865.com/archives/100</guid>
       <description>&lt;p&gt;Tornado是一款轻量级的Web服务器，同时又是一个开发框架。采用单线程非阻塞I/O模型(epoll)，主要是为了应对高并发 访问量而被开发出来，尤其适用于comet应用。&lt;/p&gt;
 
@@ -251,7 +251,7 @@ def start_serving(self, delegate):
       <title>基于标签的推荐系统</title>
       <link>http://blog.sword865.com/archives/5</link>
       <pubDate>Mon, 17 Nov 2014 00:00:00 +0000</pubDate>
-      <author>luosha865@gmail.com (罗刹剑客)</author>
+      <author>sword865@163.com (罗刹剑客)</author>
       <guid>http://blog.sword865.com/archives/5</guid>
       <description>&lt;p&gt;一、基于图模型的推荐&lt;/p&gt;
 
@@ -315,7 +315,7 @@ def start_serving(self, delegate):
       <title>Google在KDD2013上关于CTR的一篇论文</title>
       <link>http://blog.sword865.com/archives/6</link>
       <pubDate>Sat, 03 Aug 2013 00:00:00 +0000</pubDate>
-      <author>luosha865@gmail.com (罗刹剑客)</author>
+      <author>sword865@163.com (罗刹剑客)</author>
       <guid>http://blog.sword865.com/archives/6</guid>
       <description>&lt;p&gt;最近在做CTR，刚好Google在KDD发了一篇文章，讲了他们的一些尝试，总结一下：&lt;/p&gt;
 
@@ -455,7 +455,7 @@ def start_serving(self, delegate):
       <title>[转] Deep Learning（深度学习）学习笔记整理系列</title>
       <link>http://blog.sword865.com/archives/7</link>
       <pubDate>Fri, 26 Apr 2013 00:00:00 +0000</pubDate>
-      <author>luosha865@gmail.com (罗刹剑客)</author>
+      <author>sword865@163.com (罗刹剑客)</author>
       <guid>http://blog.sword865.com/archives/7</guid>
       <description>&lt;p&gt;转一套Deep Learning的文章&lt;/p&gt;
 
@@ -471,7 +471,7 @@ def start_serving(self, delegate):
       <title>决策粗糙集</title>
       <link>http://blog.sword865.com/archives/8</link>
       <pubDate>Thu, 25 Apr 2013 00:00:00 +0000</pubDate>
-      <author>luosha865@gmail.com (罗刹剑客)</author>
+      <author>sword865@163.com (罗刹剑客)</author>
       <guid>http://blog.sword865.com/archives/8</guid>
       <description>&lt;p&gt;今天收拾资料，发现了以前刚接触粗糙集时写的一个综述，好久没写博客，发上来充数好了&lt;/p&gt;
 
@@ -791,7 +791,7 @@ def start_serving(self, delegate):
       <title>算法总结9—优化</title>
       <link>http://blog.sword865.com/archives/13</link>
       <pubDate>Wed, 30 Sep 2009 00:00:00 +0000</pubDate>
-      <author>luosha865@gmail.com (罗刹剑客)</author>
+      <author>sword865@163.com (罗刹剑客)</author>
       <guid>http://blog.sword865.com/archives/13</guid>
       <description>&lt;p&gt;不同于之前的分类和聚类算法，优化的目的是尝试找到一个使成本函数输出最小化的值。这里主要包括两个算法：模拟退火算法和遗传算法。&lt;/p&gt;
 
@@ -844,7 +844,7 @@ def start_serving(self, delegate):
       <title>算法总结8—非负矩阵因式分解</title>
       <link>http://blog.sword865.com/archives/14</link>
       <pubDate>Fri, 25 Sep 2009 00:00:00 +0000</pubDate>
-      <author>luosha865@gmail.com (罗刹剑客)</author>
+      <author>sword865@163.com (罗刹剑客)</author>
       <guid>http://blog.sword865.com/archives/14</guid>
       <description>&lt;p&gt;&lt;strong&gt;数学基础:&lt;/strong&gt;&lt;/p&gt;
 
@@ -903,7 +903,7 @@ def start_serving(self, delegate):
       <title>算法总结7—多维缩放</title>
       <link>http://blog.sword865.com/archives/15</link>
       <pubDate>Sun, 20 Sep 2009 00:00:00 +0000</pubDate>
-      <author>luosha865@gmail.com (罗刹剑客)</author>
+      <author>sword865@163.com (罗刹剑客)</author>
       <guid>http://blog.sword865.com/archives/15</guid>
       <description>&lt;p&gt;一直没有时间写…..唉&lt;/p&gt;
 
@@ -958,7 +958,7 @@ def start_serving(self, delegate):
       <title>算法总结5&amp;6—-k-最近邻与聚类</title>
       <link>http://blog.sword865.com/archives/16</link>
       <pubDate>Mon, 14 Sep 2009 00:00:00 +0000</pubDate>
-      <author>luosha865@gmail.com (罗刹剑客)</author>
+      <author>sword865@163.com (罗刹剑客)</author>
       <guid>http://blog.sword865.com/archives/16</guid>
       <description>&lt;p&gt;因为这两个算法比较简单，又有些相似，所以这里放在一起。&lt;/p&gt;
 
@@ -1034,7 +1034,7 @@ def start_serving(self, delegate):
       <title>算法总结4—支持向量机</title>
       <link>http://blog.sword865.com/archives/18</link>
       <pubDate>Tue, 08 Sep 2009 00:00:00 +0000</pubDate>
-      <author>luosha865@gmail.com (罗刹剑客)</author>
+      <author>sword865@163.com (罗刹剑客)</author>
       <guid>http://blog.sword865.com/archives/18</guid>
       <description>&lt;p&gt;支持向量机&amp;hellip;&amp;hellip;复杂的东西，书里讲得也不怎么详细，起码具体算法没有说&amp;hellip;&amp;hellip;所以又去查了些资料&amp;hellip;&amp;hellip;&lt;/p&gt;
 
@@ -1152,7 +1152,7 @@ def start_serving(self, delegate):
       <title>算法总结3—神经网络</title>
       <link>http://blog.sword865.com/archives/19</link>
       <pubDate>Mon, 07 Sep 2009 00:00:00 +0000</pubDate>
-      <author>luosha865@gmail.com (罗刹剑客)</author>
+      <author>sword865@163.com (罗刹剑客)</author>
       <guid>http://blog.sword865.com/archives/19</guid>
       <description>&lt;p&gt;&lt;strong&gt;生物神经网络：&lt;/strong&gt;&lt;/p&gt;
 
@@ -1298,7 +1298,7 @@ def start_serving(self, delegate):
       <title>算法总结2—决策树分类器</title>
       <link>http://blog.sword865.com/archives/20</link>
       <pubDate>Sun, 06 Sep 2009 00:00:00 +0000</pubDate>
-      <author>luosha865@gmail.com (罗刹剑客)</author>
+      <author>sword865@163.com (罗刹剑客)</author>
       <guid>http://blog.sword865.com/archives/20</guid>
       <description>&lt;p&gt;&lt;strong&gt;数学基础：&lt;/strong&gt;&lt;/p&gt;
 
@@ -1434,7 +1434,7 @@ def start_serving(self, delegate):
       <title>算法总结1—贝叶斯分类器</title>
       <link>http://blog.sword865.com/archives/21</link>
       <pubDate>Sat, 05 Sep 2009 00:00:00 +0000</pubDate>
-      <author>luosha865@gmail.com (罗刹剑客)</author>
+      <author>sword865@163.com (罗刹剑客)</author>
       <guid>http://blog.sword865.com/archives/21</guid>
       <description>&lt;p&gt;&amp;nbsp;这几天以很快的速度翻完了&amp;lt;集体智慧编程&amp;gt;,因为只是对里面的算法感兴趣,对那些web2.0的应用没什么感觉,所以很多地方都是一扫而过,现在按最后一章的顺序来对所有相关的算法作一个详细的复习&amp;hellip;.&lt;/p&gt;
 

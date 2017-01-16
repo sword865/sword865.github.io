@@ -6,8 +6,8 @@
     <description>Recent content in 搜索 on 悟剑阁</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <managingEditor>luosha865@gmail.com (罗刹剑客)</managingEditor>
-    <webMaster>luosha865@gmail.com (罗刹剑客)</webMaster>
+    <managingEditor>sword865@163.com (罗刹剑客)</managingEditor>
+    <webMaster>sword865@163.com (罗刹剑客)</webMaster>
     <copyright>Copyright (c) 2015. All rights reserved.</copyright>
     <lastBuildDate>Mon, 27 Jul 2015 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://blog.sword865.com/tags/%E6%90%9C%E7%B4%A2/index.xml" rel="self" type="application/rss+xml" />
@@ -16,7 +16,7 @@
       <title>Elasticsearch-HttpServerModule</title>
       <link>http://blog.sword865.com/archives/150</link>
       <pubDate>Mon, 27 Jul 2015 00:00:00 +0000</pubDate>
-      <author>luosha865@gmail.com (罗刹剑客)</author>
+      <author>sword865@163.com (罗刹剑客)</author>
       <guid>http://blog.sword865.com/archives/150</guid>
       <description>&lt;p&gt;HttpServerModule的请求主要由HttpServer中的HttpServerTransport(默认为NettyHttpServerTransport）类处理。&lt;/p&gt;
 
@@ -108,7 +108,7 @@
       <title>Lucene索引文件学习</title>
       <link>http://blog.sword865.com/archives/86</link>
       <pubDate>Wed, 04 Feb 2015 00:00:00 +0000</pubDate>
-      <author>luosha865@gmail.com (罗刹剑客)</author>
+      <author>sword865@163.com (罗刹剑客)</author>
       <guid>http://blog.sword865.com/archives/86</guid>
       <description>&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt; 最近在做搜索，抽空看一下lucene，资料挺多的，不过大部分都是3.x了……在对着官方文档大概看一下。&lt;/span&gt;&lt;/p&gt;
 

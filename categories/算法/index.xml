@@ -6,8 +6,8 @@
     <description>Recent content in 算法 on 悟剑阁</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <managingEditor>luosha865@gmail.com (罗刹剑客)</managingEditor>
-    <webMaster>luosha865@gmail.com (罗刹剑客)</webMaster>
+    <managingEditor>sword865@163.com (罗刹剑客)</managingEditor>
+    <webMaster>sword865@163.com (罗刹剑客)</webMaster>
     <copyright>Copyright (c) 2015. All rights reserved.</copyright>
     <lastBuildDate>Wed, 19 Aug 2009 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://blog.sword865.com/categories/%E7%AE%97%E6%B3%95/index.xml" rel="self" type="application/rss+xml" />
@@ -16,7 +16,7 @@
       <title>ACM暑假集训总结</title>
       <link>http://blog.sword865.com/archives/23</link>
       <pubDate>Wed, 19 Aug 2009 00:00:00 +0000</pubDate>
-      <author>luosha865@gmail.com (罗刹剑客)</author>
+      <author>sword865@163.com (罗刹剑客)</author>
       <guid>http://blog.sword865.com/archives/23</guid>
       <description>&lt;p&gt;ACM的暑假集训结束了，趁着军训还没开始，对整个暑假接触到的东西作了一个总结，因为刚参加ACM不久，所以内容大都比较基础吧，文章中提到了些参考资料，如果需要的话，请留下邮箱。&lt;/p&gt;
 
@@ -866,7 +866,7 @@
       <title>有重复组合数</title>
       <link>http://blog.sword865.com/archives/24</link>
       <pubDate>Thu, 02 Apr 2009 00:00:00 +0000</pubDate>
-      <author>luosha865@gmail.com (罗刹剑客)</author>
+      <author>sword865@163.com (罗刹剑客)</author>
       <guid>http://blog.sword865.com/archives/24</guid>
       <description>&lt;p&gt;从n个元素中有重复地取r个，不计顺序，则不同的取法有多少种？&lt;br /&gt;
 这个问题的答案被称为有重复组合数。结果很简洁，是C(n+r-1,r)。(注：这表示从n+r-1个数中取出r个数的组合数)&lt;br /&gt;
@@ -899,7 +899,7 @@
       <title>KMP算法复杂度分析</title>
       <link>http://blog.sword865.com/archives/26</link>
       <pubDate>Wed, 11 Mar 2009 00:00:00 +0000</pubDate>
-      <author>luosha865@gmail.com (罗刹剑客)</author>
+      <author>sword865@163.com (罗刹剑客)</author>
       <guid>http://blog.sword865.com/archives/26</guid>
       <description>&lt;p&gt;KMP算法也算接触很久了，今天却突然发现不知道那个的复杂度是怎么来的&lt;br /&gt;
 于是想啊想，查啊查，总结如下&lt;br /&gt;
