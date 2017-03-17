@@ -34,7 +34,7 @@
 <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://blog.sword865.com/touch-icon-144-precomposed.png">
 <link href="http://blog.sword865.com/favicon.png" rel="icon">
 
-<meta name="generator" content="Hugo 0.16" />
+<meta name="generator" content="Hugo 0.18.1" />
 
   <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -327,7 +327,25 @@
   <p class="container content">
   
   
-    options { JAVA_UNICODE_ESCAPE = true; } PARSER_BEGIN(MiniJavaParser) public class MiniJavaParser {} PARSER_END(MiniJavaParser) // Insert a specification of a lexical analysis here. TOKEN : { &lt; LPAREN: &#8220;(&#8221; &gt; | &lt; RPAREN: &#8220;)&#8221; &gt; | &lt; LSQPAREN: &#8220;[&#8221; &gt; | &lt; RSQPAREN: &#8220;]&#8221; &gt; | &lt; LBRACE: &#8220;{&#8221; &gt; | &lt; RBRACE: &#8220;}&#8221; &gt; | &lt; DOT: &#8220;.&#8221; &gt; | &lt; ASSIGN: &#8220;=&#8221; &gt; | &lt; LT: &#8220;&lt;&#8221; &gt; | &lt; PLUS: &#8220;+&#8221; &gt; | &lt; MINUS: &#8220;-&#8221; &gt; | &lt; AND : &#8220;&amp;&amp;&#8221; &gt; | &lt; NOT : &#8220;!&#8221; &gt; | &lt; SEMICOLON: &#8220;;&#8221; &gt; | &lt; PUBLIC: &#8220;public&#8221; &gt; | &lt; RETURN: &#8220;return&#8221; &gt; | &lt; BOOLEAN: &#8220;boolean&#8221; &gt; | &lt; CLASS: &#8220;class&#8221; &gt; | &lt; INTERFACE: &#8220;interface&#8221; &gt; | &lt; ELSE: &#8220;else&#8221; &gt; | &lt; EXTENDS: &#8220;extends&#8221; &gt; | &lt; FALSE: &#8220;false&#8221; &gt; | &lt; IF: &#8220;if&#8221; &gt; | &lt; WHILE: &#8220;while&#8221; &gt; | &lt; INTEGER: &#8220;int&#8221; &gt; | &lt; LENGTH: &#8220;length&#8221; &gt; | &lt; MAIN: &#8220;main&#8221; &gt; | &lt; NEW: &#8220;new&#8221; &gt; | &lt; STATIC: &#8220;static&#8221; &gt; | &lt; STRING: &#8220;String&#8221; &gt; | &lt; THIS: &#8220;this&#8221; &gt; | &lt; TRUE: &#8220;true&#8221; &gt; | &lt; PRINT: &#8220;System.out.println&#8221; &gt; | &lt; VOID: &#8220;void&#8221; &gt; } TOKEN : /* LITERALS */ { &lt; INTEGER_LITERAL: ( [&#8220;1&#8243;-&#8220;9&#8243;] ([&#8220;0&#8243;-&#8220;9&#8243;])* | &#8220;0&#8221; ) &gt; } TOKEN : /* IDENTIFIERS */ { &lt; IDENTIFIER: (|)* &gt; | &lt; #LETTER: [ &#8220;u0024&#8243;, &#8220;u0041&#8243;-&#8220;u005a&#8221;, &#8220;u005f&#8221;, &#8220;u0061&#8243;-&#8220;u007a&#8221;, &#8220;u00c0&#8243;-&#8220;u00d6&#8243;, &#8220;u00d8&#8243;-&#8220;u00f6&#8243;, &#8220;u00f8&#8243;-&#8220;u00ff&#8221;, &#8220;u0100&#8243;-&#8220;u1fff&#8221;, &#8220;u3040&#8243;-&#8220;u318f&#8221;, &#8220;u3300&#8243;-&#8220;u337f&#8221;, &#8220;u3400&#8243;-&#8220;u3d2d&#8221;, &#8220;u4e00&#8243;-&#8220;u9fff&#8221;, &#8220;uf900&#8243;-&#8220;ufaff&#8221; ] | &lt; #DIGIT: [ &#8220;u0030&#8243;-&#8220;u0039&#8243;, &#8220;u0660&#8243;-&#8220;u0669&#8243;, &#8220;u06f0&#8243;-&#8220;u06f9&#8243;, &#8220;u0966&#8243;-&#8220;u096f&#8221;, &#8220;u09e6&#8243;-&#8220;u09ef&#8221;, &#8220;u0a66&#8243;-&#8220;u0a6f&#8221;, &#8220;u0ae6&#8243;-&#8220;u0aef&#8221;, &#8220;u0b66&#8243;-&#8220;u0b6f&#8221;, &#8220;u0be7&#8243;-&#8220;u0bef&#8221;, &#8220;u0c66&#8243;-&#8220;u0c6f&#8221;, &#8220;u0ce6&#8243;-&#8220;u0cef&#8221;, &#8220;u0d66&#8243;-&#8220;u0d6f&#8221;, &#8220;u0e50&#8243;-&#8220;u0e59&#8243;, &#8220;u0ed0&#8243;-&#8220;u0ed9&#8243;, &#8220;u1040&#8243;-&#8220;u1049&#8243; ] } SKIP : { &lt; &#8221; &#8221; &gt; | &lt; &#8220;t&#8221; &gt; | &lt; &#8220;n&#8221; &gt; | &lt; &#8220;r&#8221; &gt; | &lt; &#8220;//&#8221; (~[&#8220;n&#8221;])* &#8220;n&#8221; &gt; | &lt;&#8220;/*&#8221; (~[&#8220;*&#8221;])* &#8220;*&#8221; (~[&#8220;/&#8221;] (~[&#8220;*&#8221;])* &#8220;*&#8221;)* &#8220;/&#8221;&gt; } // The following is a simple grammar that will allow you // to test the generated lexer.
+    options {
+JAVA_UNICODE_ESCAPE = true;
+}
+PARSER_BEGIN(MiniJavaParser)
+public class MiniJavaParser {}
+PARSER_END(MiniJavaParser)
+// Insert a specification of a lexical analysis here.
+TOKEN :
+{
+&lt; LPAREN: &#8220;(&#8221; &gt;
+| &lt; RPAREN: &#8220;)&#8221; &gt;
+| &lt; LSQPAREN: &#8220;[&#8221; &gt;
+| &lt; RSQPAREN: &#8220;]&#8221; &gt;
+| &lt; LBRACE: &#8220;{&#8221; &gt;
+| &lt; RBRACE: &#8220;}&#8221; &gt;
+| &lt; DOT: &#8220;.&#8221; &gt;
+| &lt; ASSIGN: &#8220;=&#8221; &gt;
+| &lt; LT: &#8220;&lt;&#8221; &gt;
+| &lt; PLUS: &#8220;+&#8221; &gt;
   
 
 

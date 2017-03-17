@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on 悟剑阁</title>
-    <link>http://blog.sword865.com/post/</link>
+    <link>http://blog.sword865.com/post/index.xml</link>
     <description>Recent content in Posts on 悟剑阁</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
