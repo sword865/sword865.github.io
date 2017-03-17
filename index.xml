@@ -9,8 +9,81 @@
     <managingEditor>sword865@163.com (罗刹剑客)</managingEditor>
     <webMaster>sword865@163.com (罗刹剑客)</webMaster>
     <copyright>Copyright (c) 2015. All rights reserved.</copyright>
-    <lastBuildDate>Fri, 04 Nov 2016 22:47:21 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 12 Mar 2017 15:49:45 +0800</lastBuildDate>
     <atom:link href="http://blog.sword865.com/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>比较一下spark2的DataFrame和RDD</title>
+      <link>http://blog.sword865.com/2017/03/12/%E6%AF%94%E8%BE%83%E4%B8%80%E4%B8%8Bspark2%E7%9A%84DataFrame%E5%92%8CRDD/</link>
+      <pubDate>Sun, 12 Mar 2017 15:49:45 +0800</pubDate>
+      <author>sword865@163.com (罗刹剑客)</author>
+      <guid>http://blog.sword865.com/2017/03/12/%E6%AF%94%E8%BE%83%E4%B8%80%E4%B8%8Bspark2%E7%9A%84DataFrame%E5%92%8CRDD/</guid>
+      <description>
+
+&lt;p&gt;前段时间把spark集群升级到2.x，使用起来感觉相对1.x的版本最大的改动就是DataFrame正式开始替代RDD成为主流，包括我们最常用到的mllib的官方文档也提到：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;In the Spark 2.x releases, MLlib will add features to the DataFrames-based API to reach feature parity with the RDD-based API.
+After reaching feature parity (roughly estimated for Spark 2.2), the RDD-based API will be deprecated.
+The RDD-based API is expected to be removed in Spark 3.0.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;rdd的结构&#34;&gt;RDD的结构&lt;/h4&gt;
+
+&lt;p&gt;RDD可以看成是一个分布式的无序列表，这个列表内的元素是一个object，RDD并不关心每个object的内部结构。因此所有操作都必须对这个object进行，不利于算子的复用。&lt;/p&gt;
+
+&lt;p&gt;比起DataFrame，RDD更方便我们对数据做一些底层的操作，也可以用于unstructured的数据。&lt;/p&gt;
+
+&lt;h4 id=&#34;dataframe的结构&#34;&gt;DataFrame的结构&lt;/h4&gt;
+
+&lt;p&gt;DataFrame不同于RDD，框架会去了解object中的数据是什么样的结构，这样每个算子就可以单独实现在某个列上，复用起来就更加简单。&lt;/p&gt;
+
+&lt;p&gt;因为DataFrame比RDD多个更多的限制，对内部的元素也有了更多的了解，可以使用SQL语句进行操作，因此也就可以在对DataFrame进行操作时使用Spark SQL的Catalyst优化器进行优化。&lt;/p&gt;
+
+&lt;p&gt;Catalyst一个易于扩展的查询优化器，同时支持基于规则(rule-based)和基于代价(cost-based)的优化方法，我们可以基于相关API自己定义优化规则。&lt;/p&gt;
+
+&lt;p&gt;最后，Spark的Tungsten目前还只支持DataFrame API, 因此在使用RDD时不能享受到Tungsten带来的效率优化。（Tungsten做的优化概括起来说就是由Spark自己来管理内存而不是使用JVM，这样可以避免JVM GC带来的性能损失）&lt;/p&gt;
+
+&lt;h4 id=&#34;dataset数据结构&#34;&gt;DataSet数据结构&lt;/h4&gt;
+
+&lt;p&gt;前面提到DataFrame每一个record对应了一个Row。而Dataset的定义更加宽松，每一个record对应了一个任意的类型。实际上，从源码中可以看到，DataFrame就是Dataset的一种特例。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;package object sql {
+    ...
+    type DataFrame = Dataset[Row]
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;DataSet和DataFrame可以通过df.as和ds.toDF方法方便的进行转化。&lt;/p&gt;
+
+&lt;p&gt;不同于Row是一个泛化的无类型JVM object, Dataset是由一系列的强类型JVM object组成的，因此DataSet可以在编译时进行类型检查。&lt;/p&gt;
+
+&lt;p&gt;比起RDD，DataSet的API也以Spark SQL引擎为基础，因此在对DataSet进行操作时，同样可以从Catalyst优化器中受益。&lt;/p&gt;
+
+&lt;p&gt;基本上，我觉得DataSet集合了RDD和DataSet两者的优点。&lt;/p&gt;
+
+&lt;h4 id=&#34;关于效率&#34;&gt;关于效率&lt;/h4&gt;
+
+&lt;p&gt;最后，在效率上，在使用RDD的API时候，使用Python明显比Scala要慢上很多（据我们测试是慢了2倍以上）。但是在使用DataFame时，这个缺陷就不复存在了，换句话说，喜欢Python或者放不下各种Python扩展的同志们可以把Python写起来了，哈哈。这里放个国外网友测试的效率比较吧：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://0x0fff.com/wp-content/uploads/2015/08/Spark_Dataframe_Official_Benchmark.png&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;可以看到，速度上大致是 Scala DF = Python DF &amp;gt; Scala RDD &amp;gt; Python RDD，并且DF优势很显著。&lt;/p&gt;
+
+&lt;h4 id=&#34;其他参考资料&#34;&gt;其他参考资料&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/hustnn/TungstenSecret&#34;&gt;探索Spark Tungsten的秘密&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://www.iteblog.com/archives/1706.html&#34;&gt;Spark 2.0介绍：在Spark SQL中定义查询优化规则&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.infoq.com/cn/articles/2015-Review-Spark&#34;&gt;http://www.infoq.com/cn/articles/2015-Review-Spark&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://stackoverflow.com/questions/37301226/difference-between-dataset-api-and-dataframe&#34;&gt;http://stackoverflow.com/questions/37301226/difference-between-dataset-api-and-dataframe&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://databricks.com/blog/2016/07/14/a-tale-of-three-apache-spark-apis-rdds-dataframes-and-datasets.html&#34;&gt;https://databricks.com/blog/2016/07/14/a-tale-of-three-apache-spark-apis-rdds-dataframes-and-datasets.html&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://0x0fff.com/spark-dataframes-are-faster-arent-they/&#34;&gt;https://0x0fff.com/spark-dataframes-are-faster-arent-they/&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>谈谈Factorization Machine</title>
@@ -1559,65 +1632,6 @@ for ( int i = 0; i &amp;lt; m_numMeshes; i++ )
 &lt;p&gt;&amp;nbsp;&lt;/p&gt;
 
 &lt;p&gt;该系列结束，恩，也许以后学了更多，有了更好的了解后会回来改一改，谁知道呢？&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>算法总结8—非负矩阵因式分解</title>
-      <link>http://blog.sword865.com/archives/14</link>
-      <pubDate>Fri, 25 Sep 2009 00:00:00 +0000</pubDate>
-      <author>sword865@163.com (罗刹剑客)</author>
-      <guid>http://blog.sword865.com/archives/14</guid>
-      <description>&lt;p&gt;&lt;strong&gt;数学基础:&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;线性代数的矩阵乘法运算。&lt;/p&gt;
-
-&lt;p&gt;&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;&amp;nbsp;&amp;nbsp; 非负矩阵分解是一种特征提取的算法，它尝试从数据集中寻找新的数据行，将这些新找到的数据行加以组合，就可以重新构造出数据集。&lt;/p&gt;
-
-&lt;p&gt;算法要求输入多个样本数据，每个样本数据都是一个m维数值向量，首先把我们的数据集用矩阵的形式写出来，每一列是一个数据，而每一行是这些数据对应维度的数值。于是我们就有了一个大小为m*n的输入矩阵。而算法的目标就是将这个矩阵分解为另外两个非负矩阵的积。&lt;/p&gt;
-
-&lt;p&gt;　&lt;img src=&#34;http://sword865.com/blog/wp-content/ql-cache/quicklatex.com-cad804e086b2306a9bd31889dd0dbb72_l3.png&#34; class=&#34;ql-img-inline-formula quicklatex-auto-format&#34; alt=&#34;&amp;#77;&amp;#95;&amp;#123;&amp;#109;&amp;#42;&amp;#110;&amp;#125;&amp;#61;&amp;#65;&amp;#95;&amp;#123;&amp;#109;&amp;#42;&amp;#114;&amp;#125;&amp;#66;&amp;#95;&amp;#123;&amp;#114;&amp;#42;&amp;#110;&amp;#125;&#34; title=&#34;Rendered by QuickLaTeX.com&#34; height=&#34;15&#34; width=&#34;144&#34; style=&#34;vertical-align: -3px;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&amp;nbsp;&amp;nbsp; 我们将分解矩阵后新得出的一个维度称为特征，那么在前一个m*r的矩阵中，第i行第j列的值就代表属性i对第j种特征的贡献值，而后一个矩阵的第i行第j列则代表第i种特征对第j个样本的贡献值。这样我们就找出了输入样本的r种特征。&lt;/p&gt;
-
-&lt;p&gt;&amp;nbsp;&amp;nbsp; r的大小应该依照需要进行选择，比如如果是希望找到某些共性特征，则就要选择较小的r。当我们确定了一个较为合适的r值后，就要想办法确定后面两个矩阵具体的值了。&lt;/p&gt;
-
-&lt;p&gt;&amp;nbsp;&amp;nbsp; 书中给出的算法大致如下：&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;定义一个函数计算用来两个矩阵的差异程度（每个对应元素相减后平方的和）&lt;/li&gt;
-&lt;li&gt;随机生成2个矩阵(m*r维和r*n维)记为A（权重矩阵）,B（特征矩阵）&lt;/li&gt;
-&lt;li&gt;计算A*B与输入的m*n的数据矩阵的差异，足够小则停止，否则继续&lt;/li&gt;
-&lt;li&gt;按一定规则调整A，B的值后转3.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;对于调整的方法，可以用模拟退火（下一篇文章中会提到）等多种算法，书里使用的是乘法更新法则，该法则我没有认真去看&amp;hellip;.感兴趣的可以去看论文&amp;hellip;.英文的&amp;hellip;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://hebb.mit.edu/people/seung/papers/nmfconverge.pdf&#34;&gt;http://hebb.mit.edu/people/seung/papers/nmfconverge.pdf&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;算法如下：&lt;/p&gt;
-
-&lt;p&gt;hn 转置后的权重矩阵和数据矩阵相乘的结果&lt;/p&gt;
-
-&lt;p&gt;hd 转置后的权重矩阵和原权重矩阵相乘再乘特征矩阵的结果&lt;/p&gt;
-
-&lt;p&gt;wn数据矩阵与转置后的特征矩阵相乘的结果&lt;/p&gt;
-
-&lt;p&gt;wd权重矩阵与特征矩阵相乘，再与转置后的特诊矩阵相乘得到的矩阵&lt;/p&gt;
-
-&lt;p&gt;为了更新特征矩阵和权重矩阵，我们先把上面所有矩阵变为数组．然后把特征矩阵中每一个值与hn中对应值相乘，并除以hd中对应的值．类似的，我们再将权重矩阵中每一个值与wn中的对应值相乘，并除以wd中对应的值．&lt;/p&gt;
-
-&lt;p&gt;&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;最近的算法都很好理解的样子&amp;hellip;不过写起来还是挺麻烦的&amp;hellip;.还有最后一篇优化了，内容挺多，包括模拟退火和遗传算法&amp;hellip;.恩&lt;/p&gt;
-
-&lt;div&gt;
-  &lt;embed id=&#34;lingoes_plugin_object&#34; width=&#34;0&#34; height=&#34;0&#34; type=&#34;application/lingoes-npruntime-capture-word-plugin&#34; hidden=&#34;true&#34; /&gt;
-&lt;/div&gt;
 </description>
     </item>
     

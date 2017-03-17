@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://blog.sword865.com/2017/03/12/%E6%AF%94%E8%BE%83%E4%B8%80%E4%B8%8Bspark2%E7%9A%84DataFrame%E5%92%8CRDD/</loc>
+    <lastmod>2017-03-12T15:49:45+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>http://blog.sword865.com/2016/11/04/%E8%B0%88%E8%B0%88Factorization-Machine/</loc>
     <lastmod>2016-11-04T22:47:21+08:00</lastmod>
   </url>
@@ -174,6 +179,12 @@
   </url>
   
   <url>
+    <loc>http://blog.sword865.com/tags/dataframe/</loc>
+    <lastmod>2017-03-12T15:49:45+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>http://blog.sword865.com/tags/elasticsearch/</loc>
     <lastmod>2015-07-27T00:00:00+00:00</lastmod>
     <priority>0</priority>
@@ -204,6 +215,12 @@
   </url>
   
   <url>
+    <loc>http://blog.sword865.com/tags/mllib/</loc>
+    <lastmod>2017-03-12T15:49:45+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>http://blog.sword865.com/tags/netty/</loc>
     <lastmod>2015-07-27T00:00:00+00:00</lastmod>
     <priority>0</priority>
@@ -217,13 +234,25 @@
   
   <url>
     <loc>http://blog.sword865.com/post/</loc>
-    <lastmod>2016-11-04T22:47:21+08:00</lastmod>
+    <lastmod>2017-03-12T15:49:45+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>http://blog.sword865.com/tags/r/</loc>
     <lastmod>2012-06-30T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://blog.sword865.com/tags/rdd/</loc>
+    <lastmod>2017-03-12T15:49:45+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://blog.sword865.com/topics/spark/</loc>
+    <lastmod>2017-03-12T15:49:45+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -235,6 +264,11 @@
   
   <url>
     <loc>http://blog.sword865.com/tags/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://blog.sword865.com/topics/</loc>
     <priority>0</priority>
   </url>
   
@@ -270,7 +304,7 @@
   
   <url>
     <loc>http://blog.sword865.com/</loc>
-    <lastmod>2016-11-04T22:47:21+08:00</lastmod>
+    <lastmod>2017-03-12T15:49:45+08:00</lastmod>
     <priority>0</priority>
   </url>
   
