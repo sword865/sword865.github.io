@@ -2,165 +2,25 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>索引 on 悟剑阁</title>
-    <link>http://blog.sword865.com/tags/%E7%B4%A2%E5%BC%95/index.xml</link>
+    <link>http://blog.sword865.com/tags/%E7%B4%A2%E5%BC%95/</link>
     <description>Recent content in 索引 on 悟剑阁</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <managingEditor>sword865@163.com (罗刹剑客)</managingEditor>
     <webMaster>sword865@163.com (罗刹剑客)</webMaster>
     <copyright>Copyright (c) 2015. All rights reserved.</copyright>
-    <atom:link href="http://blog.sword865.com/tags/%E7%B4%A2%E5%BC%95/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 04 Feb 2015 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="http://blog.sword865.com/tags/%E7%B4%A2%E5%BC%95/index.xml" rel="self" type="application/rss+xml" />
+    
     
     <item>
       <title>Lucene索引文件学习</title>
-      <link>http://blog.sword865.com/archives/86</link>
+      <link>http://blog.sword865.com/archives/86/</link>
       <pubDate>Wed, 04 Feb 2015 00:00:00 +0000</pubDate>
       <author>sword865@163.com (罗刹剑客)</author>
-      <guid>http://blog.sword865.com/archives/86</guid>
-      <description>&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt; 最近在做搜索，抽空看一下lucene，资料挺多的，不过大部分都是3.x了……在对着官方文档大概看一下。&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;优化后的lucene索引文件(4.9.0)&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;&lt;img title=&#34;NewImage.png&#34; src=&#34;http://blog.sword865.com/wp-content/uploads/2015/02/NewImage.png&#34; alt=&#34;NewImage&#34; width=&#34;200&#34; height=&#34;146&#34; border=&#34;0&#34; /&gt;&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;一、段文件&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;1.段文件：segments_5p和segments.gen。&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;segments.gen保存当前段文件版本信息。&lt;/span&gt;&lt;/p&gt;
-
-&lt;ul style=&#34;color: #353833; font-family: Arial, Helvetica, sans-serif; font-size: 12px;&#34;&gt;
-  &lt;li&gt;
-    &lt;span style=&#34;font-size: 12px;&#34;&gt;&lt;tt style=&#34;font-size: 1.2em;&#34;&gt;segments.gen&lt;/tt&gt;: GenHeader, Generation, Generation, Footer&lt;/span&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;segments_N（segments_5p）保存最新的段的信息，包括段的个数，每个段的段名、文档数等信息。&lt;/span&gt;&lt;/p&gt;
-
-&lt;ul style=&#34;font-size: 12px; color: #353833; font-family: Arial, Helvetica, sans-serif;&#34;&gt;
-  &lt;li&gt;
-    &lt;span style=&#34;font-size: 12px;&#34;&gt;&lt;tt style=&#34;font-size: 1.2em;&#34;&gt;segments_N&lt;/tt&gt;: Header, Version, NameCounter, SegCount, &lt;SegName, SegCodec, DelGen, DeletionCount, FieldInfosGen, DocValuesGen, UpdatesFiles&gt;&lt;sup style=&#34;font-size: 0.6em;&#34;&gt;SegCount&lt;/sup&gt;, CommitUserData, Footer&lt;/span&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;  源码参考：SegmentInfos.read(Directory directory, String segmentFileName):&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;2.段信息：*.si，存储段的基本信息。&lt;/span&gt;&lt;/p&gt;
-
-&lt;ul style=&#34;color: #353833; font-family: Arial, Helvetica, sans-serif; font-size: 12px;&#34;&gt;
-  &lt;li&gt;
-    &lt;span style=&#34;font-size: 12px;&#34;&gt;&lt;tt style=&#34;font-size: 1.2em;&#34;&gt;.si&lt;/tt&gt;: Header, SegVersion, SegSize, IsCompoundFile, Diagnostics, Attributes, Files&lt;/span&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;       只对4.0-4.5使用，新版已经抛弃了，可以无视。  &lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;二、域文件&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;1.域(field)：*.fnm ，存储域的信息。&lt;/span&gt;&lt;/p&gt;
-
-&lt;ul style=&#34;font-size: 12px; color: #353833; font-family: Arial, Helvetica, sans-serif;&#34;&gt;
-  &lt;li&gt;
-    &lt;span style=&#34;font-size: 12px;&#34;&gt;FieldInfos (.fnm) &amp;#8211;&gt; Header,FieldsCount, &lt;FieldName,FieldNumber, FieldBits,DocValuesBits,DocValuesGen,Attributes&gt; &lt;sup style=&#34;font-size: 0.6em; color: #353833; font-family: Arial, Helvetica, sans-serif;&#34;&gt;FieldsCount&lt;/sup&gt;,Footer&lt;/span&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div&gt;
-  &lt;p style=&#34;margin: 0px; font-size: 11px; font-family: Monaco;&#34;&gt;
-    &lt;span style=&#34;font-size: 12px;&#34;&gt;  源码参考：org.apache.lucene.codecs.lucene46.Lucene46FieldInfosFormat&lt;/span&gt;
-  &lt;/p&gt;
-  
-  &lt;p style=&#34;margin: 0px; font-size: 11px; font-family: Monaco;&#34;&gt;
-    &lt;span style=&#34;font-size: 12px;&#34;&gt;2.域(field)索引：*.fdx，存储到域数据的指针。&lt;/span&gt;
-  &lt;/p&gt;
-&lt;/div&gt;
-
-&lt;ul style=&#34;color: #353833; font-family: Arial, Helvetica, sans-serif; font-size: 12px;&#34;&gt;
-  &lt;li&gt;
-    &lt;span style=&#34;font-size: 12px;&#34;&gt;FieldsIndex (.fdx) &amp;#8211;&gt; &lt;Header&gt;, &lt;ChunkIndex&gt;&lt;/span&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;   源码参考：org.apache.lucene.codecs.lucene41.Lucene41StoredFieldsFormat&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;3.域(field)数据：*.fdt，存储文档的域，话说这个结构比较复杂，简单列一下。&lt;/span&gt;&lt;/p&gt;
-
-&lt;ul style=&#34;font-size: 12px; color: #353833; font-family: Arial, Helvetica, sans-serif;&#34;&gt;
-  &lt;li&gt;
-    &lt;span style=&#34;font-size: 12px;&#34;&gt;FieldData (.fdt) &amp;#8211;&gt; &lt;Header&gt;, PackedIntsVersion, &lt;Chunk&gt;&lt;sup style=&#34;font-size: 0.6em;&#34;&gt;ChunkCount&lt;/sup&gt;&lt;/span&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;span style=&#34;font-size: 12px;&#34;&gt;ChunkCount is not known in advance and is the number of chunks necessary to store all document of the segment&lt;/span&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;span style=&#34;font-size: 12px;&#34;&gt;Chunk &amp;#8211;&gt; DocBase, ChunkDocs, DocFieldCounts, DocLengths, &lt;CompressedDocs&gt;&lt;/span&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;  源码参考：org.apache.lucene.codecs.lucene41.Lucene41StoredFieldsFormat&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;三、字典文件&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;4.项(term)字典：*.tim，存储项的信息。&lt;/span&gt;&lt;/p&gt;
-
-&lt;ul style=&#34;color: #353833; font-family: Arial, Helvetica, sans-serif; font-size: 12px;&#34;&gt;
-  &lt;li&gt;
-    &lt;span style=&#34;font-size: 12px;&#34;&gt;TermsDict (.tim) &amp;#8211;&gt; Header, &lt;em&gt;PostingsHeader&lt;/em&gt;, NodeBlock&lt;sup style=&#34;font-size: 0.6em;&#34;&gt;NumBlocks&lt;/sup&gt;, FieldSummary, DirOffset, Footer&lt;/span&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;  源码参考：org.apache.lucene.codecs.lucene41.Lucene41PostingsFormat&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;5.项(term)索引：*.tip，到项字典的索引。&lt;/span&gt;&lt;/p&gt;
-
-&lt;ul style=&#34;color: #353833; font-family: Arial, Helvetica, sans-serif; font-size: 12px;&#34;&gt;
-  &lt;li&gt;
-    &lt;span style=&#34;font-size: 12px;&#34;&gt;TermsIndex (.tip) &amp;#8211;&gt; Header, FSTIndex&lt;sup style=&#34;font-size: 0.6em;&#34;&gt;NumFields&lt;/sup&gt; &lt;IndexStartFP&gt;&lt;sup style=&#34;font-size: 0.6em;&#34;&gt;NumFields&lt;/sup&gt;, DirOffset, Footer&lt;/span&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;  源码参考：org.apache.lucene.codecs.lucene41.Lucene41PostingsFormat &lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;四、其他文件 &lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;6.频率：*.doc，包括一个文档列表，列表中每一个项都有一个频数。&lt;/span&gt;&lt;/p&gt;
-
-&lt;ul style=&#34;color: #353833; font-family: Arial, Helvetica, sans-serif; font-size: 12px;&#34;&gt;
-  &lt;li&gt;
-    &lt;span style=&#34;font-size: 12px;&#34;&gt;docFile(.doc) &amp;#8211;&gt; Header, &lt;TermFreqs, SkipData?&gt;&lt;sup style=&#34;font-size: 0.6em;&#34;&gt;TermCount&lt;/sup&gt;, Footer&lt;/span&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;  源码参考：org.apache.lucene.codecs.lucene41.Lucene41PostingsFormat &lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;7.位置：*.pos，存储项在索引中出现的位置信息。&lt;/span&gt;&lt;/p&gt;
-
-&lt;ul style=&#34;color: #353833; font-family: Arial, Helvetica, sans-serif; font-size: 12px;&#34;&gt;
-  &lt;li&gt;
-    &lt;span style=&#34;font-size: 12px;&#34;&gt;PosFile(.pos) &amp;#8211;&gt; Header, &lt;TermPositions&gt; &lt;sup style=&#34;font-size: 0.6em;&#34;&gt;TermCount&lt;/sup&gt;, Footer&lt;/span&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;  源码参考：org.apache.lucene.codecs.lucene41.Lucene41PostingsFormat&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt; 8.norm文件：&lt;em&gt;.nvd，&lt;/em&gt;.nvm，编码文档和域的长度已经boost factors。&lt;/span&gt;&lt;/p&gt;
-
-&lt;ul style=&#34;font-size: 12px; color: #353833; font-family: Arial, Helvetica, sans-serif;&#34;&gt;
-  &lt;li&gt;
-    &lt;span style=&#34;font-size: 12px;&#34;&gt;Norms data (.nvd) &amp;#8211;&gt; Header,&lt;Uncompressed | TableCompressed | DeltaCompressed&gt;&lt;sup style=&#34;font-size: 0.6em; color: #353833; font-family: Arial, Helvetica, sans-serif;&#34;&gt;NumFields&lt;/sup&gt;,Footer&lt;/span&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;  源码参考：org.apache.lucene.codecs.lucene49.Lucene49NormsFormat&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt; 除此之外，还可能有一些其他文件，暂且不表。&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt; 参考：&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;&lt;a href=&#34;http://lucene.apache.org/core/4_9_0/core/org/apache/lucene/codecs/lucene49/package-summary.html#File_Naming&#34;&gt;http://lucene.apache.org/core/4_9_0/core/org/apache/lucene/codecs/lucene49/package-summary.html#File_Naming&lt;/a&gt;&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;&lt;a href=&#34;http://www.cnblogs.com/forfuture1978/category/300665.html&#34;&gt;http://www.cnblogs.com/forfuture1978/category/300665.html&lt;/a&gt;&lt;/span&gt;&lt;/p&gt;
-</description>
+      <guid>http://blog.sword865.com/archives/86/</guid>
+      <description>最近在做搜索，抽空看一下lucene，资料挺多的，不过大部分都是3.x了……在对着官方文档大概看一下。 优化后的lucene索引文件(4.9.</description>
     </item>
     
   </channel>
