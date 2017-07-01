@@ -19,7 +19,7 @@
 
 <meta property="og:title" content="算法总结3—神经网络  &middot; 悟剑阁 ">
 <meta property="og:site_name" content="悟剑阁"/>
-<meta property="og:url" content="http://blog.sword865.com/archives/19/" />
+<meta property="og:url" content="http://blog.sword865.com/archives/19" />
 <meta property="og:locale" content="zh-CN">
 
 
@@ -47,18 +47,18 @@
     },
     "datePublished": "2009-09-07",
     "description": "",
-    "wordCount": 2068
+    "wordCount": 2060
   }
 </script>
 
 
 
-<link rel="canonical" href="http://blog.sword865.com/archives/19/" />
+<link rel="canonical" href="http://blog.sword865.com/archives/19" />
 
 <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://blog.sword865.com/touch-icon-144-precomposed.png">
 <link href="http://blog.sword865.com/favicon.png" rel="icon">
 
-<meta name="generator" content="Hugo 0.23" />
+<meta name="generator" content="Hugo 0.19" />
 
   <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -183,7 +183,7 @@ vertical-align:middle}
     &middot; by sword865
   
   &middot; Read in about 5 min
-  &middot; (2068 Words)
+  &middot; (2060 Words)
   <br>
   
 <a class="label" href="http://blog.sword865.com/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C">神经网络</a>
@@ -241,11 +241,7 @@ vertical-align:middle}
 
 <p>f为传递函数</p>
 
-<p>&nbsp;</p>
-
 <p>在人工神经网络中，神经元之间相互连接，在连接点将前者的输出作为后者的输出，形成错综复杂的网状结构，进行信息的传递与计算。</p>
-
-<p>&nbsp;</p>
 
 <p>我们这里要介绍的是其中比较简单的一种模型，称为&ldquo;多层感知机（MLP）&rdquo;网络。</p>
 
@@ -267,21 +263,11 @@ vertical-align:middle}
   &nbsp;
 </p>
 
-<p>&nbsp;</p>
-
 <p>这些层次中，每层的每个神经元的输出都会作为下一层的每个神经元的输入，因此当我们对输入层进行输入后，该信息会一层层传递下去，最终从输出层输出。</p>
-
-<p>&nbsp;</p>
 
 <p>神经网络建立后，我们需要设法确定每个神经元的各个输入的权重w，并选择合适的函数f对输入进行变换，只有完成以上工作后，我们才能使用神经网络完成相应的工作。</p>
 
-<p>&nbsp;</p>
-
 <p>我们一般会选择过关于源点对称的S形函数作为函数f，该种函数特点是:输入接近0时，函数对输入的变化有敏感的反应，这一敏感度将随输入绝对值的增大而下降，最终趋于0。</p>
-
-<p align="center">
-  &nbsp;
-</p>
 
 <p><strong>权重的获取：</strong></p>
 
@@ -311,13 +297,9 @@ vertical-align:middle}
 
 <p>这样一层层的从后向前反推，最终完成对一个训练样本的学习。</p>
 
-<p>&nbsp;</p>
-
 <p>当对所有样本完成训练后，我们就可以使用这个神经网络了。</p>
 
 <p>比如，我们想用神经网络模拟一个数学函数，我们先向网络提供大量的正确的输入输出进行训练，然后就可以用神经网络作模拟这个函数进行计算了。</p>
-
-<p>&nbsp;</p>
 
 <p><strong>优点：</strong></p>
 
@@ -343,13 +325,13 @@ vertical-align:middle}
   
 
     
-    <a class="prev" href="http://blog.sword865.com/archives/20/" title="算法总结2—决策树分类器">
+    <a class="prev" href="http://blog.sword865.com/archives/20" title="算法总结2—决策树分类器">
       Previous
     </a>
     
 
     
-    <a class="next" href="http://blog.sword865.com/archives/18/" title="算法总结4—支持向量机">
+    <a class="next" href="http://blog.sword865.com/archives/18" title="算法总结4—支持向量机">
       Next
     </a>
     

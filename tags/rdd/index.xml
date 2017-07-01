@@ -2,17 +2,14 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Rdd on 悟剑阁</title>
-    <link>http://blog.sword865.com/tags/rdd/</link>
+    <link>http://blog.sword865.com/tags/rdd/index.xml</link>
     <description>Recent content in Rdd on 悟剑阁</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <managingEditor>sword865@163.com (罗刹剑客)</managingEditor>
     <webMaster>sword865@163.com (罗刹剑客)</webMaster>
     <copyright>Copyright (c) 2015. All rights reserved.</copyright>
-    <lastBuildDate>Sun, 12 Mar 2017 15:49:45 +0800</lastBuildDate>
-    
-	<atom:link href="http://blog.sword865.com/tags/rdd/index.xml" rel="self" type="application/rss+xml" />
-    
+    <atom:link href="http://blog.sword865.com/tags/rdd/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>比较一下spark2的DataFrame和RDD</title>
@@ -20,7 +17,71 @@
       <pubDate>Sun, 12 Mar 2017 15:49:45 +0800</pubDate>
       <author>sword865@163.com (罗刹剑客)</author>
       <guid>http://blog.sword865.com/2017/03/12/%E6%AF%94%E8%BE%83%E4%B8%80%E4%B8%8Bspark2%E7%9A%84DataFrame%E5%92%8CRDD/</guid>
-      <description>前段时间把spark集群升级到2.x，使用起来感觉相对1.x的版本最大的改动就是DataFrame正式开始替代RDD成为主流，包括我们最常用</description>
+      <description>
+
+&lt;p&gt;前段时间把spark集群升级到2.x，使用起来感觉相对1.x的版本最大的改动就是DataFrame正式开始替代RDD成为主流，包括我们最常用到的mllib的官方文档也提到：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;In the Spark 2.x releases, MLlib will add features to the DataFrames-based API to reach feature parity with the RDD-based API.
+After reaching feature parity (roughly estimated for Spark 2.2), the RDD-based API will be deprecated.
+The RDD-based API is expected to be removed in Spark 3.0.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;rdd的结构&#34;&gt;RDD的结构&lt;/h4&gt;
+
+&lt;p&gt;RDD可以看成是一个分布式的无序列表，这个列表内的元素是一个object，RDD并不关心每个object的内部结构。因此所有操作都必须对这个object进行，不利于算子的复用。&lt;/p&gt;
+
+&lt;p&gt;比起DataFrame，RDD更方便我们对数据做一些底层的操作，也可以用于unstructured的数据。&lt;/p&gt;
+
+&lt;h4 id=&#34;dataframe的结构&#34;&gt;DataFrame的结构&lt;/h4&gt;
+
+&lt;p&gt;DataFrame不同于RDD，框架会去了解object中的数据是什么样的结构，这样每个算子就可以单独实现在某个列上，复用起来就更加简单。&lt;/p&gt;
+
+&lt;p&gt;因为DataFrame比RDD多个更多的限制，对内部的元素也有了更多的了解，可以使用SQL语句进行操作，因此也就可以在对DataFrame进行操作时使用Spark SQL的Catalyst优化器进行优化。&lt;/p&gt;
+
+&lt;p&gt;Catalyst一个易于扩展的查询优化器，同时支持基于规则(rule-based)和基于代价(cost-based)的优化方法，我们可以基于相关API自己定义优化规则。&lt;/p&gt;
+
+&lt;p&gt;最后，Spark的Tungsten目前还只支持DataFrame API, 因此在使用RDD时不能享受到Tungsten带来的效率优化。（Tungsten做的优化概括起来说就是由Spark自己来管理内存而不是使用JVM，这样可以避免JVM GC带来的性能损失）&lt;/p&gt;
+
+&lt;h4 id=&#34;dataset数据结构&#34;&gt;DataSet数据结构&lt;/h4&gt;
+
+&lt;p&gt;前面提到DataFrame每一个record对应了一个Row。而Dataset的定义更加宽松，每一个record对应了一个任意的类型。实际上，从源码中可以看到，DataFrame就是Dataset的一种特例。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;package object sql {
+    ...
+    type DataFrame = Dataset[Row]
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;DataSet和DataFrame可以通过df.as和ds.toDF方法方便的进行转化。&lt;/p&gt;
+
+&lt;p&gt;不同于Row是一个泛化的无类型JVM object, Dataset是由一系列的强类型JVM object组成的，因此DataSet可以在编译时进行类型检查。&lt;/p&gt;
+
+&lt;p&gt;比起RDD，DataSet的API也以Spark SQL引擎为基础，因此在对DataSet进行操作时，同样可以从Catalyst优化器中受益。&lt;/p&gt;
+
+&lt;p&gt;基本上，我觉得DataSet集合了RDD和DataSet两者的优点。&lt;/p&gt;
+
+&lt;h4 id=&#34;关于效率&#34;&gt;关于效率&lt;/h4&gt;
+
+&lt;p&gt;最后，在效率上，在使用RDD的API时候，使用Python明显比Scala要慢上很多（据我们测试是慢了2倍以上）。但是在使用DataFame时，这个缺陷就不复存在了，换句话说，喜欢Python或者放不下各种Python扩展的同志们可以把Python写起来了，哈哈。这里放个国外网友测试的效率比较吧：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://0x0fff.com/wp-content/uploads/2015/08/Spark_Dataframe_Official_Benchmark.png&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;可以看到，速度上大致是 Scala DF = Python DF &amp;gt; Scala RDD &amp;gt; Python RDD，并且DF优势很显著。&lt;/p&gt;
+
+&lt;h4 id=&#34;其他参考资料&#34;&gt;其他参考资料&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/hustnn/TungstenSecret&#34;&gt;探索Spark Tungsten的秘密&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://www.iteblog.com/archives/1706.html&#34;&gt;Spark 2.0介绍：在Spark SQL中定义查询优化规则&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.infoq.com/cn/articles/2015-Review-Spark&#34;&gt;http://www.infoq.com/cn/articles/2015-Review-Spark&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://stackoverflow.com/questions/37301226/difference-between-dataset-api-and-dataframe&#34;&gt;http://stackoverflow.com/questions/37301226/difference-between-dataset-api-and-dataframe&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://databricks.com/blog/2016/07/14/a-tale-of-three-apache-spark-apis-rdds-dataframes-and-datasets.html&#34;&gt;https://databricks.com/blog/2016/07/14/a-tale-of-three-apache-spark-apis-rdds-dataframes-and-datasets.html&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://0x0fff.com/spark-dataframes-are-faster-arent-they/&#34;&gt;https://0x0fff.com/spark-dataframes-are-faster-arent-they/&lt;/a&gt;&lt;/p&gt;
+</description>
     </item>
     
   </channel>

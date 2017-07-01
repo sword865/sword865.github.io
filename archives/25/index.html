@@ -19,7 +19,7 @@
 
 <meta property="og:title" content="编译原理虎书java版本–Chapter 2-3  &middot; 悟剑阁 ">
 <meta property="og:site_name" content="悟剑阁"/>
-<meta property="og:url" content="http://blog.sword865.com/archives/25/" />
+<meta property="og:url" content="http://blog.sword865.com/archives/25" />
 <meta property="og:locale" content="zh-CN">
 
 
@@ -47,18 +47,18 @@
     },
     "datePublished": "2009-03-14",
     "description": "",
-    "wordCount": 595
+    "wordCount": 1726
   }
 </script>
 
 
 
-<link rel="canonical" href="http://blog.sword865.com/archives/25/" />
+<link rel="canonical" href="http://blog.sword865.com/archives/25" />
 
 <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://blog.sword865.com/touch-icon-144-precomposed.png">
 <link href="http://blog.sword865.com/favicon.png" rel="icon">
 
-<meta name="generator" content="Hugo 0.23" />
+<meta name="generator" content="Hugo 0.19" />
 
   <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -182,8 +182,8 @@ vertical-align:middle}
   
     &middot; by sword865
   
-  &middot; Read in about 3 min
-  &middot; (595 Words)
+  &middot; Read in about 4 min
+  &middot; (1726 Words)
   <br>
   
 <a class="label" href="http://blog.sword865.com/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86">编译原理</a>
@@ -195,437 +195,218 @@ vertical-align:middle}
 </header>
 
   <div class="container content">
-  <p>options {</p>
-
-<p>JAVA_UNICODE_ESCAPE = true;</p>
-
-<p>}</p>
-
-<p>PARSER_BEGIN(MiniJavaParser)</p>
-
-<p>public class MiniJavaParser {}</p>
-
-<p>PARSER_END(MiniJavaParser)</p>
-
-<p>// Insert a specification of a lexical analysis here.</p>
-
-<p>TOKEN :</p>
-
-<p>{</p>
-
-<p>&lt; LPAREN: &#8220;(&#8221; &gt;</p>
-
-<p>| &lt; RPAREN: &#8220;)&#8221; &gt;</p>
-
-<p>| &lt; LSQPAREN: &#8220;[&#8221; &gt;</p>
-
-<p>| &lt; RSQPAREN: &#8220;]&#8221; &gt;</p>
-
-<p>| &lt; LBRACE: &#8220;{&#8221; &gt;</p>
-
-<p>| &lt; RBRACE: &#8220;}&#8221; &gt;</p>
-
-<p>| &lt; DOT: &#8220;.&#8221; &gt;</p>
-
-<p>| &lt; ASSIGN: &#8220;=&#8221; &gt;</p>
-
-<p>| &lt; LT: &#8220;&lt;&#8221; &gt;</p>
-
-<p>| &lt; PLUS: &#8220;+&#8221; &gt;</p>
-
-<p>| &lt; MINUS: &#8220;-&#8221; &gt;</p>
-
-<p>| &lt; AND : &#8220;&amp;&amp;&#8221; &gt;</p>
-
-<p>| &lt; NOT : &#8220;!&#8221; &gt;</p>
-
-<p>| &lt; SEMICOLON: &#8220;;&#8221; &gt;</p>
-
-<p>| &lt; PUBLIC: &#8220;public&#8221; &gt;</p>
-
-<p>| &lt; RETURN: &#8220;return&#8221; &gt;</p>
-
-<p>| &lt; BOOLEAN: &#8220;boolean&#8221; &gt;</p>
-
-<p>| &lt; CLASS: &#8220;class&#8221; &gt;</p>
-
-<p>| &lt; INTERFACE: &#8220;interface&#8221; &gt;</p>
-
-<p>| &lt; ELSE: &#8220;else&#8221; &gt;</p>
-
-<p>| &lt; EXTENDS: &#8220;extends&#8221; &gt;</p>
-
-<p>| &lt; FALSE: &#8220;false&#8221; &gt;</p>
-
-<p>| &lt; IF: &#8220;if&#8221; &gt;</p>
-
-<p>| &lt; WHILE: &#8220;while&#8221; &gt;</p>
-
-<p>| &lt; INTEGER: &#8220;int&#8221; &gt;</p>
-
-<p>| &lt; LENGTH: &#8220;length&#8221; &gt;</p>
-
-<p>| &lt; MAIN: &#8220;main&#8221; &gt;</p>
-
-<p>| &lt; NEW: &#8220;new&#8221; &gt;</p>
-
-<p>| &lt; STATIC: &#8220;static&#8221; &gt;</p>
-
-<p>| &lt; STRING: &#8220;String&#8221; &gt;</p>
-
-<p>| &lt; THIS: &#8220;this&#8221; &gt;</p>
-
-<p>| &lt; TRUE: &#8220;true&#8221; &gt;</p>
-
-<p>| &lt; PRINT: &#8220;System.out.println&#8221; &gt;</p>
-
-<p>| &lt; VOID: &#8220;void&#8221; &gt;</p>
-
-<p>}</p>
-
-<p>TOKEN : /* LITERALS */</p>
-
-<p>{</p>
-
-<p>&lt; INTEGER_LITERAL: ( [&#8220;1&#8243;-&#8220;9&#8243;] ([&#8220;0&#8243;-&#8220;9&#8243;])* | &#8220;0&#8221; ) &gt;</p>
-
-<p>}</p>
-
-<p>TOKEN : /* IDENTIFIERS */</p>
-
-<p>{</p>
-
-<p>&lt; IDENTIFIER: <LETTER> (<LETTER>|<DIGIT>)* &gt;</p>
-
-<p>|</p>
-
-<p>&lt; #LETTER:</p>
-
-<p>[</p>
-
-<p>&#8220;u0024&#8243;,</p>
-
-<p>&#8220;u0041&#8243;-&#8220;u005a&#8221;,</p>
-
-<p>&#8220;u005f&#8221;,</p>
-
-<p>&#8220;u0061&#8243;-&#8220;u007a&#8221;,</p>
-
-<p>&#8220;u00c0&#8243;-&#8220;u00d6&#8243;,</p>
-
-<p>&#8220;u00d8&#8243;-&#8220;u00f6&#8243;,</p>
-
-<p>&#8220;u00f8&#8243;-&#8220;u00ff&#8221;,</p>
-
-<p>&#8220;u0100&#8243;-&#8220;u1fff&#8221;,</p>
-
-<p>&#8220;u3040&#8243;-&#8220;u318f&#8221;,</p>
-
-<p>&#8220;u3300&#8243;-&#8220;u337f&#8221;,</p>
-
-<p>&#8220;u3400&#8243;-&#8220;u3d2d&#8221;,</p>
-
-<p>&#8220;u4e00&#8243;-&#8220;u9fff&#8221;,</p>
-
-<p>&#8220;uf900&#8243;-&#8220;ufaff&#8221;</p>
-
-<p>]</p>
-
-<blockquote>
-</blockquote>
-
-<p>|</p>
-
-<p>&lt; #DIGIT:</p>
-
-<p>[</p>
-
-<p>&#8220;u0030&#8243;-&#8220;u0039&#8243;,</p>
-
-<p>&#8220;u0660&#8243;-&#8220;u0669&#8243;,</p>
-
-<p>&#8220;u06f0&#8243;-&#8220;u06f9&#8243;,</p>
-
-<p>&#8220;u0966&#8243;-&#8220;u096f&#8221;,</p>
-
-<p>&#8220;u09e6&#8243;-&#8220;u09ef&#8221;,</p>
-
-<p>&#8220;u0a66&#8243;-&#8220;u0a6f&#8221;,</p>
-
-<p>&#8220;u0ae6&#8243;-&#8220;u0aef&#8221;,</p>
-
-<p>&#8220;u0b66&#8243;-&#8220;u0b6f&#8221;,</p>
-
-<p>&#8220;u0be7&#8243;-&#8220;u0bef&#8221;,</p>
-
-<p>&#8220;u0c66&#8243;-&#8220;u0c6f&#8221;,</p>
-
-<p>&#8220;u0ce6&#8243;-&#8220;u0cef&#8221;,</p>
-
-<p>&#8220;u0d66&#8243;-&#8220;u0d6f&#8221;,</p>
-
-<p>&#8220;u0e50&#8243;-&#8220;u0e59&#8243;,</p>
-
-<p>&#8220;u0ed0&#8243;-&#8220;u0ed9&#8243;,</p>
-
-<p>&#8220;u1040&#8243;-&#8220;u1049&#8243;</p>
-
-<p>]</p>
-
-<blockquote>
-</blockquote>
-
-<p>}</p>
-
-<p>SKIP :</p>
-
-<p>{</p>
-
-<p>&lt; &#8221; &#8221; &gt;</p>
-
-<p>| &lt; &#8220;t&#8221; &gt;</p>
-
-<p>| &lt; &#8220;n&#8221; &gt;</p>
-
-<p>| &lt; &#8220;r&#8221; &gt;</p>
-
-<p>| &lt; &#8220;//&#8221; (~[&#8220;n&#8221;])* &#8220;n&#8221; &gt;</p>
-
-<p>| &lt;&#8220;/*&#8221; (~[&#8220;*&#8221;])* &#8220;*&#8221; (~[&#8220;/&#8221;] (~[&#8220;*&#8221;])* &#8220;*&#8221;)* &#8220;/&#8221;&gt;</p>
-
-<p>}</p>
-
-<p>// The following is a simple grammar that will allow you</p>
-
-<p>// to test the generated lexer.</p>
-
-<p>void Program() :</p>
-
-<p>{}</p>
-
-<p>{</p>
-
-<p>MainClass() (ClassDecl())*</p>
-
-<p>}</p>
-
-<p>void MainClass() :</p>
-
-<p>{}</p>
-
-<p>{</p>
-
-<p>&#8220;class&#8221; <IDENTIFIER> &#8220;{&#8221; &#8220;public&#8221; &#8220;static&#8221; &#8220;void&#8221; &#8220;main&#8221; &#8220;(&#8221; &#8220;String&#8221; &#8220;[&#8221; &#8220;]&#8221; <IDENTIFIER> &#8220;{&#8221; Statement() &#8220;}&#8221; &#8220;}&#8221;</p>
-
-<p>}</p>
-
-<p>void ext() :</p>
-
-<p>{}</p>
-
-<p>{</p>
-
-<p>(&#8220;extends&#8221;  <IDENTIFIER> )?</p>
-
-<p>}</p>
-
-<p>void ClassDecl() :</p>
-
-<p>{}</p>
-
-<p>{</p>
-
-<p>&#8220;class&#8221; <IDENTIFIER> ext()  &#8220;{&#8221; (VarDecl())* (MethodDecl())* &#8220;}&#8221;</p>
-
-<p>}</p>
-
-<p>void VarDecl():</p>
-
-<p>{}</p>
-
-<p>{ Type() <IDENTIFIER> &#8220;;&#8221;}</p>
-
-<p>void MethodDecl():</p>
-
-<p>{}</p>
-
-<p>{&#8220;public&#8221; Type() <IDENTIFIER></p>
-
-<p>&#8220;(&#8221; FormaList() &#8220;)&#8221;</p>
-
-<p>&#8220;{&#8221; ( LOOKAHEAD(2) VarDecl() )* (Statement())*  &#8220;return&#8221; Exp() &#8220;;&#8221; &#8220;}&#8221;</p>
-
-<p>}</p>
-
-<p>&nbsp;</p>
-
-<p>void FormaList():</p>
-
-<p>{}</p>
-
-<p>{(Type()  <IDENTIFIER> &#8220;FormalRest()&#8221;)?}</p>
-
-<p>void FormaRest():</p>
-
-<p>{}</p>
-
-<p>{&#8220;,&#8221; Type() <IDENTIFIER>}</p>
-
-<p>void Type():</p>
-
-<p>{}</p>
-
-<p>{<IDENTIFIER></p>
-
-<p>|&#8221;boolean&#8221;</p>
-
-<p>|LOOKAHEAD(2)</p>
-
-<p>&#8220;int&#8221;</p>
-
-<p>|&#8221;int&#8221; &#8220;[&#8221; &#8220;]&#8221;</p>
-
-<p>}</p>
-
-<p>void Statement():</p>
-
-<p>{}</p>
-
-<p>{&#8220;{&#8221; (Statement())* &#8220;}&#8221;</p>
-
-<p>|&#8221;while&#8221; &#8220;(&#8221; Exp() &#8220;)&#8221; Statement()</p>
-
-<p>|&#8221;System.out.println&#8221;  &#8220;(&#8221; Exp() &#8220;)&#8221;</p>
-
-<p>|<IDENTIFIER> instat1() &#8220;=&#8221; Exp() &#8220;;&#8221;</p>
-
-<p>|&#8221;if&#8221; &#8220;(&#8221; Exp() &#8220;)&#8221; Statement() inif()</p>
-
-<p>}</p>
-
-<p>void inif():</p>
-
-<p>{}</p>
-
-<p>{(LOOKAHEAD(2) &#8220;else&#8221; Statement())?}</p>
-
-<p>void instat1():</p>
-
-<p>{}</p>
-
-<p>{(&#8220;[&#8221; Exp() &#8220;]&#8221;)?}</p>
-
-<p>void Exp():</p>
-
-<p>{}</p>
-
-<p>{Expa() (LOOKAHEAD(2) (Expb()))?</p>
-
-<p>}</p>
-
-<p>void Expa():</p>
-
-<p>{}</p>
-
-<p>{&#8220;true&#8221;</p>
-
-<p>|&#8221;false&#8221;</p>
-
-<p>|<IDENTIFIER></p>
-
-<p>|&#8221;this&#8221;</p>
-
-<p>|&#8221;!&#8221; Exp()</p>
-
-<p>|&#8221;(&#8221; Exp() &#8220;)&#8221;</p>
-
-<p>|LOOKAHEAD(2)</p>
-
-<p>&#8220;new&#8221; &#8220;int&#8221; &#8220;[&#8221; Exp() &#8220;]&#8221;</p>
-
-<p>|&#8221;new&#8221; <IDENTIFIER> &#8220;(&#8221; &#8220;)&#8221;</p>
-
-<p>}</p>
-
-<p>void Expb():</p>
-
-<p>{}</p>
-
-<p>{</p>
-
-<p>op() Exp()</p>
-
-<p>|&#8221;[&#8221; Exp() &#8220;]&#8221;Exp()</p>
-
-<p>|LOOKAHEAD(2)</p>
-
-<p>&#8220;.&#8221; &#8220;length&#8221;</p>
-
-<p>|&#8221;.&#8221; <IDENTIFIER></p>
-
-<p>}</p>
-
-<p>void op():</p>
-
-<p>{}</p>
-
-<p>{&#8220;&amp;&amp;&#8221;</p>
-
-<p>|&#8221;&lt;&#8221;</p>
-
-<p>|&#8221;+&#8221;</p>
-
-<p>|&#8221;-&#8221;</p>
-
-<p>|&#8221;*&#8221;}</p>
-
-<p>&nbsp;</p>
-
-<p>void ExpList():</p>
-
-<p>{}</p>
-
-<p>{(Exp()  (ExpRest())*)?}</p>
-
-<p>void ExpRest():</p>
-
-<p>{}</p>
-
-<p>{&#8220;,&#8221; Exp()}</p>
-
-<p>void Goal() :</p>
-
-<p>{}</p>
-
-<p>{</p>
-
-<p>( MiniJavaToken() )*</p>
-
-<p><EOF></p>
-
-<p>}</p>
-
-<p>void MiniJavaToken():</p>
-
-<p>{}</p>
-
-<p>{</p>
-
-<p>&#8220;class&#8221;  |  <IDENTIFIER> | &#8220;{&#8221; | &#8220;public&#8221; | &#8220;static&#8221; | &#8220;void&#8221; |</p>
-
-<p>&#8220;main&#8221; | &#8220;(&#8221; | &#8220;String&#8221;  | &#8220;[&#8221; | &#8220;]&#8221; | &#8220;)&#8221; | &#8220;}&#8221; | &#8220;extends&#8221; | &#8220;;&#8221;</p>
-
-<p>| &#8220;return&#8221; | &#8220;,&#8221; | &#8220;int&#8221; | &#8220;boolean&#8221; | &#8220;=&#8221; | &#8220;if&#8221; | &#8220;else&#8221; | &#8220;while&#8221;</p>
-
-<p>| &#8220;System.out.println&#8221; | &#8220;&amp;&amp;&#8221; | &#8220;&lt;&#8221; | &#8220;+&#8221; | &#8220;-&#8221; | &#8220;*&#8221; | &#8220;.&#8221; |</p>
-
-<p>&#8220;length&#8221; | <INTEGER_LITERAL> | &#8220;true&#8221; | &#8220;false&#8221; | &#8220;this&#8221; | &#8220;new&#8221; |</p>
-
-<p>&#8220;!&#8221;</p>
-
-<p>}</p>
-
-<p>&nbsp;</p>
+  <p>文件：</p>
+
+<pre><code>options {
+    JAVA_UNICODE_ESCAPE = true;
+}
+PARSER_BEGIN(MiniJavaParser)
+public class MiniJavaParser {}
+PARSER_END(MiniJavaParser)
+// Insert a specification of a lexical analysis here.
+TOKEN :
+{
+    &lt; LPAREN: “(” &gt;
+        | &lt; RPAREN: “)” &gt;
+        | &lt; LSQPAREN: “[” &gt;
+        | &lt; RSQPAREN: “]” &gt;
+        | &lt; LBRACE: “{” &gt;
+        | &lt; RBRACE: “}” &gt;
+        | &lt; DOT: “.” &gt;
+        | &lt; ASSIGN: “=” &gt;
+        | &lt; LT: “&lt;” &gt;
+        | &lt; PLUS: “+” &gt;
+        | &lt; MINUS: “-” &gt;
+        | &lt; AND : “&amp;&amp;” &gt;
+        | &lt; NOT : “!” &gt;
+        | &lt; SEMICOLON: “;” &gt;
+        | &lt; PUBLIC: “public” &gt;
+        | &lt; RETURN: “return” &gt;
+        | &lt; BOOLEAN: “boolean” &gt;
+        | &lt; CLASS: “class” &gt;
+        | &lt; INTERFACE: “interface” &gt;
+        | &lt; ELSE: “else” &gt;
+        | &lt; EXTENDS: “extends” &gt;
+        | &lt; FALSE: “false” &gt;
+        | &lt; IF: “if” &gt;
+        | &lt; WHILE: “while” &gt;
+        | &lt; INTEGER: “int” &gt;
+        | &lt; LENGTH: “length” &gt;
+        | &lt; MAIN: “main” &gt;
+        | &lt; NEW: “new” &gt;
+        | &lt; STATIC: “static” &gt;
+        | &lt; STRING: “String” &gt;
+        | &lt; THIS: “this” &gt;
+        | &lt; TRUE: “true” &gt;
+        | &lt; PRINT: “System.out.println” &gt;
+        | &lt; VOID: “void” &gt;
+    }
+    TOKEN : /* LITERALS */
+    {
+        &lt; INTEGER_LITERAL: ( [“1″-“9″] ([“0″-“9″])* | “0” ) &gt;
+    }
+    TOKEN : /* IDENTIFIERS */
+    {
+        &lt; IDENTIFIER: (|)* &gt;
+        |
+        &lt; #LETTER:
+        [
+        “u0024″,
+        “u0041″-“u005a”,
+        “u005f”,
+        “u0061″-“u007a”,
+        “u00c0″-“u00d6″,
+        “u00d8″-“u00f6″,
+        “u00f8″-“u00ff”,
+        “u0100″-“u1fff”,
+        “u3040″-“u318f”,
+        “u3300″-“u337f”,
+        “u3400″-“u3d2d”,
+        “u4e00″-“u9fff”,
+        “uf900″-“ufaff”
+        ]
+        |
+        &lt; #DIGIT:
+        [
+        “u0030″-“u0039″,
+        “u0660″-“u0669″,
+        “u06f0″-“u06f9″,
+        “u0966″-“u096f”,
+        “u09e6″-“u09ef”,
+        “u0a66″-“u0a6f”,
+        “u0ae6″-“u0aef”,
+        “u0b66″-“u0b6f”,
+        “u0be7″-“u0bef”,
+        “u0c66″-“u0c6f”,
+        “u0ce6″-“u0cef”,
+        “u0d66″-“u0d6f”,
+        “u0e50″-“u0e59″,
+        “u0ed0″-“u0ed9″,
+        “u1040″-“u1049″
+        ]
+    }
+    SKIP :
+    {
+        &lt; ” ” &gt;
+        | &lt; “t” &gt;
+        | &lt; “n” &gt;
+        | &lt; “r” &gt;
+        | &lt; “//” (~[“n”])* “n” &gt;
+        | &lt;“/*” (~[“*”])* “*” (~[“/”] (~[“*”])* “*”)* “/”&gt;
+    }
+    // The following is a simple grammar that will allow you
+    // to test the generated lexer.
+    void Program() :
+    {}
+    {
+        MainClass() (ClassDecl())*
+    }
+    void MainClass() :
+    {}
+    {
+        “class” “{” “public” “static” “void” “main” “(” “String” “[” “]” “{” Statement() “}” “}”
+    }
+    void ext() :
+    {}
+    {
+        (“extends”  )?
+    }
+    void ClassDecl() :
+    {}
+    {
+        “class” ext()  “{” (VarDecl())* (MethodDecl())* “}”
+    }
+    void VarDecl():
+    {}
+    { Type() “;”}
+    void MethodDecl():
+    {}
+    {“public” Type()
+        “(” FormaList() “)”
+        “{” ( LOOKAHEAD(2) VarDecl() )* (Statement())*  “return” Exp() “;” “}”
+    }
+    void FormaList():
+    {}
+    {(Type()  “FormalRest()”)?}
+    void FormaRest():
+    {}
+    {“,” Type() }
+    void Type():
+    {}
+    {
+        |”boolean”
+        |LOOKAHEAD(2)
+        “int”
+        |”int” “[” “]”
+    }
+    void Statement():
+    {}
+    {“{” (Statement())* “}”
+    |”while” “(” Exp() “)” Statement()
+    |”System.out.println”  “(” Exp() “)”
+    | instat1() “=” Exp() “;”
+    |”if” “(” Exp() “)” Statement() inif()
+}
+void inif():
+{}
+{(LOOKAHEAD(2) “else” Statement())?}
+void instat1():
+{}
+{(“[” Exp() “]”)?}
+void Exp():
+{}
+{Expa() (LOOKAHEAD(2) (Expb()))?
+}
+void Expa():
+{}
+{“true”
+    |”false”
+    |
+    |”this”
+    |”!” Exp()
+    |”(” Exp() “)”
+    |LOOKAHEAD(2)
+    “new” “int” “[” Exp() “]”
+    |”new” “(” “)”
+}
+void Expb():
+{}
+{
+    op() Exp()
+    |”[” Exp() “]”Exp()
+    |LOOKAHEAD(2)
+    “.” “length”
+    |”.”
+}
+void op():
+{}
+{“&amp;&amp;”
+    |”&lt;”
+    |”+”
+    |”-”
+    |”*”}
+    void ExpList():
+    {}
+    {(Exp()  (ExpRest())*)?}
+    void ExpRest():
+    {}
+    {“,” Exp()}
+    void Goal() :
+    {}
+    {
+        ( MiniJavaToken() )*
+    }
+    void MiniJavaToken():
+    {}
+    {
+        “class”  |  | “{” | “public” | “static” | “void” |
+            “main” | “(” | “String”  | “[” | “]” | “)” | “}” | “extends” | “;”
+            | “return” | “,” | “int” | “boolean” | “=” | “if” | “else” | “while”
+            | “System.out.println” | “&amp;&amp;” | “&lt;” | “+” | “-” | “*” | “.” |
+            “length” | | “true” | “false” | “this” | “new” |
+            “!”
+    }
+</code></pre>
 
 </div>
 
@@ -637,13 +418,13 @@ vertical-align:middle}
   
 
     
-    <a class="prev" href="http://blog.sword865.com/archives/26/" title="KMP算法复杂度分析">
+    <a class="prev" href="http://blog.sword865.com/archives/26" title="KMP算法复杂度分析">
       Previous
     </a>
     
 
     
-    <a class="next" href="http://blog.sword865.com/archives/24/" title="有重复组合数">
+    <a class="next" href="http://blog.sword865.com/archives/24" title="有重复组合数">
       Next
     </a>
     

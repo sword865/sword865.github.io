@@ -2,43 +2,440 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>后台 on 悟剑阁</title>
-    <link>http://blog.sword865.com/categories/%E5%90%8E%E5%8F%B0/</link>
+    <link>http://blog.sword865.com/categories/%E5%90%8E%E5%8F%B0/index.xml</link>
     <description>Recent content in 后台 on 悟剑阁</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <managingEditor>sword865@163.com (罗刹剑客)</managingEditor>
     <webMaster>sword865@163.com (罗刹剑客)</webMaster>
     <copyright>Copyright (c) 2015. All rights reserved.</copyright>
-    <lastBuildDate>Mon, 27 Jul 2015 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="http://blog.sword865.com/categories/%E5%90%8E%E5%8F%B0/index.xml" rel="self" type="application/rss+xml" />
-    
+    <atom:link href="http://blog.sword865.com/categories/%E5%90%8E%E5%8F%B0/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Elasticsearch-HttpServerModule</title>
-      <link>http://blog.sword865.com/archives/150/</link>
+      <link>http://blog.sword865.com/archives/150</link>
       <pubDate>Mon, 27 Jul 2015 00:00:00 +0000</pubDate>
       <author>sword865@163.com (罗刹剑客)</author>
-      <guid>http://blog.sword865.com/archives/150/</guid>
-      <description>HttpServerModule的请求主要由HttpServer中的HttpServerTransport(默认为NettyHttpServ</description>
+      <guid>http://blog.sword865.com/archives/150</guid>
+      <description>&lt;p&gt;HttpServerModule的请求主要由HttpServer中的HttpServerTransport(默认为NettyHttpServerTransport）类处理。&lt;/p&gt;
+
+&lt;p&gt;NettyHttpServerTransport基于netty框架，负责监听并建立连接，信息的处理由内部类HttpChannelPipelineFactory完成。&lt;/p&gt;
+
+&lt;p&gt;每当产生一个连接时，都会发出一个ChannelEvent，该Event由一系列的ChannelHandler进行处理。&lt;/p&gt;
+
+&lt;p&gt;为了方便组织，这些ChannelHandler被放在一条“流(pipeline)”里，一个ChannelEvent并不会主动的&amp;#8221;流&amp;#8221;经所有的Handler，而是由上一个Handler显式的调用ChannelPipeline.sendUp(Down)stream产生，并交给下一个Handler处理。&lt;/p&gt;
+
+&lt;p&gt;换句话说，每个Handler接收到一个ChannelEvent，并处理结束后，如果需要继续处理，那么它需要调用sendUp(Down)stream新发起一个事件。如果它不再发起事件，那么处理就到此结束，即使它后面仍然有Handler没有执行。这个机制可以保证最大的灵活性，当然对Handler的先后顺序也有了更严格的要求。&lt;/p&gt;
+
+&lt;p&gt;在流Pipeline里有一个Map(name2ctx)和一个链表(记录head和tail)，pipeline里面会调度关联的多个channelhandler的运行。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://static.oschina.net/uploads/space/2013/1109/075339_Kjw6_190591.png&#34;&gt;&lt;img src=&#34;http://static.oschina.net/uploads/space/2013/1109/075339_Kjw6_190591.png&#34; alt=&#34;channel pipeline&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;在NettyHttpServerTransport中，会流过的channelhandler就包括解码http请求(把多个HttpChunk拼起来并按http协议进行解析)和http请求处理。&lt;/p&gt;
+
+&lt;p&gt;在处理http请求，数据流向为：HttpRequestHandler-&amp;gt;&lt;span class=&#34;s1&#34;&gt;NettyHttpServerTransport&lt;/span&gt;-&amp;gt;HttpServerAdapter(HttpServer的内部类Dispatche)-&amp;gt;RestController。&lt;/p&gt;
+
+&lt;p&gt;RestController中的处理代码为：&lt;/p&gt;
+
+&lt;pre class=&#34;lang:java decode:true &#34;&gt;void executeHandler(RestRequest request, RestChannel channel) throws Exception {
+        final RestHandler handler = getHandler(request);
+        if (handler != null) {
+            handler.handleRequest(request, channel);
+        } else {
+            if (request.method() == RestRequest.Method.OPTIONS) {
+                // when we have OPTIONS request, simply send OK by default (with the Access Control Origin header which gets automatically added)
+                channel.sendResponse(new BytesRestResponse(OK));
+            } else {
+                channel.sendResponse(new BytesRestResponse(BAD_REQUEST, &#34;No handler found for uri [&#34; + request.uri() + &#34;] and method [&#34; + request.method() + &#34;]&#34;));
+            }
+        }
+    }
+
+    private RestHandler getHandler(RestRequest request) {
+        String path = getPath(request);
+        RestRequest.Method method = request.method();
+        if (method == RestRequest.Method.GET) {
+            return getHandlers.retrieve(path, request.params());
+        } else if (method == RestRequest.Method.POST) {
+            return postHandlers.retrieve(path, request.params());
+        } else if (method == RestRequest.Method.PUT) {
+            return putHandlers.retrieve(path, request.params());
+        } else if (method == RestRequest.Method.DELETE) {
+            return deleteHandlers.retrieve(path, request.params());
+        } else if (method == RestRequest.Method.HEAD) {
+            return headHandlers.retrieve(path, request.params());
+        } else if (method == RestRequest.Method.OPTIONS) {
+            return optionsHandlers.retrieve(path, request.params());
+        } else {
+            return null;
+        }
+    }&lt;/pre&gt;
+
+&lt;p&gt;可以看到，这里会根据注册的handler，选择合适的处理逻辑。&lt;/p&gt;
+
+&lt;p&gt;这些handler由函数registerHandler进行注册，函数签名如下：&lt;/p&gt;
+
+&lt;p class=&#34;p1&#34;&gt;
+  &lt;span class=&#34;s1&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;void&lt;/span&gt; registerHandler(RestRequest.Method &lt;span class=&#34;s2&#34;&gt;method&lt;/span&gt;, String &lt;span class=&#34;s2&#34;&gt;path&lt;/span&gt;, RestHandler &lt;span class=&#34;s3&#34;&gt;handler&lt;/span&gt;)
+&lt;/p&gt;
+
+&lt;p class=&#34;p1&#34;&gt;
+  比如对RestGetIndicesAction类，有如下构造函数：
+&lt;/p&gt;
+
+&lt;pre class=&#34;lang:java decode:true&#34;&gt;public RestGetIndicesAction(Settings settings, RestController controller, Client client) {
+        super(settings, controller, client);
+        controller.registerHandler(GET, &#34;/{index}&#34;, this);
+        controller.registerHandler(GET, &#34;/{index}/{type}&#34;, this);
+    }&lt;/pre&gt;
+
+&lt;p&gt;netty参考：&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://my.oschina.net/flashsword/blog/162936&#34;&gt;http://my.oschina.net/flashsword/blog/162936&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://my.oschina.net/flashsword/blog/164237&#34;&gt;http://my.oschina.net/flashsword/blog/164237&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://my.oschina.net/flashsword/blog/169361&#34;&gt;http://my.oschina.net/flashsword/blog/169361&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://my.oschina.net/flashsword/blog/178561&#34;&gt;http://my.oschina.net/flashsword/blog/178561&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://my.oschina.net/flashsword/blog/197963&#34;&gt;http://my.oschina.net/flashsword/blog/197963&lt;/a&gt;&lt;/p&gt;
+</description>
     </item>
     
     <item>
       <title>Tornado框架简析</title>
-      <link>http://blog.sword865.com/archives/100/</link>
+      <link>http://blog.sword865.com/archives/100</link>
       <pubDate>Thu, 05 Feb 2015 00:00:00 +0000</pubDate>
       <author>sword865@163.com (罗刹剑客)</author>
-      <guid>http://blog.sword865.com/archives/100/</guid>
-      <description>Tornado是一款轻量级的Web服务器，同时又是一个开发框架。采用单线程非阻塞I/O模型(epoll)，主要是为了应对高并发 访问量而被开发</description>
+      <guid>http://blog.sword865.com/archives/100</guid>
+      <description>&lt;p&gt;Tornado是一款轻量级的Web服务器，同时又是一个开发框架。采用单线程非阻塞I/O模型(epoll)，主要是为了应对高并发 访问量而被开发出来，尤其适用于comet应用。&lt;/p&gt;
+
+&lt;p&gt;Tornado服务器3大核心模块:&lt;/p&gt;
+
+&lt;p&gt;(1) IOLoop&lt;/p&gt;
+
+&lt;p&gt;Tornado为了实现高并发和高性能，使用了一个IOLoop来处理socket的读写事件，IOLoop基于epoll，可以高效的响应网络事件。这是Tornado高效的保证。&lt;/p&gt;
+
+&lt;p&gt;tornado.ioloop.IOLoop.instance().start()&lt;/p&gt;
+
+&lt;p&gt;IOLoop使用了单例模式，处理所有IO事件，&lt;/p&gt;
+
+&lt;p&gt;实现为EPollIOLoop-&amp;gt;PollIOLoop-&amp;gt;IOLoop-&amp;gt;Configurable&lt;/p&gt;
+
+&lt;p&gt;IOLoop中有四个重要的数据集： _events 和 _handlers 保存I/O事件和对应的处理器， _callbacks 和 _timeouts 保存（超时）回调。&lt;/p&gt;
+
+&lt;p&gt;关键函数：&lt;/p&gt;
+
+&lt;pre class=&#34;lang:python decode:true &#34;&gt;def initialize(self, impl, time_func=None):
+    super(PollIOLoop, self).initialize()
+    self._impl = impl
+    if hasattr(self._impl, &#39;fileno&#39;):
+        set_close_exec(self._impl.fileno())
+    self.time_func = time_func or time.time
+    #handlers 是一个函数集字典
+    self._handlers = {}
+    self._events = {}
+    #回调函数集合
+    self._callbacks = []
+    self._callback_lock = threading.Lock()
+    self._timeouts = []
+    self._cancellations = 0
+    self._running = False
+    self._stopped = False
+    self._closing = False
+    self._thread_ident = None
+    self._blocking_signal_threshold = None
+    self._timeout_counter = itertools.count()
+
+    # Create a pipe that we send bogus data to when we want to wake
+    # the I/O loop when it is idle
+    self._waker = Waker()
+    self.add_handler(self._waker.fileno(),
+                     lambda fd, events: self._waker.consume(),
+                     self.READ)&lt;/pre&gt;
+
+&lt;p&gt;其中，waker是一个发伪数据用的类，在需要时，我们可以用它唤醒空闲的I/O Loop。当我们调用add_callback时，为了让回调函数运行，可能会需要使用它发送一个伪数据。&lt;/p&gt;
+
+&lt;pre class=&#34;lang:python decode:true&#34;&gt;#将文件描述符发生相应的事件时的回调函数对应
+def add_handler(self, fd, handler, events):
+    &#34;&#34;&#34;Registers the given handler to receive the given events for fd.&#34;&#34;&#34;
+    self._handlers[fd] = stack_context.wrap(handler)
+    #在 epoll 中注册对应事件
+    #epoll_ctl
+    self._impl.register(fd, events | self.ERROR)
+&lt;/pre&gt;
+
+&lt;p&gt;其中stack_context.wrap()对handler进行封装，封装后记录了上下文信息。而_impl是对epoll的封装。&lt;/p&gt;
+
+&lt;p&gt;所以，只要把所有事件在IOLoop中进行注册，运行start函数后，就会进入进程的监听循环，循环监听所有的fd，并调用fd对应的handler。循环过程参考start()函数。&lt;/p&gt;
+
+&lt;pre class=&#34;lang:python decode:true&#34;&gt;def start(self):
+    while True:
+        with self._callback_lock:
+            callbacks = self._callbacks
+            self._callbacks = []
+        #运行所有callback
+        for callback in callbacks:
+            self._run_callback(callback)
+        #取事件
+        event_pairs = self._impl.poll(poll_timeout)
+        self._events.update(event_pairs)
+        while self._events:
+            fd, events = self._events.popitem()
+            try:
+                #调用事件handler
+                fd_obj, handler_func = self._handlers[fd]
+                handler_func(fd_obj, events)
+            except (OSError, IOError) as e:
+                if errno_from_exception(e) == errno.EPIPE:
+                    # Happens when the client closes the connection
+                    pass
+                else:
+                    self.handle_callback_exception(self._handlers.get(fd))
+            except Exception:
+                self.handle_callback_exception(self._handlers.get(fd))
+&lt;/pre&gt;
+
+&lt;p&gt;当poll中发现fp有read事件时，会调用对应的callback方法。如果fd是监听的fd，那么这个回调handler就是accept_handler函数(见下面HttpConnection的bind和add_scokets函数)。该方法会Accept连接并且紧跟着创建IOStream对象，read_until方法读完数据后，则调用_run_callback把处理函数（self._header_callback）加到IOLoop中，等到下次轮询时在最前面处理。&lt;/p&gt;
+
+&lt;p&gt;(2) IOStream&lt;/p&gt;
+
+&lt;p&gt;为了在处理请求的时候，实现对socket的异步读写， Tornado实现了IOStream类，用来处理socket的异步读写，负责异步通讯。&lt;/p&gt;
+
+&lt;p&gt;主要包括3个函数，&lt;/p&gt;
+
+&lt;p&gt;1.read_bytes(bytes,callback)在有固定的字节的数据到来的时候调用回调函数&lt;/p&gt;
+
+&lt;p&gt;2.read_until(delimiter,callback)在读取到固定的字符序列结尾后调用回调函数&lt;/p&gt;
+
+&lt;p&gt;3.write(data)：异步写&lt;/p&gt;
+
+&lt;p&gt;(3) HTTPConnection&lt;/p&gt;
+
+&lt;p&gt;这个类用来处理http的请求， 包括读取http请求头， 读取post过来的数据，调用用户自定义的处理方法。以及把响应数据写给客户端socket。&lt;/p&gt;
+
+&lt;pre class=&#34;lang:python decode:true&#34;&gt;def bind(self, port, address=None, family=socket.AF_UNSPEC, backlog=128): 
+    sockets = bind_sockets(port, address=address, family=family,backlog=backlog)
+        if self._started:
+            self.add_sockets(sockets)
+        else:
+            self._pending_sockets.extend(sockets)
+def add_sockets(self, sockets):
+    if self.io_loop is None:
+        self.io_loop = IOLoop.current()
+    for sock in sockets:
+        self._sockets[sock.fileno()] = sock
+        add_accept_handler(sock, self._handle_connection,io_loop=self.io_loop)
+&lt;/pre&gt;
+
+&lt;p&gt;socket启动后，监听各个sockets，事件到来时，调用_handle_connection。&lt;/p&gt;
+
+&lt;pre class=&#34;lang:python decode:true &#34;&gt;def _handle_connection(self, connection, address):
+    if self.ssl_options is not None:
+        connection = ssl_wrap_socket(connection,self.ssl_options,
+                                     server_side=True,
+                                     do_handshake_on_connect=False)
+        if self.ssl_options is not None:
+            stream = SSLIOStream(connection, io_loop=self.io_loop,
+                                 max_buffer_size=self.max_buffer_size,
+                                 read_chunk_size=self.read_chunk_size)
+        else:
+            stream = IOStream(connection, io_loop=self.io_loop,
+                              max_buffer_size=self.max_buffer_size,
+                              read_chunk_size=self.read_chunk_size)
+        self.handle_stream(stream, address)
+def handle_stream(self, stream, address):
+    context = _HTTPRequestContext(stream, address,
+                                  self.protocol)
+    conn = HTTP1ServerConnection(
+        stream, self.conn_params, context)
+    self._connections.add(conn)
+    conn.start_serving(self)
+def start_serving(self, delegate):
+    assert isinstance(delegate, httputil.HTTPServerConnectionDelegate)
+    self._serving_future = self._server_request_loop(delegate)
+    # Register the future on the IOLoop so its errors get logged.
+    self.stream.io_loop.add_future(self._serving_future,
+                                   lambda f: f.result())
+&lt;/pre&gt;
+
+&lt;p&gt;如前面所述，这里Accept连接并且紧跟着创建IOStream对象(不考虑https)，调用handle_stream-&amp;gt;start_serving-&amp;gt;_server_request_loop处理请求。最后会调用_read_message读取数据，并注册回调函数。&lt;/p&gt;
+
+&lt;p&gt;最后抄一张图过来：&lt;/p&gt;
+
+&lt;p&gt;&lt;img class=&#34;alignnone wp-image-108 size-large&#34; src=&#34;http://blog.sword865.com/wp-content/uploads/2015/02/QQ20150205-1@2x-1024x593.png&#34; alt=&#34;QQ20150205-1@2x&#34; width=&#34;615&#34; height=&#34;356&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;参考：&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.cnblogs.com/Bozh/archive/2012/07/22/2603976.html&#34;&gt;http://www.cnblogs.com/Bozh/archive/2012/07/22/2603976.html&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://kenby.iteye.com/blog/1159621&#34;&gt;http://kenby.iteye.com/blog/1159621&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.nowamagic.net/academy/detail/13321030&#34;&gt;http://www.nowamagic.net/academy/detail/13321030&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.yeolar.com/note/2013/02/09/tornado-async-networking/&#34;&gt;http://www.yeolar.com/note/2013/02/09/tornado-async-networking/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;源码：&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/tornadoweb/tornado&#34;&gt;https://github.com/tornadoweb/tornado&lt;/a&gt;&lt;/p&gt;
+
+&lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
+  &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
+&lt;/p&gt;
+</description>
     </item>
     
     <item>
       <title>Lucene索引文件学习</title>
-      <link>http://blog.sword865.com/archives/86/</link>
+      <link>http://blog.sword865.com/archives/86</link>
       <pubDate>Wed, 04 Feb 2015 00:00:00 +0000</pubDate>
       <author>sword865@163.com (罗刹剑客)</author>
-      <guid>http://blog.sword865.com/archives/86/</guid>
-      <description>最近在做搜索，抽空看一下lucene，资料挺多的，不过大部分都是3.x了……在对着官方文档大概看一下。 优化后的lucene索引文件(4.9.</description>
+      <guid>http://blog.sword865.com/archives/86</guid>
+      <description>&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt; 最近在做搜索，抽空看一下lucene，资料挺多的，不过大部分都是3.x了……在对着官方文档大概看一下。&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;优化后的lucene索引文件(4.9.0)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;&lt;img title=&#34;NewImage.png&#34; src=&#34;http://blog.sword865.com/wp-content/uploads/2015/02/NewImage.png&#34; alt=&#34;NewImage&#34; width=&#34;200&#34; height=&#34;146&#34; border=&#34;0&#34; /&gt;&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;一、段文件&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;1.段文件：segments_5p和segments.gen。&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;segments.gen保存当前段文件版本信息。&lt;/span&gt;&lt;/p&gt;
+
+&lt;ul style=&#34;color: #353833; font-family: Arial, Helvetica, sans-serif; font-size: 12px;&#34;&gt;
+  &lt;li&gt;
+    &lt;span style=&#34;font-size: 12px;&#34;&gt;&lt;tt style=&#34;font-size: 1.2em;&#34;&gt;segments.gen&lt;/tt&gt;: GenHeader, Generation, Generation, Footer&lt;/span&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;segments_N（segments_5p）保存最新的段的信息，包括段的个数，每个段的段名、文档数等信息。&lt;/span&gt;&lt;/p&gt;
+
+&lt;ul style=&#34;font-size: 12px; color: #353833; font-family: Arial, Helvetica, sans-serif;&#34;&gt;
+  &lt;li&gt;
+    &lt;span style=&#34;font-size: 12px;&#34;&gt;&lt;tt style=&#34;font-size: 1.2em;&#34;&gt;segments_N&lt;/tt&gt;: Header, Version, NameCounter, SegCount, &lt;SegName, SegCodec, DelGen, DeletionCount, FieldInfosGen, DocValuesGen, UpdatesFiles&gt;&lt;sup style=&#34;font-size: 0.6em;&#34;&gt;SegCount&lt;/sup&gt;, CommitUserData, Footer&lt;/span&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;  源码参考：SegmentInfos.read(Directory directory, String segmentFileName):&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;2.段信息：*.si，存储段的基本信息。&lt;/span&gt;&lt;/p&gt;
+
+&lt;ul style=&#34;color: #353833; font-family: Arial, Helvetica, sans-serif; font-size: 12px;&#34;&gt;
+  &lt;li&gt;
+    &lt;span style=&#34;font-size: 12px;&#34;&gt;&lt;tt style=&#34;font-size: 1.2em;&#34;&gt;.si&lt;/tt&gt;: Header, SegVersion, SegSize, IsCompoundFile, Diagnostics, Attributes, Files&lt;/span&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;       只对4.0-4.5使用，新版已经抛弃了，可以无视。  &lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;二、域文件&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;1.域(field)：*.fnm ，存储域的信息。&lt;/span&gt;&lt;/p&gt;
+
+&lt;ul style=&#34;font-size: 12px; color: #353833; font-family: Arial, Helvetica, sans-serif;&#34;&gt;
+  &lt;li&gt;
+    &lt;span style=&#34;font-size: 12px;&#34;&gt;FieldInfos (.fnm) &amp;#8211;&gt; Header,FieldsCount, &lt;FieldName,FieldNumber, FieldBits,DocValuesBits,DocValuesGen,Attributes&gt; &lt;sup style=&#34;font-size: 0.6em; color: #353833; font-family: Arial, Helvetica, sans-serif;&#34;&gt;FieldsCount&lt;/sup&gt;,Footer&lt;/span&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div&gt;
+  &lt;p style=&#34;margin: 0px; font-size: 11px; font-family: Monaco;&#34;&gt;
+    &lt;span style=&#34;font-size: 12px;&#34;&gt;  源码参考：org.apache.lucene.codecs.lucene46.Lucene46FieldInfosFormat&lt;/span&gt;
+  &lt;/p&gt;
+  
+  &lt;p style=&#34;margin: 0px; font-size: 11px; font-family: Monaco;&#34;&gt;
+    &lt;span style=&#34;font-size: 12px;&#34;&gt;2.域(field)索引：*.fdx，存储到域数据的指针。&lt;/span&gt;
+  &lt;/p&gt;
+&lt;/div&gt;
+
+&lt;ul style=&#34;color: #353833; font-family: Arial, Helvetica, sans-serif; font-size: 12px;&#34;&gt;
+  &lt;li&gt;
+    &lt;span style=&#34;font-size: 12px;&#34;&gt;FieldsIndex (.fdx) &amp;#8211;&gt; &lt;Header&gt;, &lt;ChunkIndex&gt;&lt;/span&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;   源码参考：org.apache.lucene.codecs.lucene41.Lucene41StoredFieldsFormat&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;3.域(field)数据：*.fdt，存储文档的域，话说这个结构比较复杂，简单列一下。&lt;/span&gt;&lt;/p&gt;
+
+&lt;ul style=&#34;font-size: 12px; color: #353833; font-family: Arial, Helvetica, sans-serif;&#34;&gt;
+  &lt;li&gt;
+    &lt;span style=&#34;font-size: 12px;&#34;&gt;FieldData (.fdt) &amp;#8211;&gt; &lt;Header&gt;, PackedIntsVersion, &lt;Chunk&gt;&lt;sup style=&#34;font-size: 0.6em;&#34;&gt;ChunkCount&lt;/sup&gt;&lt;/span&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;span style=&#34;font-size: 12px;&#34;&gt;ChunkCount is not known in advance and is the number of chunks necessary to store all document of the segment&lt;/span&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;span style=&#34;font-size: 12px;&#34;&gt;Chunk &amp;#8211;&gt; DocBase, ChunkDocs, DocFieldCounts, DocLengths, &lt;CompressedDocs&gt;&lt;/span&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;  源码参考：org.apache.lucene.codecs.lucene41.Lucene41StoredFieldsFormat&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;三、字典文件&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;4.项(term)字典：*.tim，存储项的信息。&lt;/span&gt;&lt;/p&gt;
+
+&lt;ul style=&#34;color: #353833; font-family: Arial, Helvetica, sans-serif; font-size: 12px;&#34;&gt;
+  &lt;li&gt;
+    &lt;span style=&#34;font-size: 12px;&#34;&gt;TermsDict (.tim) &amp;#8211;&gt; Header, &lt;em&gt;PostingsHeader&lt;/em&gt;, NodeBlock&lt;sup style=&#34;font-size: 0.6em;&#34;&gt;NumBlocks&lt;/sup&gt;, FieldSummary, DirOffset, Footer&lt;/span&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;  源码参考：org.apache.lucene.codecs.lucene41.Lucene41PostingsFormat&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;5.项(term)索引：*.tip，到项字典的索引。&lt;/span&gt;&lt;/p&gt;
+
+&lt;ul style=&#34;color: #353833; font-family: Arial, Helvetica, sans-serif; font-size: 12px;&#34;&gt;
+  &lt;li&gt;
+    &lt;span style=&#34;font-size: 12px;&#34;&gt;TermsIndex (.tip) &amp;#8211;&gt; Header, FSTIndex&lt;sup style=&#34;font-size: 0.6em;&#34;&gt;NumFields&lt;/sup&gt; &lt;IndexStartFP&gt;&lt;sup style=&#34;font-size: 0.6em;&#34;&gt;NumFields&lt;/sup&gt;, DirOffset, Footer&lt;/span&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;  源码参考：org.apache.lucene.codecs.lucene41.Lucene41PostingsFormat &lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;四、其他文件 &lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;6.频率：*.doc，包括一个文档列表，列表中每一个项都有一个频数。&lt;/span&gt;&lt;/p&gt;
+
+&lt;ul style=&#34;color: #353833; font-family: Arial, Helvetica, sans-serif; font-size: 12px;&#34;&gt;
+  &lt;li&gt;
+    &lt;span style=&#34;font-size: 12px;&#34;&gt;docFile(.doc) &amp;#8211;&gt; Header, &lt;TermFreqs, SkipData?&gt;&lt;sup style=&#34;font-size: 0.6em;&#34;&gt;TermCount&lt;/sup&gt;, Footer&lt;/span&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;  源码参考：org.apache.lucene.codecs.lucene41.Lucene41PostingsFormat &lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;7.位置：*.pos，存储项在索引中出现的位置信息。&lt;/span&gt;&lt;/p&gt;
+
+&lt;ul style=&#34;color: #353833; font-family: Arial, Helvetica, sans-serif; font-size: 12px;&#34;&gt;
+  &lt;li&gt;
+    &lt;span style=&#34;font-size: 12px;&#34;&gt;PosFile(.pos) &amp;#8211;&gt; Header, &lt;TermPositions&gt; &lt;sup style=&#34;font-size: 0.6em;&#34;&gt;TermCount&lt;/sup&gt;, Footer&lt;/span&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;  源码参考：org.apache.lucene.codecs.lucene41.Lucene41PostingsFormat&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt; 8.norm文件：&lt;em&gt;.nvd，&lt;/em&gt;.nvm，编码文档和域的长度已经boost factors。&lt;/span&gt;&lt;/p&gt;
+
+&lt;ul style=&#34;font-size: 12px; color: #353833; font-family: Arial, Helvetica, sans-serif;&#34;&gt;
+  &lt;li&gt;
+    &lt;span style=&#34;font-size: 12px;&#34;&gt;Norms data (.nvd) &amp;#8211;&gt; Header,&lt;Uncompressed | TableCompressed | DeltaCompressed&gt;&lt;sup style=&#34;font-size: 0.6em; color: #353833; font-family: Arial, Helvetica, sans-serif;&#34;&gt;NumFields&lt;/sup&gt;,Footer&lt;/span&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;  源码参考：org.apache.lucene.codecs.lucene49.Lucene49NormsFormat&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt; 除此之外，还可能有一些其他文件，暂且不表。&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt; 参考：&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;&lt;a href=&#34;http://lucene.apache.org/core/4_9_0/core/org/apache/lucene/codecs/lucene49/package-summary.html#File_Naming&#34;&gt;http://lucene.apache.org/core/4_9_0/core/org/apache/lucene/codecs/lucene49/package-summary.html#File_Naming&lt;/a&gt;&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;&lt;a href=&#34;http://www.cnblogs.com/forfuture1978/category/300665.html&#34;&gt;http://www.cnblogs.com/forfuture1978/category/300665.html&lt;/a&gt;&lt;/span&gt;&lt;/p&gt;
+</description>
     </item>
     
   </channel>

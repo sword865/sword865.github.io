@@ -19,7 +19,7 @@
 
 <meta property="og:title" content="算法总结7—多维缩放  &middot; 悟剑阁 ">
 <meta property="og:site_name" content="悟剑阁"/>
-<meta property="og:url" content="http://blog.sword865.com/archives/15/" />
+<meta property="og:url" content="http://blog.sword865.com/archives/15" />
 <meta property="og:locale" content="zh-CN">
 
 
@@ -53,12 +53,12 @@
 
 
 
-<link rel="canonical" href="http://blog.sword865.com/archives/15/" />
+<link rel="canonical" href="http://blog.sword865.com/archives/15" />
 
 <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://blog.sword865.com/touch-icon-144-precomposed.png">
 <link href="http://blog.sword865.com/favicon.png" rel="icon">
 
-<meta name="generator" content="Hugo 0.23" />
+<meta name="generator" content="Hugo 0.19" />
 
   <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -215,7 +215,7 @@ vertical-align:middle}
 
 <p>伪码：</p>
 
-<pre class="lang:vim decode:true ">for m = 1 to 1000{
+<pre><code>for m = 1 to 1000{
   for i=1 to n
     for  j = 1 to n
       dij=sqrt((x[i] – x[j])^2+(y[i]-y[j])^2)
@@ -230,13 +230,14 @@ vertical-align:middle}
          grad[i][1]+=((y[i] - y[j]) / dij)* eij
          totale+=abs(eij)
        }
-  if (laste &lt; totale) break;
+  if (laste &amp;lt; totale) break;
   laste=totale
   for i=1 to n{
     x[i] -= rate * grad[i][x]
     y[i] - = rate* grad[i][y]
   }
-}</pre>
+}
+</code></pre>
 
 <p>&nbsp;</p>
 
@@ -252,13 +253,13 @@ vertical-align:middle}
   
 
     
-    <a class="prev" href="http://blog.sword865.com/archives/16/" title="算法总结5&amp;6—-k-最近邻与聚类">
+    <a class="prev" href="http://blog.sword865.com/archives/16" title="算法总结5&amp;6—-k-最近邻与聚类">
       Previous
     </a>
     
 
     
-    <a class="next" href="http://blog.sword865.com/archives/14/" title="算法总结8—非负矩阵因式分解">
+    <a class="next" href="http://blog.sword865.com/archives/14" title="算法总结8—非负矩阵因式分解">
       Next
     </a>
     

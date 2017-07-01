@@ -19,7 +19,7 @@
 
 <meta property="og:title" content="KMP算法复杂度分析  &middot; 悟剑阁 ">
 <meta property="og:site_name" content="悟剑阁"/>
-<meta property="og:url" content="http://blog.sword865.com/archives/26/" />
+<meta property="og:url" content="http://blog.sword865.com/archives/26" />
 <meta property="og:locale" content="zh-CN">
 
 
@@ -53,12 +53,12 @@
 
 
 
-<link rel="canonical" href="http://blog.sword865.com/archives/26/" />
+<link rel="canonical" href="http://blog.sword865.com/archives/26" />
 
 <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://blog.sword865.com/touch-icon-144-precomposed.png">
 <link href="http://blog.sword865.com/favicon.png" rel="icon">
 
-<meta name="generator" content="Hugo 0.23" />
+<meta name="generator" content="Hugo 0.19" />
 
   <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -197,12 +197,15 @@ vertical-align:middle}
   <div class="container content">
   <p>KMP算法也算接触很久了，今天却突然发现不知道那个的复杂度是怎么来的<br />
 于是想啊想，查啊查，总结如下<br />
-设代码为<br />
-s=0;<br />
-for(i=1;i&lt;=m,i++){<br />
-while(s&gt;0&amp;&amp;a[i]!=b[s+1])s=next(s)<br />
-if(a[i]==b[s+1])s++;<br />
-if(s==n) return (i-n)</p>
+设代码为</p>
+
+<pre><code>s=0;  
+for(i=1;i&lt;=m,i++){  
+    while(s&gt;0&amp;&amp;a[i]!=b[s+1])s=next(s)  
+    if(a[i]==b[s+1])s++;  
+    if(s==n) return (i-n)
+}
+</code></pre>
 
 <p>分析的关键是那个while循环循环会让s减少<br />
 而s又只会在第五行增加，于是j最多增加m次，<br />
@@ -210,8 +213,8 @@ if(s==n) return (i-n)</p>
 平摊到每个for上就是一次<br />
 所以复杂度就是O(m)了<br />
 不过也有书上说是O(m+n)<br />
-这个就不是很明白了&#8230;<br />
-想想在说&#8230;..</p>
+这个就不是很明白了&hellip;
+想想在说&hellip;</p>
 
 <div>
   <embed type="application/lingoes-npruntime-capture-word-plugin" width="0" height="0" id="lingoes_plugin_object" hidden="true" />
@@ -227,13 +230,13 @@ if(s==n) return (i-n)</p>
   
 
     
-    <a class="prev" href="http://blog.sword865.com/archives/27/" title="终于还是开了个blog。。。">
+    <a class="prev" href="http://blog.sword865.com/archives/27" title="终于还是开了个blog。。。">
       Previous
     </a>
     
 
     
-    <a class="next" href="http://blog.sword865.com/archives/25/" title="编译原理虎书java版本–Chapter 2-3">
+    <a class="next" href="http://blog.sword865.com/archives/25" title="编译原理虎书java版本–Chapter 2-3">
       Next
     </a>
     

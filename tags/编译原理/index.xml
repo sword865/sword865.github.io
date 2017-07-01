@@ -2,26 +2,25 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>编译原理 on 悟剑阁</title>
-    <link>http://blog.sword865.com/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/</link>
+    <link>http://blog.sword865.com/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/index.xml</link>
     <description>Recent content in 编译原理 on 悟剑阁</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <managingEditor>sword865@163.com (罗刹剑客)</managingEditor>
     <webMaster>sword865@163.com (罗刹剑客)</webMaster>
     <copyright>Copyright (c) 2015. All rights reserved.</copyright>
-    <lastBuildDate>Sat, 14 Mar 2009 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="http://blog.sword865.com/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/index.xml" rel="self" type="application/rss+xml" />
-    
+    <atom:link href="http://blog.sword865.com/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>编译原理虎书java版本–Chapter 2-3</title>
-      <link>http://blog.sword865.com/archives/25/</link>
+      <link>http://blog.sword865.com/archives/25</link>
       <pubDate>Sat, 14 Mar 2009 00:00:00 +0000</pubDate>
       <author>sword865@163.com (罗刹剑客)</author>
-      <guid>http://blog.sword865.com/archives/25/</guid>
-      <description>options {
-JAVA_UNICODE_ESCAPE = true;
+      <guid>http://blog.sword865.com/archives/25</guid>
+      <description>&lt;p&gt;文件：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;options {
+    JAVA_UNICODE_ESCAPE = true;
 }
 PARSER_BEGIN(MiniJavaParser)
 public class MiniJavaParser {}
@@ -29,62 +28,366 @@ PARSER_END(MiniJavaParser)
 // Insert a specification of a lexical analysis here.
 TOKEN :
 {
-&amp;lt; LPAREN: &amp;#8220;(&amp;#8221; &amp;gt;
-| &amp;lt; RPAREN: &amp;#8220;)&amp;#8221; &amp;gt;
-| &amp;lt; LSQPAREN: &amp;#8220;[&amp;#8221; &amp;gt;
-| &amp;lt; RSQPAREN: &amp;#8220;]&amp;#8221; &amp;gt;
-| &amp;lt; LBRACE: &amp;#8220;{&amp;#8221; &amp;gt;
-| &amp;lt; RBRACE: &amp;#8220;}&amp;#8221; &amp;gt;
-| &amp;lt; DOT: &amp;#8220;.&amp;#8221; &amp;gt;
-| &amp;lt; ASSIGN: &amp;#8220;=&amp;#8221; &amp;gt;
-| &amp;lt; LT: &amp;#8220;&amp;lt;&amp;#8221; &amp;gt;
-| &amp;lt; PLUS: &amp;#8220;+&amp;#8221; &amp;gt;</description>
+    &amp;lt; LPAREN: “(” &amp;gt;
+        | &amp;lt; RPAREN: “)” &amp;gt;
+        | &amp;lt; LSQPAREN: “[” &amp;gt;
+        | &amp;lt; RSQPAREN: “]” &amp;gt;
+        | &amp;lt; LBRACE: “{” &amp;gt;
+        | &amp;lt; RBRACE: “}” &amp;gt;
+        | &amp;lt; DOT: “.” &amp;gt;
+        | &amp;lt; ASSIGN: “=” &amp;gt;
+        | &amp;lt; LT: “&amp;lt;” &amp;gt;
+        | &amp;lt; PLUS: “+” &amp;gt;
+        | &amp;lt; MINUS: “-” &amp;gt;
+        | &amp;lt; AND : “&amp;amp;&amp;amp;” &amp;gt;
+        | &amp;lt; NOT : “!” &amp;gt;
+        | &amp;lt; SEMICOLON: “;” &amp;gt;
+        | &amp;lt; PUBLIC: “public” &amp;gt;
+        | &amp;lt; RETURN: “return” &amp;gt;
+        | &amp;lt; BOOLEAN: “boolean” &amp;gt;
+        | &amp;lt; CLASS: “class” &amp;gt;
+        | &amp;lt; INTERFACE: “interface” &amp;gt;
+        | &amp;lt; ELSE: “else” &amp;gt;
+        | &amp;lt; EXTENDS: “extends” &amp;gt;
+        | &amp;lt; FALSE: “false” &amp;gt;
+        | &amp;lt; IF: “if” &amp;gt;
+        | &amp;lt; WHILE: “while” &amp;gt;
+        | &amp;lt; INTEGER: “int” &amp;gt;
+        | &amp;lt; LENGTH: “length” &amp;gt;
+        | &amp;lt; MAIN: “main” &amp;gt;
+        | &amp;lt; NEW: “new” &amp;gt;
+        | &amp;lt; STATIC: “static” &amp;gt;
+        | &amp;lt; STRING: “String” &amp;gt;
+        | &amp;lt; THIS: “this” &amp;gt;
+        | &amp;lt; TRUE: “true” &amp;gt;
+        | &amp;lt; PRINT: “System.out.println” &amp;gt;
+        | &amp;lt; VOID: “void” &amp;gt;
+    }
+    TOKEN : /* LITERALS */
+    {
+        &amp;lt; INTEGER_LITERAL: ( [“1″-“9″] ([“0″-“9″])* | “0” ) &amp;gt;
+    }
+    TOKEN : /* IDENTIFIERS */
+    {
+        &amp;lt; IDENTIFIER: (|)* &amp;gt;
+        |
+        &amp;lt; #LETTER:
+        [
+        “u0024″,
+        “u0041″-“u005a”,
+        “u005f”,
+        “u0061″-“u007a”,
+        “u00c0″-“u00d6″,
+        “u00d8″-“u00f6″,
+        “u00f8″-“u00ff”,
+        “u0100″-“u1fff”,
+        “u3040″-“u318f”,
+        “u3300″-“u337f”,
+        “u3400″-“u3d2d”,
+        “u4e00″-“u9fff”,
+        “uf900″-“ufaff”
+        ]
+        |
+        &amp;lt; #DIGIT:
+        [
+        “u0030″-“u0039″,
+        “u0660″-“u0669″,
+        “u06f0″-“u06f9″,
+        “u0966″-“u096f”,
+        “u09e6″-“u09ef”,
+        “u0a66″-“u0a6f”,
+        “u0ae6″-“u0aef”,
+        “u0b66″-“u0b6f”,
+        “u0be7″-“u0bef”,
+        “u0c66″-“u0c6f”,
+        “u0ce6″-“u0cef”,
+        “u0d66″-“u0d6f”,
+        “u0e50″-“u0e59″,
+        “u0ed0″-“u0ed9″,
+        “u1040″-“u1049″
+        ]
+    }
+    SKIP :
+    {
+        &amp;lt; ” ” &amp;gt;
+        | &amp;lt; “t” &amp;gt;
+        | &amp;lt; “n” &amp;gt;
+        | &amp;lt; “r” &amp;gt;
+        | &amp;lt; “//” (~[“n”])* “n” &amp;gt;
+        | &amp;lt;“/*” (~[“*”])* “*” (~[“/”] (~[“*”])* “*”)* “/”&amp;gt;
+    }
+    // The following is a simple grammar that will allow you
+    // to test the generated lexer.
+    void Program() :
+    {}
+    {
+        MainClass() (ClassDecl())*
+    }
+    void MainClass() :
+    {}
+    {
+        “class” “{” “public” “static” “void” “main” “(” “String” “[” “]” “{” Statement() “}” “}”
+    }
+    void ext() :
+    {}
+    {
+        (“extends”  )?
+    }
+    void ClassDecl() :
+    {}
+    {
+        “class” ext()  “{” (VarDecl())* (MethodDecl())* “}”
+    }
+    void VarDecl():
+    {}
+    { Type() “;”}
+    void MethodDecl():
+    {}
+    {“public” Type()
+        “(” FormaList() “)”
+        “{” ( LOOKAHEAD(2) VarDecl() )* (Statement())*  “return” Exp() “;” “}”
+    }
+    void FormaList():
+    {}
+    {(Type()  “FormalRest()”)?}
+    void FormaRest():
+    {}
+    {“,” Type() }
+    void Type():
+    {}
+    {
+        |”boolean”
+        |LOOKAHEAD(2)
+        “int”
+        |”int” “[” “]”
+    }
+    void Statement():
+    {}
+    {“{” (Statement())* “}”
+    |”while” “(” Exp() “)” Statement()
+    |”System.out.println”  “(” Exp() “)”
+    | instat1() “=” Exp() “;”
+    |”if” “(” Exp() “)” Statement() inif()
+}
+void inif():
+{}
+{(LOOKAHEAD(2) “else” Statement())?}
+void instat1():
+{}
+{(“[” Exp() “]”)?}
+void Exp():
+{}
+{Expa() (LOOKAHEAD(2) (Expb()))?
+}
+void Expa():
+{}
+{“true”
+    |”false”
+    |
+    |”this”
+    |”!” Exp()
+    |”(” Exp() “)”
+    |LOOKAHEAD(2)
+    “new” “int” “[” Exp() “]”
+    |”new” “(” “)”
+}
+void Expb():
+{}
+{
+    op() Exp()
+    |”[” Exp() “]”Exp()
+    |LOOKAHEAD(2)
+    “.” “length”
+    |”.”
+}
+void op():
+{}
+{“&amp;amp;&amp;amp;”
+    |”&amp;lt;”
+    |”+”
+    |”-”
+    |”*”}
+    void ExpList():
+    {}
+    {(Exp()  (ExpRest())*)?}
+    void ExpRest():
+    {}
+    {“,” Exp()}
+    void Goal() :
+    {}
+    {
+        ( MiniJavaToken() )*
+    }
+    void MiniJavaToken():
+    {}
+    {
+        “class”  |  | “{” | “public” | “static” | “void” |
+            “main” | “(” | “String”  | “[” | “]” | “)” | “}” | “extends” | “;”
+            | “return” | “,” | “int” | “boolean” | “=” | “if” | “else” | “while”
+            | “System.out.println” | “&amp;amp;&amp;amp;” | “&amp;lt;” | “+” | “-” | “*” | “.” |
+            “length” | | “true” | “false” | “this” | “new” |
+            “!”
+    }
+&lt;/code&gt;&lt;/pre&gt;
+</description>
     </item>
     
     <item>
       <title>编译原理虎书java版本–Chapter 1</title>
-      <link>http://blog.sword865.com/archives/28/</link>
+      <link>http://blog.sword865.com/archives/28</link>
       <pubDate>Sun, 08 Mar 2009 00:00:00 +0000</pubDate>
       <author>sword865@163.com (罗刹剑客)</author>
-      <guid>http://blog.sword865.com/archives/28/</guid>
-      <description>Count.java
-public class Count
+      <guid>http://blog.sword865.com/archives/28</guid>
+      <description>&lt;p&gt;Count.java&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;public class  Count
 {
-int resolveStm(Stm stm){
-int temp1=0,temp2=0;
-if(stm.kind==1){
-temp1=resolveStm(((CompoundStm)stm).stm1);
-temp2=resolveStm(((CompoundStm)stm).stm2);
-return temp1&amp;gt;temp2? temp1:temp2;
-}else if(stm.kind==2){
-return resolveExp(((AssignStm)stm).exp);
-}else if (stm.kind==3){
-return countExpInExpList(((PrintStm)stm).exps);
-}else{
-return 0;
+    int resolveStm(Stm stm){
+        int temp1=0,temp2=0;
+        if(stm.kind==1){
+            temp1=resolveStm(((CompoundStm)stm).stm1);
+            temp2=resolveStm(((CompoundStm)stm).stm2);
+            return temp1&amp;gt;temp2? temp1:temp2;
+        }else if(stm.kind==2){
+            return resolveExp(((AssignStm)stm).exp);
+        }else if (stm.kind==3){
+            return countExpInExpList(((PrintStm)stm).exps);
+        }else{
+            return 0;
+        }
+    }
+    int countExpInExpList(ExpList expList){
+        if(expList.kind==1){
+            return 1;
+        }else if(expList.kind==2){
+            return 1+countExpInExpList(((PairExpList)expList).tail);
+        }else{
+            return 0;
+        }
+    }
+    int resolveExp(Exp exp){
+        int temp1,temp2;
+        if(exp.kind==1){
+            return 0;
+        }else if(exp.kind==2){
+            return 0;
+        }else if(exp.kind==3){
+            temp1 = resolveExp(((OpExp)exp).left);
+            temp2 = resolveExp(((OpExp)exp).right);
+            return temp1&amp;gt;temp2?temp1:temp2;
+        }else if(exp.kind==4){
+            temp1=resolveStm(((EseqExp)exp).stm);
+            temp2=resolveExp(((EseqExp)exp).exp);
+            return temp1&amp;gt;temp2?temp1:temp2;
+        }else{
+            return 0;
+        }
+    }
+    int resolveExpList(ExpList expList){
+        int temp1,temp2;
+        if(expList.kind==2){
+            temp1 = resolveExp(((PairExpList)expList).head);
+            temp2 = resolveExpList(((PairExpList)expList).tail);
+            return temp1&amp;gt;temp2?temp1:temp2;
+        }else if(expList.kind==1){
+            return resolveExp(((LastExpList)expList).last);
+        }else{
+            return 0;
+        }
+    }
 }
+Interp.java
+public class  Interp
+{
+    void startinterpStm(Stm stm){
+        Table t=new Table(null,0,null);
+        interpStm(stm,t);
+    }
+    Table interpStm(Stm stm,Table t){
+        if(stm.kind==1){
+            Table t1=interpStm(((CompoundStm)stm).stm1,t);
+            Table t2=interpStm(((CompoundStm)stm).stm2,t1);
+            return t2;
+        }else if(stm.kind==2){
+            IntAndTable it1 = interExp(((AssignStm)stm).exp,t);
+            Table t1=update(it1.t,((AssignStm)stm).id,it1.i);
+            return t1;
+        }else if(stm.kind==3){
+            printExplist(((PrintStm)stm).exps,t);
+            return t;
+        }else{
+            return t;
+        }
+    }
+    IntAndTable interExp(Exp exp,Table t){
+        if(exp.kind==1){
+            int temp=lookup(t,((IdExp)exp).id);
+            return new IntAndTable(temp,t);
+        }else if(exp.kind==2){
+            return new IntAndTable(((NumExp)exp).num,t);
+        }else if(exp.kind==3){
+            IntAndTable it1= interExp(((OpExp)exp).left,t);
+            IntAndTable it2= interExp(((OpExp)exp).right,it1.t);
+            int x1,x2,result;
+            x1=it1.i;
+            x2=it2.i;
+            if(((OpExp)exp).oper==1){
+                result=x1+x2;
+            }else if(((OpExp)exp).oper==2){
+                result=x1-x2;
+            }else if(((OpExp)exp).oper==3){
+                result=x1*x2;
+            }else if(((OpExp)exp).oper==4){
+                result=x1/x2;
+            }else{
+                result=0;
+            }
+            return new IntAndTable(result,t);
+        }else if(exp.kind==4){
+            Table t1=interpStm(((EseqExp)exp).stm,t);
+            IntAndTable t3= interExp(((EseqExp)exp).exp,t1);
+            return t3;
+        }else{
+            return new IntAndTable(0,t);
+        }
+    }
+    Table update(Table t1,String i,int v){
+        Table t2=new Table(i,v,t1);
+        return t2;
+    }
+    int lookup(Table t,String key){
+        if(key.compareTo(t.id)==0){
+            return t.value;
+        }else return lookup(t.tail,key);
+    }
+    void printExplist(ExpList exps,Table t){
+        if(exps.kind==1){
+            IntAndTable temp=interExp(((LastExpList)exps).last,t);
+            System.out.println(temp.i);
+        }else if(exps.kind==2){
+            IntAndTable temp=interExp(((PairExpList)exps).head,t);
+            System.out.print(temp.i+&amp;quot;&amp;quot;);
+            printExplist(((PairExpList)exps).tail,t);
+        }else return;
+    }
+// IntAndTable interExpList(ExpList explist,Table t){
+// }
 }
-int countExpInExpList(ExpList expList){
-if(expList.kind==1){
-return 1;
-}else if(expList.kind==2){
-return 1+countExpInExpList(((PairExpList)expList).tail);
-}else{
-return 0;
+class Table
+{
+    String id;
+    int value;
+    Table tail;
+    Table(String i,int v,Table t){id=i;value=v;tail=t;}
 }
+class IntAndTable
+{
+    int i;
+    Table t;
+    IntAndTable(int ii,Table tt){i=ii;t=tt;};
 }
-int resolveExp(Exp exp){
-int temp1,temp2;
-if(exp.kind==1){
-return 0;
-}else if(exp.kind==2){
-return 0;
-}else if(exp.kind==3){
-temp1 = resolveExp(((OpExp)exp).left);
-temp2 = resolveExp(((OpExp)exp).right);
-return temp1&amp;gt;temp2?temp1:temp2;
-}else if(exp.kind==4){
-temp1=resolveStm(((EseqExp)exp).stm);</description>
+&lt;/code&gt;&lt;/pre&gt;
+</description>
     </item>
     
   </channel>

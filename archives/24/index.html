@@ -19,7 +19,7 @@
 
 <meta property="og:title" content="有重复组合数  &middot; 悟剑阁 ">
 <meta property="og:site_name" content="悟剑阁"/>
-<meta property="og:url" content="http://blog.sword865.com/archives/24/" />
+<meta property="og:url" content="http://blog.sword865.com/archives/24" />
 <meta property="og:locale" content="zh-CN">
 
 
@@ -47,18 +47,18 @@
     },
     "datePublished": "2009-04-02",
     "description": "",
-    "wordCount": 555
+    "wordCount": 648
   }
 </script>
 
 
 
-<link rel="canonical" href="http://blog.sword865.com/archives/24/" />
+<link rel="canonical" href="http://blog.sword865.com/archives/24" />
 
 <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://blog.sword865.com/touch-icon-144-precomposed.png">
 <link href="http://blog.sword865.com/favicon.png" rel="icon">
 
-<meta name="generator" content="Hugo 0.23" />
+<meta name="generator" content="Hugo 0.19" />
 
   <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -183,7 +183,7 @@ vertical-align:middle}
     &middot; by sword865
   
   &middot; Read in about 2 min
-  &middot; (555 Words)
+  &middot; (648 Words)
   <br>
   
 <a class="label" href="http://blog.sword865.com/tags/ACM">ACM</a>
@@ -198,14 +198,13 @@ vertical-align:middle}
   <p>从n个元素中有重复地取r个，不计顺序，则不同的取法有多少种？<br />
 这个问题的答案被称为有重复组合数。结果很简洁，是C(n+r-1,r)。(注：这表示从n+r-1个数中取出r个数的组合数)<br />
 【证明1】<br />
-我们先把原命题具体化。假设这n个元素就是1~n这n个数。&nbsp;<br />
-对于每一种选出来的组合a1，a2，a3，&hellip; ，am，我们要求：a1&lt;=a2&lt;=a3&lt;=&hellip;&lt;=ar<br />
-我们的目的就是找出这样的a(i)组数<br />
+我们先把原命题具体化。假设这n个元素就是1~n这n个数:<br />
+对于每一种选出来的组合a1，a2，a3，&hellip; ，am，我们要求：a1&lt;=a2&lt;=a3&lt;=&hellip;&lt;=ar，那么最终的目的就是找出这样的a(i)组数。<br />
 这里我们构造b1=a1，b2= a2+1，&hellip; ，b(i)= a(i)+(i-1)，&hellip; ，b&reg;= a&reg;+(r-1)<br />
 于是b(i)和a(i)一一对应，即所求a(i)组数对应于b(i)组数<br />
-又：b1<b2<b3<&hellip;<br 且b(i)取值于1~ n+(r-1)  
-亦即原命题等价于从1~ n+r-1中取得r个不重复排列数  
-来源：<http://zhidao.baidu.com/question/16706714.html><br />
+又因为 b1 &lt; b2 &lt; b3 &lt; &hellip; &lt; br 且b(i)取值于1~ n+(r-1)<br />
+亦即原命题等价于从1~ n+r-1中取得r个不重复排列数<br />
+来源：<a href="http://zhidao.baidu.com/question/16706714.html">http://zhidao.baidu.com/question/16706714.html</a><br />
 【证明2】<br />
 将n个元素看做n个盒子,r看作r个无区别的球,则相当于:<br />
 把r个同样的球放入n个顺次排列的盒子,求不计放球顺序的放法种数<br />
@@ -230,13 +229,13 @@ vertical-align:middle}
   
 
     
-    <a class="prev" href="http://blog.sword865.com/archives/25/" title="编译原理虎书java版本–Chapter 2-3">
+    <a class="prev" href="http://blog.sword865.com/archives/25" title="编译原理虎书java版本–Chapter 2-3">
       Previous
     </a>
     
 
     
-    <a class="next" href="http://blog.sword865.com/archives/23/" title="ACM暑假集训总结">
+    <a class="next" href="http://blog.sword865.com/archives/23" title="ACM暑假集训总结">
       Next
     </a>
     

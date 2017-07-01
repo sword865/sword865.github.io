@@ -19,7 +19,7 @@
 
 <meta property="og:title" content="算法总结2—决策树分类器  &middot; 悟剑阁 ">
 <meta property="og:site_name" content="悟剑阁"/>
-<meta property="og:url" content="http://blog.sword865.com/archives/20/" />
+<meta property="og:url" content="http://blog.sword865.com/archives/20" />
 <meta property="og:locale" content="zh-CN">
 
 
@@ -47,18 +47,18 @@
     },
     "datePublished": "2009-09-06",
     "description": "",
-    "wordCount": 1731
+    "wordCount": 1726
   }
 </script>
 
 
 
-<link rel="canonical" href="http://blog.sword865.com/archives/20/" />
+<link rel="canonical" href="http://blog.sword865.com/archives/20" />
 
 <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://blog.sword865.com/touch-icon-144-precomposed.png">
 <link href="http://blog.sword865.com/favicon.png" rel="icon">
 
-<meta name="generator" content="Hugo 0.23" />
+<meta name="generator" content="Hugo 0.19" />
 
   <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -183,7 +183,7 @@ vertical-align:middle}
     &middot; by sword865
   
   &middot; Read in about 4 min
-  &middot; (1731 Words)
+  &middot; (1726 Words)
   <br>
   
 <a class="label" href="http://blog.sword865.com/tags/%E5%86%B3%E7%AD%96%E6%A0%91">决策树</a>
@@ -233,7 +233,7 @@ vertical-align:middle}
 
 <p>&nbsp;&nbsp; 为了选择适合的变量对数据进行拆分，我们需要一个方法来评估一种拆分方案的好坏，<strong>其评估方法包括：</strong></p>
 
-<p><strong>1)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong> <strong>基尼不纯度：</strong></p>
+<p>2) <strong>基尼不纯度：</strong></p>
 
 <p>定义：基尼不存度是指来自集合的某种结果随机应用于集合中某一数据的预期误差。（如果集合中所有结果属于同一类，则误差为0）</p>
 
@@ -241,43 +241,32 @@ vertical-align:middle}
 
 <p>伪代码：</p>
 
-<p>imp=0</p>
-
-<p>for &nbsp;k1 in kinds</p>
-
-<p>p1=count(k1) / total</p>
-
-<p>for k2 in counts</p>
-
-<p>&nbsp;&nbsp; if (k1==k2)continue</p>
-
-<p>&nbsp; &nbsp;p2=count(k2) / total</p>
-
-<p>&nbsp;&nbsp; imp+=p1*p2</p>
-
-<p>&nbsp;&nbsp;&nbsp; ans=imp</p>
+<pre><code>imp=0
+for k1 in kinds
+    p1=count(k1) / total
+    for k2 in counts
+        if (k1==k2)continue
+        p2=count(k2) / total
+        imp+=p1*p2
+ans=imp
+</code></pre>
 
 <p align="left">
   &nbsp;&nbsp; (p1*p2是一个p1类别的数据被当作p2的概率)
 </p>
 
-<p>2)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>熵：</strong>在信息论中，熵代表的是集合的无序程度&#8212;&#8211;基本上就相当于我们在此处所说的集合的混杂程度。</p>
+<p>2) <strong>熵：</strong>在信息论中，熵代表的是集合的无序程度&#8212;&#8211;基本上就相当于我们在此处所说的集合的混杂程度。</p>
 
 <p>熵的值是遍历所有结果后得到的pi*log2(pi)的和的绝对值</p>
 
 <p>伪代码：</p>
 
-<p>ent=0.0</p>
-
-<p>for k in kinds</p>
-
-<p>p=count(k) / total</p>
-
-<p>ent=ent &ndash; p*log2(p)&nbsp;&nbsp;&nbsp;&nbsp; // 因为0&lt;p&lt;=1，所以必有log2(p)&lt;=0</p>
-
-<p>ans=ent</p>
-
-<p>&nbsp;</p>
+<pre><code>ent=0.0
+for k in kinds
+    p=count(k) / total
+    ent=ent – p*log2(p)     // 因为0&lt;p&lt;=1，所以必有log2(p)&lt;=0
+ans=ent
+</code></pre>
 
 <p>有了上述评估方法后，我们就可以不断尝试各种拆分方法，然后选出最好的拆分方法构造树中的节点了。我们将计算拆分前的熵（基尼不存度）值，与拆分后的熵（基尼不存度）的值的加权平均，将其差值作为<strong>信息增益</strong>。最终对能得到最大信息增益的属性进行拆分。然后再分别对拆分后得集合选择属性进行拆分，直到最大信息增益为非正时停止拆分，这时决策树就构建完毕了。</p>
 
@@ -333,13 +322,13 @@ vertical-align:middle}
   
 
     
-    <a class="prev" href="http://blog.sword865.com/archives/21/" title="算法总结1—贝叶斯分类器">
+    <a class="prev" href="http://blog.sword865.com/archives/21" title="算法总结1—贝叶斯分类器">
       Previous
     </a>
     
 
     
-    <a class="next" href="http://blog.sword865.com/archives/19/" title="算法总结3—神经网络">
+    <a class="next" href="http://blog.sword865.com/archives/19" title="算法总结3—神经网络">
       Next
     </a>
     

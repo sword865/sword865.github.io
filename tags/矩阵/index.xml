@@ -2,25 +2,66 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>矩阵 on 悟剑阁</title>
-    <link>http://blog.sword865.com/tags/%E7%9F%A9%E9%98%B5/</link>
+    <link>http://blog.sword865.com/tags/%E7%9F%A9%E9%98%B5/index.xml</link>
     <description>Recent content in 矩阵 on 悟剑阁</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <managingEditor>sword865@163.com (罗刹剑客)</managingEditor>
     <webMaster>sword865@163.com (罗刹剑客)</webMaster>
     <copyright>Copyright (c) 2015. All rights reserved.</copyright>
-    <lastBuildDate>Fri, 25 Sep 2009 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="http://blog.sword865.com/tags/%E7%9F%A9%E9%98%B5/index.xml" rel="self" type="application/rss+xml" />
-    
+    <atom:link href="http://blog.sword865.com/tags/%E7%9F%A9%E9%98%B5/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>算法总结8—非负矩阵因式分解</title>
-      <link>http://blog.sword865.com/archives/14/</link>
+      <link>http://blog.sword865.com/archives/14</link>
       <pubDate>Fri, 25 Sep 2009 00:00:00 +0000</pubDate>
       <author>sword865@163.com (罗刹剑客)</author>
-      <guid>http://blog.sword865.com/archives/14/</guid>
-      <description>数学基础: 线性代数的矩阵乘法运算。 &amp;nbsp; &amp;nbsp;&amp;nbsp; 非负矩阵分解是一种特征提取的算法，它尝试从数据集中寻找新的数据行，将这些新找到的数据行加以组合，就可以</description>
+      <guid>http://blog.sword865.com/archives/14</guid>
+      <description>&lt;p&gt;&lt;strong&gt;数学基础:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;线性代数的矩阵乘法运算。&lt;/p&gt;
+
+&lt;p&gt;&amp;nbsp;&amp;nbsp; 非负矩阵分解是一种特征提取的算法，它尝试从数据集中寻找新的数据行，将这些新找到的数据行加以组合，就可以重新构造出数据集。&lt;/p&gt;
+
+&lt;p&gt;算法要求输入多个样本数据，每个样本数据都是一个m维数值向量，首先把我们的数据集用矩阵的形式写出来，每一列是一个数据，而每一行是这些数据对应维度的数值。于是我们就有了一个大小为m*n的输入矩阵。而算法的目标就是将这个矩阵分解为另外两个非负矩阵的积。&lt;/p&gt;
+
+&lt;p&gt;　&lt;img src=&#34;http://sword865.com/blog/wp-content/ql-cache/quicklatex.com-cad804e086b2306a9bd31889dd0dbb72_l3.png&#34; class=&#34;ql-img-inline-formula quicklatex-auto-format&#34; alt=&#34;&amp;#77;&amp;#95;&amp;#123;&amp;#109;&amp;#42;&amp;#110;&amp;#125;&amp;#61;&amp;#65;&amp;#95;&amp;#123;&amp;#109;&amp;#42;&amp;#114;&amp;#125;&amp;#66;&amp;#95;&amp;#123;&amp;#114;&amp;#42;&amp;#110;&amp;#125;&#34; title=&#34;Rendered by QuickLaTeX.com&#34; height=&#34;15&#34; width=&#34;144&#34; style=&#34;vertical-align: -3px;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&amp;nbsp;&amp;nbsp; 我们将分解矩阵后新得出的一个维度称为特征，那么在前一个m*r的矩阵中，第i行第j列的值就代表属性i对第j种特征的贡献值，而后一个矩阵的第i行第j列则代表第i种特征对第j个样本的贡献值。这样我们就找出了输入样本的r种特征。&lt;/p&gt;
+
+&lt;p&gt;&amp;nbsp;&amp;nbsp; r的大小应该依照需要进行选择，比如如果是希望找到某些共性特征，则就要选择较小的r。当我们确定了一个较为合适的r值后，就要想办法确定后面两个矩阵具体的值了。&lt;/p&gt;
+
+&lt;p&gt;&amp;nbsp;&amp;nbsp; 书中给出的算法大致如下：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;定义一个函数计算用来两个矩阵的差异程度（每个对应元素相减后平方的和）&lt;/li&gt;
+&lt;li&gt;随机生成2个矩阵(m*r维和r*n维)记为A（权重矩阵）,B（特征矩阵）&lt;/li&gt;
+&lt;li&gt;计算A*B与输入的m*n的数据矩阵的差异，足够小则停止，否则继续&lt;/li&gt;
+&lt;li&gt;按一定规则调整A，B的值后转3.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;对于调整的方法，可以用模拟退火（下一篇文章中会提到）等多种算法，书里使用的是乘法更新法则，该法则我没有认真去看&amp;hellip;.感兴趣的可以去看论文&amp;hellip;.英文的&amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://hebb.mit.edu/people/seung/papers/nmfconverge.pdf&#34;&gt;http://hebb.mit.edu/people/seung/papers/nmfconverge.pdf&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;算法如下：&lt;/p&gt;
+
+&lt;p&gt;hn 转置后的权重矩阵和数据矩阵相乘的结果&lt;/p&gt;
+
+&lt;p&gt;hd 转置后的权重矩阵和原权重矩阵相乘再乘特征矩阵的结果&lt;/p&gt;
+
+&lt;p&gt;wn数据矩阵与转置后的特征矩阵相乘的结果&lt;/p&gt;
+
+&lt;p&gt;wd权重矩阵与特征矩阵相乘，再与转置后的特诊矩阵相乘得到的矩阵&lt;/p&gt;
+
+&lt;p&gt;为了更新特征矩阵和权重矩阵，我们先把上面所有矩阵变为数组．然后把特征矩阵中每一个值与hn中对应值相乘，并除以hd中对应的值．类似的，我们再将权重矩阵中每一个值与wn中的对应值相乘，并除以wd中对应的值．&lt;/p&gt;
+
+&lt;p&gt;最近的算法都很好理解的样子&amp;hellip;不过写起来还是挺麻烦的&amp;hellip;.还有最后一篇优化了，内容挺多，包括模拟退火和遗传算法&amp;hellip;.恩&lt;/p&gt;
+
+&lt;div&gt;
+  &lt;embed id=&#34;lingoes_plugin_object&#34; width=&#34;0&#34; height=&#34;0&#34; type=&#34;application/lingoes-npruntime-capture-word-plugin&#34; hidden=&#34;true&#34; /&gt;
+&lt;/div&gt;
+</description>
     </item>
     
   </channel>

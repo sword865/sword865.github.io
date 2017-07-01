@@ -19,7 +19,7 @@
 
 <meta property="og:title" content="算法总结1—贝叶斯分类器  &middot; 悟剑阁 ">
 <meta property="og:site_name" content="悟剑阁"/>
-<meta property="og:url" content="http://blog.sword865.com/archives/21/" />
+<meta property="og:url" content="http://blog.sword865.com/archives/21" />
 <meta property="og:locale" content="zh-CN">
 
 
@@ -53,12 +53,12 @@
 
 
 
-<link rel="canonical" href="http://blog.sword865.com/archives/21/" />
+<link rel="canonical" href="http://blog.sword865.com/archives/21" />
 
 <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://blog.sword865.com/touch-icon-144-precomposed.png">
 <link href="http://blog.sword865.com/favicon.png" rel="icon">
 
-<meta name="generator" content="Hugo 0.23" />
+<meta name="generator" content="Hugo 0.19" />
 
   <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -261,9 +261,7 @@ vertical-align:middle}
 
 <p>这里，就用到了贝叶斯定理：P(A | B)=P(B | A)P(A) / P(B)</p>
 
-<p>这里就是：P(category | sample)= P(sample |</p>
-
-<p>category)P(category) / P(sample)</p>
+<p>这里就是：P(category | sample)= P(sample | category)P(category) / P(sample)</p>
 
 <p>其中，P(sample | category)P(category)都已经在学习中计算得到，而P(sample)是样本出现 的概率，我们可以计算它，但是这是没有意义的，因为我们会计算出各个分类的条件概率，然后比较它们的大小确定样本所属的分类，而对各个条件概率而言p(sample)是完全一样的。所以，我们就省去了对它的计算。</p>
 
@@ -275,9 +273,7 @@ vertical-align:middle}
 
 <p><strong>费舍尔方法</strong>为文档中的每个特征都求得了分类的概率，然后又将这些概率组合起来，并判断其是否有可能构成一个随机集合。该方法还会返回每个分类的概率，这些概率彼此间可以进行比较。尽管这种方法更为复杂，但是因为它在为分类选择临界值（cutoff）时允许更大的灵活性，所以还是值得一学的。</p>
 
-<p>不同于之前计算的P(feature | category)，费舍尔方法将计算P(category | feature)，即拥有某一特征的样本属于某分类的概率。首先用P(具有指定特征的属于某分类的样本数 |具有指定特征的样本数)作为这一概率，然后将特征出现在所有所有分类中的概率fresum=&sum;P(category | feature),最后用P(category | feature) / fresum作为新的P(category</p>
-
-<p>| feature)。(这样修正后的值将比修正前更加有效)</p>
+<p>不同于之前计算的P(feature | category)，费舍尔方法将计算P(category | feature)，即拥有某一特征的样本属于某分类的概率。首先用P(具有指定特征的属于某分类的样本数 |具有指定特征的样本数)作为这一概率，然后将特征出现在所有所有分类中的概率fresum=&sum;P(category | feature),最后用P(category | feature) / fresum作为新的P(category | feature)。(这样修正后的值将比修正前更加有效)</p>
 
 <p>然后，我们就可以通过将各个特征的概率组合起来得到待分类样本所属的类别了。我们可以通过简单的相乘完成这一目的，虽然这里也作了相互独立的假设，但也比之前号上很多了。费舍尔方法的计算方法是将所有概率相乘后取自然对数，在乘以-2.</p>
 
@@ -301,13 +297,13 @@ vertical-align:middle}
   
 
     
-    <a class="prev" href="http://blog.sword865.com/archives/22/" title="读《你的灯亮这么》—走出问题的乌托邦">
+    <a class="prev" href="http://blog.sword865.com/archives/22" title="读《你的灯亮这么》—走出问题的乌托邦">
       Previous
     </a>
     
 
     
-    <a class="next" href="http://blog.sword865.com/archives/20/" title="算法总结2—决策树分类器">
+    <a class="next" href="http://blog.sword865.com/archives/20" title="算法总结2—决策树分类器">
       Next
     </a>
     

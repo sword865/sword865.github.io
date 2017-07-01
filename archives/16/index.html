@@ -19,7 +19,7 @@
 
 <meta property="og:title" content="算法总结5&amp;6—-k-最近邻与聚类  &middot; 悟剑阁 ">
 <meta property="og:site_name" content="悟剑阁"/>
-<meta property="og:url" content="http://blog.sword865.com/archives/16/" />
+<meta property="og:url" content="http://blog.sword865.com/archives/16" />
 <meta property="og:locale" content="zh-CN">
 
 
@@ -47,18 +47,18 @@
     },
     "datePublished": "2009-09-14",
     "description": "",
-    "wordCount": 898
+    "wordCount": 891
   }
 </script>
 
 
 
-<link rel="canonical" href="http://blog.sword865.com/archives/16/" />
+<link rel="canonical" href="http://blog.sword865.com/archives/16" />
 
 <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://blog.sword865.com/touch-icon-144-precomposed.png">
 <link href="http://blog.sword865.com/favicon.png" rel="icon">
 
-<meta name="generator" content="Hugo 0.23" />
+<meta name="generator" content="Hugo 0.19" />
 
   <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -183,7 +183,7 @@ vertical-align:middle}
     &middot; by sword865
   
   &middot; Read in about 2 min
-  &middot; (898 Words)
+  &middot; (891 Words)
   <br>
   
 <a class="label" href="http://blog.sword865.com/tags/%E8%81%9A%E7%B1%BB">聚类</a>
@@ -205,19 +205,11 @@ vertical-align:middle}
 
 <p>接受一个用以进行数值预测的新数据项，然后将它与一组已经赋过值的数据项进行比较。算法会从中找出与待预测数据最为接近的k项，并这k项其求均值以得到最终的结果。</p>
 
-<p>&nbsp;</p>
-
 <p>总计来说这是一个很简单的算法，只要我们做好距离的定义并选择一个适合的k值，我们就可以很容易的实现它。</p>
-
-<p>&nbsp;</p>
 
 <p>由于我们计算2组数据的距离的通常方法是将他们中对应的每一项目的差值的绝对值(或平方)相加，所以就会出现不同数据范围不同导致的误差。比如每组数据有2个分量，一个取值为0&#8212;10,另一个是0&#8212;-999999，那么第二的值就会几乎完全决定我们最后的结果。所以我们要对每一组数据进行缩放。</p>
 
-<p>&nbsp;</p>
-
 <p>对数据的缩放取决于具体的应用，我们可以通过交叉验证尝试多组缩放因子然后比较它们的优劣。交叉验证的做法是先数据的一部分去除，然后用剩余数据去推测这组数据，我们就可以根据预测的结果对缩放因子进行评估。</p>
-
-<p><strong>&nbsp;</strong></p>
 
 <p><strong>优点：</strong></p>
 
@@ -229,8 +221,6 @@ vertical-align:middle}
 
 <p>寻找缩放因子是一项很乏味的工作.</p>
 
-<p>&nbsp;</p>
-
 <p><strong>聚类：</strong></p>
 
 <p>聚类算法可以用于任何具有一个或多个数值属性的数据集合，通过这些数值属性，我们将其所有数据映射到一个n维空间中，并定义该空间中的距离，然后我们可以通过各个数据间的距离对其实现聚类。</p>
@@ -238,10 +228,6 @@ vertical-align:middle}
 <p><strong>分级聚类:</strong></p>
 
 <p>分级聚类的算法是不断找出所有数据中距离最小的两个数据A、B，然后将它们合并成一个新的节点，该节点在n维空间中的坐标是原来两数据点的均值，通过不断进行这一操作，我们最终可以得到一个树形的层级结构。</p>
-
-<p align="center">
-  &nbsp;
-</p>
 
 <p><strong>K-</strong><strong>均值聚类:</strong></p>
 
@@ -252,10 +238,6 @@ vertical-align:middle}
 <li>将每个数据项分配给与其距离最近的中心点。</li>
 <li>将中心点位置移动到所有分配给它的数据项的中心。如果中心点位置没有改变，则结束算法，否则回到第二步。</li>
 </ol>
-
-<p align="center">
-  &nbsp;
-</p>
 
 <p>具体选择哪种聚类算法取决于要处理的问题，当要将数据拆分到不同的群组时，k均值聚类往往是很有价值的，而如果我们更想了解哪些群组间更为接近，分级聚类更好。当然，我们也可以同时使用２种算法得到更加详细的信息。</p>
 
@@ -273,13 +255,13 @@ vertical-align:middle}
   
 
     
-    <a class="prev" href="http://blog.sword865.com/archives/17/" title="统计,逻辑与智能">
+    <a class="prev" href="http://blog.sword865.com/archives/17" title="统计,逻辑与智能">
       Previous
     </a>
     
 
     
-    <a class="next" href="http://blog.sword865.com/archives/15/" title="算法总结7—多维缩放">
+    <a class="next" href="http://blog.sword865.com/archives/15" title="算法总结7—多维缩放">
       Next
     </a>
     
