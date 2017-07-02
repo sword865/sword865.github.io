@@ -21,9 +21,9 @@
 
 &lt;p&gt;这个是第一篇&amp;hellip;&amp;hellip;贝叶斯分类器&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;数学基础：&lt;/strong&gt;**&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;数学基础：&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;条件概率&lt;/strong&gt;**&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;条件概率&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;定义：设A, B是两个事件，且P(A)&amp;gt;0 称P(B∣A)=P(AB)/P(A)为在条件 A下发生的条件事件B发生的条件概率。&lt;/p&gt;
 
@@ -33,15 +33,11 @@
 
 &lt;p&gt;&lt;strong&gt;全概率公式和贝叶斯公式&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;定义 设S为试验E的样本空间，B1, B2, &amp;hellip;Bn为E的一组事件，若BiBj=Ф, i&amp;ne;j, i, j=1,&lt;/p&gt;
-
-&lt;p&gt;2, &amp;hellip;,n; B1&amp;cup;B2&amp;cup;&amp;hellip;&amp;cup;Bn=S则称B1, B2, &amp;hellip;, Bn为样本空间的一个划分。&lt;/p&gt;
+&lt;p&gt;定义: 设S为试验E的样本空间，B1, B2, &amp;hellip;Bn为E的一组事件，若BiBj=Ф, i&amp;ne;j, i, j=1, 2, &amp;hellip;,n; B1&amp;cup;B2&amp;cup;&amp;hellip;&amp;cup;Bn=S则称B1, B2, &amp;hellip;, Bn为样本空间的一个划分。&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;定理&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;设试验E的样本空间为，A为E的事件，B1, B2, &amp;hellip;,Bn为的一个划分，且P(Bi)&amp;gt;0&lt;/p&gt;
-
-&lt;p&gt;(i=1, 2, &amp;hellip;n)，则P(A)=P(A∣B1)P(B1)+P(A∣B2)+ &amp;hellip;+P(A∣Bn)P(Bn)称为全概率公式。&lt;/p&gt;
+&lt;p&gt;设试验E的样本空间为，A为E的事件，B1, B2, &amp;hellip;,Bn为的一个划分，且P(Bi)&amp;gt;0(i=1, 2, &amp;hellip;n)，则P(A)=P(A∣B1)P(B1)+P(A∣B2)+ &amp;hellip;+P(A∣Bn)P(Bn)称为全概率公式。&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;定理&lt;/strong&gt;&lt;/p&gt;
 
@@ -63,9 +59,9 @@
 
 &lt;p&gt;1) 学习：向分类器输入一系列的训练数据，注意这些数据是包括其所属类别的，分类器将对训练数据进行分析，计算出&lt;/p&gt;
 
-&lt;p&gt;1.各个特征在各个分类中出现的概率(=某分类中具有该特征的数据数目 / 该分类数目)如先计算出各个单词在各种分类的文档出现的概率。&lt;/p&gt;
+&lt;p&gt;1.各个特征在各个分类中出现的概率(=某分类中具有该特征的数据数目/该分类数目)如先计算出各个单词在各种分类的文档出现的概率。&lt;/p&gt;
 
-&lt;p&gt;将该概率作为某分类下某特征出现的条件概率P(feature | category)&lt;/p&gt;
+&lt;p&gt;将该概率作为某分类下某特征出现的条件概率P(feature|category)&lt;/p&gt;
 
 &lt;p&gt;2.任选一个样本属于某分类的概率(=某分类文章数 / 文章总数)&lt;/p&gt;
 
@@ -75,9 +71,7 @@
 
 &lt;p&gt;2)分类计算：在向分类器提供大量学习数据后，我们就可以用它对新的样本进行分类了。&lt;/p&gt;
 
-&lt;p&gt;首先对样本进行分析，找出其具有的各种特征，利用这些特征，我们来计算各个分类中出现该样本的概率p(sample&lt;/p&gt;
-
-&lt;p&gt;| category)。为了完成这一计算，我们只要简单将该分类下在该文档中出现过的特征出现的条件概率相乘即可。即&amp;pi; (P(feature | category) 这里的feature是该样本拥有的所有特征。&lt;/p&gt;
+&lt;p&gt;首先对样本进行分析，找出其具有的各种特征，利用这些特征，我们来计算各个分类中出现该样本的概率p(sample | category)。为了完成这一计算，我们只要简单将该分类下在该文档中出现过的特征出现的条件概率相乘即可。即∏P(feature | category) 这里的feature是该样本拥有的所有特征。&lt;/p&gt;
 
 &lt;p&gt;但是，我们实际要计算的是P (category | sample),即给定样本属于某分类的条件概率。&lt;/p&gt;
 

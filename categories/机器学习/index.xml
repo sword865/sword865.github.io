@@ -611,8 +611,8 @@
       <guid>http://blog.sword865.com/archives/13</guid>
       <description>&lt;p&gt;不同于之前的分类和聚类算法，优化的目的是尝试找到一个使成本函数输出最小化的值。这里主要包括两个算法：模拟退火算法和遗传算法。&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;成本函数&lt;/strong&gt;**:&lt;br /&gt;
-** 接受一个经推测的题解，并返回一个数值结果，该值越大代表成本越高（题解表现越差），该值越小就表示题解越好。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;成本函数&lt;/strong&gt;:&lt;br /&gt;
+接受一个经推测的题解，并返回一个数值结果，该值越大代表成本越高（题解表现越差），该值越小就表示题解越好。&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;模拟退火算法：&lt;/strong&gt;&lt;/p&gt;
 
@@ -662,9 +662,9 @@
 
 &lt;p&gt;&amp;nbsp;&amp;nbsp; 非负矩阵分解是一种特征提取的算法，它尝试从数据集中寻找新的数据行，将这些新找到的数据行加以组合，就可以重新构造出数据集。&lt;/p&gt;
 
-&lt;p&gt;算法要求输入多个样本数据，每个样本数据都是一个m维数值向量，首先把我们的数据集用矩阵的形式写出来，每一列是一个数据，而每一行是这些数据对应维度的数值。于是我们就有了一个大小为m*n的输入矩阵。而算法的目标就是将这个矩阵分解为另外两个非负矩阵的积。&lt;/p&gt;
+&lt;p&gt;&amp;nbsp;&amp;nbsp; 算法要求输入多个样本数据，每个样本数据都是一个m维数值向量，首先把我们的数据集用矩阵的形式写出来，每一列是一个数据，而每一行是这些数据对应维度的数值。于是我们就有了一个大小为m*n的输入矩阵。而算法的目标就是将这个矩阵分解为另外两个非负矩阵的积。&lt;/p&gt;
 
-&lt;p&gt;　&lt;img src=&#34;http://sword865.com/blog/wp-content/ql-cache/quicklatex.com-cad804e086b2306a9bd31889dd0dbb72_l3.png&#34; class=&#34;ql-img-inline-formula quicklatex-auto-format&#34; alt=&#34;&amp;#77;&amp;#95;&amp;#123;&amp;#109;&amp;#42;&amp;#110;&amp;#125;&amp;#61;&amp;#65;&amp;#95;&amp;#123;&amp;#109;&amp;#42;&amp;#114;&amp;#125;&amp;#66;&amp;#95;&amp;#123;&amp;#114;&amp;#42;&amp;#110;&amp;#125;&#34; title=&#34;Rendered by QuickLaTeX.com&#34; height=&#34;15&#34; width=&#34;144&#34; style=&#34;vertical-align: -3px;&#34; /&gt;&lt;/p&gt;
+&lt;div&gt;$$M_{m,n}=A_{m,r}B_{r,n}$$&lt;/div&gt;
 
 &lt;p&gt;&amp;nbsp;&amp;nbsp; 我们将分解矩阵后新得出的一个维度称为特征，那么在前一个m*r的矩阵中，第i行第j列的值就代表属性i对第j种特征的贡献值，而后一个矩阵的第i行第j列则代表第i种特征对第j个样本的贡献值。这样我们就找出了输入样本的r种特征。&lt;/p&gt;
 
@@ -722,9 +722,9 @@
 &lt;ol&gt;
 &lt;li&gt;输入每一对点之间的距离Dij。&lt;/li&gt;
 &lt;li&gt;随机在2维平面生成n个点，点i坐标记为x[i]、y[i]，计算它们两之间的距离，记为dij.&lt;/li&gt;
-&lt;li&gt;对所有i 和j计算：eij=(dij-Dij) / Dij，每个点用一个二维的值grad[k]来表示它要移动的距离的比例因子(初始为0，0)。在计算出每个eij后，计算 ((x[i] &amp;#8211; x[j]) / dij)* eij，然后把它加到grad[i][x]上，同样把((y[i] &amp;#8211; y[j]) / dij)* eij加到grad[i][y]上。&lt;/li&gt;
+&lt;li&gt;对所有i 和j计算：eij=(dij-Dij) / Dij，每个点用一个二维的值grad[k]来表示它要移动的距离的比例因子(初始为0,0)。在计算出每个eij后，计算 ((x[i]-x[j]) / dij)* eij，然后把它加到grad[i][x]上，同样把((y[i]-y[j]) / dij)* eij加到grad[i][y]上。&lt;/li&gt;
 &lt;li&gt;把所有eij的绝对值相加，为总误差，与前一次的总误差比较(初始化为无穷大)，大于前一次的话就停止。否则把它作为上一次总误差，继续。&lt;/li&gt;
-&lt;li&gt;对每个点，新的坐标为x[i] &amp;#8211; = rate * grad[i][x]  y[i] &amp;#8211; = rate*grad[i][y]，其中rate是开始时自己定义的一个常数参数，该参数影响了点的移动速度。重新计算各个dij，回到3。&lt;/li&gt;
+&lt;li&gt;对每个点，新的坐标为x[i] -= rate * grad[i][x]  y[i] -= rate*grad[i][y]，其中rate是开始时自己定义的一个常数参数，该参数影响了点的移动速度。重新计算各个dij，回到3。&lt;/li&gt;
 &lt;/ol&gt;
 
 &lt;p&gt;伪码：&lt;/p&gt;
@@ -767,7 +767,7 @@
       <guid>http://blog.sword865.com/archives/16</guid>
       <description>&lt;p&gt;因为这两个算法比较简单，又有些相似，所以这里放在一起。&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;K-&lt;/strong&gt;&lt;strong&gt;最近邻&lt;/strong&gt;&lt;strong&gt;:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;K-最近邻：&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;k-最近邻也是一种用来进行预测的算法。&lt;/p&gt;
 
@@ -799,7 +799,7 @@
 
 &lt;p&gt;分级聚类的算法是不断找出所有数据中距离最小的两个数据A、B，然后将它们合并成一个新的节点，该节点在n维空间中的坐标是原来两数据点的均值，通过不断进行这一操作，我们最终可以得到一个树形的层级结构。&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;K-&lt;/strong&gt;&lt;strong&gt;均值聚类:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;K-均值聚类:&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;不同于分级聚类，K-均值聚类的目的是将数据拆成K个不同的群组，其具体算法如下：&lt;/p&gt;
 
@@ -873,21 +873,13 @@
 
 &lt;p&gt;（具体证明与求解参考《统计学完全教程》 科学出版社 P290的支持向量机一节）&lt;/p&gt;
 
-&lt;p&gt;&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;第二个问题的解决&amp;#8212;&lt;/strong&gt;&lt;strong&gt;核方法&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;第二个问题的解决&amp;#8212;核方法&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;很多时候，我们是找不到一个简单的超平面对样本进行划分的，这个时候，我们可以通过坐标变换，把样本点映射到一个可以线形划分的空间中。&lt;/p&gt;
 
 &lt;p&gt;这个映射可以是同维度的，即映射前后样本空间的纬度相同，比如：&lt;/p&gt;
 
-&lt;p&gt;&amp;nbsp;&lt;/p&gt;
-
 &lt;p&gt;&lt;img src=&#34;http://pic002.cnblogs.com/images/2012/52809/2012063021394557.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p align=&#34;center&#34;&gt;
-  &amp;nbsp;
-&lt;/p&gt;
 
 &lt;p&gt;就可以通过一个简单的&lt;strong&gt;求平方&lt;/strong&gt;运算，把数据从线性不可划分变为线性可分&amp;#8212;我们可以很容易的找到一条直线把后者的样本点分成两个部分。&lt;/p&gt;
 
@@ -895,7 +887,7 @@
 
 &lt;p&gt;比如上面的左图还可以做这么一种变换：&lt;/p&gt;
 
-&lt;p&gt;z1=x1*x1, z2=sqrt(2)x1*x2&amp;nbsp; (sqrt(2)是指2的平方根)　,z3=x2*x2　　&lt;/p&gt;
+&lt;p&gt;$$z_1=x_1x_1, z_2=\sqrt{2}x_1x_2, z_3=x_2x_2$$&lt;/p&gt;
 
 &lt;p&gt;这样我们就可以在新的样本空间中很简单的找到一个平面把这些点分开了．仔细分析，你可以发现，这个平面其实是左图中的一个椭圆的经过上述变换后得到的．&lt;/p&gt;
 
@@ -910,8 +902,6 @@
 &lt;p&gt;找到核函数后，我们就完全解决上述问题了。&lt;/p&gt;
 
 &lt;p&gt;（其实这里还有一些简化计算的技巧，这些技巧与其它更具体的东西还是可以去看《统计学完全教程》 科学出版社，真是一本非常强大的书。）&lt;/p&gt;
-
-&lt;p&gt;&amp;nbsp;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;优点:&lt;/strong&gt;&lt;/p&gt;
 
@@ -955,37 +945,26 @@
 
 &lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; 模仿这一过程，我们就可以建立人工神经网络。&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&amp;nbsp;&lt;/strong&gt;&lt;/p&gt;
-
 &lt;p&gt;&lt;strong&gt;人工神经网络：&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;/strong&gt; 人工神经网络的基本单位是人工神经元（以下简称神经元）。一个神经元可以有多个输入，每个输入有一个相应权值。&lt;/p&gt;
+&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; 人工神经网络的基本单位是人工神经元（以下简称神经元）。一个神经元可以有多个输入，每个输入有一个相应权值。&lt;/p&gt;
 
 &lt;p&gt;图示如下：&lt;/p&gt;
 
 &lt;p&gt;&lt;img class=&#34;alignnone  wp-image-125&#34; src=&#34;http://upload.wikimedia.org/wikipedia/commons/9/97/Ncell.png&#34; alt=&#34;nn&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;a1~an为神经元的输入值&lt;/p&gt;
-
-&lt;p&gt;w1~wn为神经元各个的输入所拥有的权值&lt;/p&gt;
-
-&lt;p&gt;b为偏移量&lt;/p&gt;
-
-&lt;p&gt;sum对各个输入与其权值的积求和(含偏移量)。&lt;/p&gt;
-
-&lt;p&gt;f为传递函数，接受sum的输出，通过一个函数变换，输出t&lt;/p&gt;
-
-&lt;p&gt;t为神经元输出&lt;/p&gt;
-
-&lt;p&gt;数学表示 t=f(WA&amp;#8217;+b)&lt;/p&gt;
-
-&lt;p&gt;W为权向量&lt;/p&gt;
-
-&lt;p&gt;A为输入向量，A&amp;#8217;为A向量的转置&lt;/p&gt;
-
-&lt;p&gt;b为偏移量&lt;/p&gt;
-
-&lt;p&gt;f为传递函数&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;a1~an为神经元的输入值
+w1~wn为神经元各个的输入所拥有的权值
+b为偏移量
+sum对各个输入与其权值的积求和(含偏移量)。
+f为传递函数，接受sum的输出，通过一个函数变换，输出t
+t为神经元输出
+数学表示 t=f(WA&#39;+b)
+W为权向量
+A为输入向量，A&#39;为A向量的转置
+b为偏移量
+f为传递函数
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;在人工神经网络中，神经元之间相互连接，在连接点将前者的输出作为后者的输出，形成错综复杂的网状结构，进行信息的传递与计算。&lt;/p&gt;
 
@@ -1004,10 +983,6 @@
 &lt;p&gt;因此，MLP网络中至少有3个层次。&lt;/p&gt;
 
 &lt;p&gt;&lt;img class=&#34;alignnone  wp-image-125&#34; src=&#34;http://pic002.cnblogs.com/images/2012/52809/2012063021381464.jpg&#34; alt=&#34;mlp&#34; /&gt;&lt;/p&gt;
-
-&lt;p align=&#34;center&#34;&gt;
-  &amp;nbsp;
-&lt;/p&gt;
 
 &lt;p&gt;这些层次中，每层的每个神经元的输出都会作为下一层的每个神经元的输入，因此当我们对输入层进行输入后，该信息会一层层传递下去，最终从输出层输出。&lt;/p&gt;
 
@@ -1083,8 +1058,6 @@
 
 &lt;p&gt;没有子节点的节点称为叶节点。&lt;/p&gt;
 
-&lt;p&gt;&amp;nbsp;&lt;/p&gt;
-
 &lt;p&gt;&lt;strong&gt;决策树分类器原理：&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;决策树是一颗树，要分类的样本从树根进入，在树的每个节点通过对样本的某种属性的判断选择不同的路径逐步下降到底,得出其所属类别。&lt;/p&gt;
@@ -1093,13 +1066,7 @@
 
 &lt;p&gt;&lt;img src=&#34;http://pic002.cnblogs.com/images/2012/52809/2012063021362216.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
-&lt;p align=&#34;center&#34;&gt;
-  &amp;nbsp;
-&lt;/p&gt;
-
 &lt;p&gt;为了建立一棵决策树,我们首先应向程序输入大量训练数据(包含所属类别的数据)，程序将根据训练数据按某一算法自动生成决策树。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;&amp;nbsp;&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;决策树生成算法:&lt;/strong&gt;&lt;/p&gt;
 
@@ -1144,8 +1111,6 @@ ans=ent
 
 &lt;p&gt;有了上述评估方法后，我们就可以不断尝试各种拆分方法，然后选出最好的拆分方法构造树中的节点了。我们将计算拆分前的熵（基尼不存度）值，与拆分后的熵（基尼不存度）的值的加权平均，将其差值作为&lt;strong&gt;信息增益&lt;/strong&gt;。最终对能得到最大信息增益的属性进行拆分。然后再分别对拆分后得集合选择属性进行拆分，直到最大信息增益为非正时停止拆分，这时决策树就构建完毕了。&lt;/p&gt;
 
-&lt;p&gt;&amp;nbsp;&lt;/p&gt;
-
 &lt;p&gt;&lt;strong&gt;优化：&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;为了防止决策树变的过度拟合（过度针对训练数据），我们可以在信息增益小于某个值后就停止拆分。但是我们可能遇到这样的数据―――某次拆分信息增益很小，但下一次就会很大。为了防止这一状况，我们可以在用先前的方法构造整棵树后，在尝试消除多余的节点。这个过程就是&lt;strong&gt;剪枝&lt;/strong&gt;。&lt;/p&gt;
@@ -1154,13 +1119,9 @@ ans=ent
 
 &lt;p&gt;&lt;strong&gt;在处理数值型数据时，熵和基尼不存度并不是一个好的选择，因为有些数值相差很近，有些相差很远，不能简单用是否为同一类别进行判断。所以我们可以用方差代替它们。&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;&amp;nbsp;&lt;/p&gt;
-
 &lt;p&gt;&lt;strong&gt;决策树对缺失数据的处理：&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;当我们要判断类别的样本缺少某些决策树作判断时必须的数据时，我们可以选择同时走两个分支，不过我们不是平均统计各分支的结果值，而是进行加权统计。为了达到这一目标，决策树中每个节点都有一个值为１的权重，即观测数据对于数据向是否属于某个特定分类的概率具有１００％的影响，而如果走多个分支，我们将给每个分支一个权重，其值等于所有位于该分支的其他数据所占的比重。&lt;/p&gt;
-
-&lt;p&gt;&amp;nbsp;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;优点：&lt;/strong&gt;&lt;/p&gt;
 
@@ -1177,8 +1138,6 @@ ans=ent
 &lt;p&gt;面对有大量可能结果的数据集时，决策树不够有效。当可能的分类结果较多时，决策树就会过度复杂，预测效果也会较差。&lt;/p&gt;
 
 &lt;p&gt;另外，决策树不适合处理大量的数值型输入输出，因为它只能创建一些简单的&amp;gt; ，&amp;lt;，＝等节点，但数值之间可能存在更多更复杂的关系。&lt;/p&gt;
-
-&lt;p&gt;&amp;nbsp;&lt;/p&gt;
 
 &lt;p&gt;呼&amp;hellip;.这个写的不怎么累了&amp;hellip;.很多都是书上的原话哈，不像昨天那个几乎都是自己写的&amp;hellip;&amp;hellip;&lt;/p&gt;
 
@@ -1198,9 +1157,9 @@ ans=ent
 
 &lt;p&gt;这个是第一篇&amp;hellip;&amp;hellip;贝叶斯分类器&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;数学基础：&lt;/strong&gt;**&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;数学基础：&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;条件概率&lt;/strong&gt;**&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;条件概率&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;定义：设A, B是两个事件，且P(A)&amp;gt;0 称P(B∣A)=P(AB)/P(A)为在条件 A下发生的条件事件B发生的条件概率。&lt;/p&gt;
 
@@ -1210,15 +1169,11 @@ ans=ent
 
 &lt;p&gt;&lt;strong&gt;全概率公式和贝叶斯公式&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;定义 设S为试验E的样本空间，B1, B2, &amp;hellip;Bn为E的一组事件，若BiBj=Ф, i&amp;ne;j, i, j=1,&lt;/p&gt;
-
-&lt;p&gt;2, &amp;hellip;,n; B1&amp;cup;B2&amp;cup;&amp;hellip;&amp;cup;Bn=S则称B1, B2, &amp;hellip;, Bn为样本空间的一个划分。&lt;/p&gt;
+&lt;p&gt;定义: 设S为试验E的样本空间，B1, B2, &amp;hellip;Bn为E的一组事件，若BiBj=Ф, i&amp;ne;j, i, j=1, 2, &amp;hellip;,n; B1&amp;cup;B2&amp;cup;&amp;hellip;&amp;cup;Bn=S则称B1, B2, &amp;hellip;, Bn为样本空间的一个划分。&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;定理&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;设试验E的样本空间为，A为E的事件，B1, B2, &amp;hellip;,Bn为的一个划分，且P(Bi)&amp;gt;0&lt;/p&gt;
-
-&lt;p&gt;(i=1, 2, &amp;hellip;n)，则P(A)=P(A∣B1)P(B1)+P(A∣B2)+ &amp;hellip;+P(A∣Bn)P(Bn)称为全概率公式。&lt;/p&gt;
+&lt;p&gt;设试验E的样本空间为，A为E的事件，B1, B2, &amp;hellip;,Bn为的一个划分，且P(Bi)&amp;gt;0(i=1, 2, &amp;hellip;n)，则P(A)=P(A∣B1)P(B1)+P(A∣B2)+ &amp;hellip;+P(A∣Bn)P(Bn)称为全概率公式。&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;定理&lt;/strong&gt;&lt;/p&gt;
 
@@ -1240,9 +1195,9 @@ ans=ent
 
 &lt;p&gt;1) 学习：向分类器输入一系列的训练数据，注意这些数据是包括其所属类别的，分类器将对训练数据进行分析，计算出&lt;/p&gt;
 
-&lt;p&gt;1.各个特征在各个分类中出现的概率(=某分类中具有该特征的数据数目 / 该分类数目)如先计算出各个单词在各种分类的文档出现的概率。&lt;/p&gt;
+&lt;p&gt;1.各个特征在各个分类中出现的概率(=某分类中具有该特征的数据数目/该分类数目)如先计算出各个单词在各种分类的文档出现的概率。&lt;/p&gt;
 
-&lt;p&gt;将该概率作为某分类下某特征出现的条件概率P(feature | category)&lt;/p&gt;
+&lt;p&gt;将该概率作为某分类下某特征出现的条件概率P(feature|category)&lt;/p&gt;
 
 &lt;p&gt;2.任选一个样本属于某分类的概率(=某分类文章数 / 文章总数)&lt;/p&gt;
 
@@ -1252,9 +1207,7 @@ ans=ent
 
 &lt;p&gt;2)分类计算：在向分类器提供大量学习数据后，我们就可以用它对新的样本进行分类了。&lt;/p&gt;
 
-&lt;p&gt;首先对样本进行分析，找出其具有的各种特征，利用这些特征，我们来计算各个分类中出现该样本的概率p(sample&lt;/p&gt;
-
-&lt;p&gt;| category)。为了完成这一计算，我们只要简单将该分类下在该文档中出现过的特征出现的条件概率相乘即可。即&amp;pi; (P(feature | category) 这里的feature是该样本拥有的所有特征。&lt;/p&gt;
+&lt;p&gt;首先对样本进行分析，找出其具有的各种特征，利用这些特征，我们来计算各个分类中出现该样本的概率p(sample | category)。为了完成这一计算，我们只要简单将该分类下在该文档中出现过的特征出现的条件概率相乘即可。即∏P(feature | category) 这里的feature是该样本拥有的所有特征。&lt;/p&gt;
 
 &lt;p&gt;但是，我们实际要计算的是P (category | sample),即给定样本属于某分类的条件概率。&lt;/p&gt;
 

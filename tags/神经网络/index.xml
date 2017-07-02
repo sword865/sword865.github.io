@@ -47,37 +47,26 @@
 
 &lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; 模仿这一过程，我们就可以建立人工神经网络。&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&amp;nbsp;&lt;/strong&gt;&lt;/p&gt;
-
 &lt;p&gt;&lt;strong&gt;人工神经网络：&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;/strong&gt; 人工神经网络的基本单位是人工神经元（以下简称神经元）。一个神经元可以有多个输入，每个输入有一个相应权值。&lt;/p&gt;
+&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; 人工神经网络的基本单位是人工神经元（以下简称神经元）。一个神经元可以有多个输入，每个输入有一个相应权值。&lt;/p&gt;
 
 &lt;p&gt;图示如下：&lt;/p&gt;
 
 &lt;p&gt;&lt;img class=&#34;alignnone  wp-image-125&#34; src=&#34;http://upload.wikimedia.org/wikipedia/commons/9/97/Ncell.png&#34; alt=&#34;nn&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;a1~an为神经元的输入值&lt;/p&gt;
-
-&lt;p&gt;w1~wn为神经元各个的输入所拥有的权值&lt;/p&gt;
-
-&lt;p&gt;b为偏移量&lt;/p&gt;
-
-&lt;p&gt;sum对各个输入与其权值的积求和(含偏移量)。&lt;/p&gt;
-
-&lt;p&gt;f为传递函数，接受sum的输出，通过一个函数变换，输出t&lt;/p&gt;
-
-&lt;p&gt;t为神经元输出&lt;/p&gt;
-
-&lt;p&gt;数学表示 t=f(WA&amp;#8217;+b)&lt;/p&gt;
-
-&lt;p&gt;W为权向量&lt;/p&gt;
-
-&lt;p&gt;A为输入向量，A&amp;#8217;为A向量的转置&lt;/p&gt;
-
-&lt;p&gt;b为偏移量&lt;/p&gt;
-
-&lt;p&gt;f为传递函数&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;a1~an为神经元的输入值
+w1~wn为神经元各个的输入所拥有的权值
+b为偏移量
+sum对各个输入与其权值的积求和(含偏移量)。
+f为传递函数，接受sum的输出，通过一个函数变换，输出t
+t为神经元输出
+数学表示 t=f(WA&#39;+b)
+W为权向量
+A为输入向量，A&#39;为A向量的转置
+b为偏移量
+f为传递函数
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;在人工神经网络中，神经元之间相互连接，在连接点将前者的输出作为后者的输出，形成错综复杂的网状结构，进行信息的传递与计算。&lt;/p&gt;
 
@@ -96,10 +85,6 @@
 &lt;p&gt;因此，MLP网络中至少有3个层次。&lt;/p&gt;
 
 &lt;p&gt;&lt;img class=&#34;alignnone  wp-image-125&#34; src=&#34;http://pic002.cnblogs.com/images/2012/52809/2012063021381464.jpg&#34; alt=&#34;mlp&#34; /&gt;&lt;/p&gt;
-
-&lt;p align=&#34;center&#34;&gt;
-  &amp;nbsp;
-&lt;/p&gt;
 
 &lt;p&gt;这些层次中，每层的每个神经元的输出都会作为下一层的每个神经元的输入，因此当我们对输入层进行输入后，该信息会一层层传递下去，最终从输出层输出。&lt;/p&gt;
 

@@ -23,9 +23,9 @@
 
 &lt;p&gt;&amp;nbsp;&amp;nbsp; 非负矩阵分解是一种特征提取的算法，它尝试从数据集中寻找新的数据行，将这些新找到的数据行加以组合，就可以重新构造出数据集。&lt;/p&gt;
 
-&lt;p&gt;算法要求输入多个样本数据，每个样本数据都是一个m维数值向量，首先把我们的数据集用矩阵的形式写出来，每一列是一个数据，而每一行是这些数据对应维度的数值。于是我们就有了一个大小为m*n的输入矩阵。而算法的目标就是将这个矩阵分解为另外两个非负矩阵的积。&lt;/p&gt;
+&lt;p&gt;&amp;nbsp;&amp;nbsp; 算法要求输入多个样本数据，每个样本数据都是一个m维数值向量，首先把我们的数据集用矩阵的形式写出来，每一列是一个数据，而每一行是这些数据对应维度的数值。于是我们就有了一个大小为m*n的输入矩阵。而算法的目标就是将这个矩阵分解为另外两个非负矩阵的积。&lt;/p&gt;
 
-&lt;p&gt;　&lt;img src=&#34;http://sword865.com/blog/wp-content/ql-cache/quicklatex.com-cad804e086b2306a9bd31889dd0dbb72_l3.png&#34; class=&#34;ql-img-inline-formula quicklatex-auto-format&#34; alt=&#34;&amp;#77;&amp;#95;&amp;#123;&amp;#109;&amp;#42;&amp;#110;&amp;#125;&amp;#61;&amp;#65;&amp;#95;&amp;#123;&amp;#109;&amp;#42;&amp;#114;&amp;#125;&amp;#66;&amp;#95;&amp;#123;&amp;#114;&amp;#42;&amp;#110;&amp;#125;&#34; title=&#34;Rendered by QuickLaTeX.com&#34; height=&#34;15&#34; width=&#34;144&#34; style=&#34;vertical-align: -3px;&#34; /&gt;&lt;/p&gt;
+&lt;div&gt;$$M_{m,n}=A_{m,r}B_{r,n}$$&lt;/div&gt;
 
 &lt;p&gt;&amp;nbsp;&amp;nbsp; 我们将分解矩阵后新得出的一个维度称为特征，那么在前一个m*r的矩阵中，第i行第j列的值就代表属性i对第j种特征的贡献值，而后一个矩阵的第i行第j列则代表第i种特征对第j个样本的贡献值。这样我们就找出了输入样本的r种特征。&lt;/p&gt;
 

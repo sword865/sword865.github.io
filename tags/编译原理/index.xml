@@ -28,44 +28,44 @@ PARSER_END(MiniJavaParser)
 // Insert a specification of a lexical analysis here.
 TOKEN :
 {
-    &amp;lt; LPAREN: “(” &amp;gt;
-        | &amp;lt; RPAREN: “)” &amp;gt;
-        | &amp;lt; LSQPAREN: “[” &amp;gt;
-        | &amp;lt; RSQPAREN: “]” &amp;gt;
-        | &amp;lt; LBRACE: “{” &amp;gt;
-        | &amp;lt; RBRACE: “}” &amp;gt;
-        | &amp;lt; DOT: “.” &amp;gt;
-        | &amp;lt; ASSIGN: “=” &amp;gt;
-        | &amp;lt; LT: “&amp;lt;” &amp;gt;
-        | &amp;lt; PLUS: “+” &amp;gt;
-        | &amp;lt; MINUS: “-” &amp;gt;
-        | &amp;lt; AND : “&amp;amp;&amp;amp;” &amp;gt;
-        | &amp;lt; NOT : “!” &amp;gt;
-        | &amp;lt; SEMICOLON: “;” &amp;gt;
-        | &amp;lt; PUBLIC: “public” &amp;gt;
-        | &amp;lt; RETURN: “return” &amp;gt;
-        | &amp;lt; BOOLEAN: “boolean” &amp;gt;
-        | &amp;lt; CLASS: “class” &amp;gt;
-        | &amp;lt; INTERFACE: “interface” &amp;gt;
-        | &amp;lt; ELSE: “else” &amp;gt;
-        | &amp;lt; EXTENDS: “extends” &amp;gt;
-        | &amp;lt; FALSE: “false” &amp;gt;
-        | &amp;lt; IF: “if” &amp;gt;
-        | &amp;lt; WHILE: “while” &amp;gt;
-        | &amp;lt; INTEGER: “int” &amp;gt;
-        | &amp;lt; LENGTH: “length” &amp;gt;
-        | &amp;lt; MAIN: “main” &amp;gt;
-        | &amp;lt; NEW: “new” &amp;gt;
-        | &amp;lt; STATIC: “static” &amp;gt;
-        | &amp;lt; STRING: “String” &amp;gt;
-        | &amp;lt; THIS: “this” &amp;gt;
-        | &amp;lt; TRUE: “true” &amp;gt;
-        | &amp;lt; PRINT: “System.out.println” &amp;gt;
-        | &amp;lt; VOID: “void” &amp;gt;
+    &amp;lt; LPAREN: &amp;quot;(&amp;quot; &amp;gt;
+        | &amp;lt; RPAREN: &amp;quot;)&amp;quot; &amp;gt;
+        | &amp;lt; LSQPAREN: &amp;quot;[&amp;quot; &amp;gt;
+        | &amp;lt; RSQPAREN: &amp;quot;]&amp;quot; &amp;gt;
+        | &amp;lt; LBRACE: &amp;quot;{&amp;quot; &amp;gt;
+        | &amp;lt; RBRACE: &amp;quot;}&amp;quot; &amp;gt;
+        | &amp;lt; DOT: &amp;quot;.&amp;quot; &amp;gt;
+        | &amp;lt; ASSIGN: &amp;quot;=&amp;quot; &amp;gt;
+        | &amp;lt; LT: &amp;quot;&amp;lt;&amp;quot; &amp;gt;
+        | &amp;lt; PLUS: &amp;quot;+&amp;quot; &amp;gt;
+        | &amp;lt; MINUS: &amp;quot;-&amp;quot; &amp;gt;
+        | &amp;lt; AND : &amp;quot;&amp;amp;&amp;amp;&amp;quot; &amp;gt;
+        | &amp;lt; NOT : &amp;quot;!&amp;quot; &amp;gt;
+        | &amp;lt; SEMICOLON: &amp;quot;;&amp;quot; &amp;gt;
+        | &amp;lt; PUBLIC: &amp;quot;public&amp;quot; &amp;gt;
+        | &amp;lt; RETURN: &amp;quot;return&amp;quot; &amp;gt;
+        | &amp;lt; BOOLEAN: &amp;quot;boolean&amp;quot; &amp;gt;
+        | &amp;lt; CLASS: &amp;quot;class&amp;quot; &amp;gt;
+        | &amp;lt; INTERFACE: &amp;quot;interface&amp;quot; &amp;gt;
+        | &amp;lt; ELSE: &amp;quot;else&amp;quot; &amp;gt;
+        | &amp;lt; EXTENDS: &amp;quot;extends&amp;quot; &amp;gt;
+        | &amp;lt; FALSE: &amp;quot;false&amp;quot; &amp;gt;
+        | &amp;lt; IF: &amp;quot;if&amp;quot; &amp;gt;
+        | &amp;lt; WHILE: &amp;quot;while&amp;quot; &amp;gt;
+        | &amp;lt; INTEGER: &amp;quot;int&amp;quot; &amp;gt;
+        | &amp;lt; LENGTH: &amp;quot;length&amp;quot; &amp;gt;
+        | &amp;lt; MAIN: &amp;quot;main&amp;quot; &amp;gt;
+        | &amp;lt; NEW: &amp;quot;new&amp;quot; &amp;gt;
+        | &amp;lt; STATIC: &amp;quot;static&amp;quot; &amp;gt;
+        | &amp;lt; STRING: &amp;quot;String&amp;quot; &amp;gt;
+        | &amp;lt; THIS: &amp;quot;this&amp;quot; &amp;gt;
+        | &amp;lt; TRUE: &amp;quot;true&amp;quot; &amp;gt;
+        | &amp;lt; PRINT: &amp;quot;System.out.println&amp;quot; &amp;gt;
+        | &amp;lt; VOID: &amp;quot;void&amp;quot; &amp;gt;
     }
     TOKEN : /* LITERALS */
     {
-        &amp;lt; INTEGER_LITERAL: ( [“1″-“9″] ([“0″-“9″])* | “0” ) &amp;gt;
+        &amp;lt; INTEGER_LITERAL: ( [&amp;quot;1&amp;quot;-&amp;quot;9&amp;quot;] ([&amp;quot;0&amp;quot;-&amp;quot;9&amp;quot;])* | &amp;quot;0&amp;quot; ) &amp;gt;
     }
     TOKEN : /* IDENTIFIERS */
     {
@@ -73,48 +73,48 @@ TOKEN :
         |
         &amp;lt; #LETTER:
         [
-        “u0024″,
-        “u0041″-“u005a”,
-        “u005f”,
-        “u0061″-“u007a”,
-        “u00c0″-“u00d6″,
-        “u00d8″-“u00f6″,
-        “u00f8″-“u00ff”,
-        “u0100″-“u1fff”,
-        “u3040″-“u318f”,
-        “u3300″-“u337f”,
-        “u3400″-“u3d2d”,
-        “u4e00″-“u9fff”,
-        “uf900″-“ufaff”
+        &amp;quot;u0024&amp;quot;,
+        &amp;quot;u0041&amp;quot;-&amp;quot;u005a&amp;quot;,
+        &amp;quot;u005f&amp;quot;,
+        &amp;quot;u0061&amp;quot;-&amp;quot;u007a&amp;quot;,
+        &amp;quot;u00c0&amp;quot;-&amp;quot;u00d6&amp;quot;,
+        &amp;quot;u00d8&amp;quot;-&amp;quot;u00f6&amp;quot;,
+        &amp;quot;u00f8&amp;quot;-&amp;quot;u00ff&amp;quot;,
+        &amp;quot;u0100&amp;quot;-&amp;quot;u1fff&amp;quot;,
+        &amp;quot;u3040&amp;quot;-&amp;quot;u318f&amp;quot;,
+        &amp;quot;u3300&amp;quot;-&amp;quot;u337f&amp;quot;,
+        &amp;quot;u3400&amp;quot;-&amp;quot;u3d2d&amp;quot;,
+        &amp;quot;u4e00&amp;quot;-&amp;quot;u9fff&amp;quot;,
+        &amp;quot;uf900&amp;quot;-&amp;quot;ufaff&amp;quot;
         ]
         |
         &amp;lt; #DIGIT:
         [
-        “u0030″-“u0039″,
-        “u0660″-“u0669″,
-        “u06f0″-“u06f9″,
-        “u0966″-“u096f”,
-        “u09e6″-“u09ef”,
-        “u0a66″-“u0a6f”,
-        “u0ae6″-“u0aef”,
-        “u0b66″-“u0b6f”,
-        “u0be7″-“u0bef”,
-        “u0c66″-“u0c6f”,
-        “u0ce6″-“u0cef”,
-        “u0d66″-“u0d6f”,
-        “u0e50″-“u0e59″,
-        “u0ed0″-“u0ed9″,
-        “u1040″-“u1049″
+        &amp;quot;u0030&amp;quot;-&amp;quot;u0039&amp;quot;,
+        &amp;quot;u0660&amp;quot;-&amp;quot;u0669&amp;quot;,
+        &amp;quot;u06f0&amp;quot;-&amp;quot;u06f9&amp;quot;,
+        &amp;quot;u0966&amp;quot;-&amp;quot;u096f&amp;quot;,
+        &amp;quot;u09e6&amp;quot;-&amp;quot;u09ef&amp;quot;,
+        &amp;quot;u0a66&amp;quot;-&amp;quot;u0a6f&amp;quot;,
+        &amp;quot;u0ae6&amp;quot;-&amp;quot;u0aef&amp;quot;,
+        &amp;quot;u0b66&amp;quot;-&amp;quot;u0b6f&amp;quot;,
+        &amp;quot;u0be7&amp;quot;-&amp;quot;u0bef&amp;quot;,
+        &amp;quot;u0c66&amp;quot;-&amp;quot;u0c6f&amp;quot;,
+        &amp;quot;u0ce6&amp;quot;-&amp;quot;u0cef&amp;quot;,
+        &amp;quot;u0d66&amp;quot;-&amp;quot;u0d6f&amp;quot;,
+        &amp;quot;u0e50&amp;quot;-&amp;quot;u0e59&amp;quot;,
+        &amp;quot;u0ed0&amp;quot;-&amp;quot;u0ed9&amp;quot;,
+        &amp;quot;u1040&amp;quot;-&amp;quot;u1049&amp;quot;
         ]
     }
     SKIP :
     {
-        &amp;lt; ” ” &amp;gt;
-        | &amp;lt; “t” &amp;gt;
-        | &amp;lt; “n” &amp;gt;
-        | &amp;lt; “r” &amp;gt;
-        | &amp;lt; “//” (~[“n”])* “n” &amp;gt;
-        | &amp;lt;“/*” (~[“*”])* “*” (~[“/”] (~[“*”])* “*”)* “/”&amp;gt;
+        &amp;lt; &amp;quot; &amp;quot; &amp;gt;
+        | &amp;lt; &amp;quot;t&amp;quot; &amp;gt;
+        | &amp;lt; &amp;quot;n&amp;quot; &amp;gt;
+        | &amp;lt; &amp;quot;r&amp;quot; &amp;gt;
+        | &amp;lt; &amp;quot;//&amp;quot; (~[&amp;quot;n&amp;quot;])* &amp;quot;n&amp;quot; &amp;gt;
+        | &amp;lt;&amp;quot;/*&amp;quot; (~[&amp;quot;*&amp;quot;])* &amp;quot;*&amp;quot; (~[&amp;quot;/&amp;quot;] (~[&amp;quot;*&amp;quot;])* &amp;quot;*&amp;quot;)* &amp;quot;/&amp;quot;&amp;gt;
     }
     // The following is a simple grammar that will allow you
     // to test the generated lexer.
@@ -126,93 +126,93 @@ TOKEN :
     void MainClass() :
     {}
     {
-        “class” “{” “public” “static” “void” “main” “(” “String” “[” “]” “{” Statement() “}” “}”
+        &amp;quot;class&amp;quot; &amp;quot;{&amp;quot; &amp;quot;public&amp;quot; &amp;quot;static&amp;quot; &amp;quot;void&amp;quot; &amp;quot;main&amp;quot; &amp;quot;(&amp;quot; &amp;quot;String&amp;quot; &amp;quot;[&amp;quot; &amp;quot;]&amp;quot; &amp;quot;{&amp;quot; Statement() &amp;quot;}&amp;quot; &amp;quot;}&amp;quot;
     }
     void ext() :
     {}
     {
-        (“extends”  )?
+        (&amp;quot;extends&amp;quot;  )?
     }
     void ClassDecl() :
     {}
     {
-        “class” ext()  “{” (VarDecl())* (MethodDecl())* “}”
+        &amp;quot;class&amp;quot; ext()  &amp;quot;{&amp;quot; (VarDecl())* (MethodDecl())* &amp;quot;}&amp;quot;
     }
     void VarDecl():
     {}
-    { Type() “;”}
+    { Type() &amp;quot;;&amp;quot;}
     void MethodDecl():
     {}
-    {“public” Type()
-        “(” FormaList() “)”
-        “{” ( LOOKAHEAD(2) VarDecl() )* (Statement())*  “return” Exp() “;” “}”
+    {&amp;quot;public&amp;quot; Type()
+        &amp;quot;(&amp;quot; FormaList() &amp;quot;)&amp;quot;
+        &amp;quot;{&amp;quot; ( LOOKAHEAD(2) VarDecl() )* (Statement())*  &amp;quot;return&amp;quot; Exp() &amp;quot;;&amp;quot; &amp;quot;}&amp;quot;
     }
     void FormaList():
     {}
-    {(Type()  “FormalRest()”)?}
+    {(Type()  &amp;quot;FormalRest()&amp;quot;)?}
     void FormaRest():
     {}
-    {“,” Type() }
+    {&amp;quot;,&amp;quot; Type() }
     void Type():
     {}
     {
-        |”boolean”
+        |&amp;quot;boolean&amp;quot;
         |LOOKAHEAD(2)
-        “int”
-        |”int” “[” “]”
+        &amp;quot;int&amp;quot;
+        |&amp;quot;int&amp;quot; &amp;quot;[&amp;quot; &amp;quot;]&amp;quot;
     }
     void Statement():
     {}
-    {“{” (Statement())* “}”
-    |”while” “(” Exp() “)” Statement()
-    |”System.out.println”  “(” Exp() “)”
-    | instat1() “=” Exp() “;”
-    |”if” “(” Exp() “)” Statement() inif()
+    {&amp;quot;{&amp;quot; (Statement())* &amp;quot;}&amp;quot;
+    |&amp;quot;while&amp;quot; &amp;quot;(&amp;quot; Exp() &amp;quot;)&amp;quot; Statement()
+    |&amp;quot;System.out.println&amp;quot;  &amp;quot;(&amp;quot; Exp() &amp;quot;)&amp;quot;
+    | instat1() &amp;quot;=&amp;quot; Exp() &amp;quot;;&amp;quot;
+    |&amp;quot;if&amp;quot; &amp;quot;(&amp;quot; Exp() &amp;quot;)&amp;quot; Statement() inif()
 }
 void inif():
 {}
-{(LOOKAHEAD(2) “else” Statement())?}
+{(LOOKAHEAD(2) &amp;quot;else&amp;quot; Statement())?}
 void instat1():
 {}
-{(“[” Exp() “]”)?}
+{(&amp;quot;[&amp;quot; Exp() &amp;quot;]&amp;quot;)?}
 void Exp():
 {}
 {Expa() (LOOKAHEAD(2) (Expb()))?
 }
 void Expa():
 {}
-{“true”
-    |”false”
+{&amp;quot;true&amp;quot;
+    |&amp;quot;false&amp;quot;
     |
-    |”this”
-    |”!” Exp()
-    |”(” Exp() “)”
+    |&amp;quot;this&amp;quot;
+    |&amp;quot;!&amp;quot; Exp()
+    |&amp;quot;(&amp;quot; Exp() &amp;quot;)&amp;quot;
     |LOOKAHEAD(2)
-    “new” “int” “[” Exp() “]”
-    |”new” “(” “)”
+    &amp;quot;new&amp;quot; &amp;quot;int&amp;quot; &amp;quot;[&amp;quot; Exp() &amp;quot;]&amp;quot;
+    |&amp;quot;new&amp;quot; &amp;quot;(&amp;quot; &amp;quot;)&amp;quot;
 }
 void Expb():
 {}
 {
     op() Exp()
-    |”[” Exp() “]”Exp()
+    |&amp;quot;[&amp;quot; Exp() &amp;quot;]&amp;quot;Exp()
     |LOOKAHEAD(2)
-    “.” “length”
-    |”.”
+    &amp;quot;.&amp;quot; &amp;quot;length&amp;quot;
+    |&amp;quot;.&amp;quot;
 }
 void op():
 {}
-{“&amp;amp;&amp;amp;”
-    |”&amp;lt;”
-    |”+”
-    |”-”
-    |”*”}
+{&amp;quot;&amp;amp;&amp;amp;&amp;quot;
+    |&amp;quot;&amp;lt;&amp;quot;
+    |&amp;quot;+&amp;quot;
+    |&amp;quot;-&amp;quot;
+    |&amp;quot;*&amp;quot;}
     void ExpList():
     {}
     {(Exp()  (ExpRest())*)?}
     void ExpRest():
     {}
-    {“,” Exp()}
+    {&amp;quot;,&amp;quot; Exp()}
     void Goal() :
     {}
     {
@@ -221,12 +221,12 @@ void op():
     void MiniJavaToken():
     {}
     {
-        “class”  |  | “{” | “public” | “static” | “void” |
-            “main” | “(” | “String”  | “[” | “]” | “)” | “}” | “extends” | “;”
-            | “return” | “,” | “int” | “boolean” | “=” | “if” | “else” | “while”
-            | “System.out.println” | “&amp;amp;&amp;amp;” | “&amp;lt;” | “+” | “-” | “*” | “.” |
-            “length” | | “true” | “false” | “this” | “new” |
-            “!”
+        &amp;quot;class&amp;quot;  |  | &amp;quot;{&amp;quot; | &amp;quot;public&amp;quot; | &amp;quot;static&amp;quot; | &amp;quot;void&amp;quot; |
+            &amp;quot;main&amp;quot; | &amp;quot;(&amp;quot; | &amp;quot;String&amp;quot;  | &amp;quot;[&amp;quot; | &amp;quot;]&amp;quot; | &amp;quot;)&amp;quot; | &amp;quot;}&amp;quot; | &amp;quot;extends&amp;quot; | &amp;quot;;&amp;quot;
+            | &amp;quot;return&amp;quot; | &amp;quot;,&amp;quot; | &amp;quot;int&amp;quot; | &amp;quot;boolean&amp;quot; | &amp;quot;=&amp;quot; | &amp;quot;if&amp;quot; | &amp;quot;else&amp;quot; | &amp;quot;while&amp;quot;
+            | &amp;quot;System.out.println&amp;quot; | &amp;quot;&amp;amp;&amp;amp;&amp;quot; | &amp;quot;&amp;lt;&amp;quot; | &amp;quot;+&amp;quot; | &amp;quot;-&amp;quot; | &amp;quot;*&amp;quot; | &amp;quot;.&amp;quot; |
+            &amp;quot;length&amp;quot; | | &amp;quot;true&amp;quot; | &amp;quot;false&amp;quot; | &amp;quot;this&amp;quot; | &amp;quot;new&amp;quot; |
+            &amp;quot;!&amp;quot;
     }
 &lt;/code&gt;&lt;/pre&gt;
 </description>
