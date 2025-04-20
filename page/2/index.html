@@ -427,7 +427,8 @@ ans&lt;-c(mean-sigma*qnorm(1-alpha / 2)/sqrt(n) , mean+sigma*qnorm(1-alpha / 2)/
 <pre class="lang:r decode:true">z.test&lt;-function(x,n,sigma,alpha){
 mean&lt;-mean(x)
 ans&lt;-c(
-  mean-sigma*qnorm(1-alpha/2,mean=0,sd=1,lower.tail=TRUE)/sqrt(n),mean+sigma*qnorm(1-alpha/2,mean=0,sd=1,lower.tail=TRUE)/sqrt(n))
+  mean-sigma*qnorm(1-alpha/2,mean=0,sd=1,lower.tail=TRUE)/sqrt(n),
+    mean+sigma*qnorm(1-alpha/2,mean=0,sd=1,lower.tail=TRUE)/sqrt(n))
 ans
 }</pre>
 <p>这样我们就可以直接使用z.test()完成对u的置信区间的计算。</p>
@@ -719,7 +720,11 @@ pPtr += sizeof( word );
 for ( i = 0; i &amp;lt; nTriangles; i++ )
 {
   MS3DTriangle *pTriangle = ( MS3DTriangle* )pPtr;
-  int vertexIndices[3] = { pTriangle-&amp;gt;m_vertexIndices[0], pTriangle-&amp;gt;m_vertexIndices[1], pTriangle-&amp;gt;m_vertexIndices[2] };
+  int vertexIndices[3] = {
+    pTriangle-&amp;gt;m_vertexIndices[0], 
+    pTriangle-&amp;gt;m_vertexIndices[1], 
+    pTriangle-&amp;gt;m_vertexIndices[2] 
+  };
   float t[3] = { 1.0f-pTriangle-&amp;gt;m_t[0], 1.0f-pTriangle-&amp;gt;m_t[1], 1.0f-pTriangle-&amp;gt;m_t[2] };
   //数据读取
   memcpy( m_pTriangles[i].m_vertexNormals, pTriangle-&amp;gt;m_vertexNormals, sizeof( float )*3*3 );
@@ -730,7 +735,7 @@ for ( i = 0; i &amp;lt; nTriangles; i++ )
   pPtr += sizeof( MS3DTriangle );
 }
 </code></pre>
-<p>要注意得是，因为MS3D使用窗口坐标系而OpenGL使用笛卡儿坐标系，所以需要反转每个顶点Y方向的纹理坐标</p>
+<p>要注意得是，因为MS3D使用窗口坐标系而OpenGL使用笛卡儿坐标系，所以需要反转每个顶点Y方向的纹理坐标。</p>
                                 
                             </div>
                             <div class="post-item-meta">

@@ -211,7 +211,8 @@ ans&lt;-c(mean-sigma*qnorm(1-alpha / 2)/sqrt(n) , mean+sigma*qnorm(1-alpha / 2)/
 <pre class="lang:r decode:true">z.test&lt;-function(x,n,sigma,alpha){
 mean&lt;-mean(x)
 ans&lt;-c(
-  mean-sigma*qnorm(1-alpha/2,mean=0,sd=1,lower.tail=TRUE)/sqrt(n),mean+sigma*qnorm(1-alpha/2,mean=0,sd=1,lower.tail=TRUE)/sqrt(n))
+  mean-sigma*qnorm(1-alpha/2,mean=0,sd=1,lower.tail=TRUE)/sqrt(n),
+    mean+sigma*qnorm(1-alpha/2,mean=0,sd=1,lower.tail=TRUE)/sqrt(n))
 ans
 }</pre>
 <p>这样我们就可以直接使用z.test()完成对u的置信区间的计算。</p>

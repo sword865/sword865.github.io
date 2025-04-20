@@ -350,7 +350,8 @@ ans&amp;lt;-c(mean-sigma*qnorm(1-alpha / 2)/sqrt(n) , mean+sigma*qnorm(1-alpha /
 &lt;pre class=&#34;lang:r decode:true&#34;&gt;z.test&amp;lt;-function(x,n,sigma,alpha){
 mean&amp;lt;-mean(x)
 ans&amp;lt;-c(
-  mean-sigma*qnorm(1-alpha/2,mean=0,sd=1,lower.tail=TRUE)/sqrt(n),mean+sigma*qnorm(1-alpha/2,mean=0,sd=1,lower.tail=TRUE)/sqrt(n))
+  mean-sigma*qnorm(1-alpha/2,mean=0,sd=1,lower.tail=TRUE)/sqrt(n),
+    mean+sigma*qnorm(1-alpha/2,mean=0,sd=1,lower.tail=TRUE)/sqrt(n))
 ans
 }&lt;/pre&gt;
 &lt;p&gt;这样我们就可以直接使用z.test()完成对u的置信区间的计算。&lt;/p&gt;
@@ -637,7 +638,11 @@ pPtr += sizeof( word );
 for ( i = 0; i &amp;amp;lt; nTriangles; i++ )
 {
   MS3DTriangle *pTriangle = ( MS3DTriangle* )pPtr;
-  int vertexIndices[3] = { pTriangle-&amp;amp;gt;m_vertexIndices[0], pTriangle-&amp;amp;gt;m_vertexIndices[1], pTriangle-&amp;amp;gt;m_vertexIndices[2] };
+  int vertexIndices[3] = {
+    pTriangle-&amp;amp;gt;m_vertexIndices[0], 
+    pTriangle-&amp;amp;gt;m_vertexIndices[1], 
+    pTriangle-&amp;amp;gt;m_vertexIndices[2] 
+  };
   float t[3] = { 1.0f-pTriangle-&amp;amp;gt;m_t[0], 1.0f-pTriangle-&amp;amp;gt;m_t[1], 1.0f-pTriangle-&amp;amp;gt;m_t[2] };
   //数据读取
   memcpy( m_pTriangles[i].m_vertexNormals, pTriangle-&amp;amp;gt;m_vertexNormals, sizeof( float )*3*3 );
@@ -648,7 +653,7 @@ for ( i = 0; i &amp;amp;lt; nTriangles; i++ )
   pPtr += sizeof( MS3DTriangle );
 }
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;要注意得是，因为MS3D使用窗口坐标系而OpenGL使用笛卡儿坐标系，所以需要反转每个顶点Y方向的纹理坐标&lt;/p&gt;
+&lt;p&gt;要注意得是，因为MS3D使用窗口坐标系而OpenGL使用笛卡儿坐标系，所以需要反转每个顶点Y方向的纹理坐标。&lt;/p&gt;
 &lt;p&gt;除了读取模型信息外，还需要根据材质信息段中各种材质的贴图文件路径，读入对应的贴图文件，用以完成贴图。&lt;/p&gt;
 &lt;p&gt;通过对上一步中得到的各种结构体进行解析，可以得到以下以一些简单的基础结构：&lt;/p&gt;
 &lt;p&gt;Mesh   /*网格*/&lt;/p&gt;
