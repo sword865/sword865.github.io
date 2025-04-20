@@ -413,7 +413,7 @@ code.has-jax {
 <p>$$f_t^a(x; \theta_{sh}, \theta_t^a))=f_t(h(x;\theta_{sh}); \theta_t^a), \forall t$$</p>
 <h3 id="修改后的多目标模型结构">修改后的多目标模型结构</h3>
 <p>修改后多目标模型的结构是这样的：</p>
-<img width="500"  src="../images/google_m_towner.png" class="center" />
+<img width="500"  src="/images/2021/google_m_towner.png" class="center" />
 <h3 id="损失函数">损失函数</h3>
 <p>最后的Loss则是在原来的基础上加上了小塔的Loss:</p>
 <p>$$\hat{L}(\theta)=\sum_{t=1}^Tw_t(\hat{L}(\theta_{sh},\theta_t)+\gamma \hat{L}(\theta_{sh},\theta_t^a))$$</p>
@@ -422,7 +422,7 @@ code.has-jax {
 <p>文章认为，这种通过强迫模型学习共享层来提高复数任务的的结构也是一种正则化的手段。</p>
 <h2 id="小塔结构示例">小塔结构示例</h2>
 <p>这里对小塔的结构没有什么限制，唯一的要求就是要比模型简单，下面是文章里的一些例子：</p>
-<img src="../images/google_m_tower_small_tower.png" />
+<img src="/images/2021/google_m_tower_small_tower.png" />
 <p>最后主要就是附录中的证明与实验细节了，建议直接读原文了解。</p>
 <h2 id="注释与思考">注释与思考</h2>
 <p><strong>注1</strong>: Over-Parameterization的说明见&quot;<a href="https://arxiv.org/abs/1812.11118">Reconciling modern machine-learning practice and the classical bias–variance trade-off</a>&ldquo;和&rdquo;<a href="https://arxiv.org/abs/1903.07571">Two models of double descent for weak features</a>&ldquo;等文章，或者<a href="https://www.zhihu.com/question/434311126">知乎相关讨论</a>。</p>
