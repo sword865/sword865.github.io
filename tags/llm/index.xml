@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>LLM on 悟剑阁</title>
+    <link>https://sword865.github.io/tags/llm/</link>
+    <description>Recent content in LLM on 悟剑阁</description>
+    <generator>Hugo</generator>
+    <language>zh-CN</language>
+    <copyright>Copyright (c) 2015. All rights reserved.</copyright>
+    <lastBuildDate>Sun, 20 Apr 2025 15:51:35 +0800</lastBuildDate>
+    <atom:link href="https://sword865.github.io/tags/llm/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>vLLM Paged Attention代码分析</title>
+      <link>https://sword865.github.io/posts/2025/vllm-paged-attention%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/</link>
+      <pubDate>Sun, 20 Apr 2025 15:51:35 +0800</pubDate>
+      <guid>https://sword865.github.io/posts/2025/vllm-paged-attention%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/</guid>
+      <description>&lt;p&gt;3月底整理了一个关于经典Paged Attention算法的ppt, 想起这个几年没写过的blog，把PPT改成一篇文章证明我还活着(-_-)。&lt;/p&gt;&#xA;&lt;img width=&#34;500&#34;  src=&#34;../images/20250420/paged_attention.png&#34; class=&#34;center&#34; /&gt;&#xD;&#xA;&lt;h2 id=&#34;vllm-的-paged-attention&#34;&gt;vLLM 的 Paged Attention&lt;/h2&gt;&#xA;&lt;p&gt;开始前先说明一下，vLLM里的Paged Attention Kernel是有好几个不同的版本的，大概是下面这样子：&lt;/p&gt;&#xA;&lt;p&gt;vLLM早期版本：&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Prefilling -&amp;gt; Flash Attention的flash_attn_varlen_func&lt;/li&gt;&#xA;&lt;li&gt;Dedocding -&amp;gt; 自己实现的Paged Attention&#xA;&lt;ul&gt;&#xA;&lt;li&gt;paged_attention_v1 : 用于比较短的sequence&lt;/li&gt;&#xA;&lt;li&gt;paged_attention_v2 : 用于不想用v1的情况 :)&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;源码大概是这样的：&lt;/p&gt;&#xA;&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;    # NOTE(woosuk): We use a simple heuristic to decide whether to use&#xD;&#xA;    # PagedAttention V1 or V2. If the number of partitions is 1, we use&#xD;&#xA;    # V1 to avoid the overhead of reduction. Also, if the number of&#xD;&#xA;    # sequences or heads is large, we use V1 since there is enough work&#xD;&#xA;    # to parallelize.&#xD;&#xA;    # TODO(woosuk): Tune this heuristic.&#xD;&#xA;    # For context len &amp;gt; 8192, use V2 kernel to avoid shared memory&#xD;&#xA;    # shortage.&#xD;&#xA;    use_v1 = (max_seq_len &amp;lt;= 8192 and (max_num_partitions == 1 or num_seqs * num_heads &amp;gt; 512))&#xA;&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;vLLM 最新版本就已经全部转向Flash Attention， 用cutlass实现了。&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

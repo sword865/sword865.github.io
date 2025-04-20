@@ -151,6 +151,58 @@ code.has-jax {
     <div class="post-list-container post-list-container-no-background">
         
         
+            <a href="/posts/2025/vllm-paged-attention%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/" class="a-block">
+                <div class="post-item-wrapper">
+                    <div class="post-item post-item-no-divider">
+                        <div class="post-item-info-wrapper">
+                            <div class="post-item-title">
+                                vLLM Paged Attention代码分析
+                            </div>
+                            <div class="post-item-summary">
+                                
+                                    <p>3月底整理了一个关于经典Paged Attention算法的ppt, 想起这个几年没写过的blog，把PPT改成一篇文章证明我还活着(-_-)。</p>
+<img width="500"  src="../images/20250420/paged_attention.png" class="center" />
+<h2 id="vllm-的-paged-attention">vLLM 的 Paged Attention</h2>
+<p>开始前先说明一下，vLLM里的Paged Attention Kernel是有好几个不同的版本的，大概是下面这样子：</p>
+<p>vLLM早期版本：</p>
+<ul>
+<li>Prefilling -&gt; Flash Attention的flash_attn_varlen_func</li>
+<li>Dedocding -&gt; 自己实现的Paged Attention
+<ul>
+<li>paged_attention_v1 : 用于比较短的sequence</li>
+<li>paged_attention_v2 : 用于不想用v1的情况 :)</li>
+</ul>
+</li>
+</ul>
+<p>源码大概是这样的：</p>
+<pre tabindex="0"><code>    # NOTE(woosuk): We use a simple heuristic to decide whether to use
+    # PagedAttention V1 or V2. If the number of partitions is 1, we use
+    # V1 to avoid the overhead of reduction. Also, if the number of
+    # sequences or heads is large, we use V1 since there is enough work
+    # to parallelize.
+    # TODO(woosuk): Tune this heuristic.
+    # For context len &gt; 8192, use V2 kernel to avoid shared memory
+    # shortage.
+    use_v1 = (max_seq_len &lt;= 8192 and (max_num_partitions == 1 or num_seqs * num_heads &gt; 512))
+</code></pre><p>vLLM 最新版本就已经全部转向Flash Attention， 用cutlass实现了。</p>
+                                
+                            </div>
+                            <div class="post-item-meta">
+    2025-04-20
+    &emsp;
+    
+    
+    
+    &emsp;
+    
+</div>
+
+                        </div>
+                        
+                        
+                    </div>
+                </div>
+        
             <a href="/posts/2021/2021-03-08-google-small-towers%E4%B8%AD%E5%A4%9A%E7%9B%AE%E6%A0%87%E4%BC%98%E5%8C%96%E7%9A%84%E6%8E%A2%E7%B4%A2/" class="a-block">
                 <div class="post-item-wrapper">
                     <div class="post-item post-item-no-divider">
@@ -559,35 +611,6 @@ channel.sendResponse(new BytesRestResponse(BAD_REQUEST, &ldquo;No handler found 
                             </div>
                             <div class="post-item-meta">
     2015-02-04
-    &emsp;
-    
-    
-    
-    &emsp;
-    
-</div>
-
-                        </div>
-                        
-                        
-                    </div>
-                </div>
-        
-            <a href="/about/" class="a-block">
-                <div class="post-item-wrapper">
-                    <div class="post-item post-item-no-divider">
-                        <div class="post-item-info-wrapper">
-                            <div class="post-item-title">
-                                关于
-                            </div>
-                            <div class="post-item-summary">
-                                
-                                    <p>这里是我的技术博客。</p>
-<p>对什么都感兴趣的推荐系统系统工程师。</p>
-                                
-                            </div>
-                            <div class="post-item-meta">
-    2014-12-07
     &emsp;
     
     
