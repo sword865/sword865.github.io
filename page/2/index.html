@@ -208,13 +208,13 @@ code.has-jax {
 <p>相比之下，Heats算法倾向于降低热门item的权重，而Probs中与增强对热门item的推荐。</p>
 <p> </p>
 <p>在随机游走算法的基础上，有基于<span style="color: #333333; font-family: arial; font-size: 13px; line-height: 20.0200004577637px;">三分图的标签推荐算法：</span></p>
-<img title="NewImage.png" src="/images/_posts/171255254884996.png" alt="NewImage" width="600" height="305" border="0" />
+<img title="NewImage.png" src="/images/archives/171255254884996.png" alt="NewImage" width="600" height="305" border="0" />
 <p>图中，用户i的每个item的权重（1 or 0）会同时像用户和标签进行传播，这样每次传播后的兴趣向量：</p>
 <p>$f_j^t=\lambda f_j^p + (1-\lambda) f_j^{pt}$，其中$f_j^p$和$f_j^{pt}$分别是从(item-&gt;user-&gt;item)和(item-&gt;tag-&gt;item)传播后得到的权重。</p>
 <p><span style="font-size: 14px;">二、矩阵分解的张量模型</span></p>
 <p>对三元阵$Y_{(n\times m\times t)}$进行矩阵分解，C为核张量，U,I,T为用户特征，物品特征和标签特征矩阵。</p>
 <p>根据分解结果对Y进行填充。</p>
-<img title="NewImage.png" src="/images/_posts/171508548949009.png" alt="NewImage" width="600" height="260" border="0" />
+<img title="NewImage.png" src="/images/archives/171508548949009.png" alt="NewImage" width="600" height="260" border="0" />
 <p>填充后即得到评分矩阵</p>
 <p><span style="font-size: 14px;"> </span></p>
                                 
@@ -246,16 +246,16 @@ code.has-jax {
                                 
                                     <p>最近在做CTR，刚好Google在KDD发了一篇文章，讲了他们的一些尝试，总结一下：</p>
 <p>先是一些公式的符号说明：</p>
-<p>[<img style="background-image: none; padding-top: 0px; padding-left: 0px; display: inline; padding-right: 0px; border-width: 0px;" title="image" src="/images/_posts/04011358-949b9f116ca94563ab5a0efa047697db.png" alt="image" width="447" height="98" border="0" />][1]</p>
+<p>[<img style="background-image: none; padding-top: 0px; padding-left: 0px; display: inline; padding-right: 0px; border-width: 0px;" title="image" src="/images/archives/04011358-949b9f116ca94563ab5a0efa047697db.png" alt="image" width="447" height="98" border="0" />][1]</p>
 <p>一、优化算法</p>
 <p>CTR中经常用Logistic regression进行训练，一个常用的Loss Function为</p>
-<p><a href="/images/_posts/04011358-9e64ee86e7f14dbd8a3da9f8a2bb7c13.png"><img style="background-image: none; padding-top: 0px; padding-left: 0px; display: inline; padding-right: 0px; border-width: 0px;" title="image" src="/images/_posts/04011358-03407ff016d04735b28103abc573d428.png" alt="image" width="329" height="34" border="0" /></a></p>
+<p><a href="/images/archives/04011358-9e64ee86e7f14dbd8a3da9f8a2bb7c13.png"><img style="background-image: none; padding-top: 0px; padding-left: 0px; display: inline; padding-right: 0px; border-width: 0px;" title="image" src="/images/archives/04011358-03407ff016d04735b28103abc573d428.png" alt="image" width="329" height="34" border="0" /></a></p>
 <p>Online gradient descent(OGD)是一个常用的优化方法，但是在加上L1正则化后，这种方法不能产生有效的稀疏模型。相比之下 Regularized Dual Averaging (RDA)拥有更好的稀疏性，但是精度不如OGD好。</p>
 <p>FTRL-Proximal 方法可以同时得到稀疏性与精确性，不同于OGD的迭代步骤：</p>
-<p><a href="/images/_posts/04011358-2e856d4483c64ef0a668ee8c8df2a548.png"><img style="background-image: none; padding-top: 0px; padding-left: 0px; display: inline; padding-right: 0px; border-width: 0px;" title="image" src="/images/_posts/04011359-6f55d3e1f55f4389979bec14102120b5.png" alt="image" width="187" height="39" border="0" /></a></p>
+<p><a href="/images/archives/04011358-2e856d4483c64ef0a668ee8c8df2a548.png"><img style="background-image: none; padding-top: 0px; padding-left: 0px; display: inline; padding-right: 0px; border-width: 0px;" title="image" src="/images/archives/04011359-6f55d3e1f55f4389979bec14102120b5.png" alt="image" width="187" height="39" border="0" /></a></p>
 <p>其中$\eta_t$是一个非增的学习率</p>
 <p>FTRL-Proximal通过下式迭代：</p>
-<p><a href="/images/_posts/04011359-900ea01f64a547bd99cefe8e375a3a9d.png"><img style="background-image: none; padding-top: 0px; padding-left: 0px; display: inline; padding-right: 0px; border-width: 0px;" title="image" src="/images/_posts/04011359-37b635900b57402a9efc1d0fbf12e7d2.png" alt="image" width="482" height="60" border="0" /></a></p>
+<p><a href="/images/archives/04011359-900ea01f64a547bd99cefe8e375a3a9d.png"><img style="background-image: none; padding-top: 0px; padding-left: 0px; display: inline; padding-right: 0px; border-width: 0px;" title="image" src="/images/archives/04011359-37b635900b57402a9efc1d0fbf12e7d2.png" alt="image" width="482" height="60" border="0" /></a></p>
 <p> </p>
 <p>参数$\sigma$是学习率，一般我们有 ${\sum_{s=1}^t\sigma_s=\frac{1}{\eta_t}}$。</p>
                                 

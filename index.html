@@ -161,7 +161,7 @@ code.has-jax {
                             <div class="post-item-summary">
                                 
                                     <p>3月底整理了一个关于经典Paged Attention算法的ppt, 想起这个几年没写过的blog，把PPT改成一篇文章证明我还活着(-_-)。</p>
-<img width="500"  src="/images/2025/paged_attention.png" class="center" />
+<img width="500"  src="/images/2025/20250420/paged_attention.png" class="center" />
 <h2 id="vllm-的-paged-attention">vLLM 的 Paged Attention</h2>
 <p>开始前先说明一下，vLLM里的Paged Attention Kernel是有好几个不同的版本的，大概是下面这样子：</p>
 <p>vLLM早期版本：</p>
@@ -435,7 +435,7 @@ code.has-jax {
 <p>为了方便组织，这些ChannelHandler被放在一条“流(pipeline)”里，一个ChannelEvent并不会主动的”流”经所有的Handler，而是由上一个Handler显式的调用ChannelPipeline.sendUp(Down)stream产生，并交给下一个Handler处理。</p>
 <p>换句话说，每个Handler接收到一个ChannelEvent，并处理结束后，如果需要继续处理，那么它需要调用sendUp(Down)stream新发起一个事件。如果它不再发起事件，那么处理就到此结束，即使它后面仍然有Handler没有执行。这个机制可以保证最大的灵活性，当然对Handler的先后顺序也有了更严格的要求。</p>
 <p>在流Pipeline里有一个Map(name2ctx)和一个链表(记录head和tail)，pipeline里面会调度关联的多个channelhandler的运行。</p>
-<p><a href="/images/_posts/0753391.png"><img src="/images/_posts/0753391.png" alt="channel pipeline" /></a></p>
+<p><a href="/images/archives/0753391.png"><img src="/images/archives/0753391.png" alt="channel pipeline" /></a></p>
 <p>在NettyHttpServerTransport中，会流过的channelhandler就包括解码http请求(把多个HttpChunk拼起来并按http协议进行解析)和http请求处理。</p>
 <p>在处理http请求，数据流向为：HttpRequestHandler-&gt;<span class="s1">NettyHttpServerTransport</span>-&gt;HttpServerAdapter(HttpServer的内部类Dispatche)-&gt;RestController。</p>
 <p>RestController中的处理代码为：</p>
