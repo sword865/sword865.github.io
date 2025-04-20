@@ -1,276 +1,251 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]> <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
-<head>
-  <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <title>Lucene索引文件学习  &middot; 悟剑阁</title>
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="HandheldFriendly" content="True">
-<meta name="MobileOptimized" content="320">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="en"><head>
+<title>Lucene索引文件学习</title>
 
 
-<meta name="description" content="" />
-
-<meta name="keywords" content="lucene, 搜索, 索引, ">
 
 
-<meta property="og:title" content="Lucene索引文件学习  &middot; 悟剑阁 ">
-<meta property="og:site_name" content="悟剑阁"/>
-<meta property="og:url" content="http://blog.sword865.com/archives/86" />
-<meta property="og:locale" content="zh-CN">
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5, user-scalable=5" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
 
 
-<meta property="og:type" content="article" />
-<meta property="og:description" content=""/>
-<meta property="og:article:published_time" content="2015-02-04T00:00:00Z" />
-<meta property="og:article:modified_time" content="2015-02-04T00:00:00Z" />
 
-  
-    
-<meta property="og:article:tag" content="lucene">
-    
-<meta property="og:article:tag" content="搜索">
-    
-<meta property="og:article:tag" content="索引">
-    
-  
+
+
+
+
+
+
+
+
+
+
+
 
   
 
-<script type="application/ld+json">
-  {
-    "@context": "http://schema.org",
-    "@type": "Article",
-    "headline": "Lucene索引文件学习",
-    "author": {
-      "@type": "Person",
-      "name": "http://profiles.google.com/+?rel=author"
-    },
-    "datePublished": "2015-02-04",
-    "description": "",
-    "wordCount": 1146
+
+
+
+
+
+      <script src="/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="/scss/dark-mode.min.cb53f1bee2b8900cb4f082afbf00175d6618f281cf9a2fe8619e3b52d20b5721.css" integrity="sha256-y1PxvuK4kAy08IKvvwAXXWYY8oHPmi/oYZ47UtILVyE=" media="screen">
+
+
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript"
+        async
+        src="https://cdn.bootcss.com/mathjax/2.7.3/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$'], ['\[\[','\]\]']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
   }
+});
+
+MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
 </script>
 
+<style>
+code.has-jax {
+    font: inherit;
+    font-size: 100%;
+    background: inherit;
+    border: inherit;
+    color: #515151;
+}
+</style>
 
 
-<link rel="canonical" href="http://blog.sword865.com/archives/86" />
-
-<link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://blog.sword865.com/touch-icon-144-precomposed.png">
-<link href="http://blog.sword865.com/favicon.png" rel="icon">
-
-<meta name="generator" content="Hugo 0.19" />
-
-  <!--[if lt IE 9]>
-<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-<![endif]-->
-
-<link href='https://fonts.googleapis.com/css?family=Merriweather:300%7CRaleway%7COpen+Sans' rel='stylesheet' type='text/css'>
-<link rel="stylesheet" href="http://blog.sword865.com/css/font-awesome.min.css">
-<link rel="stylesheet" href="http://blog.sword865.com/css/style.css">
-<link rel="stylesheet" href="http://blog.sword865.com/css/highlight/default.css">
-
-  
 </head>
 <body>
-  <main id="main-wrapper" class="container main_wrapper has-sidebar">
-    <header id="main-header" class="container main_header">
-  <div class="container brand">
-  <div class="container title h1-like">
-  <a class="baselink" href="http://blog.sword865.com/">
-  悟剑阁
-
-</a>
-
-</div>
-
-  
-<div class="container topline">
-  
-  阁中悟剑，红尘练心
+    	<div id="app"><div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+            
+            <div class="toc">
 
 
 </div>
-
-
+            
+        </div>
+    </div>
 </div>
-
-  <nav class="container nav primary no-print">
-  
-
-
-  
-<a href="http://blog.sword865.com/about">关于我</a>
-
-<a href="http://blog.sword865.com/categories" title="Show list of categories">分类</a>
-
-<a href="http://blog.sword865.com/post" title="Show list of posts">我的文章</a>
-
-<a href="http://blog.sword865.com/tags" title="Show list of tags">标签列表</a>
-
-
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://sword865.github.io/">
+            悟剑阁
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
 </nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://sword865.github.io/">
+        <div class="single-column-header-title">悟剑阁</div>
+        
 
-<div class="container nav secondary no-print">
-  
-<a id="contact-link-email" class="contact_link" href="mailto:sword865@163.com">
-  <span class="fa fa-envelope-square"></span><span>email</span></a>
-
-
-
-<a id="contact-link-github" class="contact_link" href="https://github.com/sword865">
-  <span class="fa fa-github-square"></span><span>github</span></a>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    </a>
 </div>
 
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
 
-  
-<style type="text/css">
-#so360{white-space:nowrap}
-#so360 form{margin:0;padding:0}
-#so360_keyword{width:109px;height:22px;line-height:22px;font:14px arial;padding:
-2px 5px;margin-right:5px;border:2px solid #607FB5;outline:0;vertical-align:middle}
-#so360_keyword{background:url(https://p.ssl.qhimg.com/t01ab1a3fb05f0ee893.png)
- no-repeat 236px center}
-#so360_submit{width:60px;height:30px;border:0;color:#fff;
- background:#607FB5;font-weight:bold;font:bold 14px arial;padding:0;
- padding-top:3px\9;cursor:pointer;
-vertical-align:middle}
-</style>
-<div id="so360">
-    <form action="http://www.so.com/s" target="_blank" id="so360form">
-   <input type="text" autocomplete="off" name="q" id="so360_keyword">
-        <input type="submit" id="so360_submit" value="搜 索">
-        <input type="hidden" name="ie" value="utf8">
-        <input type="hidden" name="src" value="zz_http://blog.sword865.com/">
-        <input type="hidden" name="site" value="http://blog.sword865.com/">
-        <input type="hidden" name="rg" value="1">
-    </form>
-</div>
-</header>
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
 
+            <div class="post-head-wrapper-text-only"
+                
+            >
+                <div class="post-title">
+                    Lucene索引文件学习
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2015-02-04 00:00
+                        </time>
+                        
 
-<article id="main-content" class="container main_content single">
-  <header class="container hat">
-  <h1>Lucene索引文件学习
-</h1>
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/%E5%90%8E%E5%8F%B0">后台</a>
+                                &nbsp;
+                        
 
-  <div class="metas">
-<time datetime="2015-02-04">4 Feb, 2015</time>
-
-
-  
-    &middot; by sword865
-  
-  &middot; Read in about 3 min
-  &middot; (1146 Words)
-  <br>
-  
-<a class="label" href="http://blog.sword865.com/tags/lucene">lucene</a>
-
-<a class="label" href="http://blog.sword865.com/tags/%E6%90%9C%E7%B4%A2">搜索</a>
-
-<a class="label" href="http://blog.sword865.com/tags/%E7%B4%A2%E5%BC%95">索引</a>
-
-
-
-</div>
-
-</header>
-
-  <div class="container content">
-  <p><span style="font-size: 12px;"> 最近在做搜索，抽空看一下lucene，资料挺多的，不过大部分都是3.x了……在对着官方文档大概看一下。</span></p>
-
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/lucene">lucene</a>
+                                &nbsp;
+                            
+                                <a href="/tags/%E6%90%9C%E7%B4%A2">搜索</a>
+                                &nbsp;
+                            
+                                <a href="/tags/%E7%B4%A2%E5%BC%95">索引</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <p><span style="font-size: 12px;"> 最近在做搜索，抽空看一下lucene，资料挺多的，不过大部分都是3.x了……在对着官方文档大概看一下。</span></p>
 <p><span style="font-size: 12px;">优化后的lucene索引文件(4.9.0)</span></p>
-
-<p><span style="font-size: 12px;"><img title="NewImage.png" src="http://blog.sword865.com/wp-content/uploads/2015/02/NewImage.png" alt="NewImage" width="200" height="146" border="0" /></span></p>
-
+<p><span style="font-size: 12px;"><img title="NewImage.png" src="/wp-content/uploads/2015/02/NewImage.png" alt="NewImage" width="200" height="146" border="0" /></span></p>
 <p><span style="font-size: 12px;">一、段文件</span></p>
-
 <p><span style="font-size: 12px;">1.段文件：segments_5p和segments.gen。</span></p>
-
 <p><span style="font-size: 12px;">segments.gen保存当前段文件版本信息。</span></p>
-
 <ul style="color: #353833; font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
   <li>
     <span style="font-size: 12px;"><tt style="font-size: 1.2em;">segments.gen</tt>: GenHeader, Generation, Generation, Footer</span>
   </li>
 </ul>
-
 <p><span style="font-size: 12px;">segments_N（segments_5p）保存最新的段的信息，包括段的个数，每个段的段名、文档数等信息。</span></p>
-
 <ul style="font-size: 12px; color: #353833; font-family: Arial, Helvetica, sans-serif;">
   <li>
     <span style="font-size: 12px;"><tt style="font-size: 1.2em;">segments_N</tt>: Header, Version, NameCounter, SegCount, <SegName, SegCodec, DelGen, DeletionCount, FieldInfosGen, DocValuesGen, UpdatesFiles><sup style="font-size: 0.6em;">SegCount</sup>, CommitUserData, Footer</span>
   </li>
 </ul>
-
 <p><span style="font-size: 12px;">  源码参考：SegmentInfos.read(Directory directory, String segmentFileName):</span></p>
-
 <p><span style="font-size: 12px;">2.段信息：*.si，存储段的基本信息。</span></p>
-
 <ul style="color: #353833; font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
   <li>
     <span style="font-size: 12px;"><tt style="font-size: 1.2em;">.si</tt>: Header, SegVersion, SegSize, IsCompoundFile, Diagnostics, Attributes, Files</span>
   </li>
 </ul>
-
 <p><span style="font-size: 12px;">       只对4.0-4.5使用，新版已经抛弃了，可以无视。  </span></p>
-
 <p><span style="font-size: 12px;">二、域文件</span></p>
-
 <p><span style="font-size: 12px;">1.域(field)：*.fnm ，存储域的信息。</span></p>
-
 <ul style="font-size: 12px; color: #353833; font-family: Arial, Helvetica, sans-serif;">
   <li>
     <span style="font-size: 12px;">FieldInfos (.fnm) &#8211;> Header,FieldsCount, <FieldName,FieldNumber, FieldBits,DocValuesBits,DocValuesGen,Attributes> <sup style="font-size: 0.6em; color: #353833; font-family: Arial, Helvetica, sans-serif;">FieldsCount</sup>,Footer</span>
   </li>
 </ul>
-
 <div>
   <p style="margin: 0px; font-size: 11px; font-family: Monaco;">
     <span style="font-size: 12px;">  源码参考：org.apache.lucene.codecs.lucene46.Lucene46FieldInfosFormat</span>
   </p>
-  
   <p style="margin: 0px; font-size: 11px; font-family: Monaco;">
     <span style="font-size: 12px;">2.域(field)索引：*.fdx，存储到域数据的指针。</span>
   </p>
 </div>
-
 <ul style="color: #353833; font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
   <li>
     <span style="font-size: 12px;">FieldsIndex (.fdx) &#8211;> <Header>, <ChunkIndex></span>
   </li>
 </ul>
-
 <p><span style="font-size: 12px;">   源码参考：org.apache.lucene.codecs.lucene41.Lucene41StoredFieldsFormat</span></p>
-
 <p><span style="font-size: 12px;">3.域(field)数据：*.fdt，存储文档的域，话说这个结构比较复杂，简单列一下。</span></p>
-
 <ul style="font-size: 12px; color: #353833; font-family: Arial, Helvetica, sans-serif;">
   <li>
     <span style="font-size: 12px;">FieldData (.fdt) &#8211;> <Header>, PackedIntsVersion, <Chunk><sup style="font-size: 0.6em;">ChunkCount</sup></span>
@@ -282,202 +257,163 @@ vertical-align:middle}
     <span style="font-size: 12px;">Chunk &#8211;> DocBase, ChunkDocs, DocFieldCounts, DocLengths, <CompressedDocs></span>
   </li>
 </ul>
-
 <p><span style="font-size: 12px;">  源码参考：org.apache.lucene.codecs.lucene41.Lucene41StoredFieldsFormat</span></p>
-
 <p><span style="font-size: 12px;">三、字典文件</span></p>
-
 <p><span style="font-size: 12px;">4.项(term)字典：*.tim，存储项的信息。</span></p>
-
 <ul style="color: #353833; font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
   <li>
     <span style="font-size: 12px;">TermsDict (.tim) &#8211;> Header, <em>PostingsHeader</em>, NodeBlock<sup style="font-size: 0.6em;">NumBlocks</sup>, FieldSummary, DirOffset, Footer</span>
   </li>
 </ul>
-
 <p><span style="font-size: 12px;">  源码参考：org.apache.lucene.codecs.lucene41.Lucene41PostingsFormat</span></p>
-
 <p><span style="font-size: 12px;">5.项(term)索引：*.tip，到项字典的索引。</span></p>
-
 <ul style="color: #353833; font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
   <li>
     <span style="font-size: 12px;">TermsIndex (.tip) &#8211;> Header, FSTIndex<sup style="font-size: 0.6em;">NumFields</sup> <IndexStartFP><sup style="font-size: 0.6em;">NumFields</sup>, DirOffset, Footer</span>
   </li>
 </ul>
-
 <p><span style="font-size: 12px;">  源码参考：org.apache.lucene.codecs.lucene41.Lucene41PostingsFormat </span></p>
-
 <p><span style="font-size: 12px;">四、其他文件 </span></p>
-
 <p><span style="font-size: 12px;">6.频率：*.doc，包括一个文档列表，列表中每一个项都有一个频数。</span></p>
-
 <ul style="color: #353833; font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
   <li>
     <span style="font-size: 12px;">docFile(.doc) &#8211;> Header, <TermFreqs, SkipData?><sup style="font-size: 0.6em;">TermCount</sup>, Footer</span>
   </li>
 </ul>
-
 <p><span style="font-size: 12px;">  源码参考：org.apache.lucene.codecs.lucene41.Lucene41PostingsFormat </span></p>
-
 <p><span style="font-size: 12px;">7.位置：*.pos，存储项在索引中出现的位置信息。</span></p>
-
 <ul style="color: #353833; font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
   <li>
     <span style="font-size: 12px;">PosFile(.pos) &#8211;> Header, <TermPositions> <sup style="font-size: 0.6em;">TermCount</sup>, Footer</span>
   </li>
 </ul>
-
 <p><span style="font-size: 12px;">  源码参考：org.apache.lucene.codecs.lucene41.Lucene41PostingsFormat</span></p>
-
 <p><span style="font-size: 12px;"> 8.norm文件：<em>.nvd，</em>.nvm，编码文档和域的长度已经boost factors。</span></p>
-
 <ul style="font-size: 12px; color: #353833; font-family: Arial, Helvetica, sans-serif;">
   <li>
     <span style="font-size: 12px;">Norms data (.nvd) &#8211;> Header,<Uncompressed | TableCompressed | DeltaCompressed><sup style="font-size: 0.6em; color: #353833; font-family: Arial, Helvetica, sans-serif;">NumFields</sup>,Footer</span>
   </li>
 </ul>
-
 <p><span style="font-size: 12px;">  源码参考：org.apache.lucene.codecs.lucene49.Lucene49NormsFormat</span></p>
-
 <p><span style="font-size: 12px;"> 除此之外，还可能有一些其他文件，暂且不表。</span></p>
-
 <p><span style="font-size: 12px;"> 参考：</span></p>
+<p><span style="font-size: 12px;"><a href="http://lucene.apache.org/core/4_9_0/core/org/apache/lucene/codecs/lucene49/package-summary.html#File_Naming"><a href="http://lucene.apache.org/core/4_9_0/core/org/apache/lucene/codecs/lucene49/package-summary.html#File_Naming">http://lucene.apache.org/core/4_9_0/core/org/apache/lucene/codecs/lucene49/package-summary.html#File_Naming</a></a></span></p>
+<p><span style="font-size: 12px;"><a href="http://www.cnblogs.com/forfuture1978/category/300665.html"><a href="http://www.cnblogs.com/forfuture1978/category/300665.html">http://www.cnblogs.com/forfuture1978/category/300665.html</a></a></span></p>
 
-<p><span style="font-size: 12px;"><a href="http://lucene.apache.org/core/4_9_0/core/org/apache/lucene/codecs/lucene49/package-summary.html#File_Naming">http://lucene.apache.org/core/4_9_0/core/org/apache/lucene/codecs/lucene49/package-summary.html#File_Naming</a></span></p>
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">Last modified on 2015-02-04</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
 
-<p><span style="font-size: 12px;"><a href="http://www.cnblogs.com/forfuture1978/category/300665.html">http://www.cnblogs.com/forfuture1978/category/300665.html</a></span></p>
+                
+                <a class="newer-posts" href="/archives/100/">
+			Next<br>Tornado框架简析
+                </a>
+                
+                
+                
+                <a class="older-posts" href="/about/">
+			Previous<br>关于
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
 
-</div>
 
 
-  <footer class="container">
-  <div class="container navigation no-print">
-  <h2>Navigation</h2>
-  
-  
 
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="sideContainer" class="side-container">
     
-    <a class="prev" href="http://blog.sword865.com/archives/5" title="基于标签的推荐系统">
-      Previous
+    <a class="a-block nav-head false" href="https://sword865.github.io/">
+    
+        <div class="nav-title">
+            悟剑阁
+        </div>
+        
     </a>
-    
+
+    <div class="nav-link-list">
+        
+        
+    </div>
 
     
-    <a class="next" href="http://blog.sword865.com/archives/100" title="Tornado框架简析">
-      Next
-    </a>
-    
 
-  
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	Copyright (c) 2015. All rights reserved.
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    <div class="toc-wrapper">
+        
+
+        
+        <div class="toc">
 
 
 </div>
+        
+    </div>
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top"
+            :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
 
-  <div class="container comments">
-    <h2>Comments</h2>
+<div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	Copyright (c) 2015. All rights reserved.
+	
+</div>
+            </div>
     
-    
-<div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
-<script>
-    var cloudTieConfig = {
-        url: document.location.href,
-        sourceId: "",
-        productKey: "543cd58c6e7b44ad8fade1767e9fbef2",
-        target: "cloud-tie-wrapper"
-    };
-</script>
-<script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
-
-</div>
-</footer>
-
-</article>
-      <footer id="main-footer" class="container main_footer">
-  
-
-  <div class="container nav foot no-print">
-  
-
-  <div>
-  友情链接 -
-  
-<a href="http://brg-liuwei.github.io/">Blog of Finesse</a>
-
-<a href="http://blog.sina.com.cn/hkingstar">霄星座</a>
-
-<a href="http://blog.sina.com.cn/williamwhe">威廉他</a>
-
-
-</div>
-
-  <a class="toplink" href="#">back to top</a>
-
-</div>
-
-  <div class="container credits">
-  
-<div class="container footline">
-  
-
-</div>
-
-
-  
-<div class="container copyright">
-  
-  Copyright &copy; 2015. All rights reserved.
-
-
-</div>
-
-
-</div>
-
-  <script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-  tex2jax: {
-    inlineMath: [['$','$'], ['\\(','\\)']],
-    processEscapes: true
-    },
-  TeX: {
-              equationNumbers: {
-                  autoNumber: ["AMS"],
-                  useLabelIds: true
-              }
-          },
-          "HTML-CSS": {
-              linebreaks: {
-                  automatic: true
-              },
-              scale: 85
-          },
-          SVG: {
-              linebreaks: {
-                  automatic: true
-              }
-          }
-  });
-  </script>
-  <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-  </script>
-</footer>
-
-    </main>
-    
-
-
-<script src="http://blog.sword865.com/js/highlight.pack.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
-
-
-
-
-
-<script src="https://s95.cnzz.com/z_stat.php?id=1260888787&web_id=1260888787" language="JavaScript"></script>
-
-
-
-    
-  </body>
+    <script src="/js/journal.js"></script></body>
 </html>
-

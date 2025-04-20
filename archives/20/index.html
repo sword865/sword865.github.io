@@ -1,238 +1,219 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]> <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
-<head>
-  <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <title>算法总结2—决策树分类器  &middot; 悟剑阁</title>
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="HandheldFriendly" content="True">
-<meta name="MobileOptimized" content="320">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="en"><head>
+<title>算法总结2—决策树分类器</title>
 
 
-<meta name="description" content="" />
-
-<meta name="keywords" content="决策树, ">
 
 
-<meta property="og:title" content="算法总结2—决策树分类器  &middot; 悟剑阁 ">
-<meta property="og:site_name" content="悟剑阁"/>
-<meta property="og:url" content="http://blog.sword865.com/archives/20" />
-<meta property="og:locale" content="zh-CN">
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5, user-scalable=5" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
 
 
-<meta property="og:type" content="article" />
-<meta property="og:description" content=""/>
-<meta property="og:article:published_time" content="2009-09-06T00:00:00Z" />
-<meta property="og:article:modified_time" content="2009-09-06T00:00:00Z" />
+
+
+
+
+
+
+
+
+
+
+
+
 
   
+
+
+
+
+
+
+      <script src="/js/toc.js"></script>
     
-<meta property="og:article:tag" content="决策树">
-    
-  
+    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
 
-  
+<link rel="stylesheet" href="/scss/dark-mode.min.cb53f1bee2b8900cb4f082afbf00175d6618f281cf9a2fe8619e3b52d20b5721.css" integrity="sha256-y1PxvuK4kAy08IKvvwAXXWYY8oHPmi/oYZ47UtILVyE=" media="screen">
 
-<script type="application/ld+json">
-  {
-    "@context": "http://schema.org",
-    "@type": "Article",
-    "headline": "算法总结2—决策树分类器",
-    "author": {
-      "@type": "Person",
-      "name": "http://profiles.google.com/+?rel=author"
-    },
-    "datePublished": "2009-09-06",
-    "description": "",
-    "wordCount": 1719
+
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript"
+        async
+        src="https://cdn.bootcss.com/mathjax/2.7.3/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$'], ['\[\[','\]\]']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
   }
+});
+
+MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
 </script>
 
+<style>
+code.has-jax {
+    font: inherit;
+    font-size: 100%;
+    background: inherit;
+    border: inherit;
+    color: #515151;
+}
+</style>
 
 
-<link rel="canonical" href="http://blog.sword865.com/archives/20" />
-
-<link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://blog.sword865.com/touch-icon-144-precomposed.png">
-<link href="http://blog.sword865.com/favicon.png" rel="icon">
-
-<meta name="generator" content="Hugo 0.19" />
-
-  <!--[if lt IE 9]>
-<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-<![endif]-->
-
-<link href='https://fonts.googleapis.com/css?family=Merriweather:300%7CRaleway%7COpen+Sans' rel='stylesheet' type='text/css'>
-<link rel="stylesheet" href="http://blog.sword865.com/css/font-awesome.min.css">
-<link rel="stylesheet" href="http://blog.sword865.com/css/style.css">
-<link rel="stylesheet" href="http://blog.sword865.com/css/highlight/default.css">
-
-  
 </head>
 <body>
-  <main id="main-wrapper" class="container main_wrapper has-sidebar">
-    <header id="main-header" class="container main_header">
-  <div class="container brand">
-  <div class="container title h1-like">
-  <a class="baselink" href="http://blog.sword865.com/">
-  悟剑阁
-
-</a>
-
-</div>
-
-  
-<div class="container topline">
-  
-  阁中悟剑，红尘练心
+    	<div id="app"><div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+            
+            <div class="toc">
 
 
 </div>
-
-
+            
+        </div>
+    </div>
 </div>
-
-  <nav class="container nav primary no-print">
-  
-
-
-  
-<a href="http://blog.sword865.com/about">关于我</a>
-
-<a href="http://blog.sword865.com/categories" title="Show list of categories">分类</a>
-
-<a href="http://blog.sword865.com/post" title="Show list of posts">我的文章</a>
-
-<a href="http://blog.sword865.com/tags" title="Show list of tags">标签列表</a>
-
-
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://sword865.github.io/">
+            悟剑阁
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
 </nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://sword865.github.io/">
+        <div class="single-column-header-title">悟剑阁</div>
+        
 
-<div class="container nav secondary no-print">
-  
-<a id="contact-link-email" class="contact_link" href="mailto:sword865@163.com">
-  <span class="fa fa-envelope-square"></span><span>email</span></a>
-
-
-
-<a id="contact-link-github" class="contact_link" href="https://github.com/sword865">
-  <span class="fa fa-github-square"></span><span>github</span></a>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    </a>
 </div>
 
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
 
-  
-<style type="text/css">
-#so360{white-space:nowrap}
-#so360 form{margin:0;padding:0}
-#so360_keyword{width:109px;height:22px;line-height:22px;font:14px arial;padding:
-2px 5px;margin-right:5px;border:2px solid #607FB5;outline:0;vertical-align:middle}
-#so360_keyword{background:url(https://p.ssl.qhimg.com/t01ab1a3fb05f0ee893.png)
- no-repeat 236px center}
-#so360_submit{width:60px;height:30px;border:0;color:#fff;
- background:#607FB5;font-weight:bold;font:bold 14px arial;padding:0;
- padding-top:3px\9;cursor:pointer;
-vertical-align:middle}
-</style>
-<div id="so360">
-    <form action="http://www.so.com/s" target="_blank" id="so360form">
-   <input type="text" autocomplete="off" name="q" id="so360_keyword">
-        <input type="submit" id="so360_submit" value="搜 索">
-        <input type="hidden" name="ie" value="utf8">
-        <input type="hidden" name="src" value="zz_http://blog.sword865.com/">
-        <input type="hidden" name="site" value="http://blog.sword865.com/">
-        <input type="hidden" name="rg" value="1">
-    </form>
-</div>
-</header>
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
 
+            <div class="post-head-wrapper-text-only"
+                
+            >
+                <div class="post-title">
+                    算法总结2—决策树分类器
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2009-09-06 00:00
+                        </time>
+                        
 
-<article id="main-content" class="container main_content single">
-  <header class="container hat">
-  <h1>算法总结2—决策树分类器
-</h1>
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0">机器学习</a>
+                                &nbsp;
+                        
 
-  <div class="metas">
-<time datetime="2009-09-06">6 Sep, 2009</time>
-
-
-  
-    &middot; by sword865
-  
-  &middot; Read in about 4 min
-  &middot; (1719 Words)
-  <br>
-  
-<a class="label" href="http://blog.sword865.com/tags/%E5%86%B3%E7%AD%96%E6%A0%91">决策树</a>
-
-
-
-</div>
-
-</header>
-
-  <div class="container content">
-  <p><strong>数学基础：</strong></p>
-
-<p>树：树是一种数据结构，它是由n（n&gt;=1）个有限结点组成一个具有层次关系的集合。把它叫做&ldquo;树&rdquo;是因为它看起来像一棵倒挂的树，也就是说它是根朝上，而叶朝下的。它具有以下的特点：</p>
-
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/%E5%86%B3%E7%AD%96%E6%A0%91">决策树</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <p><strong>数学基础：</strong></p>
+<p>树：树是一种数据结构，它是由n（n&gt;=1）个有限结点组成一个具有层次关系的集合。把它叫做“树”是因为它看起来像一棵倒挂的树，也就是说它是根朝上，而叶朝下的。它具有以下的特点：</p>
 <p>每个结点有零个或多个子结点；</p>
-
 <p>每一个子结点只有一个父结点；</p>
-
 <p>没有前驱的结点为根结点；</p>
-
 <p>除了根结点外，每个子结点可以分为m个不相交的子树；</p>
-
 <p>没有子节点的节点称为叶节点。</p>
-
 <p><strong>决策树分类器原理：</strong></p>
-
 <p>决策树是一颗树，要分类的样本从树根进入，在树的每个节点通过对样本的某种属性的判断选择不同的路径逐步下降到底,得出其所属类别。</p>
-
 <p>例图:</p>
-
-<p><img src="http://pic002.cnblogs.com/images/2012/52809/2012063021362216.jpg" alt="" /></p>
-
+<p><img src="http://pic002.cnblogs.com/images/2012/52809/2012063021362216.jpg" alt=""></p>
 <p>为了建立一棵决策树,我们首先应向程序输入大量训练数据(包含所属类别的数据)，程序将根据训练数据按某一算法自动生成决策树。</p>
-
 <p><strong>决策树生成算法:</strong></p>
-
-<p>&nbsp;&nbsp; 为了构造决策树，算法首先创建一个根节点，然后通过分析训练数据，逐步选出适合的变量对数据进行拆分(即逐步构造上图中的非叶子节点。)</p>
-
-<p>&nbsp;&nbsp; 为了选择适合的变量对数据进行拆分，我们需要一个方法来评估一种拆分方案的好坏，<strong>其评估方法包括：</strong></p>
-
-<p>2) <strong>基尼不纯度：</strong></p>
-
+<p>   为了构造决策树，算法首先创建一个根节点，然后通过分析训练数据，逐步选出适合的变量对数据进行拆分(即逐步构造上图中的非叶子节点。)</p>
+<p>   为了选择适合的变量对数据进行拆分，我们需要一个方法来评估一种拆分方案的好坏，<strong>其评估方法包括：</strong></p>
+<ol start="2">
+<li><strong>基尼不纯度：</strong></li>
+</ol>
 <p>定义：基尼不存度是指来自集合的某种结果随机应用于集合中某一数据的预期误差。（如果集合中所有结果属于同一类，则误差为0）</p>
-
 <p>使用：利用这一思想，我们可以将集合中每种类别的数据出现的次数除以数据总数计算相应概率，再将这些概率的乘积相加（所有概率两两相乘后在相加），这样就会得到某一数据被随机分配到错误结果的总概率。</p>
-
 <p>伪代码：</p>
-
 <pre><code>imp=0
 for k1 in kinds
     p1=count(k1) / total
@@ -242,191 +223,154 @@ for k1 in kinds
         imp+=p1*p2
 ans=imp
 </code></pre>
-
 <p align="left">
   &nbsp;&nbsp; (p1*p2是一个p1类别的数据被当作p2的概率)
 </p>
-
-<p>2) <strong>熵：</strong>在信息论中，熵代表的是集合的无序程度&#8212;&#8211;基本上就相当于我们在此处所说的集合的混杂程度。</p>
-
+<ol start="2">
+<li>**熵：**在信息论中，熵代表的是集合的无序程度—–基本上就相当于我们在此处所说的集合的混杂程度。</li>
+</ol>
 <p>熵的值是遍历所有结果后得到的pi*log2(pi)的和的绝对值</p>
-
 <p>伪代码：</p>
-
 <pre><code>ent=0.0
 for k in kinds
     p=count(k) / total
     ent=ent – p*log2(p)     // 因为0&lt;p&lt;=1，所以必有log2(p)&lt;=0
 ans=ent
 </code></pre>
-
 <p>有了上述评估方法后，我们就可以不断尝试各种拆分方法，然后选出最好的拆分方法构造树中的节点了。我们将计算拆分前的熵（基尼不存度）值，与拆分后的熵（基尼不存度）的值的加权平均，将其差值作为<strong>信息增益</strong>。最终对能得到最大信息增益的属性进行拆分。然后再分别对拆分后得集合选择属性进行拆分，直到最大信息增益为非正时停止拆分，这时决策树就构建完毕了。</p>
-
 <p><strong>优化：</strong></p>
-
 <p>为了防止决策树变的过度拟合（过度针对训练数据），我们可以在信息增益小于某个值后就停止拆分。但是我们可能遇到这样的数据―――某次拆分信息增益很小，但下一次就会很大。为了防止这一状况，我们可以在用先前的方法构造整棵树后，在尝试消除多余的节点。这个过程就是<strong>剪枝</strong>。</p>
-
 <p>剪枝的过程就是对具有相同父节点的节点进行检查，判断将其合并后，信息增益是否会小于某个指定发值。若是，则合并这些节点。合并后节点包括所有可能的结果值。</p>
-
 <p><strong>在处理数值型数据时，熵和基尼不存度并不是一个好的选择，因为有些数值相差很近，有些相差很远，不能简单用是否为同一类别进行判断。所以我们可以用方差代替它们。</strong></p>
-
 <p><strong>决策树对缺失数据的处理：</strong></p>
-
 <p>当我们要判断类别的样本缺少某些决策树作判断时必须的数据时，我们可以选择同时走两个分支，不过我们不是平均统计各分支的结果值，而是进行加权统计。为了达到这一目标，决策树中每个节点都有一个值为１的权重，即观测数据对于数据向是否属于某个特定分类的概率具有１００％的影响，而如果走多个分支，我们将给每个分支一个权重，其值等于所有位于该分支的其他数据所占的比重。</p>
-
 <p><strong>优点：</strong></p>
-
 <p>决策树最大的优势是它可以轻易对一个受训模型给予解释。（解释分类原理）</p>
-
 <p>决策树可以同时接受分类型和数值型数据。</p>
-
-<p>比起贝叶斯分类器（参考<strong>[&lt;集体智慧编程&gt;算法总结1&mdash;贝叶斯分类器][2]</strong>）决策树可以更好的处理变量间的相互影响。</p>
-
+<p>比起贝叶斯分类器（参考**[&lt;集体智慧编程&gt;算法总结1—贝叶斯分类器][2]**）决策树可以更好的处理变量间的相互影响。</p>
 <p><strong>缺点：</strong></p>
-
 <p>决策树无法单独对某一数据进行训练。</p>
-
 <p>面对有大量可能结果的数据集时，决策树不够有效。当可能的分类结果较多时，决策树就会过度复杂，预测效果也会较差。</p>
-
 <p>另外，决策树不适合处理大量的数值型输入输出，因为它只能创建一些简单的&gt; ，&lt;，＝等节点，但数值之间可能存在更多更复杂的关系。</p>
-
-<p>呼&hellip;.这个写的不怎么累了&hellip;.很多都是书上的原话哈，不像昨天那个几乎都是自己写的&hellip;&hellip;</p>
-
+<p>呼….这个写的不怎么累了….很多都是书上的原话哈，不像昨天那个几乎都是自己写的……</p>
 <p style="margin:0;padding:0;height:1px;overflow:hidden;">
   <a href="http://www.wumii.com/widget/relatedItems" style="border:0;"><img src="http://static.wumii.cn/images/pixel.png" alt="无觅相关文章插件，快速提升流量" style="border:0;padding:0;margin:0;" /></a>
 </p>
 
-</div>
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">Last modified on 2009-09-06</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts" href="/archives/19/">
+			Next<br>算法总结3—神经网络
+                </a>
+                
+                
+                
+                <a class="older-posts" href="/archives/21/">
+			Previous<br>算法总结1—贝叶斯分类器
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
 
 
-  <footer class="container">
-  <div class="container navigation no-print">
-  <h2>Navigation</h2>
-  
-  
 
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="sideContainer" class="side-container">
     
-    <a class="prev" href="http://blog.sword865.com/archives/21" title="算法总结1—贝叶斯分类器">
-      Previous
+    <a class="a-block nav-head false" href="https://sword865.github.io/">
+    
+        <div class="nav-title">
+            悟剑阁
+        </div>
+        
     </a>
-    
+
+    <div class="nav-link-list">
+        
+        
+    </div>
 
     
-    <a class="next" href="http://blog.sword865.com/archives/19" title="算法总结3—神经网络">
-      Next
-    </a>
-    
 
-  
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	Copyright (c) 2015. All rights reserved.
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    <div class="toc-wrapper">
+        
+
+        
+        <div class="toc">
 
 
 </div>
+        
+    </div>
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top"
+            :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
 
-  <div class="container comments">
-    <h2>Comments</h2>
+<div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	Copyright (c) 2015. All rights reserved.
+	
+</div>
+            </div>
     
-    
-<div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
-<script>
-    var cloudTieConfig = {
-        url: document.location.href,
-        sourceId: "",
-        productKey: "543cd58c6e7b44ad8fade1767e9fbef2",
-        target: "cloud-tie-wrapper"
-    };
-</script>
-<script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
-
-</div>
-</footer>
-
-</article>
-      <footer id="main-footer" class="container main_footer">
-  
-
-  <div class="container nav foot no-print">
-  
-
-  <div>
-  友情链接 -
-  
-<a href="http://brg-liuwei.github.io/">Blog of Finesse</a>
-
-<a href="http://blog.sina.com.cn/hkingstar">霄星座</a>
-
-<a href="http://blog.sina.com.cn/williamwhe">威廉他</a>
-
-
-</div>
-
-  <a class="toplink" href="#">back to top</a>
-
-</div>
-
-  <div class="container credits">
-  
-<div class="container footline">
-  
-
-</div>
-
-
-  
-<div class="container copyright">
-  
-  Copyright &copy; 2015. All rights reserved.
-
-
-</div>
-
-
-</div>
-
-  <script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-  tex2jax: {
-    inlineMath: [['$','$'], ['\\(','\\)']],
-    processEscapes: true
-    },
-  TeX: {
-              equationNumbers: {
-                  autoNumber: ["AMS"],
-                  useLabelIds: true
-              }
-          },
-          "HTML-CSS": {
-              linebreaks: {
-                  automatic: true
-              },
-              scale: 85
-          },
-          SVG: {
-              linebreaks: {
-                  automatic: true
-              }
-          }
-  });
-  </script>
-  <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-  </script>
-</footer>
-
-    </main>
-    
-
-
-<script src="http://blog.sword865.com/js/highlight.pack.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
-
-
-
-
-
-<script src="https://s95.cnzz.com/z_stat.php?id=1260888787&web_id=1260888787" language="JavaScript"></script>
-
-
-
-    
-  </body>
+    <script src="/js/journal.js"></script></body>
 </html>
-

@@ -1,123 +1,20 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Svm on 悟剑阁</title>
-    <link>http://blog.sword865.com/tags/svm/index.xml</link>
-    <description>Recent content in Svm on 悟剑阁</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <title>SVM on 悟剑阁</title>
+    <link>https://sword865.github.io/tags/svm/</link>
+    <description>Recent content in SVM on 悟剑阁</description>
+    <generator>Hugo</generator>
     <language>zh-CN</language>
-    <managingEditor>sword865@163.com (罗刹剑客)</managingEditor>
-    <webMaster>sword865@163.com (罗刹剑客)</webMaster>
     <copyright>Copyright (c) 2015. All rights reserved.</copyright>
-    <atom:link href="http://blog.sword865.com/tags/svm/index.xml" rel="self" type="application/rss+xml" />
-    
+    <lastBuildDate>Tue, 08 Sep 2009 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://sword865.github.io/tags/svm/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>算法总结4—支持向量机</title>
-      <link>http://blog.sword865.com/archives/18</link>
+      <link>https://sword865.github.io/archives/18/</link>
       <pubDate>Tue, 08 Sep 2009 00:00:00 +0000</pubDate>
-      <author>sword865@163.com (罗刹剑客)</author>
-      <guid>http://blog.sword865.com/archives/18</guid>
-      <description>&lt;p&gt;支持向量机&amp;hellip;&amp;hellip;复杂的东西，书里讲得也不怎么详细，起码具体算法没有说&amp;hellip;&amp;hellip;所以又去查了些资料&amp;hellip;&amp;hellip;&lt;/p&gt;
-
-&lt;p&gt;支持向量机是用来对数据进行分类的。&lt;/p&gt;
-
-&lt;p&gt;首先从最简单的情况开始吧：&lt;/p&gt;
-
-&lt;p&gt;如果有一条直线，我们把它看成一条数轴，上面有一些样本点，其中坐标大于某个值的点都属于一类，坐标小于某个值的点都属于一类，那么我们就可以用这个值来做分分界点，它点把直线上的点分为了两类。因为样本点是有限可数的。所以这个分类点的取法不唯一。选好后，随便给我们一个点，我们就可以根据这个随机给出的点是在分界点的左侧还是右侧来判断这个点的类别。&lt;/p&gt;
-
-&lt;p&gt;同样，一个平面上有很多样本点，这些点也分为2类，如果我们在平面上可以找到这样一条直线满足这两类样本点分别分布在直线的两侧，那么我们就可以用这个平面作分界面，来对之后随机给出的点进行分类。&lt;/p&gt;
-
-&lt;p&gt;仍然用同样的方法，我们可以用一个平面给分布在一个3维立体空间中的点分类。&lt;/p&gt;
-
-&lt;p&gt;总结起来就是说：在n维空间中有很多样本点，如果我们能找到一个n-1维的超平面，这个平面恰好把空间中的样本点分在它的两侧，那么我们就可以用这个n-1维的超平面来对之后随机给出点分类。&lt;/p&gt;
-
-&lt;p&gt;这种方法有两个问题：&lt;/p&gt;
-
-&lt;p&gt;1）&amp;nbsp; 因为那个n-1维的超平面选法往往是不唯一的，我们要选哪一个?&lt;/p&gt;
-
-&lt;p&gt;2）&amp;nbsp; 更多情况下，我们找不到这样一个n-1维超平面，你可以想象更多情况下，我们要分类的数据是&amp;ldquo;混合&amp;rdquo;在一起的，很难简单的用一个点，一条线，或者一个更高纬度的线性分类器把它分开。&lt;/p&gt;
-
-&lt;p&gt;接下来我们就要来解决这个问题。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;最优超平面的确定:&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;如果选择合适的分界超平面呢？直观的来说，我们因该选择一个距离两组数据&amp;ldquo;最远&amp;rdquo;的超平面。首先每个点都和这个超平面有一个距离（该距离可以通过把n维空间放入一个n维坐标系后用代数的方法计算出来，具体计算过程此处就不说了。不过1维２维３维的情况你应该能自己算出来吧～～～，理解就好）我们选择的超平面要让所有这些距离中最小的一个值最大。&lt;/p&gt;
-
-&lt;p&gt;我们在n维空间空建立一个n维坐标系&lt;/p&gt;
-
-&lt;p&gt;在这个n维坐标系中，每个n-1维超平面都可一个用一个方程表示出来，这里设为。&lt;/p&gt;
-
-&lt;div&gt;$$H(x)=a_{0}+\sum_{i=1}^{n}(a_{i}*x_{i})$$&lt;/div&gt;
-
-&lt;p&gt;我们用一个变量Y表示一个点相对超平面的关系，在一侧为1.另一侧为-1.&lt;/p&gt;
-
-&lt;p&gt;可以证明:（证明过程略）&lt;/p&gt;
-
-&lt;p&gt;该平面在满足下面的约束时：&lt;/p&gt;
-
-&lt;div&gt;$Y_{i}H_(x_{i})\geq 1$&lt;/div&gt;
-
-&lt;p&gt;极小化函数&lt;/p&gt;
-
-&lt;div&gt;$\frac{1}{2}\sum_{j=1}^{n}(a_{j}^{2})$&lt;/div&gt;
-
-&lt;p&gt;这是一个二次规划问题，我们对它求解就可以得到最优平面。&lt;/p&gt;
-
-&lt;p&gt;有时我们找不到这样一个超平面，这时，我们可以把超平面的约束条件放的宽松一点，也就是在超平面附近允许两种分类的点的重叠，可以同过把改为（e&amp;gt;0）来实现这一目的。&lt;/p&gt;
-
-&lt;p&gt;（具体证明与求解参考《统计学完全教程》 科学出版社 P290的支持向量机一节）&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;第二个问题的解决&amp;#8212;核方法&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;很多时候，我们是找不到一个简单的超平面对样本进行划分的，这个时候，我们可以通过坐标变换，把样本点映射到一个可以线形划分的空间中。&lt;/p&gt;
-
-&lt;p&gt;这个映射可以是同维度的，即映射前后样本空间的纬度相同，比如：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://pic002.cnblogs.com/images/2012/52809/2012063021394557.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;就可以通过一个简单的&lt;strong&gt;求平方&lt;/strong&gt;运算，把数据从线性不可划分变为线性可分&amp;#8212;我们可以很容易的找到一条直线把后者的样本点分成两个部分。&lt;/p&gt;
-
-&lt;p&gt;但是很多时候，问题没有这么简单，我们就需要用另外一种映射，即把样本点映射到更高纬度的空间去。&lt;/p&gt;
-
-&lt;p&gt;比如上面的左图还可以做这么一种变换：&lt;/p&gt;
-
-&lt;p&gt;$$z_1=x_1x_1, z_2=\sqrt{2}x_1x_2, z_3=x_2x_2$$&lt;/p&gt;
-
-&lt;p&gt;这样我们就可以在新的样本空间中很简单的找到一个平面把这些点分开了．仔细分析，你可以发现，这个平面其实是左图中的一个椭圆的经过上述变换后得到的．&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;较高维空间的线性分类器对应于原空间的一个非线性分类器．&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;这就是&lt;strong&gt;核方法&lt;/strong&gt;的核心。&lt;/p&gt;
-
-&lt;p&gt;通过找到一个合适的映射，我们就可以前面的问题(2)了&lt;/p&gt;
-
-&lt;p&gt;这种映射称为核函数，核函数的选择是很有技巧的，它也有一些常见的模型，很多时候我们只要选择合适的模型并计算适当的参数就可以了。具体方法这里不说了，有兴趣的可以参见《&lt;a href=&#34;http://download.csdn.net/source/1353188&#34;&gt;RBF核函数的支持向量机参数选择&lt;/a&gt;》一文。&lt;/p&gt;
-
-&lt;p&gt;找到核函数后，我们就完全解决上述问题了。&lt;/p&gt;
-
-&lt;p&gt;（其实这里还有一些简化计算的技巧，这些技巧与其它更具体的东西还是可以去看《统计学完全教程》 科学出版社，真是一本非常强大的书。）&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;优点:&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;可以很快的判断一个样本的种类。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;缺点:&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;由于对每个数据集的最佳核变换及相应参数都不一样，所以对每个数据集都要重新学习确定函数与参数。&lt;/p&gt;
-
-&lt;p&gt;一般而言，支持向量机更适合包含大量数据的问题，而其他方法如决策树，更适合小规模的数据集。&lt;/p&gt;
-
-&lt;p&gt;支持向量机也是一种黑盒技术，由于存在像高维空间的判断，我们很难解释分类的具体标准与原因。&lt;/p&gt;
-
-&lt;div&gt;
-  &lt;embed id=&#34;lingoes_plugin_object&#34; width=&#34;0&#34; height=&#34;0&#34; type=&#34;application/lingoes-npruntime-capture-word-plugin&#34; hidden=&#34;true&#34; /&gt;
-&lt;/div&gt;
-
-&lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
-  &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
-&lt;/p&gt;
-</description>
+      <guid>https://sword865.github.io/archives/18/</guid>
+      <description>&lt;p&gt;支持向量机……复杂的东西，书里讲得也不怎么详细，起码具体算法没有说……所以又去查了些资料……&lt;/p&gt;&#xA;&lt;p&gt;支持向量机是用来对数据进行分类的。&lt;/p&gt;&#xA;&lt;p&gt;首先从最简单的情况开始吧：&lt;/p&gt;&#xA;&lt;p&gt;如果有一条直线，我们把它看成一条数轴，上面有一些样本点，其中坐标大于某个值的点都属于一类，坐标小于某个值的点都属于一类，那么我们就可以用这个值来做分分界点，它点把直线上的点分为了两类。因为样本点是有限可数的。所以这个分类点的取法不唯一。选好后，随便给我们一个点，我们就可以根据这个随机给出的点是在分界点的左侧还是右侧来判断这个点的类别。&lt;/p&gt;&#xA;&lt;p&gt;同样，一个平面上有很多样本点，这些点也分为2类，如果我们在平面上可以找到这样一条直线满足这两类样本点分别分布在直线的两侧，那么我们就可以用这个平面作分界面，来对之后随机给出的点进行分类。&lt;/p&gt;&#xA;&lt;p&gt;仍然用同样的方法，我们可以用一个平面给分布在一个3维立体空间中的点分类。&lt;/p&gt;&#xA;&lt;p&gt;总结起来就是说：在n维空间中有很多样本点，如果我们能找到一个n-1维的超平面，这个平面恰好把空间中的样本点分在它的两侧，那么我们就可以用这个n-1维的超平面来对之后随机给出点分类。&lt;/p&gt;&#xA;&lt;p&gt;这种方法有两个问题：&lt;/p&gt;&#xA;&lt;p&gt;1）  因为那个n-1维的超平面选法往往是不唯一的，我们要选哪一个?&lt;/p&gt;&#xA;&lt;p&gt;2）  更多情况下，我们找不到这样一个n-1维超平面，你可以想象更多情况下，我们要分类的数据是“混合”在一起的，很难简单的用一个点，一条线，或者一个更高纬度的线性分类器把它分开。&lt;/p&gt;&#xA;&lt;p&gt;接下来我们就要来解决这个问题。&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;最优超平面的确定:&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;p&gt;如果选择合适的分界超平面呢？直观的来说，我们因该选择一个距离两组数据“最远”的超平面。首先每个点都和这个超平面有一个距离（该距离可以通过把n维空间放入一个n维坐标系后用代数的方法计算出来，具体计算过程此处就不说了。不过1维２维３维的情况你应该能自己算出来吧～～～，理解就好）我们选择的超平面要让所有这些距离中最小的一个值最大。&lt;/p&gt;&#xA;&lt;p&gt;我们在n维空间空建立一个n维坐标系&lt;/p&gt;&#xA;&lt;p&gt;在这个n维坐标系中，每个n-1维超平面都可一个用一个方程表示出来，这里设为。&lt;/p&gt;&#xA;&lt;div&gt;$$H(x)=a_{0}+\sum_{i=1}^{n}(a_{i}*x_{i})$$&lt;/div&gt;&#xD;&#xA;&lt;p&gt;我们用一个变量Y表示一个点相对超平面的关系，在一侧为1.另一侧为-1.&lt;/p&gt;&#xA;&lt;p&gt;可以证明:（证明过程略）&lt;/p&gt;&#xA;&lt;p&gt;该平面在满足下面的约束时：&lt;/p&gt;&#xA;&lt;div&gt;$Y_{i}H_(x_{i})\geq 1$&lt;/div&gt;&#xD;&#xA;&lt;p&gt;极小化函数&lt;/p&gt;&#xA;&lt;div&gt;$\frac{1}{2}\sum_{j=1}^{n}(a_{j}^{2})$&lt;/div&gt;&#xD;&#xA;&lt;p&gt;这是一个二次规划问题，我们对它求解就可以得到最优平面。&lt;/p&gt;&#xA;&lt;p&gt;有时我们找不到这样一个超平面，这时，我们可以把超平面的约束条件放的宽松一点，也就是在超平面附近允许两种分类的点的重叠，可以同过把改为（e&amp;gt;0）来实现这一目的。&lt;/p&gt;&#xA;&lt;p&gt;（具体证明与求解参考《统计学完全教程》 科学出版社 P290的支持向量机一节）&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;第二个问题的解决—核方法&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;p&gt;很多时候，我们是找不到一个简单的超平面对样本进行划分的，这个时候，我们可以通过坐标变换，把样本点映射到一个可以线形划分的空间中。&lt;/p&gt;&#xA;&lt;p&gt;这个映射可以是同维度的，即映射前后样本空间的纬度相同，比如：&lt;/p&gt;&#xA;&lt;p&gt;&lt;img src=&#34;http://pic002.cnblogs.com/images/2012/52809/2012063021394557.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;&#xA;&lt;p&gt;就可以通过一个简单的&lt;strong&gt;求平方&lt;/strong&gt;运算，把数据从线性不可划分变为线性可分—我们可以很容易的找到一条直线把后者的样本点分成两个部分。&lt;/p&gt;&#xA;&lt;p&gt;但是很多时候，问题没有这么简单，我们就需要用另外一种映射，即把样本点映射到更高纬度的空间去。&lt;/p&gt;&#xA;&lt;p&gt;比如上面的左图还可以做这么一种变换：&lt;/p&gt;&#xA;&lt;p&gt;$$z_1=x_1x_1, z_2=\sqrt{2}x_1x_2, z_3=x_2x_2$$&lt;/p&gt;&#xA;&lt;p&gt;这样我们就可以在新的样本空间中很简单的找到一个平面把这些点分开了．仔细分析，你可以发现，这个平面其实是左图中的一个椭圆的经过上述变换后得到的．&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;较高维空间的线性分类器对应于原空间的一个非线性分类器．&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;p&gt;这就是&lt;strong&gt;核方法&lt;/strong&gt;的核心。&lt;/p&gt;&#xA;&lt;p&gt;通过找到一个合适的映射，我们就可以前面的问题(2)了&lt;/p&gt;&#xA;&lt;p&gt;这种映射称为核函数，核函数的选择是很有技巧的，它也有一些常见的模型，很多时候我们只要选择合适的模型并计算适当的参数就可以了。具体方法这里不说了，有兴趣的可以参见《&lt;a href=&#34;http://download.csdn.net/source/1353188&#34;&gt;RBF核函数的支持向量机参数选择&lt;/a&gt;》一文。&lt;/p&gt;&#xA;&lt;p&gt;找到核函数后，我们就完全解决上述问题了。&lt;/p&gt;&#xA;&lt;p&gt;（其实这里还有一些简化计算的技巧，这些技巧与其它更具体的东西还是可以去看《统计学完全教程》 科学出版社，真是一本非常强大的书。）&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;优点:&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;p&gt;可以很快的判断一个样本的种类。&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;缺点:&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;p&gt;由于对每个数据集的最佳核变换及相应参数都不一样，所以对每个数据集都要重新学习确定函数与参数。&lt;/p&gt;&#xA;&lt;p&gt;一般而言，支持向量机更适合包含大量数据的问题，而其他方法如决策树，更适合小规模的数据集。&lt;/p&gt;&#xA;&lt;p&gt;支持向量机也是一种黑盒技术，由于存在像高维空间的判断，我们很难解释分类的具体标准与原因。&lt;/p&gt;&#xA;&lt;div&gt;&#xD;&#xA;  &lt;embed id=&#34;lingoes_plugin_object&#34; width=&#34;0&#34; height=&#34;0&#34; type=&#34;application/lingoes-npruntime-capture-word-plugin&#34; hidden=&#34;true&#34; /&gt;&#xD;&#xA;&lt;/div&gt;&#xD;&#xA;&lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;&#xD;&#xA;  &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;&#xD;&#xA;&lt;/p&gt;</description>
     </item>
-    
   </channel>
 </rss>

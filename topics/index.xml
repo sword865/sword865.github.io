@@ -1,27 +1,41 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Topics on 悟剑阁</title>
-    <link>http://blog.sword865.com/topics/</link>
+    <link>https://sword865.github.io/topics/</link>
     <description>Recent content in Topics on 悟剑阁</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
     <language>zh-CN</language>
-    <managingEditor>sword865@163.com (罗刹剑客)</managingEditor>
-    <webMaster>sword865@163.com (罗刹剑客)</webMaster>
     <copyright>Copyright (c) 2015. All rights reserved.</copyright>
-    <lastBuildDate>Sun, 12 Mar 2017 15:49:45 +0800</lastBuildDate>
-    
-	<atom:link href="http://blog.sword865.com/topics/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Mon, 08 Mar 2021 15:51:35 +0800</lastBuildDate>
+    <atom:link href="https://sword865.github.io/topics/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Spark</title>
-      <link>http://blog.sword865.com/topics/spark/</link>
-      <pubDate>Sun, 12 Mar 2017 15:49:45 +0800</pubDate>
-      <author>sword865@163.com (罗刹剑客)</author>
-      <guid>http://blog.sword865.com/topics/spark/</guid>
+      <title>深度学习</title>
+      <link>https://sword865.github.io/topics/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/</link>
+      <pubDate>Mon, 08 Mar 2021 15:51:35 +0800</pubDate>
+      <guid>https://sword865.github.io/topics/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/</guid>
       <description></description>
     </item>
-    
+    <item>
+      <title>机器学习平台</title>
+      <link>https://sword865.github.io/topics/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B9%B3%E5%8F%B0/</link>
+      <pubDate>Sun, 07 Mar 2021 15:51:35 +0800</pubDate>
+      <guid>https://sword865.github.io/topics/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B9%B3%E5%8F%B0/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>编程语言</title>
+      <link>https://sword865.github.io/topics/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/</link>
+      <pubDate>Thu, 08 Nov 2018 23:51:35 +0800</pubDate>
+      <guid>https://sword865.github.io/topics/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Spark</title>
+      <link>https://sword865.github.io/topics/spark/</link>
+      <pubDate>Sun, 12 Mar 2017 15:49:45 +0800</pubDate>
+      <guid>https://sword865.github.io/topics/spark/</guid>
+      <description></description>
+    </item>
   </channel>
 </rss>

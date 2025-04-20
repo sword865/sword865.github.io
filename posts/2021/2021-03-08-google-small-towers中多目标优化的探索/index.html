@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<title>Google Small Towers中多目标优化的探索</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5, user-scalable=5" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+      <script src="/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="/scss/dark-mode.min.cb53f1bee2b8900cb4f082afbf00175d6618f281cf9a2fe8619e3b52d20b5721.css" integrity="sha256-y1PxvuK4kAy08IKvvwAXXWYY8oHPmi/oYZ47UtILVyE=" media="screen">
+
+
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript"
+        async
+        src="https://cdn.bootcss.com/mathjax/2.7.3/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$'], ['\[\[','\]\]']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+});
+
+MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<style>
+code.has-jax {
+    font: inherit;
+    font-size: 100%;
+    background: inherit;
+    border: inherit;
+    color: #515151;
+}
+</style>
+
+
+</head>
+<body>
+    	<div id="app"><div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e8%83%8c%e6%99%af" class="nav-背景">
+									背景
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e4%b8%bb%e8%a6%81%e9%97%ae%e9%a2%98%e8%ae%a8%e8%ae%ba" class="nav-主要问题讨论">
+									主要问题讨论
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#1-over-parameterization%e5%af%b9%e5%a4%9a%e4%bb%bb%e5%8a%a1%e6%a8%a1%e5%9e%8b%e7%9a%84%e9%80%82%e7%94%a8%e6%80%a7" class="nav-1-over-parameterization对多任务模型的适用性">
+									1. Over-parameterization对多任务模型的适用性
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#2-%e5%a4%a7%e5%9e%8b%e6%a8%a1%e5%9e%8b%e5%92%8c%e5%b0%8f%e5%9e%8b%e6%a8%a1%e5%9e%8b%e7%9a%84%e5%a4%9a%e7%9b%ae%e6%a0%87%e5%ad%a6%e4%b9%a0%e8%a1%a8%e7%8e%b0%e5%af%b9%e6%af%94" class="nav-2-大型模型和小型模型的多目标学习表现对比">
+									2. 大型模型和小型模型的多目标学习表现对比
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#under-parameterized-self-auxiliaries%e6%a8%a1%e5%9e%8b%e7%bb%93%e6%9e%84" class="nav-under-parameterized-self-auxiliaries模型结构">
+									Under-parameterized Self-auxiliaries模型结构
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e4%bf%ae%e6%94%b9%e5%90%8e%e7%9a%84%e5%a4%9a%e7%9b%ae%e6%a0%87%e6%a8%a1%e5%9e%8b%e7%bb%93%e6%9e%84" class="nav-修改后的多目标模型结构">
+									修改后的多目标模型结构
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%8d%9f%e5%a4%b1%e5%87%bd%e6%95%b0" class="nav-损失函数">
+									损失函数
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%b0%8f%e5%a1%94%e7%bb%93%e6%9e%84%e7%a4%ba%e4%be%8b" class="nav-小塔结构示例">
+									小塔结构示例
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%b3%a8%e9%87%8a%e4%b8%8e%e6%80%9d%e8%80%83" class="nav-注释与思考">
+									注释与思考
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://sword865.github.io/">
+            悟剑阁
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://sword865.github.io/">
+        <div class="single-column-header-title">悟剑阁</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+
+            <div class="post-head-wrapper-text-only"
+                
+            >
+                <div class="post-title">
+                    Google Small Towers中多目标优化的探索
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2021-03-08 15:51
+                        </time>
+                        
+
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/%E5%A4%9A%E7%9B%AE%E6%A0%87">多目标</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <h2 id="背景">背景</h2>
+<p>多目标优化中有一个很常见的跷跷板问题，就是说在训练时，多个目标会相互影响，导致震荡&mdash;你降我升，我升你降。有时间还会出现Nan的结果，需要很仔细的调参测试+清洗数据才能训练出一个理想的模型。</p>
+<p>针对这种问题，自然就有了一些尝试，比如从帕累托最优的角度寻找优化方向（阿里PEA），修改模型结构使Shared部分存储更泛化的信息（腾讯PLE）。不过这两个写的人都挺多了，就写一下Google Small Towers的这篇文章吧。</p>
+<h2 id="主要问题讨论">主要问题讨论</h2>
+<p>文章首先讨论了两个问题：</p>
+<h3 id="1-over-parameterization对多任务模型的适用性">1. Over-parameterization对多任务模型的适用性</h3>
+<p>我们都知道over-parameterization对单任务模型是有价值的，那边对多任务模型是否成立？</p>
+<p>这里以将多个目标的线性组合作为优化目标的例子，认为over-parameterization能够帮助处理各任务优化目标之间的冲突问题（既减少跷跷板问题的出现）。</p>
+<h3 id="2-大型模型和小型模型的多目标学习表现对比">2. 大型模型和小型模型的多目标学习表现对比</h3>
+<p>通过实验对比了大型模型和小型模型进行多目标学习中的不同表现。</p>
+<p>实验中，不论是增加任务相关结构的复杂度，还是增加任务共享结构的复杂度，Pareto frontier都会呈现先变好在变差的趋势。</p>
+<p>因此，文章认为over-parameterization并不利于多目标学习中的共享性，进而伤害了多目标学习中的泛化能力。因此，在多目标学习中，模型大小实质上是对模型有效性和泛化能力的一种平衡。</p>
+<blockquote>
+<p>To summarize our insights, for a multi-task learning model, small models benefit from good multi-task generalization but hurts Pareto efficiency; big models theoretically have better Pareto efficiency but could suffer from loss of generalization.</p></blockquote>
+<h2 id="under-parameterized-self-auxiliaries模型结构">Under-parameterized Self-auxiliaries模型结构</h2>
+<p>文章提出了under-parameterized self-auxiliaries的模型结构：</p>
+<p>首先假设模型的共享方式是所有任务共享最下面的表示层（Hard Sharded，MMOE这种，PLE就不行）,既对任务t，有：</p>
+<p>$$f_{t}(x; \theta_{sh}, \theta_{t})=f_{t}(h(x; \theta_{sh}); \theta_{t}), \forall t$$</p>
+<p>其中 $\theta_t$ 是任务相关的参数， $\theta_sh$ 为共享参数， $h(x;\theta_sh)$ 既为共享的表示层输出。</p>
+<p>文章在这个基础上对每个任务t增加了self-auxiliary tower的附属结构(既一个辅助任务的small tower)，该小塔输出和原来的任务相同，但参数 $\theta_t^{a}$ 很小（既小塔是一个很简单的结构）:</p>
+<p>$$f_t^a(x; \theta_{sh}, \theta_t^a))=f_t(h(x;\theta_{sh}); \theta_t^a), \forall t$$</p>
+<h3 id="修改后的多目标模型结构">修改后的多目标模型结构</h3>
+<p>修改后多目标模型的结构是这样的：</p>
+<img width="500"  src="../images/google_m_towner.png" class="center" />
+<h3 id="损失函数">损失函数</h3>
+<p>最后的Loss则是在原来的基础上加上了小塔的Loss:</p>
+<p>$$\hat{L}(\theta)=\sum_{t=1}^Tw_t(\hat{L}(\theta_{sh},\theta_t)+\gamma \hat{L}(\theta_{sh},\theta_t^a))$$</p>
+<p>其中： $$\hat{L}(\theta_{sh},\theta_t^a))=\frac{1}{n}\sum_{i=1}^nL_t(f_t^a(x; \theta_{sh}, \theta_t^a)), y_i^t)$$</p>
+<p>这么改的原因自然就是前面的推理了：通过使用较小的模型来提高任务对不同的泛化能力。（任务量变成了原来的两倍，但是其中有一半任务是under-parameterized，因此也就降低了模型over-parameterized对共享性的破坏力）。</p>
+<p>文章认为，这种通过强迫模型学习共享层来提高复数任务的的结构也是一种正则化的手段。</p>
+<h2 id="小塔结构示例">小塔结构示例</h2>
+<p>这里对小塔的结构没有什么限制，唯一的要求就是要比模型简单，下面是文章里的一些例子：</p>
+<img src="../images/google_m_tower_small_tower.png" />
+<p>最后主要就是附录中的证明与实验细节了，建议直接读原文了解。</p>
+<h2 id="注释与思考">注释与思考</h2>
+<p><strong>注1</strong>: Over-Parameterization的说明见&quot;<a href="https://arxiv.org/abs/1812.11118">Reconciling modern machine-learning practice and the classical bias–variance trade-off</a>&ldquo;和&rdquo;<a href="https://arxiv.org/abs/1903.07571">Two models of double descent for weak features</a>&ldquo;等文章，或者<a href="https://www.zhihu.com/question/434311126">知乎相关讨论</a>。</p>
+<p><strong>注2</strong>: 有意思的是Small Tower通过小塔来提升大塔多任务的效果，而阿里的Rocket Launching则是通过大塔来提高小塔的效果，这两个模型放在一起会怎么样呢。</p>
+<p><strong>注3</strong>: 最近发现还有一篇修改优化算法的文章：Gradient Surgery for Multi-Task Learning，不过还没来得急细看，等有空了试试对我们的任务有没有帮助。</p>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">Last modified on 2021-03-08</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts">
+			Next<br>No newer posts.
+                </a>
+                
+                
+                
+                <a class="older-posts" href="/posts/2021/2021-03-07-%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F%E5%91%A8%E8%BE%B9%E8%AE%BE%E6%96%BD--%E7%89%B9%E5%BE%81%E5%95%86%E5%BA%97/">
+			Previous<br>推荐系统周边设施--特征商店
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://sword865.github.io/">
+    
+        <div class="nav-title">
+            悟剑阁
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	Copyright (c) 2015. All rights reserved.
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    <div class="toc-wrapper">
+        
+
+        
+        <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e8%83%8c%e6%99%af" class="nav-背景">
+									背景
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e4%b8%bb%e8%a6%81%e9%97%ae%e9%a2%98%e8%ae%a8%e8%ae%ba" class="nav-主要问题讨论">
+									主要问题讨论
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#1-over-parameterization%e5%af%b9%e5%a4%9a%e4%bb%bb%e5%8a%a1%e6%a8%a1%e5%9e%8b%e7%9a%84%e9%80%82%e7%94%a8%e6%80%a7" class="nav-1-over-parameterization对多任务模型的适用性">
+									1. Over-parameterization对多任务模型的适用性
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#2-%e5%a4%a7%e5%9e%8b%e6%a8%a1%e5%9e%8b%e5%92%8c%e5%b0%8f%e5%9e%8b%e6%a8%a1%e5%9e%8b%e7%9a%84%e5%a4%9a%e7%9b%ae%e6%a0%87%e5%ad%a6%e4%b9%a0%e8%a1%a8%e7%8e%b0%e5%af%b9%e6%af%94" class="nav-2-大型模型和小型模型的多目标学习表现对比">
+									2. 大型模型和小型模型的多目标学习表现对比
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#under-parameterized-self-auxiliaries%e6%a8%a1%e5%9e%8b%e7%bb%93%e6%9e%84" class="nav-under-parameterized-self-auxiliaries模型结构">
+									Under-parameterized Self-auxiliaries模型结构
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e4%bf%ae%e6%94%b9%e5%90%8e%e7%9a%84%e5%a4%9a%e7%9b%ae%e6%a0%87%e6%a8%a1%e5%9e%8b%e7%bb%93%e6%9e%84" class="nav-修改后的多目标模型结构">
+									修改后的多目标模型结构
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%8d%9f%e5%a4%b1%e5%87%bd%e6%95%b0" class="nav-损失函数">
+									损失函数
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%b0%8f%e5%a1%94%e7%bb%93%e6%9e%84%e7%a4%ba%e4%be%8b" class="nav-小塔结构示例">
+									小塔结构示例
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%b3%a8%e9%87%8a%e4%b8%8e%e6%80%9d%e8%80%83" class="nav-注释与思考">
+									注释与思考
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+        
+    </div>
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top"
+            :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+
+<div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	Copyright (c) 2015. All rights reserved.
+	
+</div>
+            </div>
+    
+    <script src="/js/journal.js"></script></body>
+</html>

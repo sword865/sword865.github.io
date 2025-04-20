@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>深度学习 on 悟剑阁</title>
+    <link>https://sword865.github.io/topics/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/</link>
+    <description>Recent content in 深度学习 on 悟剑阁</description>
+    <generator>Hugo</generator>
+    <language>zh-CN</language>
+    <copyright>Copyright (c) 2015. All rights reserved.</copyright>
+    <lastBuildDate>Mon, 08 Mar 2021 15:51:35 +0800</lastBuildDate>
+    <atom:link href="https://sword865.github.io/topics/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Google Small Towers中多目标优化的探索</title>
+      <link>https://sword865.github.io/posts/2021/2021-03-08-google-small-towers%E4%B8%AD%E5%A4%9A%E7%9B%AE%E6%A0%87%E4%BC%98%E5%8C%96%E7%9A%84%E6%8E%A2%E7%B4%A2/</link>
+      <pubDate>Mon, 08 Mar 2021 15:51:35 +0800</pubDate>
+      <guid>https://sword865.github.io/posts/2021/2021-03-08-google-small-towers%E4%B8%AD%E5%A4%9A%E7%9B%AE%E6%A0%87%E4%BC%98%E5%8C%96%E7%9A%84%E6%8E%A2%E7%B4%A2/</guid>
+      <description>&lt;h2 id=&#34;背景&#34;&gt;背景&lt;/h2&gt;&#xA;&lt;p&gt;多目标优化中有一个很常见的跷跷板问题，就是说在训练时，多个目标会相互影响，导致震荡&amp;mdash;你降我升，我升你降。有时间还会出现Nan的结果，需要很仔细的调参测试+清洗数据才能训练出一个理想的模型。&lt;/p&gt;&#xA;&lt;p&gt;针对这种问题，自然就有了一些尝试，比如从帕累托最优的角度寻找优化方向（阿里PEA），修改模型结构使Shared部分存储更泛化的信息（腾讯PLE）。不过这两个写的人都挺多了，就写一下Google Small Towers的这篇文章吧。&lt;/p&gt;&#xA;&lt;h2 id=&#34;主要问题讨论&#34;&gt;主要问题讨论&lt;/h2&gt;&#xA;&lt;p&gt;文章首先讨论了两个问题：&lt;/p&gt;&#xA;&lt;h3 id=&#34;1-over-parameterization对多任务模型的适用性&#34;&gt;1. Over-parameterization对多任务模型的适用性&lt;/h3&gt;&#xA;&lt;p&gt;我们都知道over-parameterization对单任务模型是有价值的，那边对多任务模型是否成立？&lt;/p&gt;&#xA;&lt;p&gt;这里以将多个目标的线性组合作为优化目标的例子，认为over-parameterization能够帮助处理各任务优化目标之间的冲突问题（既减少跷跷板问题的出现）。&lt;/p&gt;&#xA;&lt;h3 id=&#34;2-大型模型和小型模型的多目标学习表现对比&#34;&gt;2. 大型模型和小型模型的多目标学习表现对比&lt;/h3&gt;&#xA;&lt;p&gt;通过实验对比了大型模型和小型模型进行多目标学习中的不同表现。&lt;/p&gt;&#xA;&lt;p&gt;实验中，不论是增加任务相关结构的复杂度，还是增加任务共享结构的复杂度，Pareto frontier都会呈现先变好在变差的趋势。&lt;/p&gt;&#xA;&lt;p&gt;因此，文章认为over-parameterization并不利于多目标学习中的共享性，进而伤害了多目标学习中的泛化能力。因此，在多目标学习中，模型大小实质上是对模型有效性和泛化能力的一种平衡。&lt;/p&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;To summarize our insights, for a multi-task learning model, small models benefit from good multi-task generalization but hurts Pareto efficiency; big models theoretically have better Pareto efficiency but could suffer from loss of generalization.&lt;/p&gt;&lt;/blockquote&gt;&#xA;&lt;h2 id=&#34;under-parameterized-self-auxiliaries模型结构&#34;&gt;Under-parameterized Self-auxiliaries模型结构&lt;/h2&gt;&#xA;&lt;p&gt;文章提出了under-parameterized self-auxiliaries的模型结构：&lt;/p&gt;&#xA;&lt;p&gt;首先假设模型的共享方式是所有任务共享最下面的表示层（Hard Sharded，MMOE这种，PLE就不行）,既对任务t，有：&lt;/p&gt;&#xA;&lt;p&gt;$$f_{t}(x; \theta_{sh}, \theta_{t})=f_{t}(h(x; \theta_{sh}); \theta_{t}), \forall t$$&lt;/p&gt;&#xA;&lt;p&gt;其中 $\theta_t$ 是任务相关的参数， $\theta_sh$ 为共享参数， $h(x;\theta_sh)$ 既为共享的表示层输出。&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

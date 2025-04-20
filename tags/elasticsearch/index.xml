@@ -1,107 +1,20 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Elasticsearch on 悟剑阁</title>
-    <link>http://blog.sword865.com/tags/elasticsearch/index.xml</link>
+    <link>https://sword865.github.io/tags/elasticsearch/</link>
     <description>Recent content in Elasticsearch on 悟剑阁</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
     <language>zh-CN</language>
-    <managingEditor>sword865@163.com (罗刹剑客)</managingEditor>
-    <webMaster>sword865@163.com (罗刹剑客)</webMaster>
     <copyright>Copyright (c) 2015. All rights reserved.</copyright>
-    <atom:link href="http://blog.sword865.com/tags/elasticsearch/index.xml" rel="self" type="application/rss+xml" />
-    
+    <lastBuildDate>Mon, 27 Jul 2015 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://sword865.github.io/tags/elasticsearch/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Elasticsearch-HttpServerModule</title>
-      <link>http://blog.sword865.com/archives/150</link>
+      <link>https://sword865.github.io/archives/150/</link>
       <pubDate>Mon, 27 Jul 2015 00:00:00 +0000</pubDate>
-      <author>sword865@163.com (罗刹剑客)</author>
-      <guid>http://blog.sword865.com/archives/150</guid>
-      <description>&lt;p&gt;HttpServerModule的请求主要由HttpServer中的HttpServerTransport(默认为NettyHttpServerTransport）类处理。&lt;/p&gt;
-
-&lt;p&gt;NettyHttpServerTransport基于netty框架，负责监听并建立连接，信息的处理由内部类HttpChannelPipelineFactory完成。&lt;/p&gt;
-
-&lt;p&gt;每当产生一个连接时，都会发出一个ChannelEvent，该Event由一系列的ChannelHandler进行处理。&lt;/p&gt;
-
-&lt;p&gt;为了方便组织，这些ChannelHandler被放在一条“流(pipeline)”里，一个ChannelEvent并不会主动的&amp;#8221;流&amp;#8221;经所有的Handler，而是由上一个Handler显式的调用ChannelPipeline.sendUp(Down)stream产生，并交给下一个Handler处理。&lt;/p&gt;
-
-&lt;p&gt;换句话说，每个Handler接收到一个ChannelEvent，并处理结束后，如果需要继续处理，那么它需要调用sendUp(Down)stream新发起一个事件。如果它不再发起事件，那么处理就到此结束，即使它后面仍然有Handler没有执行。这个机制可以保证最大的灵活性，当然对Handler的先后顺序也有了更严格的要求。&lt;/p&gt;
-
-&lt;p&gt;在流Pipeline里有一个Map(name2ctx)和一个链表(记录head和tail)，pipeline里面会调度关联的多个channelhandler的运行。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://static.oschina.net/uploads/space/2013/1109/075339_Kjw6_190591.png&#34;&gt;&lt;img src=&#34;http://static.oschina.net/uploads/space/2013/1109/075339_Kjw6_190591.png&#34; alt=&#34;channel pipeline&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;在NettyHttpServerTransport中，会流过的channelhandler就包括解码http请求(把多个HttpChunk拼起来并按http协议进行解析)和http请求处理。&lt;/p&gt;
-
-&lt;p&gt;在处理http请求，数据流向为：HttpRequestHandler-&amp;gt;&lt;span class=&#34;s1&#34;&gt;NettyHttpServerTransport&lt;/span&gt;-&amp;gt;HttpServerAdapter(HttpServer的内部类Dispatche)-&amp;gt;RestController。&lt;/p&gt;
-
-&lt;p&gt;RestController中的处理代码为：&lt;/p&gt;
-
-&lt;pre class=&#34;lang:java decode:true &#34;&gt;void executeHandler(RestRequest request, RestChannel channel) throws Exception {
-        final RestHandler handler = getHandler(request);
-        if (handler != null) {
-            handler.handleRequest(request, channel);
-        } else {
-            if (request.method() == RestRequest.Method.OPTIONS) {
-                // when we have OPTIONS request, simply send OK by default (with the Access Control Origin header which gets automatically added)
-                channel.sendResponse(new BytesRestResponse(OK));
-            } else {
-                channel.sendResponse(new BytesRestResponse(BAD_REQUEST, &#34;No handler found for uri [&#34; + request.uri() + &#34;] and method [&#34; + request.method() + &#34;]&#34;));
-            }
-        }
-    }
-
-    private RestHandler getHandler(RestRequest request) {
-        String path = getPath(request);
-        RestRequest.Method method = request.method();
-        if (method == RestRequest.Method.GET) {
-            return getHandlers.retrieve(path, request.params());
-        } else if (method == RestRequest.Method.POST) {
-            return postHandlers.retrieve(path, request.params());
-        } else if (method == RestRequest.Method.PUT) {
-            return putHandlers.retrieve(path, request.params());
-        } else if (method == RestRequest.Method.DELETE) {
-            return deleteHandlers.retrieve(path, request.params());
-        } else if (method == RestRequest.Method.HEAD) {
-            return headHandlers.retrieve(path, request.params());
-        } else if (method == RestRequest.Method.OPTIONS) {
-            return optionsHandlers.retrieve(path, request.params());
-        } else {
-            return null;
-        }
-    }&lt;/pre&gt;
-
-&lt;p&gt;可以看到，这里会根据注册的handler，选择合适的处理逻辑。&lt;/p&gt;
-
-&lt;p&gt;这些handler由函数registerHandler进行注册，函数签名如下：&lt;/p&gt;
-
-&lt;p class=&#34;p1&#34;&gt;
-  &lt;span class=&#34;s1&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;void&lt;/span&gt; registerHandler(RestRequest.Method &lt;span class=&#34;s2&#34;&gt;method&lt;/span&gt;, String &lt;span class=&#34;s2&#34;&gt;path&lt;/span&gt;, RestHandler &lt;span class=&#34;s3&#34;&gt;handler&lt;/span&gt;)
-&lt;/p&gt;
-
-&lt;p class=&#34;p1&#34;&gt;
-  比如对RestGetIndicesAction类，有如下构造函数：
-&lt;/p&gt;
-
-&lt;pre class=&#34;lang:java decode:true&#34;&gt;public RestGetIndicesAction(Settings settings, RestController controller, Client client) {
-        super(settings, controller, client);
-        controller.registerHandler(GET, &#34;/{index}&#34;, this);
-        controller.registerHandler(GET, &#34;/{index}/{type}&#34;, this);
-    }&lt;/pre&gt;
-
-&lt;p&gt;netty参考：&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://my.oschina.net/flashsword/blog/162936&#34;&gt;http://my.oschina.net/flashsword/blog/162936&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://my.oschina.net/flashsword/blog/164237&#34;&gt;http://my.oschina.net/flashsword/blog/164237&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://my.oschina.net/flashsword/blog/169361&#34;&gt;http://my.oschina.net/flashsword/blog/169361&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://my.oschina.net/flashsword/blog/178561&#34;&gt;http://my.oschina.net/flashsword/blog/178561&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://my.oschina.net/flashsword/blog/197963&#34;&gt;http://my.oschina.net/flashsword/blog/197963&lt;/a&gt;&lt;/p&gt;
-</description>
+      <guid>https://sword865.github.io/archives/150/</guid>
+      <description>&lt;p&gt;HttpServerModule的请求主要由HttpServer中的HttpServerTransport （默认为NettyHttpServerTransport）类处理。&lt;/p&gt;&#xA;&lt;p&gt;NettyHttpServerTransport基于netty框架，负责监听并建立连接，信息的处理由内部类HttpChannelPipelineFactory 完成。&lt;/p&gt;&#xA;&lt;p&gt;每当产生一个连接时，都会发出一个ChannelEvent，该Event由一系列的ChannelHandler进行处理。&lt;/p&gt;&#xA;&lt;p&gt;为了方便组织，这些ChannelHandler被放在一条“流(pipeline)”里，一个ChannelEvent并不会主动的”流”经所有的Handler，而是由上一个Handler显式的调用ChannelPipeline.sendUp(Down)stream产生，并交给下一个Handler处理。&lt;/p&gt;&#xA;&lt;p&gt;换句话说，每个Handler接收到一个ChannelEvent，并处理结束后，如果需要继续处理，那么它需要调用sendUp(Down)stream新发起一个事件。如果它不再发起事件，那么处理就到此结束，即使它后面仍然有Handler没有执行。这个机制可以保证最大的灵活性，当然对Handler的先后顺序也有了更严格的要求。&lt;/p&gt;&#xA;&lt;p&gt;在流Pipeline里有一个Map(name2ctx)和一个链表(记录head和tail)，pipeline里面会调度关联的多个channelhandler的运行。&lt;/p&gt;&#xA;&lt;p&gt;&lt;a href=&#34;https://sword865.github.io/posts/_posts/images/0753391.png&#34;&gt;&lt;img src=&#34;https://sword865.github.io/posts/_posts/images/0753391.png&#34; alt=&#34;channel pipeline&#34; /&gt;&lt;/a&gt;&lt;/p&gt;&#xA;&lt;p&gt;在NettyHttpServerTransport中，会流过的channelhandler就包括解码http请求(把多个HttpChunk拼起来并按http协议进行解析)和http请求处理。&lt;/p&gt;&#xA;&lt;p&gt;在处理http请求，数据流向为：HttpRequestHandler-&amp;gt;&lt;span class=&#34;s1&#34;&gt;NettyHttpServerTransport&lt;/span&gt;-&amp;gt;HttpServerAdapter(HttpServer的内部类Dispatche)-&amp;gt;RestController。&lt;/p&gt;&#xA;&lt;p&gt;RestController中的处理代码为：&lt;/p&gt;&#xA;&lt;pre class=&#34;lang:java decode:true &#34;&gt;&#xD;&#xA;void executeHandler(RestRequest request, RestChannel channel) throws Exception {&#xD;&#xA;        final RestHandler handler = getHandler(request);&#xD;&#xA;        if (handler != null) {&#xD;&#xA;            handler.handleRequest(request, channel);&#xD;&#xA;        } else {&#xD;&#xA;            if (request.method() == RestRequest.Method.OPTIONS) {&#xD;&#xA;                // when we have OPTIONS request, simply send OK by default &#xD;&#xA;                // (with the Access Control Origin header which gets automatically added)&#xD;&#xA;                channel.sendResponse(new BytesRestResponse(OK));&#xD;&#xA;            } else {&#xD;&#xA;                channel.sendResponse(new BytesRestResponse(&#xD;&#xA;                    BAD_REQUEST, &#xD;&#xA;                    &#34;No handler found for uri [&#34; + request.uri() + &#34;] and method [&#34; + request.method() + &#34;]&#34;&#xD;&#xA;                ));&#xD;&#xA;            }&#xD;&#xA;        }&#xD;&#xA;    }&#xD;&#xA;&#xD;&#xA;    private RestHandler getHandler(RestRequest request) {&#xD;&#xA;        String path = getPath(request);&#xD;&#xA;        RestRequest.Method method = request.method();&#xD;&#xA;        if (method == RestRequest.Method.GET) {&#xD;&#xA;            return getHandlers.retrieve(path, request.params());&#xD;&#xA;        } else if (method == RestRequest.Method.POST) {&#xD;&#xA;            return postHandlers.retrieve(path, request.params());&#xD;&#xA;        } else if (method == RestRequest.Method.PUT) {&#xD;&#xA;            return putHandlers.retrieve(path, request.params());&#xD;&#xA;        } else if (method == RestRequest.Method.DELETE) {&#xD;&#xA;            return deleteHandlers.retrieve(path, request.params());&#xD;&#xA;        } else if (method == RestRequest.Method.HEAD) {&#xD;&#xA;            return headHandlers.retrieve(path, request.params());&#xD;&#xA;        } else if (method == RestRequest.Method.OPTIONS) {&#xD;&#xA;            return optionsHandlers.retrieve(path, request.params());&#xD;&#xA;        } else {&#xD;&#xA;            return null;&#xD;&#xA;        }&#xD;&#xA;    }&lt;/pre&gt;&#xD;&#xA;&lt;p&gt;void executeHandler(RestRequest request, RestChannel channel) throws Exception {&#xA;final RestHandler handler = getHandler(request);&#xA;if (handler != null) {&#xA;handler.handleRequest(request, channel);&#xA;} else {&#xA;if (request.method() == RestRequest.Method.OPTIONS) {&#xA;// when we have OPTIONS request, simply send OK by default (with the Access Control Origin header which gets automatically added)&#xA;channel.sendResponse(new BytesRestResponse(OK));&#xA;} else {&#xA;channel.sendResponse(new BytesRestResponse(BAD_REQUEST, &amp;ldquo;No handler found for uri [&amp;rdquo; + request.uri() + &amp;ldquo;] and method [&amp;rdquo; + request.method() + &amp;ldquo;]&amp;rdquo;));&#xA;}&#xA;}&#xA;}&lt;/p&gt;</description>
     </item>
-    
   </channel>
 </rss>
