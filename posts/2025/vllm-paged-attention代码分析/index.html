@@ -108,6 +108,38 @@ code.has-jax {
             
             
             
+                
+                
+                
+                    
+                
+                
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
+                    Archive
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/tags">
+                    Tags
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/about/">
+                    关于
+                </a>
+                
+            
             
             <div class="toc">
 
@@ -395,12 +427,21 @@ code.has-jax {
 <p>在 A100 GPU 上，我们有：</p>
 <ul>
 <li>108个SM</li>
-<li>每个SM有4个Wrap scheduler(因此同时最多有4个Thread Wrap被调度到一个SM上)</li>
+<li>每个SM有4个Wrap scheduler
+<ul>
+<li>最多有4个Thread Wrap同时在一个SM上执行</li>
+</ul>
+</li>
+<li>每个Wrap scheduler有一个长度为16的调度队列
+<ul>
+<li>一个SM上最多可以调度64个Thread Wrap</li>
+</ul>
+</li>
 </ul>
 <p>基本上这些数字在设计Kernel的时候都可以被考虑到，从而最大化一个Kernel的硬件利用率。</p>
 <img width="800"  src="/images/2025/20250420/nvida_gpu.png" class="center" />
 <h2 id="vllm-kernel-映射">vLLM Kernel 映射</h2>
-<p>现在我们看一下vLLM Knerl的设计：(处于简化的目的，我们认为没有TP)</p>
+<p>现在我们看一下vLLM Kernel的设计：(处于简化的目的，我们认为没有TP)</p>
 <img width="800"  src="/images/2025/20250420/vllm_kernel_map.png" class="center" />
 <p>设计Kernel的第一步是把程序拆分成不同的Thread Block来简化问题，vLLM中每个Thread Block会负责1个Query Token的一个Query Head的计算。</p>
 <blockquote>
@@ -766,6 +807,38 @@ code.has-jax {
 
     <div class="nav-link-list">
         
+        
+            
+            
+            
+                
+            
+            
+            
+            <a class="a-block nav-link-item active" href="/posts">
+                Archive
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/about/">
+                关于
+            </a>
+            
         
     </div>
 

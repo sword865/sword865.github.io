@@ -56,12 +56,21 @@
 &lt;p&gt;在 A100 GPU 上，我们有：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;108个SM&lt;/li&gt;
-&lt;li&gt;每个SM有4个Wrap scheduler(因此同时最多有4个Thread Wrap被调度到一个SM上)&lt;/li&gt;
+&lt;li&gt;每个SM有4个Wrap scheduler
+&lt;ul&gt;
+&lt;li&gt;最多有4个Thread Wrap同时在一个SM上执行&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;每个Wrap scheduler有一个长度为16的调度队列
+&lt;ul&gt;
+&lt;li&gt;一个SM上最多可以调度64个Thread Wrap&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;基本上这些数字在设计Kernel的时候都可以被考虑到，从而最大化一个Kernel的硬件利用率。&lt;/p&gt;
 &lt;img width=&#34;800&#34;  src=&#34;https://sword865.github.io/images/2025/20250420/nvida_gpu.png&#34; class=&#34;center&#34; /&gt;
 &lt;h2 id=&#34;vllm-kernel-映射&#34;&gt;vLLM Kernel 映射&lt;/h2&gt;
-&lt;p&gt;现在我们看一下vLLM Knerl的设计：(处于简化的目的，我们认为没有TP)&lt;/p&gt;
+&lt;p&gt;现在我们看一下vLLM Kernel的设计：(处于简化的目的，我们认为没有TP)&lt;/p&gt;
 &lt;img width=&#34;800&#34;  src=&#34;https://sword865.github.io/images/2025/20250420/vllm_kernel_map.png&#34; class=&#34;center&#34; /&gt;
 &lt;p&gt;设计Kernel的第一步是把程序拆分成不同的Thread Block来简化问题，vLLM中每个Thread Block会负责1个Query Token的一个Query Head的计算。&lt;/p&gt;
 &lt;blockquote&gt;
