@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<title>Elasticsearch-HttpServerModule</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5, user-scalable=5" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+      <script src="/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="/scss/dark-mode.min.cb53f1bee2b8900cb4f082afbf00175d6618f281cf9a2fe8619e3b52d20b5721.css" integrity="sha256-y1PxvuK4kAy08IKvvwAXXWYY8oHPmi/oYZ47UtILVyE=" media="screen">
+
+
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript"
+        async
+        src="https://cdn.bootcss.com/mathjax/2.7.3/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$'], ['\[\[','\]\]']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+});
+
+MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<style>
+code.has-jax {
+    font: inherit;
+    font-size: 100%;
+    background: inherit;
+    border: inherit;
+    color: #515151;
+}
+</style>
+
+
+</head>
+<body>
+    	<div id="app"><div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                    
+                
+                
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
+                    Archive
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/tags">
+                    Tags
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/about/">
+                    关于
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://sword865.github.io/">
+            悟剑阁
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://sword865.github.io/">
+        <div class="single-column-header-title">悟剑阁</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+
+            <div class="post-head-wrapper-text-only"
+                
+            >
+                <div class="post-title">
+                    Elasticsearch-HttpServerModule
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2015-07-27 00:00
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/%E5%90%8E%E5%8F%B0">后台</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/elasticsearch">elasticsearch</a>
+                                &nbsp;
+                            
+                                <a href="/tags/httpserver">httpserver</a>
+                                &nbsp;
+                            
+                                <a href="/tags/netty">netty</a>
+                                &nbsp;
+                            
+                                <a href="/tags/%E6%90%9C%E7%B4%A2">搜索</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <p>HttpServerModule的请求主要由HttpServer中的HttpServerTransport （默认为NettyHttpServerTransport）类处理。</p>
+<p>NettyHttpServerTransport基于netty框架，负责监听并建立连接，信息的处理由内部类HttpChannelPipelineFactory 完成。</p>
+<p>每当产生一个连接时，都会发出一个ChannelEvent，该Event由一系列的ChannelHandler进行处理。</p>
+<p>为了方便组织，这些ChannelHandler被放在一条“流(pipeline)”里，一个ChannelEvent并不会主动的”流”经所有的Handler，而是由上一个Handler显式的调用ChannelPipeline.sendUp(Down)stream产生，并交给下一个Handler处理。</p>
+<p>换句话说，每个Handler接收到一个ChannelEvent，并处理结束后，如果需要继续处理，那么它需要调用sendUp(Down)stream新发起一个事件。如果它不再发起事件，那么处理就到此结束，即使它后面仍然有Handler没有执行。这个机制可以保证最大的灵活性，当然对Handler的先后顺序也有了更严格的要求。</p>
+<p>在流Pipeline里有一个Map(name2ctx)和一个链表(记录head和tail)，pipeline里面会调度关联的多个channelhandler的运行。</p>
+<p><a href="/images/archives/0753391.png"><img src="/images/archives/0753391.png" alt="channel pipeline" /></a></p>
+<p>在NettyHttpServerTransport中，会流过的channelhandler就包括解码http请求(把多个HttpChunk拼起来并按http协议进行解析)和http请求处理。</p>
+<p>在处理http请求，数据流向为：HttpRequestHandler-&gt;<span class="s1">NettyHttpServerTransport</span>-&gt;HttpServerAdapter(HttpServer的内部类Dispatche)-&gt;RestController。</p>
+<p>RestController中的处理代码为：</p>
+<pre class="lang:java decode:true ">
+void executeHandler(RestRequest request, RestChannel channel) throws Exception {
+        final RestHandler handler = getHandler(request);
+        if (handler != null) {
+            handler.handleRequest(request, channel);
+        } else {
+            if (request.method() == RestRequest.Method.OPTIONS) {
+                // when we have OPTIONS request, simply send OK by default 
+                // (with the Access Control Origin header which gets automatically added)
+                channel.sendResponse(new BytesRestResponse(OK));
+            } else {
+                channel.sendResponse(new BytesRestResponse(
+                    BAD_REQUEST, 
+                    "No handler found for uri [" + request.uri() + "] and method [" + request.method() + "]"
+                ));
+            }
+        }
+    }
+
+    private RestHandler getHandler(RestRequest request) {
+        String path = getPath(request);
+        RestRequest.Method method = request.method();
+        if (method == RestRequest.Method.GET) {
+            return getHandlers.retrieve(path, request.params());
+        } else if (method == RestRequest.Method.POST) {
+            return postHandlers.retrieve(path, request.params());
+        } else if (method == RestRequest.Method.PUT) {
+            return putHandlers.retrieve(path, request.params());
+        } else if (method == RestRequest.Method.DELETE) {
+            return deleteHandlers.retrieve(path, request.params());
+        } else if (method == RestRequest.Method.HEAD) {
+            return headHandlers.retrieve(path, request.params());
+        } else if (method == RestRequest.Method.OPTIONS) {
+            return optionsHandlers.retrieve(path, request.params());
+        } else {
+            return null;
+        }
+    }</pre>
+<p>void executeHandler(RestRequest request, RestChannel channel) throws Exception {
+final RestHandler handler = getHandler(request);
+if (handler != null) {
+handler.handleRequest(request, channel);
+} else {
+if (request.method() == RestRequest.Method.OPTIONS) {
+// when we have OPTIONS request, simply send OK by default (with the Access Control Origin header which gets automatically added)
+channel.sendResponse(new BytesRestResponse(OK));
+} else {
+channel.sendResponse(new BytesRestResponse(BAD_REQUEST, &ldquo;No handler found for uri [&rdquo; + request.uri() + &ldquo;] and method [&rdquo; + request.method() + &ldquo;]&rdquo;));
+}
+}
+}</p>
+<pre><code>private RestHandler getHandler(RestRequest request) {
+    String path = getPath(request);
+    RestRequest.Method method = request.method();
+    if (method == RestRequest.Method.GET) {
+        return getHandlers.retrieve(path, request.params());
+    } else if (method == RestRequest.Method.POST) {
+        return postHandlers.retrieve(path, request.params());
+    } else if (method == RestRequest.Method.PUT) {
+        return putHandlers.retrieve(path, request.params());
+    } else if (method == RestRequest.Method.DELETE) {
+        return deleteHandlers.retrieve(path, request.params());
+    } else if (method == RestRequest.Method.HEAD) {
+        return headHandlers.retrieve(path, request.params());
+    } else if (method == RestRequest.Method.OPTIONS) {
+        return optionsHandlers.retrieve(path, request.params());
+    } else {
+        return null;
+    }
+}
+</code></pre>
+<p></pre></p>
+<p>可以看到，这里会根据注册的handler，选择合适的处理逻辑。</p>
+<p>这些handler由函数registerHandler进行注册，函数签名如下：</p>
+<p class="p1">
+  <span class="s1">public</span> <span class="s1">void</span> registerHandler(RestRequest.Method <span class="s2">method</span>, String <span class="s2">path</span>, RestHandler <span class="s3">handler</span>)
+</p>
+<p class="p1">
+  比如对RestGetIndicesAction类，有如下构造函数：
+</p>
+<pre class="lang:java decode:true">public RestGetIndicesAction(Settings settings, RestController controller, Client client) {
+        super(settings, controller, client);
+        controller.registerHandler(GET, "/{index}", this);
+        controller.registerHandler(GET, "/{index}/{type}", this);
+    }</pre>
+<p>netty参考：</p>
+<p><a href="http://my.oschina.net/flashsword/blog/162936">http://my.oschina.net/flashsword/blog/162936</a></p>
+<p><a href="http://my.oschina.net/flashsword/blog/164237">http://my.oschina.net/flashsword/blog/164237</a></p>
+<p><a href="http://my.oschina.net/flashsword/blog/169361">http://my.oschina.net/flashsword/blog/169361</a></p>
+<p><a href="http://my.oschina.net/flashsword/blog/178561">http://my.oschina.net/flashsword/blog/178561</a></p>
+<p><a href="http://my.oschina.net/flashsword/blog/197963">http://my.oschina.net/flashsword/blog/197963</a></p>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">Last modified on 2015-07-27</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts" href="/posts/2016/2016-11-04-%E8%B0%88%E8%B0%88factorization-machine/">
+			Next<br>谈谈Factorization Machine
+                </a>
+                
+                
+                
+                <a class="older-posts" href="/posts/archives/2015-02-05-tornado%E6%A1%86%E6%9E%B6%E7%AE%80%E6%9E%90/">
+			Previous<br>Tornado框架简析
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://sword865.github.io/">
+    
+        <div class="nav-title">
+            悟剑阁
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+                
+            
+            
+            
+            <a class="a-block nav-link-item active" href="/posts">
+                Archive
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/about/">
+                关于
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	Copyright (c) 2015. All rights reserved.
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    <div class="toc-wrapper">
+        
+
+        
+        <div class="toc">
+
+
+</div>
+        
+    </div>
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top"
+            :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+
+<div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	Copyright (c) 2015. All rights reserved.
+	
+</div>
+            </div>
+    
+    <script src="/js/journal.js"></script></body>
+</html>

@@ -7,19 +7,186 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>Copyright (c) 2015. All rights reserved.</copyright>
-    <lastBuildDate>Sun, 20 Apr 2025 15:51:35 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 03 May 2025 15:51:35 +0800</lastBuildDate>
     
         <atom:link href="https://sword865.github.io/index.xml" rel="self" type="application/rss+xml" />
     
     
     
         <item>
+        <title>Flash MLA Kernel分析</title>
+        <link>https://sword865.github.io/posts/2025/2025-05-03-flashmla-kernel%E5%88%86%E6%9E%90/</link>
+        <pubDate>Sat, 03 May 2025 15:51:35 +0800</pubDate>
+        
+        <guid>https://sword865.github.io/posts/2025/2025-05-03-flashmla-kernel%E5%88%86%E6%9E%90/</guid>
+        <description>悟剑阁 https://sword865.github.io/posts/2025/2025-05-03-flashmla-kernel%E5%88%86%E6%9E%90/ -&lt;p&gt;准备对DeepSeek的开源项目整理一些文档，也顺便强化一下记忆，先从FlashMLA开始。&lt;/p&gt;
+&lt;p&gt;FlashMLA是DeepSeek开源的MLA算子实现，这个实现主要给inference decoding用的，Training和prefill应该是另外一个算子。&lt;/p&gt;
+&lt;p&gt;先拿下面的图表示一下MLA算子是在计算一个什么东西，这篇文章就不讲具体的推导了，反正这个算子大概就是下面的2个GEMM算子的融合。需要注意的是：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;这里矩阵K和矩阵V的共享一部分参数。&lt;/li&gt;
+&lt;li&gt;图里只画显示了一个Query Head和一对KV Head的计算。在实际计算中还要num_kv_head和batch_size两个维度。&lt;/li&gt;
+&lt;li&gt;两个GEMM中间其实还有一个sotfmax，不过这里可以通过online softmax算法把这块逻辑独立处理分块处理，所以不影响主流程。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;img width=&#34;600&#34;  src=&#34;https://sword865.github.io/images/2025/20250503/mla.png&#34; class=&#34;center&#34; /&gt;
+&lt;p&gt;Kernel的调用主要分两部分&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;调用&lt;code&gt;get_mla_metadata&lt;/code&gt;来计算一些metadata，用来优化kernel的执行&lt;/li&gt;
+&lt;li&gt;调用&lt;code&gt;flash_mla_with_kvcache&lt;/code&gt;进行计算&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;在进入调用前，先大概说一下FlashMLA计算的拆分逻辑。这块和FlashDecoding很像，并没有要求一个thread-block必须处理一个完整的sequence，而是通过一个负载均衡算法，把所有的sequence放到一起，然后拆分成一个个的sequence-block，然后每个thread-block就去处理分配给它的那些block的计算，最后再把这些thread-block的结果用合并，得到正确的输出。&lt;/p&gt;
+&lt;p&gt;大概是下面这个图的样子：&lt;/p&gt;
+&lt;img width=&#34;800&#34;  src=&#34;https://sword865.github.io/images/2025/20250503/computation-pattern.png&#34; class=&#34;center&#34; /&gt;
+&lt;p&gt;所以为了完成计算，第一步就是决定每个block需要处理哪些sub-sequence，也就是&lt;code&gt;get_mla_metadata&lt;/code&gt;要完成的事情。&lt;/p&gt;
+&lt;h1 id=&#34;get_mla_metadata&#34;&gt;get_mla_metadata&lt;/h1&gt;
+&lt;p&gt;先看&lt;code&gt;get_mla_metadata&lt;/code&gt;具体提供了哪些元数据，我们从repo提供的测试代码入手，考虑最简单的情况(batch_size=128, query_sequence_len=1, mean_key_sequence_len=4096, MTP=1, num_kv_head=1, num_q_head=16, TP=1, hidden_NoRoPE_dim=512, hidden_RoPE_dim=64, varlen=False)。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;# cache_seqlens = tensor([4096, 4096, ..., 4096], dtype=torch.int32), size=batch_size, value=sequence_len
+# s_q=1 (query_sequence_len=1且MTP=1), h_q(num_q_head)=128 (TP=1=128/128) h_kv(num_kv_head)=1
+# 基于这些配置，计算mla kernel的metadata
+tile_scheduler_metadata, num_splits = get_mla_metadata(cache_seqlens, s_q * h_q // h_kv, h_kv)
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;因为这里我们是在测试decoding步骤，所以有&lt;code&gt;query_sequence_len=1&lt;/code&gt;，可以看到三个入参：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;kv cache的大小&lt;/li&gt;
+&lt;li&gt;类似GQA的Group数量，这个参数表示每个kv head对应多少个query head。&lt;/li&gt;
+&lt;li&gt;kv head的数量&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;code&gt;get_mla_metadata&lt;/code&gt;会根据GPU中SM的数量和要处理的数据的大小，给每个SM分配任务。这个注意&lt;code&gt;get_mla_metadata_kernel&lt;/code&gt;的参数为&lt;code&gt;&amp;lt;&amp;lt;&amp;lt;1, 32, 0, stream&amp;gt;&amp;gt;&amp;gt;&lt;/code&gt;，因此所有计算会在1个warp中完成。&lt;/p&gt;
+&lt;p&gt;这里的关键就是具体怎么给每个(每组)SM分配工作的.&lt;/p&gt;
+&lt;p&gt;首先，每几个SM会一起处理一个kv head和一组query head的计算：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;int num_sm_parts = sm_count / num_heads_k / cutlass::ceil_div(num_heads_per_head_k, block_size_m);
+&lt;/code&gt;&lt;/pre&gt;&lt;img width=&#34;600&#34;  src=&#34;https://sword865.github.io/images/2025/20250503/flash_mla_sm_part.png&#34; class=&#34;center&#34; /&gt;
+&lt;p&gt;然后，我们计算每组SM需要处理多少个block，然后把block分配到每一个SM，具体任务的分配过程为：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;根据batch size和&lt;code&gt;mean_key_sequence_len&lt;/code&gt;计算出一共有多少个block。&lt;/li&gt;
+&lt;li&gt;给每个SM分配工作，包括每个SM要处理的tile的索引和位置。&lt;/li&gt;
+&lt;li&gt;记录一下每个sequnce的切分点的位置，用于在计算时把结果正确的合起来才能得到完整的注意力输出。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;OK, 这样我们就完成了对任务的划分，接下来进入关键的计算kernel。&lt;/p&gt;
+&lt;h1 id=&#34;flash_mla_with_kvcache&#34;&gt;flash_mla_with_kvcache&lt;/h1&gt;
+&lt;p&gt;&lt;code&gt;flash_mla_with_kvcache&lt;/code&gt;函数内部其实也是由2个子kernel组成的&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;flash_fwd_splitkv_mla_kernel&lt;/code&gt;: 通过for循环的方式，计算每个SM分配到的block的GEMM乘法。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;flash_fwd_splitkv_mla_combine_kernel&lt;/code&gt;: 负责把多个block的计算结果合起来，得到最终的结果。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;flash_fwd_splitkv_mla_kernel&#34;&gt;flash_fwd_splitkv_mla_kernel&lt;/h2&gt;
+&lt;p&gt;先看&lt;code&gt;flash_fwd_splitkv_mla_kernel&lt;/code&gt;，这个kernel包括&lt;code&gt;num_m_block * num_query_head * num_sm_parts&lt;/code&gt; 个thread-block。其中&lt;code&gt;num_m_block=seqlen_q/block_size_m(64)&lt;/code&gt;。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;kernel&amp;lt;&amp;lt;&amp;lt;dim3(num_m_block, params.h, params.num_sm_parts), Kernel_traits::kNThreads, smem_size, stream&amp;gt;&amp;gt;&amp;gt;(params);&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;注意，这里的&lt;code&gt;seqlen_q&lt;/code&gt;并不是一开始的1了，实际上它等于&lt;code&gt;num_heads_per_head_k (seqlen_q = seqlen_q_ori * ngroups, 在MTP=1的情况下等于num_heads_per_head_k)&lt;/code&gt;
+这样我们会发现：&lt;code&gt;num_m_block=cutlass::ceil_div(num_heads_per_head_k, block_size_m);&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;回忆之前的SM分组公式，有&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;SM数量 = num_sm_parts * num_heads_k * ceil_div(num_heads_per_head_k, block_size_m)
+       = num_sm_parts * ceil_div(num_heads_k * num_heads_per_head_k, block_size_m) 
+       = num_sm_parts * ceil_div(num_query_head, block_size_m)
+       = num_sm_parts * num_m_block
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;因此SM的数量对应了thread-block的第一维和最后一维。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;dim3(num_m_block, params.h, params.num_sm_parts)&lt;/code&gt;的这三个维度分别表示：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;这个thread-block处理哪一个block。&lt;/li&gt;
+&lt;li&gt;这个thread-block应该处理哪的一个query head。&lt;/li&gt;
+&lt;li&gt;这个thread-block在对应的SM Group内的编号。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;我们来看每个thread-block会计算什么，我们知道多个thread-block会共同完成分配给一个SM的block的计算。
+看代码发现这里其实有2重循环：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;外层循环会遍历所以分配给这个SM的query block。&lt;/li&gt;
+&lt;li&gt;内层循环会遍历对应的KV cache block，计算出O的一个block。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;使用了Warp Specialization的策略，通过生产者&amp;ndash;&amp;gt;消费者的方式进行计算。
+&lt;ul&gt;
+&lt;li&gt;Warp Group 1：主要计算线程，负责大部分的注意力得分计算。&lt;/li&gt;
+&lt;li&gt;Warp Group 2：使用double buffer的技术进行数据的加载，也参与一些计算。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;这块代码比较复杂的，zhihu上有几篇文章写的挺清楚的，我就不一点点写分析了，画个图过来表示一下计算过程，对细节感兴趣的可以去看后面的几个参考的文章。&lt;/p&gt;
+&lt;img width=&#34;800&#34;  src=&#34;https://sword865.github.io/images/2025/20250503/flashmla_wap_spec.png&#34; class=&#34;center&#34; /&gt;
+&lt;p&gt;这里可以看到，Warp Group 0会计算GEMM1，但是GEMM2是由两个Warp Group共同计算的，每个Wrap计算其中一半。&lt;/p&gt;
+&lt;p&gt;这里比较重要的几块逻辑：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Warp Specialization&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;  int warp_group_idx = cutlass::canonical_warp_group_idx();
+    if (warp_group_idx == 0) {
+        // 主要计算逻辑，包括矩阵乘法、归一化、概率矩阵的计算和输出
+        // thread 0 - 127
+        ....
+    } else {
+       // 主要负责加载数据
+       // thread 128 - 256
+    }
+&lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;上面else逻辑中的双缓冲&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;// 双缓冲区数据结构定义
+template&amp;lt;typename Kernel_traits&amp;gt;
+struct SharedStorageMLA {
+    union {
+        struct {
+               // 存储 Query、Key 和中间结果
+              ...
+              cute::array_aligned&amp;lt;typename Kernel_traits::Element, 
+                  cute::cosize_v&amp;lt;typename Kernel_traits::SmemLayoutK&amp;gt; * 2&amp;gt; smem_k;  // Double buffer
+              ...
+        }
+        ...
+    }
+}
+...
+
+ // 双缓冲策略(在warp group 1的代码里)：切换到第二个缓冲区
+if (n_block % 2 == 1) {           
+       // Double buffer for sK
+       constexpr int sK_offset = size(sK);
+       tSrK.data() = tSrK.data() + sK_offset / 8;
+       tOrVt.data() = tOrVt.data() + sK_offset / 8;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;flash_fwd_splitkv_mla_combine_kernel&#34;&gt;flash_fwd_splitkv_mla_combine_kernel&lt;/h2&gt;
+&lt;p&gt;最后的&lt;code&gt;flash_fwd_splitkv_mla_combine_kernel&lt;/code&gt;比较简单，就是负责数据的合并：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;在Warp 0中计算各个block的Log-Sum-Exp最大值，获取全局归一化系数。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;for (int i = 0; i &amp;lt; kNLsePerThread; ++i) max_lse = max(max_lse, local_lse[i]);
+&lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;在Warp 0中计算缩放因子。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;for (int i = 0; i &amp;lt; kNLsePerThread; ++i) {
+       const int split = i * 32 + tidx;
+       if (split &amp;lt; actual_num_splits) sLseScale[split] = expf(local_lse[i] - global_lse);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;按照缩放因子，合并Output的输出，完成计算。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;for (int split = 0; split &amp;lt; actual_num_splits; ++split) {
+       ...
+       ElementAccum lse_scale = sLseScale[split];
+       for (int i = 0; i &amp;lt; size(tOrO); ++i) {
+              tOrO(i) += lse_scale * tOrOaccum(i);
+        }
+        ...
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;4&#34;&gt;
+&lt;li&gt;把结果写回全局内存。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1 id=&#34;参考文章&#34;&gt;参考文章：&lt;/h1&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&#34;https://arxiv.org/abs/2405.04434&#34;&gt;DeepSeek-V2: A Strong, Economical, and Efficient Mixture-of-Experts Language Model&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://zhuanlan.zhihu.com/p/26269071923&#34;&gt;DeepSeek: FlashMLA代码解析&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://zhuanlan.zhihu.com/p/26080342823&#34;&gt;flashMLA 深度解析&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+- https://sword865.github.io/posts/2025/2025-05-03-flashmla-kernel%E5%88%86%E6%9E%90/ - Copyright (c) 2015. All rights reserved.</description>
+        </item>
+    
+    
+    
+        <item>
         <title>vLLM Paged Attention代码分析</title>
-        <link>https://sword865.github.io/posts/2025/vllm-paged-attention%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/</link>
+        <link>https://sword865.github.io/posts/2025/2025-04-20-vllm-paged-attention%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/</link>
         <pubDate>Sun, 20 Apr 2025 15:51:35 +0800</pubDate>
         
-        <guid>https://sword865.github.io/posts/2025/vllm-paged-attention%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/</guid>
-        <description>悟剑阁 https://sword865.github.io/posts/2025/vllm-paged-attention%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/ -&lt;p&gt;3月底整理了一个关于经典Paged Attention算法的ppt, 想起这个几年没写过的blog，把PPT改成一篇文章证明我还活着(-_-)。&lt;/p&gt;
+        <guid>https://sword865.github.io/posts/2025/2025-04-20-vllm-paged-attention%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/</guid>
+        <description>悟剑阁 https://sword865.github.io/posts/2025/2025-04-20-vllm-paged-attention%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/ -&lt;p&gt;3月底整理了一个关于经典Paged Attention算法的ppt, 想起这个几年没写过的blog，把PPT改成一篇文章证明我还活着(-_-)。&lt;/p&gt;
 &lt;img width=&#34;500&#34;  src=&#34;https://sword865.github.io/images/2025/20250420/paged_attention.png&#34; class=&#34;center&#34; /&gt;
 &lt;h2 id=&#34;vllm-的-paged-attention&#34;&gt;vLLM 的 Paged Attention&lt;/h2&gt;
 &lt;p&gt;开始前先说明一下，vLLM里的Paged Attention Kernel是有好几个不同的版本的，大概是下面这样子：&lt;/p&gt;
@@ -381,7 +548,7 @@
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;算完以后就是把结果写到output了，这块就不贴了。&lt;/p&gt;
 &lt;h2 id=&#34;收尾&#34;&gt;收尾&lt;/h2&gt;
 &lt;p&gt;大概流程就是这样，整个流程还是设计不少细节的，我也不知道写清楚没有，不过对着代码多看几遍总能看明白的。&lt;/p&gt;
-- https://sword865.github.io/posts/2025/vllm-paged-attention%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/ - Copyright (c) 2015. All rights reserved.</description>
+- https://sword865.github.io/posts/2025/2025-04-20-vllm-paged-attention%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/ - Copyright (c) 2015. All rights reserved.</description>
         </item>
     
     
@@ -633,11 +800,11 @@ The RDD-based API is expected to be removed in Spark 3.0.
     
         <item>
         <title>Elasticsearch-HttpServerModule</title>
-        <link>https://sword865.github.io/archives/150/</link>
+        <link>https://sword865.github.io/posts/archives/2015-07-27-elasticsearch-httpservermodule/</link>
         <pubDate>Mon, 27 Jul 2015 00:00:00 +0000</pubDate>
         
-        <guid>https://sword865.github.io/archives/150/</guid>
-        <description>悟剑阁 https://sword865.github.io/archives/150/ -&lt;p&gt;HttpServerModule的请求主要由HttpServer中的HttpServerTransport （默认为NettyHttpServerTransport）类处理。&lt;/p&gt;
+        <guid>https://sword865.github.io/posts/archives/2015-07-27-elasticsearch-httpservermodule/</guid>
+        <description>悟剑阁 https://sword865.github.io/posts/archives/2015-07-27-elasticsearch-httpservermodule/ -&lt;p&gt;HttpServerModule的请求主要由HttpServer中的HttpServerTransport （默认为NettyHttpServerTransport）类处理。&lt;/p&gt;
 &lt;p&gt;NettyHttpServerTransport基于netty框架，负责监听并建立连接，信息的处理由内部类HttpChannelPipelineFactory 完成。&lt;/p&gt;
 &lt;p&gt;每当产生一个连接时，都会发出一个ChannelEvent，该Event由一系列的ChannelHandler进行处理。&lt;/p&gt;
 &lt;p&gt;为了方便组织，这些ChannelHandler被放在一条“流(pipeline)”里，一个ChannelEvent并不会主动的”流”经所有的Handler，而是由上一个Handler显式的调用ChannelPipeline.sendUp(Down)stream产生，并交给下一个Handler处理。&lt;/p&gt;
@@ -738,18 +905,18 @@ channel.sendResponse(new BytesRestResponse(BAD_REQUEST, &amp;ldquo;No handler fo
 &lt;p&gt;&lt;a href=&#34;http://my.oschina.net/flashsword/blog/169361&#34;&gt;http://my.oschina.net/flashsword/blog/169361&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&#34;http://my.oschina.net/flashsword/blog/178561&#34;&gt;http://my.oschina.net/flashsword/blog/178561&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&#34;http://my.oschina.net/flashsword/blog/197963&#34;&gt;http://my.oschina.net/flashsword/blog/197963&lt;/a&gt;&lt;/p&gt;
-- https://sword865.github.io/archives/150/ - Copyright (c) 2015. All rights reserved.</description>
+- https://sword865.github.io/posts/archives/2015-07-27-elasticsearch-httpservermodule/ - Copyright (c) 2015. All rights reserved.</description>
         </item>
     
     
     
         <item>
         <title>Tornado框架简析</title>
-        <link>https://sword865.github.io/archives/100/</link>
+        <link>https://sword865.github.io/posts/archives/2015-02-05-tornado%E6%A1%86%E6%9E%B6%E7%AE%80%E6%9E%90/</link>
         <pubDate>Thu, 05 Feb 2015 00:00:00 +0000</pubDate>
         
-        <guid>https://sword865.github.io/archives/100/</guid>
-        <description>悟剑阁 https://sword865.github.io/archives/100/ -&lt;p&gt;Tornado是一款轻量级的Web服务器，同时又是一个开发框架。采用单线程非阻塞I/O模型(epoll)，主要是为了应对高并发 访问量而被开发出来，尤其适用于comet应用。&lt;/p&gt;
+        <guid>https://sword865.github.io/posts/archives/2015-02-05-tornado%E6%A1%86%E6%9E%B6%E7%AE%80%E6%9E%90/</guid>
+        <description>悟剑阁 https://sword865.github.io/posts/archives/2015-02-05-tornado%E6%A1%86%E6%9E%B6%E7%AE%80%E6%9E%90/ -&lt;p&gt;Tornado是一款轻量级的Web服务器，同时又是一个开发框架。采用单线程非阻塞I/O模型(epoll)，主要是为了应对高并发 访问量而被开发出来，尤其适用于comet应用。&lt;/p&gt;
 &lt;p&gt;Tornado服务器3大核心模块:&lt;/p&gt;
 &lt;p&gt;(1) IOLoop&lt;/p&gt;
 &lt;p&gt;Tornado为了实现高并发和高性能，使用了一个IOLoop来处理socket的读写事件，IOLoop基于epoll，可以高效的响应网络事件。这是Tornado高效的保证。&lt;/p&gt;
@@ -886,118 +1053,7 @@ def start_serving(self, delegate):
 &lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
   &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
 &lt;/p&gt;
-- https://sword865.github.io/archives/100/ - Copyright (c) 2015. All rights reserved.</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>Lucene索引文件学习</title>
-        <link>https://sword865.github.io/archives/86/</link>
-        <pubDate>Wed, 04 Feb 2015 00:00:00 +0000</pubDate>
-        
-        <guid>https://sword865.github.io/archives/86/</guid>
-        <description>悟剑阁 https://sword865.github.io/archives/86/ -&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt; 最近在做搜索，抽空看一下lucene，资料挺多的，不过大部分都是3.x了……在对着官方文档大概看一下。&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;优化后的lucene索引文件(4.9.0)&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;&lt;img title=&#34;NewImage.png&#34; src=&#34;https://sword865.github.io/wp-content/uploads/2015/02/NewImage.png&#34; alt=&#34;NewImage&#34; width=&#34;200&#34; height=&#34;146&#34; border=&#34;0&#34; /&gt;&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;一、段文件&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;1.段文件：segments_5p和segments.gen。&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;segments.gen保存当前段文件版本信息。&lt;/span&gt;&lt;/p&gt;
-&lt;ul style=&#34;color: #353833; font-family: Arial, Helvetica, sans-serif; font-size: 12px;&#34;&gt;
-  &lt;li&gt;
-    &lt;span style=&#34;font-size: 12px;&#34;&gt;&lt;tt style=&#34;font-size: 1.2em;&#34;&gt;segments.gen&lt;/tt&gt;: GenHeader, Generation, Generation, Footer&lt;/span&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;segments_N（segments_5p）保存最新的段的信息，包括段的个数，每个段的段名、文档数等信息。&lt;/span&gt;&lt;/p&gt;
-&lt;ul style=&#34;font-size: 12px; color: #353833; font-family: Arial, Helvetica, sans-serif;&#34;&gt;
-  &lt;li&gt;
-    &lt;span style=&#34;font-size: 12px;&#34;&gt;&lt;tt style=&#34;font-size: 1.2em;&#34;&gt;segments_N&lt;/tt&gt;: Header, Version, NameCounter, SegCount, &lt;SegName, SegCodec, DelGen, DeletionCount, FieldInfosGen, DocValuesGen, UpdatesFiles&gt;&lt;sup style=&#34;font-size: 0.6em;&#34;&gt;SegCount&lt;/sup&gt;, CommitUserData, Footer&lt;/span&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;  源码参考：SegmentInfos.read(Directory directory, String segmentFileName):&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;2.段信息：*.si，存储段的基本信息。&lt;/span&gt;&lt;/p&gt;
-&lt;ul style=&#34;color: #353833; font-family: Arial, Helvetica, sans-serif; font-size: 12px;&#34;&gt;
-  &lt;li&gt;
-    &lt;span style=&#34;font-size: 12px;&#34;&gt;&lt;tt style=&#34;font-size: 1.2em;&#34;&gt;.si&lt;/tt&gt;: Header, SegVersion, SegSize, IsCompoundFile, Diagnostics, Attributes, Files&lt;/span&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;       只对4.0-4.5使用，新版已经抛弃了，可以无视。  &lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;二、域文件&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;1.域(field)：*.fnm ，存储域的信息。&lt;/span&gt;&lt;/p&gt;
-&lt;ul style=&#34;font-size: 12px; color: #353833; font-family: Arial, Helvetica, sans-serif;&#34;&gt;
-  &lt;li&gt;
-    &lt;span style=&#34;font-size: 12px;&#34;&gt;FieldInfos (.fnm) &amp;#8211;&gt; Header,FieldsCount, &lt;FieldName,FieldNumber, FieldBits,DocValuesBits,DocValuesGen,Attributes&gt; &lt;sup style=&#34;font-size: 0.6em; color: #353833; font-family: Arial, Helvetica, sans-serif;&#34;&gt;FieldsCount&lt;/sup&gt;,Footer&lt;/span&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-&lt;div&gt;
-  &lt;p style=&#34;margin: 0px; font-size: 11px; font-family: Monaco;&#34;&gt;
-    &lt;span style=&#34;font-size: 12px;&#34;&gt;  源码参考：org.apache.lucene.codecs.lucene46.Lucene46FieldInfosFormat&lt;/span&gt;
-  &lt;/p&gt;
-  &lt;p style=&#34;margin: 0px; font-size: 11px; font-family: Monaco;&#34;&gt;
-    &lt;span style=&#34;font-size: 12px;&#34;&gt;2.域(field)索引：*.fdx，存储到域数据的指针。&lt;/span&gt;
-  &lt;/p&gt;
-&lt;/div&gt;
-&lt;ul style=&#34;color: #353833; font-family: Arial, Helvetica, sans-serif; font-size: 12px;&#34;&gt;
-  &lt;li&gt;
-    &lt;span style=&#34;font-size: 12px;&#34;&gt;FieldsIndex (.fdx) &amp;#8211;&gt; &lt;Header&gt;, &lt;ChunkIndex&gt;&lt;/span&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;   源码参考：org.apache.lucene.codecs.lucene41.Lucene41StoredFieldsFormat&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;3.域(field)数据：*.fdt，存储文档的域，话说这个结构比较复杂，简单列一下。&lt;/span&gt;&lt;/p&gt;
-&lt;ul style=&#34;font-size: 12px; color: #353833; font-family: Arial, Helvetica, sans-serif;&#34;&gt;
-  &lt;li&gt;
-    &lt;span style=&#34;font-size: 12px;&#34;&gt;FieldData (.fdt) &amp;#8211;&gt; &lt;Header&gt;, PackedIntsVersion, &lt;Chunk&gt;&lt;sup style=&#34;font-size: 0.6em;&#34;&gt;ChunkCount&lt;/sup&gt;&lt;/span&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;span style=&#34;font-size: 12px;&#34;&gt;ChunkCount is not known in advance and is the number of chunks necessary to store all document of the segment&lt;/span&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;span style=&#34;font-size: 12px;&#34;&gt;Chunk &amp;#8211;&gt; DocBase, ChunkDocs, DocFieldCounts, DocLengths, &lt;CompressedDocs&gt;&lt;/span&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;  源码参考：org.apache.lucene.codecs.lucene41.Lucene41StoredFieldsFormat&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;三、字典文件&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;4.项(term)字典：*.tim，存储项的信息。&lt;/span&gt;&lt;/p&gt;
-&lt;ul style=&#34;color: #353833; font-family: Arial, Helvetica, sans-serif; font-size: 12px;&#34;&gt;
-  &lt;li&gt;
-    &lt;span style=&#34;font-size: 12px;&#34;&gt;TermsDict (.tim) &amp;#8211;&gt; Header, &lt;em&gt;PostingsHeader&lt;/em&gt;, NodeBlock&lt;sup style=&#34;font-size: 0.6em;&#34;&gt;NumBlocks&lt;/sup&gt;, FieldSummary, DirOffset, Footer&lt;/span&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;  源码参考：org.apache.lucene.codecs.lucene41.Lucene41PostingsFormat&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;5.项(term)索引：*.tip，到项字典的索引。&lt;/span&gt;&lt;/p&gt;
-&lt;ul style=&#34;color: #353833; font-family: Arial, Helvetica, sans-serif; font-size: 12px;&#34;&gt;
-  &lt;li&gt;
-    &lt;span style=&#34;font-size: 12px;&#34;&gt;TermsIndex (.tip) &amp;#8211;&gt; Header, FSTIndex&lt;sup style=&#34;font-size: 0.6em;&#34;&gt;NumFields&lt;/sup&gt; &lt;IndexStartFP&gt;&lt;sup style=&#34;font-size: 0.6em;&#34;&gt;NumFields&lt;/sup&gt;, DirOffset, Footer&lt;/span&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;  源码参考：org.apache.lucene.codecs.lucene41.Lucene41PostingsFormat &lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;四、其他文件 &lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;6.频率：*.doc，包括一个文档列表，列表中每一个项都有一个频数。&lt;/span&gt;&lt;/p&gt;
-&lt;ul style=&#34;color: #353833; font-family: Arial, Helvetica, sans-serif; font-size: 12px;&#34;&gt;
-  &lt;li&gt;
-    &lt;span style=&#34;font-size: 12px;&#34;&gt;docFile(.doc) &amp;#8211;&gt; Header, &lt;TermFreqs, SkipData?&gt;&lt;sup style=&#34;font-size: 0.6em;&#34;&gt;TermCount&lt;/sup&gt;, Footer&lt;/span&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;  源码参考：org.apache.lucene.codecs.lucene41.Lucene41PostingsFormat &lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;7.位置：*.pos，存储项在索引中出现的位置信息。&lt;/span&gt;&lt;/p&gt;
-&lt;ul style=&#34;color: #353833; font-family: Arial, Helvetica, sans-serif; font-size: 12px;&#34;&gt;
-  &lt;li&gt;
-    &lt;span style=&#34;font-size: 12px;&#34;&gt;PosFile(.pos) &amp;#8211;&gt; Header, &lt;TermPositions&gt; &lt;sup style=&#34;font-size: 0.6em;&#34;&gt;TermCount&lt;/sup&gt;, Footer&lt;/span&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;  源码参考：org.apache.lucene.codecs.lucene41.Lucene41PostingsFormat&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt; 8.norm文件：&lt;em&gt;.nvd，&lt;/em&gt;.nvm，编码文档和域的长度已经boost factors。&lt;/span&gt;&lt;/p&gt;
-&lt;ul style=&#34;font-size: 12px; color: #353833; font-family: Arial, Helvetica, sans-serif;&#34;&gt;
-  &lt;li&gt;
-    &lt;span style=&#34;font-size: 12px;&#34;&gt;Norms data (.nvd) &amp;#8211;&gt; Header,&lt;Uncompressed | TableCompressed | DeltaCompressed&gt;&lt;sup style=&#34;font-size: 0.6em; color: #353833; font-family: Arial, Helvetica, sans-serif;&#34;&gt;NumFields&lt;/sup&gt;,Footer&lt;/span&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;  源码参考：org.apache.lucene.codecs.lucene49.Lucene49NormsFormat&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt; 除此之外，还可能有一些其他文件，暂且不表。&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt; 参考：&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;&lt;a href=&#34;http://lucene.apache.org/core/4_9_0/core/org/apache/lucene/codecs/lucene49/package-summary.html#File_Naming&#34;&gt;&lt;a href=&#34;http://lucene.apache.org/core/4_9_0/core/org/apache/lucene/codecs/lucene49/package-summary.html#File_Naming&#34;&gt;http://lucene.apache.org/core/4_9_0/core/org/apache/lucene/codecs/lucene49/package-summary.html#File_Naming&lt;/a&gt;&lt;/a&gt;&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;&lt;a href=&#34;http://www.cnblogs.com/forfuture1978/category/300665.html&#34;&gt;&lt;a href=&#34;http://www.cnblogs.com/forfuture1978/category/300665.html&#34;&gt;http://www.cnblogs.com/forfuture1978/category/300665.html&lt;/a&gt;&lt;/a&gt;&lt;/span&gt;&lt;/p&gt;
-- https://sword865.github.io/archives/86/ - Copyright (c) 2015. All rights reserved.</description>
+- https://sword865.github.io/posts/archives/2015-02-05-tornado%E6%A1%86%E6%9E%B6%E7%AE%80%E6%9E%90/ - Copyright (c) 2015. All rights reserved.</description>
         </item>
     
     

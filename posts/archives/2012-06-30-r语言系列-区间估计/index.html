@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<title>R语言系列—-区间估计</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5, user-scalable=5" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+      <script src="/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="/scss/dark-mode.min.cb53f1bee2b8900cb4f082afbf00175d6618f281cf9a2fe8619e3b52d20b5721.css" integrity="sha256-y1PxvuK4kAy08IKvvwAXXWYY8oHPmi/oYZ47UtILVyE=" media="screen">
+
+
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript"
+        async
+        src="https://cdn.bootcss.com/mathjax/2.7.3/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$'], ['\[\[','\]\]']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+});
+
+MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<style>
+code.has-jax {
+    font: inherit;
+    font-size: 100%;
+    background: inherit;
+    border: inherit;
+    color: #515151;
+}
+</style>
+
+
+</head>
+<body>
+    	<div id="app"><div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                    
+                
+                
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
+                    Archive
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/tags">
+                    Tags
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/about/">
+                    关于
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://sword865.github.io/">
+            悟剑阁
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://sword865.github.io/">
+        <div class="single-column-header-title">悟剑阁</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+
+            <div class="post-head-wrapper-text-only"
+                
+            >
+                <div class="post-title">
+                    R语言系列—-区间估计
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2012-06-30 00:00
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80">编程语言</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/r">R</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <p>这一篇讲的是区间估计…..因为这不是一个关于统计学的系列，所以对文中出现的公式不会给予任何证明…..就是这样。</p>
+<p>就从一个最简单的正态分布的方差已知时，求均值的置信区间开始吧。</p>
+<p>书上的公式告诉我们这个区间是 $$\overline{x}\pm(\sigma/\sqrt{n})z_{(1-\sigma/2)}$$ ,其中Z<sub>p</sub>表示的是正态分布N(0,1)下侧的p分位数。</p>
+<p>我们用R来实现求得这一结果的过程。下面设x里存储了给出的样本，sigma表示已知的方差，n表示样本的个数， alpha则是(1-置信水平)</p>
+<pre class="lang:r decode:true">mean&lt;-mean(x)
+ans&lt;-c(mean-sigma*qnorm(1-alpha / 2)/sqrt(n) , mean+sigma*qnorm(1-alpha / 2)/sqrt(n))
+</pre>
+<p>这样,ans就存储了要求的置信区间。</p>
+<p>来解释一下吧，先用mean(x)求出样本的平均值，然后用qnorm(1-alpha / 2)求出Z<sub>1-a/2</sub>，（还记得么？前缀q是分位数函数，）剩下的就是套公式的加减法了。</p>
+<p>这里的qnorm(1-alpha / 2)其实省略了很多参数，完整一些的写法是</p>
+<pre class="lang:r decode:true">qnorm(1-alpha/2,mean=0,sd=1,lower.tail=TRUE)</pre>
+<p>第一个参数就不用解释了，第二,三个参数mean=0,sd=1，表示这是一个标准正态分布(不同于前面，这里增加了mean=和sd=，这种做法的好处是可以改变参数的顺序，但是结果是一样的)，最后一个参数lower.tail这个参数的意思就比较有意思了，官方解释如下：</p>
+<p>if TRUE (default), probabilities are $P[X &lt;= x]$, otherwise, $P[X &gt; x]$.</p>
+<p>明白了么?等于真的话，得出的就是X&lt;=x的分位数，为假的话就是从X&gt;x的方法寻找这个值。一般我们用默认的真就可以了。</p>
+<p>接下来我们把它整理成一个函数，方便使用</p>
+<pre class="lang:r decode:true">z.test&lt;-function(x,n,sigma,alpha){
+mean&lt;-mean(x)
+ans&lt;-c(
+  mean-sigma*qnorm(1-alpha/2,mean=0,sd=1,lower.tail=TRUE)/sqrt(n),
+    mean+sigma*qnorm(1-alpha/2,mean=0,sd=1,lower.tail=TRUE)/sqrt(n))
+ans
+}</pre>
+<p>这样我们就可以直接使用z.test()完成对u的置信区间的计算。</p>
+<p>比如，有10个样本，分别是175,176,173,175,174,173,173,176,173,179。标准差为1.5，求均值95%的置信区间：</p>
+<pre class="lang:r decode:true  ">x&lt;-c(175,176,173,175,174,173,173,176,173,179)
+z.test(x,10,1.5,0.05)</pre>
+<p>则返回置信区间：</p>
+<p>[1]173.7703 175.6297</p>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">Last modified on 2012-06-30</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts" href="/posts/archives/2013-04-25-%E5%86%B3%E7%AD%96%E7%B2%97%E7%B3%99%E9%9B%86/">
+			Next<br>决策粗糙集
+                </a>
+                
+                
+                
+                <a class="older-posts" href="/posts/archives/2012-06-30-r%E8%AF%AD%E8%A8%80%E7%B3%BB%E5%88%97-%E6%95%B0%E6%8D%AE%E6%8F%8F%E8%BF%B0/">
+			Previous<br>R语言系列—-数据描述
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://sword865.github.io/">
+    
+        <div class="nav-title">
+            悟剑阁
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+                
+            
+            
+            
+            <a class="a-block nav-link-item active" href="/posts">
+                Archive
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/about/">
+                关于
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	Copyright (c) 2015. All rights reserved.
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    <div class="toc-wrapper">
+        
+
+        
+        <div class="toc">
+
+
+</div>
+        
+    </div>
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top"
+            :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+
+<div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	Copyright (c) 2015. All rights reserved.
+	
+</div>
+            </div>
+    
+    <script src="/js/journal.js"></script></body>
+</html>

@@ -7,19 +7,130 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>Copyright (c) 2015. All rights reserved.</copyright>
-    <lastBuildDate>Sun, 20 Apr 2025 15:51:35 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 03 May 2025 15:51:35 +0800</lastBuildDate>
     
         <atom:link href="https://sword865.github.io/index.xml" rel="self" type="application/rss+xml" />
     
     
     
         <item>
+        <title>Lucene索引文件学习</title>
+        <link>https://sword865.github.io/posts/archives/2015-02-04-lucene%E7%B4%A2%E5%BC%95%E6%96%87%E4%BB%B6%E5%AD%A6%E4%B9%A0/</link>
+        <pubDate>Wed, 04 Feb 2015 00:00:00 +0000</pubDate>
+        
+        <guid>https://sword865.github.io/posts/archives/2015-02-04-lucene%E7%B4%A2%E5%BC%95%E6%96%87%E4%BB%B6%E5%AD%A6%E4%B9%A0/</guid>
+        <description>悟剑阁 https://sword865.github.io/posts/archives/2015-02-04-lucene%E7%B4%A2%E5%BC%95%E6%96%87%E4%BB%B6%E5%AD%A6%E4%B9%A0/ -&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt; 最近在做搜索，抽空看一下lucene，资料挺多的，不过大部分都是3.x了……在对着官方文档大概看一下。&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;优化后的lucene索引文件(4.9.0)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;&lt;img title=&#34;NewImage.png&#34; src=&#34;https://sword865.github.io/wp-content/uploads/2015/02/NewImage.png&#34; alt=&#34;NewImage&#34; width=&#34;200&#34; height=&#34;146&#34; border=&#34;0&#34; /&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;一、段文件&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;1.段文件：segments_5p和segments.gen。&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;segments.gen保存当前段文件版本信息。&lt;/span&gt;&lt;/p&gt;
+&lt;ul style=&#34;color: #353833; font-family: Arial, Helvetica, sans-serif; font-size: 12px;&#34;&gt;
+  &lt;li&gt;
+    &lt;span style=&#34;font-size: 12px;&#34;&gt;&lt;tt style=&#34;font-size: 1.2em;&#34;&gt;segments.gen&lt;/tt&gt;: GenHeader, Generation, Generation, Footer&lt;/span&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;segments_N（segments_5p）保存最新的段的信息，包括段的个数，每个段的段名、文档数等信息。&lt;/span&gt;&lt;/p&gt;
+&lt;ul style=&#34;font-size: 12px; color: #353833; font-family: Arial, Helvetica, sans-serif;&#34;&gt;
+  &lt;li&gt;
+    &lt;span style=&#34;font-size: 12px;&#34;&gt;&lt;tt style=&#34;font-size: 1.2em;&#34;&gt;segments_N&lt;/tt&gt;: Header, Version, NameCounter, SegCount, &lt;SegName, SegCodec, DelGen, DeletionCount, FieldInfosGen, DocValuesGen, UpdatesFiles&gt;&lt;sup style=&#34;font-size: 0.6em;&#34;&gt;SegCount&lt;/sup&gt;, CommitUserData, Footer&lt;/span&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;  源码参考：SegmentInfos.read(Directory directory, String segmentFileName):&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;2.段信息：*.si，存储段的基本信息。&lt;/span&gt;&lt;/p&gt;
+&lt;ul style=&#34;color: #353833; font-family: Arial, Helvetica, sans-serif; font-size: 12px;&#34;&gt;
+  &lt;li&gt;
+    &lt;span style=&#34;font-size: 12px;&#34;&gt;&lt;tt style=&#34;font-size: 1.2em;&#34;&gt;.si&lt;/tt&gt;: Header, SegVersion, SegSize, IsCompoundFile, Diagnostics, Attributes, Files&lt;/span&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;       只对4.0-4.5使用，新版已经抛弃了，可以无视。  &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;二、域文件&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;1.域(field)：*.fnm ，存储域的信息。&lt;/span&gt;&lt;/p&gt;
+&lt;ul style=&#34;font-size: 12px; color: #353833; font-family: Arial, Helvetica, sans-serif;&#34;&gt;
+  &lt;li&gt;
+    &lt;span style=&#34;font-size: 12px;&#34;&gt;FieldInfos (.fnm) &amp;#8211;&gt; Header,FieldsCount, &lt;FieldName,FieldNumber, FieldBits,DocValuesBits,DocValuesGen,Attributes&gt; &lt;sup style=&#34;font-size: 0.6em; color: #353833; font-family: Arial, Helvetica, sans-serif;&#34;&gt;FieldsCount&lt;/sup&gt;,Footer&lt;/span&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+&lt;div&gt;
+  &lt;p style=&#34;margin: 0px; font-size: 11px; font-family: Monaco;&#34;&gt;
+    &lt;span style=&#34;font-size: 12px;&#34;&gt;  源码参考：org.apache.lucene.codecs.lucene46.Lucene46FieldInfosFormat&lt;/span&gt;
+  &lt;/p&gt;
+  &lt;p style=&#34;margin: 0px; font-size: 11px; font-family: Monaco;&#34;&gt;
+    &lt;span style=&#34;font-size: 12px;&#34;&gt;2.域(field)索引：*.fdx，存储到域数据的指针。&lt;/span&gt;
+  &lt;/p&gt;
+&lt;/div&gt;
+&lt;ul style=&#34;color: #353833; font-family: Arial, Helvetica, sans-serif; font-size: 12px;&#34;&gt;
+  &lt;li&gt;
+    &lt;span style=&#34;font-size: 12px;&#34;&gt;FieldsIndex (.fdx) &amp;#8211;&gt; &lt;Header&gt;, &lt;ChunkIndex&gt;&lt;/span&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;   源码参考：org.apache.lucene.codecs.lucene41.Lucene41StoredFieldsFormat&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;3.域(field)数据：*.fdt，存储文档的域，话说这个结构比较复杂，简单列一下。&lt;/span&gt;&lt;/p&gt;
+&lt;ul style=&#34;font-size: 12px; color: #353833; font-family: Arial, Helvetica, sans-serif;&#34;&gt;
+  &lt;li&gt;
+    &lt;span style=&#34;font-size: 12px;&#34;&gt;FieldData (.fdt) &amp;#8211;&gt; &lt;Header&gt;, PackedIntsVersion, &lt;Chunk&gt;&lt;sup style=&#34;font-size: 0.6em;&#34;&gt;ChunkCount&lt;/sup&gt;&lt;/span&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;span style=&#34;font-size: 12px;&#34;&gt;ChunkCount is not known in advance and is the number of chunks necessary to store all document of the segment&lt;/span&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;span style=&#34;font-size: 12px;&#34;&gt;Chunk &amp;#8211;&gt; DocBase, ChunkDocs, DocFieldCounts, DocLengths, &lt;CompressedDocs&gt;&lt;/span&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;  源码参考：org.apache.lucene.codecs.lucene41.Lucene41StoredFieldsFormat&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;三、字典文件&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;4.项(term)字典：*.tim，存储项的信息。&lt;/span&gt;&lt;/p&gt;
+&lt;ul style=&#34;color: #353833; font-family: Arial, Helvetica, sans-serif; font-size: 12px;&#34;&gt;
+  &lt;li&gt;
+    &lt;span style=&#34;font-size: 12px;&#34;&gt;TermsDict (.tim) &amp;#8211;&gt; Header, &lt;em&gt;PostingsHeader&lt;/em&gt;, NodeBlock&lt;sup style=&#34;font-size: 0.6em;&#34;&gt;NumBlocks&lt;/sup&gt;, FieldSummary, DirOffset, Footer&lt;/span&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;  源码参考：org.apache.lucene.codecs.lucene41.Lucene41PostingsFormat&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;5.项(term)索引：*.tip，到项字典的索引。&lt;/span&gt;&lt;/p&gt;
+&lt;ul style=&#34;color: #353833; font-family: Arial, Helvetica, sans-serif; font-size: 12px;&#34;&gt;
+  &lt;li&gt;
+    &lt;span style=&#34;font-size: 12px;&#34;&gt;TermsIndex (.tip) &amp;#8211;&gt; Header, FSTIndex&lt;sup style=&#34;font-size: 0.6em;&#34;&gt;NumFields&lt;/sup&gt; &lt;IndexStartFP&gt;&lt;sup style=&#34;font-size: 0.6em;&#34;&gt;NumFields&lt;/sup&gt;, DirOffset, Footer&lt;/span&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;  源码参考：org.apache.lucene.codecs.lucene41.Lucene41PostingsFormat &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;四、其他文件 &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;6.频率：*.doc，包括一个文档列表，列表中每一个项都有一个频数。&lt;/span&gt;&lt;/p&gt;
+&lt;ul style=&#34;color: #353833; font-family: Arial, Helvetica, sans-serif; font-size: 12px;&#34;&gt;
+  &lt;li&gt;
+    &lt;span style=&#34;font-size: 12px;&#34;&gt;docFile(.doc) &amp;#8211;&gt; Header, &lt;TermFreqs, SkipData?&gt;&lt;sup style=&#34;font-size: 0.6em;&#34;&gt;TermCount&lt;/sup&gt;, Footer&lt;/span&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;  源码参考：org.apache.lucene.codecs.lucene41.Lucene41PostingsFormat &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;7.位置：*.pos，存储项在索引中出现的位置信息。&lt;/span&gt;&lt;/p&gt;
+&lt;ul style=&#34;color: #353833; font-family: Arial, Helvetica, sans-serif; font-size: 12px;&#34;&gt;
+  &lt;li&gt;
+    &lt;span style=&#34;font-size: 12px;&#34;&gt;PosFile(.pos) &amp;#8211;&gt; Header, &lt;TermPositions&gt; &lt;sup style=&#34;font-size: 0.6em;&#34;&gt;TermCount&lt;/sup&gt;, Footer&lt;/span&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;  源码参考：org.apache.lucene.codecs.lucene41.Lucene41PostingsFormat&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt; 8.norm文件：&lt;em&gt;.nvd，&lt;/em&gt;.nvm，编码文档和域的长度已经boost factors。&lt;/span&gt;&lt;/p&gt;
+&lt;ul style=&#34;font-size: 12px; color: #353833; font-family: Arial, Helvetica, sans-serif;&#34;&gt;
+  &lt;li&gt;
+    &lt;span style=&#34;font-size: 12px;&#34;&gt;Norms data (.nvd) &amp;#8211;&gt; Header,&lt;Uncompressed | TableCompressed | DeltaCompressed&gt;&lt;sup style=&#34;font-size: 0.6em; color: #353833; font-family: Arial, Helvetica, sans-serif;&#34;&gt;NumFields&lt;/sup&gt;,Footer&lt;/span&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;  源码参考：org.apache.lucene.codecs.lucene49.Lucene49NormsFormat&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt; 除此之外，还可能有一些其他文件，暂且不表。&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt; 参考：&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;&lt;a href=&#34;http://lucene.apache.org/core/4_9_0/core/org/apache/lucene/codecs/lucene49/package-summary.html#File_Naming&#34;&gt;&lt;a href=&#34;http://lucene.apache.org/core/4_9_0/core/org/apache/lucene/codecs/lucene49/package-summary.html#File_Naming&#34;&gt;http://lucene.apache.org/core/4_9_0/core/org/apache/lucene/codecs/lucene49/package-summary.html#File_Naming&lt;/a&gt;&lt;/a&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&#34;font-size: 12px;&#34;&gt;&lt;a href=&#34;http://www.cnblogs.com/forfuture1978/category/300665.html&#34;&gt;&lt;a href=&#34;http://www.cnblogs.com/forfuture1978/category/300665.html&#34;&gt;http://www.cnblogs.com/forfuture1978/category/300665.html&lt;/a&gt;&lt;/a&gt;&lt;/span&gt;&lt;/p&gt;
+- https://sword865.github.io/posts/archives/2015-02-04-lucene%E7%B4%A2%E5%BC%95%E6%96%87%E4%BB%B6%E5%AD%A6%E4%B9%A0/ - Copyright (c) 2015. All rights reserved.</description>
+        </item>
+    
+    
+    
+        <item>
         <title>基于标签的推荐系统</title>
-        <link>https://sword865.github.io/archives/5/</link>
+        <link>https://sword865.github.io/posts/archives/2014-11-17-%E5%9F%BA%E4%BA%8E%E6%A0%87%E7%AD%BE%E7%9A%84%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/</link>
         <pubDate>Mon, 17 Nov 2014 00:00:00 +0000</pubDate>
         
-        <guid>https://sword865.github.io/archives/5/</guid>
-        <description>悟剑阁 https://sword865.github.io/archives/5/ -&lt;p&gt;一、基于图模型的推荐&lt;/p&gt;
+        <guid>https://sword865.github.io/posts/archives/2014-11-17-%E5%9F%BA%E4%BA%8E%E6%A0%87%E7%AD%BE%E7%9A%84%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/</guid>
+        <description>悟剑阁 https://sword865.github.io/posts/archives/2014-11-17-%E5%9F%BA%E4%BA%8E%E6%A0%87%E7%AD%BE%E7%9A%84%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/ -&lt;p&gt;一、基于图模型的推荐&lt;/p&gt;
 &lt;p&gt;在不考虑标签时，基于二项图有两种随机游走的图推荐算法：&lt;/p&gt;
 &lt;p&gt;1.probability spreading&lt;/p&gt;
 &lt;p&gt;随机游走算法，在游走中，每个目标得到权重是基于归属者的边计算出来的。&lt;/p&gt;
@@ -47,18 +158,18 @@
 &lt;img title=&#34;NewImage.png&#34; src=&#34;https://sword865.github.io/images/archives/171508548949009.png&#34; alt=&#34;NewImage&#34; width=&#34;600&#34; height=&#34;260&#34; border=&#34;0&#34; /&gt;
 &lt;p&gt;填充后即得到评分矩阵&lt;/p&gt;
 &lt;p&gt;&lt;span style=&#34;font-size: 14px;&#34;&gt; &lt;/span&gt;&lt;/p&gt;
-- https://sword865.github.io/archives/5/ - Copyright (c) 2015. All rights reserved.</description>
+- https://sword865.github.io/posts/archives/2014-11-17-%E5%9F%BA%E4%BA%8E%E6%A0%87%E7%AD%BE%E7%9A%84%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/ - Copyright (c) 2015. All rights reserved.</description>
         </item>
     
     
     
         <item>
         <title>Google在KDD2013上关于CTR的一篇论文</title>
-        <link>https://sword865.github.io/archives/6/</link>
+        <link>https://sword865.github.io/posts/archives/2013-08-03-google%E5%9C%A8kdd2013%E4%B8%8A%E5%85%B3%E4%BA%8Ectr%E7%9A%84%E4%B8%80%E7%AF%87%E8%AE%BA%E6%96%87/</link>
         <pubDate>Sat, 03 Aug 2013 00:00:00 +0000</pubDate>
         
-        <guid>https://sword865.github.io/archives/6/</guid>
-        <description>悟剑阁 https://sword865.github.io/archives/6/ -&lt;p&gt;最近在做CTR，刚好Google在KDD发了一篇文章，讲了他们的一些尝试，总结一下：&lt;/p&gt;
+        <guid>https://sword865.github.io/posts/archives/2013-08-03-google%E5%9C%A8kdd2013%E4%B8%8A%E5%85%B3%E4%BA%8Ectr%E7%9A%84%E4%B8%80%E7%AF%87%E8%AE%BA%E6%96%87/</guid>
+        <description>悟剑阁 https://sword865.github.io/posts/archives/2013-08-03-google%E5%9C%A8kdd2013%E4%B8%8A%E5%85%B3%E4%BA%8Ectr%E7%9A%84%E4%B8%80%E7%AF%87%E8%AE%BA%E6%96%87/ -&lt;p&gt;最近在做CTR，刚好Google在KDD发了一篇文章，讲了他们的一些尝试，总结一下：&lt;/p&gt;
 &lt;p&gt;先是一些公式的符号说明：&lt;/p&gt;
 &lt;p&gt;[&lt;img style=&#34;background-image: none; padding-top: 0px; padding-left: 0px; display: inline; padding-right: 0px; border-width: 0px;&#34; title=&#34;image&#34; src=&#34;https://sword865.github.io/images/archives/04011358-949b9f116ca94563ab5a0efa047697db.png&#34; alt=&#34;image&#34; width=&#34;447&#34; height=&#34;98&#34; border=&#34;0&#34; /&gt;][1]&lt;/p&gt;
 &lt;p&gt;一、优化算法&lt;/p&gt;
@@ -125,33 +236,33 @@
 &lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
   &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
 &lt;/p&gt;
-- https://sword865.github.io/archives/6/ - Copyright (c) 2015. All rights reserved.</description>
+- https://sword865.github.io/posts/archives/2013-08-03-google%E5%9C%A8kdd2013%E4%B8%8A%E5%85%B3%E4%BA%8Ectr%E7%9A%84%E4%B8%80%E7%AF%87%E8%AE%BA%E6%96%87/ - Copyright (c) 2015. All rights reserved.</description>
         </item>
     
     
     
         <item>
         <title>[转] Deep Learning（深度学习）学习笔记整理系列</title>
-        <link>https://sword865.github.io/archives/7/</link>
+        <link>https://sword865.github.io/posts/archives/2013-04-26-%E8%BD%AC-deep-learning%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E6%95%B4%E7%90%86%E7%B3%BB%E5%88%97/</link>
         <pubDate>Fri, 26 Apr 2013 00:00:00 +0000</pubDate>
         
-        <guid>https://sword865.github.io/archives/7/</guid>
-        <description>悟剑阁 https://sword865.github.io/archives/7/ -&lt;p&gt;转一套Deep Learning的文章&lt;/p&gt;
+        <guid>https://sword865.github.io/posts/archives/2013-04-26-%E8%BD%AC-deep-learning%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E6%95%B4%E7%90%86%E7%B3%BB%E5%88%97/</guid>
+        <description>悟剑阁 https://sword865.github.io/posts/archives/2013-04-26-%E8%BD%AC-deep-learning%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E6%95%B4%E7%90%86%E7%B3%BB%E5%88%97/ -&lt;p&gt;转一套Deep Learning的文章&lt;/p&gt;
 &lt;p&gt;&lt;a href=&#34;http://blog.csdn.net/zouxy09/article/details/8775360&#34;&gt;http://blog.csdn.net/zouxy09/article/details/8775360&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;顺便附上翻译的UFLDL&lt;/p&gt;
 &lt;p&gt;&lt;a href=&#34;http://deeplearning.stanford.edu/wiki/index.php/UFLDL%E6%95%99%E7%A8%8B&#34;&gt;http://deeplearning.stanford.edu/wiki/index.php/UFLDL%E6%95%99%E7%A8%8B&lt;/a&gt;&lt;/p&gt;
-- https://sword865.github.io/archives/7/ - Copyright (c) 2015. All rights reserved.</description>
+- https://sword865.github.io/posts/archives/2013-04-26-%E8%BD%AC-deep-learning%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E6%95%B4%E7%90%86%E7%B3%BB%E5%88%97/ - Copyright (c) 2015. All rights reserved.</description>
         </item>
     
     
     
         <item>
         <title>决策粗糙集</title>
-        <link>https://sword865.github.io/archives/8/</link>
+        <link>https://sword865.github.io/posts/archives/2013-04-25-%E5%86%B3%E7%AD%96%E7%B2%97%E7%B3%99%E9%9B%86/</link>
         <pubDate>Thu, 25 Apr 2013 00:00:00 +0000</pubDate>
         
-        <guid>https://sword865.github.io/archives/8/</guid>
-        <description>悟剑阁 https://sword865.github.io/archives/8/ -&lt;p&gt;今天收拾资料，发现了以前刚接触粗糙集时写的一个综述，好久没写博客，发上来充数好了&lt;/p&gt;
+        <guid>https://sword865.github.io/posts/archives/2013-04-25-%E5%86%B3%E7%AD%96%E7%B2%97%E7%B3%99%E9%9B%86/</guid>
+        <description>悟剑阁 https://sword865.github.io/posts/archives/2013-04-25-%E5%86%B3%E7%AD%96%E7%B2%97%E7%B3%99%E9%9B%86/ -&lt;p&gt;今天收拾资料，发现了以前刚接触粗糙集时写的一个综述，好久没写博客，发上来充数好了&lt;/p&gt;
 &lt;p&gt;一、粗糙集模型&lt;a href=&#34;data:image/png;base64,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&#34;&gt;1&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;粗糙集是Pawlak于上世纪八十年代提出的一种不确定数学模型。该模型以有限集合上的等价关系为基础，定义了上下近似两个基本操作。该模型与它的其他一般化或变种形式有着较为广泛的应用。&lt;/p&gt;
 &lt;p&gt;1.1&lt;a name=&#34;OLE_LINK19&#34;&gt;&lt;/a&gt;&lt;a name=&#34;OLE_LINK18&#34;&gt;&lt;/a&gt;Pawlak粗糙集模型&lt;/p&gt;
@@ -308,18 +419,18 @@
 &lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
   &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
 &lt;/p&gt;
-- https://sword865.github.io/archives/8/ - Copyright (c) 2015. All rights reserved.</description>
+- https://sword865.github.io/posts/archives/2013-04-25-%E5%86%B3%E7%AD%96%E7%B2%97%E7%B3%99%E9%9B%86/ - Copyright (c) 2015. All rights reserved.</description>
         </item>
     
     
     
         <item>
         <title>R语言系列—-区间估计</title>
-        <link>https://sword865.github.io/archives/11/</link>
+        <link>https://sword865.github.io/posts/archives/2012-06-30-r%E8%AF%AD%E8%A8%80%E7%B3%BB%E5%88%97-%E5%8C%BA%E9%97%B4%E4%BC%B0%E8%AE%A1/</link>
         <pubDate>Sat, 30 Jun 2012 00:00:00 +0000</pubDate>
         
-        <guid>https://sword865.github.io/archives/11/</guid>
-        <description>悟剑阁 https://sword865.github.io/archives/11/ -&lt;p&gt;这一篇讲的是区间估计…..因为这不是一个关于统计学的系列，所以对文中出现的公式不会给予任何证明…..就是这样。&lt;/p&gt;
+        <guid>https://sword865.github.io/posts/archives/2012-06-30-r%E8%AF%AD%E8%A8%80%E7%B3%BB%E5%88%97-%E5%8C%BA%E9%97%B4%E4%BC%B0%E8%AE%A1/</guid>
+        <description>悟剑阁 https://sword865.github.io/posts/archives/2012-06-30-r%E8%AF%AD%E8%A8%80%E7%B3%BB%E5%88%97-%E5%8C%BA%E9%97%B4%E4%BC%B0%E8%AE%A1/ -&lt;p&gt;这一篇讲的是区间估计…..因为这不是一个关于统计学的系列，所以对文中出现的公式不会给予任何证明…..就是这样。&lt;/p&gt;
 &lt;p&gt;就从一个最简单的正态分布的方差已知时，求均值的置信区间开始吧。&lt;/p&gt;
 &lt;p&gt;书上的公式告诉我们这个区间是 $$\overline{x}\pm(\sigma/\sqrt{n})z_{(1-\sigma/2)}$$ ,其中Z&lt;sub&gt;p&lt;/sub&gt;表示的是正态分布N(0,1)下侧的p分位数。&lt;/p&gt;
 &lt;p&gt;我们用R来实现求得这一结果的过程。下面设x里存储了给出的样本，sigma表示已知的方差，n表示样本的个数， alpha则是(1-置信水平)&lt;/p&gt;
@@ -347,18 +458,18 @@ ans
 z.test(x,10,1.5,0.05)&lt;/pre&gt;
 &lt;p&gt;则返回置信区间：&lt;/p&gt;
 &lt;p&gt;[1]173.7703 175.6297&lt;/p&gt;
-- https://sword865.github.io/archives/11/ - Copyright (c) 2015. All rights reserved.</description>
+- https://sword865.github.io/posts/archives/2012-06-30-r%E8%AF%AD%E8%A8%80%E7%B3%BB%E5%88%97-%E5%8C%BA%E9%97%B4%E4%BC%B0%E8%AE%A1/ - Copyright (c) 2015. All rights reserved.</description>
         </item>
     
     
     
         <item>
         <title>R语言系列—-数据描述</title>
-        <link>https://sword865.github.io/archives/10/</link>
+        <link>https://sword865.github.io/posts/archives/2012-06-30-r%E8%AF%AD%E8%A8%80%E7%B3%BB%E5%88%97-%E6%95%B0%E6%8D%AE%E6%8F%8F%E8%BF%B0/</link>
         <pubDate>Sat, 30 Jun 2012 00:00:00 +0000</pubDate>
         
-        <guid>https://sword865.github.io/archives/10/</guid>
-        <description>悟剑阁 https://sword865.github.io/archives/10/ -&lt;p&gt;简单来说，R语言是一种主要用于统计分析、绘图的语言和操作环境。的源代码可自由下载使用，亦有已编译的执行档版本可以下载，可在多种平台下运行，包括UNIX（也包括FreeBSD和Linux）、Windows和MacOS。R主要是以命令行操作，同时有人开发了几种图形用户界面。&lt;/p&gt;
+        <guid>https://sword865.github.io/posts/archives/2012-06-30-r%E8%AF%AD%E8%A8%80%E7%B3%BB%E5%88%97-%E6%95%B0%E6%8D%AE%E6%8F%8F%E8%BF%B0/</guid>
+        <description>悟剑阁 https://sword865.github.io/posts/archives/2012-06-30-r%E8%AF%AD%E8%A8%80%E7%B3%BB%E5%88%97-%E6%95%B0%E6%8D%AE%E6%8F%8F%E8%BF%B0/ -&lt;p&gt;简单来说，R语言是一种主要用于统计分析、绘图的语言和操作环境。的源代码可自由下载使用，亦有已编译的执行档版本可以下载，可在多种平台下运行，包括UNIX（也包括FreeBSD和Linux）、Windows和MacOS。R主要是以命令行操作，同时有人开发了几种图形用户界面。&lt;/p&gt;
 &lt;div&gt;
   &lt;p&gt;
            为什么我会使用R语言呢？毕竟我们还有SPSS,SAS，S等其他工具。就我个人而言(其实对很多人也是这样)有两个原因&amp;#8212;-R的开源与其极高的自由度。
@@ -469,18 +580,18 @@ kurtosis(x)&lt;/pre&gt;
      基本的就是这些了，当然还可以更加复杂，比如多组数据的图形与数值描述等等。即使是我们在上面使用的函数其实也是非常强大的，只是我们在上面使用了很多的默认的参数而简化了它们的调用而已。
   &lt;/p&gt;
 &lt;/div&gt;
-- https://sword865.github.io/archives/10/ - Copyright (c) 2015. All rights reserved.</description>
+- https://sword865.github.io/posts/archives/2012-06-30-r%E8%AF%AD%E8%A8%80%E7%B3%BB%E5%88%97-%E6%95%B0%E6%8D%AE%E6%8F%8F%E8%BF%B0/ - Copyright (c) 2015. All rights reserved.</description>
         </item>
     
     
     
         <item>
         <title>R语言系列—回归分析</title>
-        <link>https://sword865.github.io/archives/12/</link>
+        <link>https://sword865.github.io/posts/archives/2012-06-30-r%E8%AF%AD%E8%A8%80%E7%B3%BB%E5%88%97-%E5%9B%9E%E5%BD%92%E5%88%86%E6%9E%90/</link>
         <pubDate>Sat, 30 Jun 2012 00:00:00 +0000</pubDate>
         
-        <guid>https://sword865.github.io/archives/12/</guid>
-        <description>悟剑阁 https://sword865.github.io/archives/12/ -&lt;p&gt;**         **一元线形回归模型：有变量x,y。假设有关系y=c+bx+e,其中c+bx 是y随x变化的部分，e是随机误差。&lt;/p&gt;
+        <guid>https://sword865.github.io/posts/archives/2012-06-30-r%E8%AF%AD%E8%A8%80%E7%B3%BB%E5%88%97-%E5%9B%9E%E5%BD%92%E5%88%86%E6%9E%90/</guid>
+        <description>悟剑阁 https://sword865.github.io/posts/archives/2012-06-30-r%E8%AF%AD%E8%A8%80%E7%B3%BB%E5%88%97-%E5%9B%9E%E5%BD%92%E5%88%86%E6%9E%90/ -&lt;p&gt;**         **一元线形回归模型：有变量x,y。假设有关系y=c+bx+e,其中c+bx 是y随x变化的部分，e是随机误差。&lt;/p&gt;
 &lt;p&gt;可以很容易的用函数lm()求出回归参数b,c并作相应的假设检验，如：&lt;/p&gt;
 &lt;pre class=&#34;lang:r decode:true &#34;&gt;x&amp;lt;-c(0.10, 0.11, 0.12, 0.13, 0.14, 0.15,0.16, 0.17, 0.18, 0.20, 0.21, 0.23)
 y&amp;lt;-c(42.0, 43.5, 45.0, 45.5, 45.0, 47.5,49.0, 53.0, 50.0, 55.0, 55.0, 60.0)
@@ -551,18 +662,18 @@ lm.sol&amp;lt;-lm(y~1+x1+x2)
 ex&amp;lt;-data.frame(x1=200,x2=3000)
 predict(lm.sol,ex,interval=&#34;prediction&#34;,level=0.95)&lt;/pre&gt;
 &lt;p&gt; &lt;/p&gt;
-- https://sword865.github.io/archives/12/ - Copyright (c) 2015. All rights reserved.</description>
+- https://sword865.github.io/posts/archives/2012-06-30-r%E8%AF%AD%E8%A8%80%E7%B3%BB%E5%88%97-%E5%9B%9E%E5%BD%92%E5%88%86%E6%9E%90/ - Copyright (c) 2015. All rights reserved.</description>
         </item>
     
     
     
         <item>
         <title>简单讲一下使用MS3D为opengl建模</title>
-        <link>https://sword865.github.io/archives/124/</link>
+        <link>https://sword865.github.io/posts/archives/2011-03-16-%E4%BD%BF%E7%94%A8ms3d%E4%B8%BAopengl%E5%BB%BA%E6%A8%A1/</link>
         <pubDate>Wed, 16 Mar 2011 00:00:00 +0000</pubDate>
         
-        <guid>https://sword865.github.io/archives/124/</guid>
-        <description>悟剑阁 https://sword865.github.io/archives/124/ -&lt;p&gt;做毕设的时候写的东西，贴上来吧…………&lt;/p&gt;
+        <guid>https://sword865.github.io/posts/archives/2011-03-16-%E4%BD%BF%E7%94%A8ms3d%E4%B8%BAopengl%E5%BB%BA%E6%A8%A1/</guid>
+        <description>悟剑阁 https://sword865.github.io/posts/archives/2011-03-16-%E4%BD%BF%E7%94%A8ms3d%E4%B8%BAopengl%E5%BB%BA%E6%A8%A1/ -&lt;p&gt;做毕设的时候写的东西，贴上来吧…………&lt;/p&gt;
 &lt;p&gt;由于在OPENGL只能通过程序语言绘制模型，远不能达到可见既可得的目的。因此，比起3DMAX、MAYA等可视化3D建模工具，OPENGL模型的建立就相当的困难，为了简化这一问题的处理，可以使用简单小巧的MS3D来完成可见即可得的绘制过程。&lt;/p&gt;
 &lt;p&gt;MS3D的文件有着非常简单良好的文件结构，可从该文件中完美读取在可视工具中绘制的3D图形模型包含的点、线、面等各项基本结构的参数与位置，并在OPENGL根据读取结果即可进行绘制重现该模型。&lt;/p&gt;
 &lt;p&gt;MS3D全名为MilkShape3D，是一款简单小巧的3D可视化图形建模工具，可以简单的使用各种点、线面等基本图形元素组合建立模型，并进行贴图，分组。进一步的，该工具还支持简单的骨骼动画制作，是一款非常好用的3D图形构建工具。&lt;/p&gt;
@@ -674,42 +785,7 @@ for ( int i = 0; i &amp;amp;lt; m_numMeshes; i++ )
 &lt;p&gt; &lt;/p&gt;
 &lt;p&gt;[1]&lt;a href=&#34;http://blog.sina.com.cn/s/blog_62d98a550100g5hh.html&#34;&gt;http://blog.sina.com.cn/s/blog_62d98a550100g5hh.html&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;[2]&lt;a href=&#34;http://www.yakergong.net/nehe/course/tutorial_31.html&#34;&gt;http://www.yakergong.net/nehe/course/tutorial_31.html&lt;/a&gt;&lt;/p&gt;
-- https://sword865.github.io/archives/124/ - Copyright (c) 2015. All rights reserved.</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>算法总结9—优化</title>
-        <link>https://sword865.github.io/archives/13/</link>
-        <pubDate>Wed, 30 Sep 2009 00:00:00 +0000</pubDate>
-        
-        <guid>https://sword865.github.io/archives/13/</guid>
-        <description>悟剑阁 https://sword865.github.io/archives/13/ -&lt;p&gt;不同于之前的分类和聚类算法，优化的目的是尝试找到一个使成本函数输出最小化的值。这里主要包括两个算法：模拟退火算法和遗传算法。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;成本函数&lt;/strong&gt;:&lt;br&gt;
-接受一个经推测的题解，并返回一个数值结果，该值越大代表成本越高（题解表现越差），该值越小就表示题解越好。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;模拟退火算法：&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;优化算法的目标可以看为寻找x使函数f(x)最小。&lt;/p&gt;
-&lt;p&gt;但是严格的最小值往往是很难达到的，我们不得不把眼光投入到寻找一个尽可能好的次优解去。&lt;/p&gt;
-&lt;p&gt;最简单的方法被称为随机法，即成千上万次的对x进行猜测，然后把这些x中使f(x)最小的一个作为答案。虽然这样很简单，但是效果很差。于是出现了爬山法。&lt;/p&gt;
-&lt;p&gt;爬山法从一个随机解出发，然后不断向该解附近的使f(x)的值更小的x移动，直到当前x附近的解都比x差为止。为了使效果更好，我们可以从多个随机解出发重复着一个过程，将最好的一个作为答案。很容易就能认识到，这样找到的解是一个极值点，是一个局部最小值。&lt;/p&gt;
-&lt;p&gt;爬山法虽然好，但是在其寻找最优解的过程中，前进的方向是固定的（使f(x)更小的方向），但是有时向其他方法前进也是必要的，因为f(x)可能先增大在变小成为最优的。&lt;/p&gt;
-&lt;p&gt;于是就有了模拟退火法。&lt;/p&gt;
-&lt;p&gt;该算法这源于固体的退火过程，即先将温度加到很高(大量原子被激发)，再缓慢降温(即退火)，则能使达到能量最低点。如果急速降温(即为淬火)则不能达到最低点。&lt;/p&gt;
-&lt;p&gt;模拟退火法同样是从一个随机解出发。但是它在寻找最优解时并不一定是向更好的x移动，也有一定的概率向更差的x移动，这个概率开始较大，但是会随时间而渐渐变小，直到稳定。一般该概率可以定义为：p=e ^ (-  (highcost – lowcost ) / temperature )，其中temperature是随时间增大而变小的温度，开始温度很高时p -&amp;gt; 1，后来会渐渐变小使p-&amp;gt;0。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;遗传算法：&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;遗传算法的思想来自生物的遗传和变异，算法以种群为单位（一个种群为一组既多个解），其算法的运行过程如下：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;随机生成一组初始解（初始种群）。&lt;/li&gt;
-&lt;li&gt;计算种群中各个解的成本，然后进行排序。&lt;/li&gt;
-&lt;li&gt;我们将种群中靠前（成本低）的解保留下来，删除其他解，这一过程称为精英选拔。&lt;/li&gt;
-&lt;li&gt;对已有解进行微小的改变，将改变后的结果作为新的元素加入种群，这一过程称为变异。&lt;/li&gt;
-&lt;li&gt;选择一些优秀的解两两组合，然后将他们按某种方式进行结合（如求平均），将得到的结果作为新的元素加入种群，这一过程称为交叉（配对）。&lt;/li&gt;
-&lt;li&gt;不断重复2—5步，直到达到指定迭代次数或成本函数连续数代都没有更好的改善。&lt;/li&gt;
-&lt;li&gt;得到一组解，该组解为算法输出。&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;该系列结束，恩，也许以后学了更多，有了更好的了解后会回来改一改，谁知道呢？&lt;/p&gt;
-- https://sword865.github.io/archives/13/ - Copyright (c) 2015. All rights reserved.</description>
+- https://sword865.github.io/posts/archives/2011-03-16-%E4%BD%BF%E7%94%A8ms3d%E4%B8%BAopengl%E5%BB%BA%E6%A8%A1/ - Copyright (c) 2015. All rights reserved.</description>
         </item>
     
     

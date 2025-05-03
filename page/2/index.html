@@ -181,7 +181,59 @@ code.has-jax {
     <div class="post-list-container post-list-container-no-background">
         
         
-            <a href="/archives/5/" class="a-block">
+            <a href="/posts/archives/2015-02-04-lucene%E7%B4%A2%E5%BC%95%E6%96%87%E4%BB%B6%E5%AD%A6%E4%B9%A0/" class="a-block">
+                <div class="post-item-wrapper">
+                    <div class="post-item post-item-no-divider">
+                        <div class="post-item-info-wrapper">
+                            <div class="post-item-title">
+                                Lucene索引文件学习
+                            </div>
+                            <div class="post-item-summary">
+                                
+                                    <p><span style="font-size: 12px;"> 最近在做搜索，抽空看一下lucene，资料挺多的，不过大部分都是3.x了……在对着官方文档大概看一下。</span></p>
+<p><span style="font-size: 12px;">优化后的lucene索引文件(4.9.0)</span></p>
+<p><span style="font-size: 12px;"><img title="NewImage.png" src="/wp-content/uploads/2015/02/NewImage.png" alt="NewImage" width="200" height="146" border="0" /></span></p>
+<p><span style="font-size: 12px;">一、段文件</span></p>
+<p><span style="font-size: 12px;">1.段文件：segments_5p和segments.gen。</span></p>
+<p><span style="font-size: 12px;">segments.gen保存当前段文件版本信息。</span></p>
+<ul style="color: #353833; font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
+  <li>
+    <span style="font-size: 12px;"><tt style="font-size: 1.2em;">segments.gen</tt>: GenHeader, Generation, Generation, Footer</span>
+  </li>
+</ul>
+<p><span style="font-size: 12px;">segments_N（segments_5p）保存最新的段的信息，包括段的个数，每个段的段名、文档数等信息。</span></p>
+<ul style="font-size: 12px; color: #353833; font-family: Arial, Helvetica, sans-serif;">
+  <li>
+    <span style="font-size: 12px;"><tt style="font-size: 1.2em;">segments_N</tt>: Header, Version, NameCounter, SegCount, <SegName, SegCodec, DelGen, DeletionCount, FieldInfosGen, DocValuesGen, UpdatesFiles><sup style="font-size: 0.6em;">SegCount</sup>, CommitUserData, Footer</span>
+  </li>
+</ul>
+<p><span style="font-size: 12px;">  源码参考：SegmentInfos.read(Directory directory, String segmentFileName):</span></p>
+<p><span style="font-size: 12px;">2.段信息：*.si，存储段的基本信息。</span></p>
+<ul style="color: #353833; font-family: Arial, Helvetica, sans-serif; font-size: 12px;">
+  <li>
+    <span style="font-size: 12px;"><tt style="font-size: 1.2em;">.si</tt>: Header, SegVersion, SegSize, IsCompoundFile, Diagnostics, Attributes, Files</span>
+  </li>
+</ul>
+<p><span style="font-size: 12px;">       只对4.0-4.5使用，新版已经抛弃了，可以无视。  </span></p>
+                                
+                            </div>
+                            <div class="post-item-meta">
+    2015-02-04
+    &emsp;
+    
+    
+    
+    &emsp;
+    
+</div>
+
+                        </div>
+                        
+                        
+                    </div>
+                </div>
+        
+            <a href="/posts/archives/2014-11-17-%E5%9F%BA%E4%BA%8E%E6%A0%87%E7%AD%BE%E7%9A%84%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/" class="a-block">
                 <div class="post-item-wrapper">
                     <div class="post-item post-item-no-divider">
                         <div class="post-item-info-wrapper">
@@ -236,7 +288,7 @@ code.has-jax {
                     </div>
                 </div>
         
-            <a href="/archives/6/" class="a-block">
+            <a href="/posts/archives/2013-08-03-google%E5%9C%A8kdd2013%E4%B8%8A%E5%85%B3%E4%BA%8Ectr%E7%9A%84%E4%B8%80%E7%AF%87%E8%AE%BA%E6%96%87/" class="a-block">
                 <div class="post-item-wrapper">
                     <div class="post-item post-item-no-divider">
                         <div class="post-item-info-wrapper">
@@ -277,7 +329,7 @@ code.has-jax {
                     </div>
                 </div>
         
-            <a href="/archives/7/" class="a-block">
+            <a href="/posts/archives/2013-04-26-%E8%BD%AC-deep-learning%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E6%95%B4%E7%90%86%E7%B3%BB%E5%88%97/" class="a-block">
                 <div class="post-item-wrapper">
                     <div class="post-item post-item-no-divider">
                         <div class="post-item-info-wrapper">
@@ -305,7 +357,7 @@ code.has-jax {
                     </div>
                 </div>
         
-            <a href="/archives/8/" class="a-block">
+            <a href="/posts/archives/2013-04-25-%E5%86%B3%E7%AD%96%E7%B2%97%E7%B3%99%E9%9B%86/" class="a-block">
                 <div class="post-item-wrapper">
                     <div class="post-item post-item-no-divider">
                         <div class="post-item-info-wrapper">
@@ -401,7 +453,7 @@ code.has-jax {
                     </div>
                 </div>
         
-            <a href="/archives/11/" class="a-block">
+            <a href="/posts/archives/2012-06-30-r%E8%AF%AD%E8%A8%80%E7%B3%BB%E5%88%97-%E5%8C%BA%E9%97%B4%E4%BC%B0%E8%AE%A1/" class="a-block">
                 <div class="post-item-wrapper">
                     <div class="post-item post-item-no-divider">
                         <div class="post-item-info-wrapper">
@@ -456,7 +508,7 @@ z.test(x,10,1.5,0.05)</pre>
                     </div>
                 </div>
         
-            <a href="/archives/10/" class="a-block">
+            <a href="/posts/archives/2012-06-30-r%E8%AF%AD%E8%A8%80%E7%B3%BB%E5%88%97-%E6%95%B0%E6%8D%AE%E6%8F%8F%E8%BF%B0/" class="a-block">
                 <div class="post-item-wrapper">
                     <div class="post-item post-item-no-divider">
                         <div class="post-item-info-wrapper">
@@ -587,7 +639,7 @@ kurtosis(x)</pre>
                     </div>
                 </div>
         
-            <a href="/archives/12/" class="a-block">
+            <a href="/posts/archives/2012-06-30-r%E8%AF%AD%E8%A8%80%E7%B3%BB%E5%88%97-%E5%9B%9E%E5%BD%92%E5%88%86%E6%9E%90/" class="a-block">
                 <div class="post-item-wrapper">
                     <div class="post-item post-item-no-divider">
                         <div class="post-item-info-wrapper">
@@ -649,7 +701,7 @@ summary(lm.sol)
                     </div>
                 </div>
         
-            <a href="/archives/124/" class="a-block">
+            <a href="/posts/archives/2011-03-16-%E4%BD%BF%E7%94%A8ms3d%E4%B8%BAopengl%E5%BB%BA%E6%A8%A1/" class="a-block">
                 <div class="post-item-wrapper">
                     <div class="post-item post-item-no-divider">
                         <div class="post-item-info-wrapper">
@@ -741,57 +793,6 @@ for ( i = 0; i &amp;lt; nTriangles; i++ )
                             </div>
                             <div class="post-item-meta">
     2011-03-16
-    &emsp;
-    
-    
-    
-    &emsp;
-    
-</div>
-
-                        </div>
-                        
-                        
-                    </div>
-                </div>
-        
-            <a href="/archives/13/" class="a-block">
-                <div class="post-item-wrapper">
-                    <div class="post-item post-item-no-divider">
-                        <div class="post-item-info-wrapper">
-                            <div class="post-item-title">
-                                算法总结9—优化
-                            </div>
-                            <div class="post-item-summary">
-                                
-                                    <p>不同于之前的分类和聚类算法，优化的目的是尝试找到一个使成本函数输出最小化的值。这里主要包括两个算法：模拟退火算法和遗传算法。</p>
-<p><strong>成本函数</strong>:<br>
-接受一个经推测的题解，并返回一个数值结果，该值越大代表成本越高（题解表现越差），该值越小就表示题解越好。</p>
-<p><strong>模拟退火算法：</strong></p>
-<p>优化算法的目标可以看为寻找x使函数f(x)最小。</p>
-<p>但是严格的最小值往往是很难达到的，我们不得不把眼光投入到寻找一个尽可能好的次优解去。</p>
-<p>最简单的方法被称为随机法，即成千上万次的对x进行猜测，然后把这些x中使f(x)最小的一个作为答案。虽然这样很简单，但是效果很差。于是出现了爬山法。</p>
-<p>爬山法从一个随机解出发，然后不断向该解附近的使f(x)的值更小的x移动，直到当前x附近的解都比x差为止。为了使效果更好，我们可以从多个随机解出发重复着一个过程，将最好的一个作为答案。很容易就能认识到，这样找到的解是一个极值点，是一个局部最小值。</p>
-<p>爬山法虽然好，但是在其寻找最优解的过程中，前进的方向是固定的（使f(x)更小的方向），但是有时向其他方法前进也是必要的，因为f(x)可能先增大在变小成为最优的。</p>
-<p>于是就有了模拟退火法。</p>
-<p>该算法这源于固体的退火过程，即先将温度加到很高(大量原子被激发)，再缓慢降温(即退火)，则能使达到能量最低点。如果急速降温(即为淬火)则不能达到最低点。</p>
-<p>模拟退火法同样是从一个随机解出发。但是它在寻找最优解时并不一定是向更好的x移动，也有一定的概率向更差的x移动，这个概率开始较大，但是会随时间而渐渐变小，直到稳定。一般该概率可以定义为：p=e ^ (-  (highcost – lowcost ) / temperature )，其中temperature是随时间增大而变小的温度，开始温度很高时p -&gt; 1，后来会渐渐变小使p-&gt;0。</p>
-<p><strong>遗传算法：</strong></p>
-<p>遗传算法的思想来自生物的遗传和变异，算法以种群为单位（一个种群为一组既多个解），其算法的运行过程如下：</p>
-<ol>
-<li>随机生成一组初始解（初始种群）。</li>
-<li>计算种群中各个解的成本，然后进行排序。</li>
-<li>我们将种群中靠前（成本低）的解保留下来，删除其他解，这一过程称为精英选拔。</li>
-<li>对已有解进行微小的改变，将改变后的结果作为新的元素加入种群，这一过程称为变异。</li>
-<li>选择一些优秀的解两两组合，然后将他们按某种方式进行结合（如求平均），将得到的结果作为新的元素加入种群，这一过程称为交叉（配对）。</li>
-<li>不断重复2—5步，直到达到指定迭代次数或成本函数连续数代都没有更好的改善。</li>
-<li>得到一组解，该组解为算法输出。</li>
-</ol>
-<p>该系列结束，恩，也许以后学了更多，有了更好的了解后会回来改一改，谁知道呢？</p>
-                                
-                            </div>
-                            <div class="post-item-meta">
-    2009-09-30
     &emsp;
     
     

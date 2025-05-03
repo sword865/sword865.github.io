@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<title>Flash MLA Kernel分析</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5, user-scalable=5" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+      <script src="/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="/scss/dark-mode.min.cb53f1bee2b8900cb4f082afbf00175d6618f281cf9a2fe8619e3b52d20b5721.css" integrity="sha256-y1PxvuK4kAy08IKvvwAXXWYY8oHPmi/oYZ47UtILVyE=" media="screen">
+
+
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript"
+        async
+        src="https://cdn.bootcss.com/mathjax/2.7.3/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$'], ['\[\[','\]\]']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+});
+
+MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<style>
+code.has-jax {
+    font: inherit;
+    font-size: 100%;
+    background: inherit;
+    border: inherit;
+    color: #515151;
+}
+</style>
+
+
+</head>
+<body>
+    	<div id="app"><div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                    
+                
+                
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
+                    Archive
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/tags">
+                    Tags
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/about/">
+                    关于
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#get_mla_metadata" class="nav-get_mla_metadata">
+									get_mla_metadata
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#flash_mla_with_kvcache" class="nav-flash_mla_with_kvcache">
+									flash_mla_with_kvcache
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#flash_fwd_splitkv_mla_kernel" class="nav-flash_fwd_splitkv_mla_kernel">
+									flash_fwd_splitkv_mla_kernel
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#flash_fwd_splitkv_mla_combine_kernel" class="nav-flash_fwd_splitkv_mla_combine_kernel">
+									flash_fwd_splitkv_mla_combine_kernel
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%8f%82%e8%80%83%e6%96%87%e7%ab%a0" class="nav-参考文章">
+									参考文章：
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://sword865.github.io/">
+            悟剑阁
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://sword865.github.io/">
+        <div class="single-column-header-title">悟剑阁</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+
+            <div class="post-head-wrapper-text-only"
+                
+            >
+                <div class="post-title">
+                    Flash MLA Kernel分析
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2025-05-03 15:51
+                        </time>
+                        
+
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/cuda">CUDA</a>
+                                &nbsp;
+                            
+                                <a href="/tags/deepseek">DeepSeek</a>
+                                &nbsp;
+                            
+                                <a href="/tags/llm">LLM</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <p>准备对DeepSeek的开源项目整理一些文档，也顺便强化一下记忆，先从FlashMLA开始。</p>
+<p>FlashMLA是DeepSeek开源的MLA算子实现，这个实现主要给inference decoding用的，Training和prefill应该是另外一个算子。</p>
+<p>先拿下面的图表示一下MLA算子是在计算一个什么东西，这篇文章就不讲具体的推导了，反正这个算子大概就是下面的2个GEMM算子的融合。需要注意的是：</p>
+<ol>
+<li>这里矩阵K和矩阵V的共享一部分参数。</li>
+<li>图里只画显示了一个Query Head和一对KV Head的计算。在实际计算中还要num_kv_head和batch_size两个维度。</li>
+<li>两个GEMM中间其实还有一个sotfmax，不过这里可以通过online softmax算法把这块逻辑独立处理分块处理，所以不影响主流程。</li>
+</ol>
+<img width="600"  src="/images/2025/20250503/mla.png" class="center" />
+<p>Kernel的调用主要分两部分</p>
+<ol>
+<li>调用<code>get_mla_metadata</code>来计算一些metadata，用来优化kernel的执行</li>
+<li>调用<code>flash_mla_with_kvcache</code>进行计算</li>
+</ol>
+<p>在进入调用前，先大概说一下FlashMLA计算的拆分逻辑。这块和FlashDecoding很像，并没有要求一个thread-block必须处理一个完整的sequence，而是通过一个负载均衡算法，把所有的sequence放到一起，然后拆分成一个个的sequence-block，然后每个thread-block就去处理分配给它的那些block的计算，最后再把这些thread-block的结果用合并，得到正确的输出。</p>
+<p>大概是下面这个图的样子：</p>
+<img width="800"  src="/images/2025/20250503/computation-pattern.png" class="center" />
+<p>所以为了完成计算，第一步就是决定每个block需要处理哪些sub-sequence，也就是<code>get_mla_metadata</code>要完成的事情。</p>
+<h1 id="get_mla_metadata">get_mla_metadata</h1>
+<p>先看<code>get_mla_metadata</code>具体提供了哪些元数据，我们从repo提供的测试代码入手，考虑最简单的情况(batch_size=128, query_sequence_len=1, mean_key_sequence_len=4096, MTP=1, num_kv_head=1, num_q_head=16, TP=1, hidden_NoRoPE_dim=512, hidden_RoPE_dim=64, varlen=False)。</p>
+<pre tabindex="0"><code># cache_seqlens = tensor([4096, 4096, ..., 4096], dtype=torch.int32), size=batch_size, value=sequence_len
+# s_q=1 (query_sequence_len=1且MTP=1), h_q(num_q_head)=128 (TP=1=128/128) h_kv(num_kv_head)=1
+# 基于这些配置，计算mla kernel的metadata
+tile_scheduler_metadata, num_splits = get_mla_metadata(cache_seqlens, s_q * h_q // h_kv, h_kv)
+</code></pre><p>因为这里我们是在测试decoding步骤，所以有<code>query_sequence_len=1</code>，可以看到三个入参：</p>
+<ol>
+<li>kv cache的大小</li>
+<li>类似GQA的Group数量，这个参数表示每个kv head对应多少个query head。</li>
+<li>kv head的数量</li>
+</ol>
+<p><code>get_mla_metadata</code>会根据GPU中SM的数量和要处理的数据的大小，给每个SM分配任务。这个注意<code>get_mla_metadata_kernel</code>的参数为<code>&lt;&lt;&lt;1, 32, 0, stream&gt;&gt;&gt;</code>，因此所有计算会在1个warp中完成。</p>
+<p>这里的关键就是具体怎么给每个(每组)SM分配工作的.</p>
+<p>首先，每几个SM会一起处理一个kv head和一组query head的计算：</p>
+<pre tabindex="0"><code>int num_sm_parts = sm_count / num_heads_k / cutlass::ceil_div(num_heads_per_head_k, block_size_m);
+</code></pre><img width="600"  src="/images/2025/20250503/flash_mla_sm_part.png" class="center" />
+<p>然后，我们计算每组SM需要处理多少个block，然后把block分配到每一个SM，具体任务的分配过程为：</p>
+<ol>
+<li>根据batch size和<code>mean_key_sequence_len</code>计算出一共有多少个block。</li>
+<li>给每个SM分配工作，包括每个SM要处理的tile的索引和位置。</li>
+<li>记录一下每个sequnce的切分点的位置，用于在计算时把结果正确的合起来才能得到完整的注意力输出。</li>
+</ol>
+<p>OK, 这样我们就完成了对任务的划分，接下来进入关键的计算kernel。</p>
+<h1 id="flash_mla_with_kvcache">flash_mla_with_kvcache</h1>
+<p><code>flash_mla_with_kvcache</code>函数内部其实也是由2个子kernel组成的</p>
+<ol>
+<li><code>flash_fwd_splitkv_mla_kernel</code>: 通过for循环的方式，计算每个SM分配到的block的GEMM乘法。</li>
+<li><code>flash_fwd_splitkv_mla_combine_kernel</code>: 负责把多个block的计算结果合起来，得到最终的结果。</li>
+</ol>
+<h2 id="flash_fwd_splitkv_mla_kernel">flash_fwd_splitkv_mla_kernel</h2>
+<p>先看<code>flash_fwd_splitkv_mla_kernel</code>，这个kernel包括<code>num_m_block * num_query_head * num_sm_parts</code> 个thread-block。其中<code>num_m_block=seqlen_q/block_size_m(64)</code>。</p>
+<ul>
+<li><code>kernel&lt;&lt;&lt;dim3(num_m_block, params.h, params.num_sm_parts), Kernel_traits::kNThreads, smem_size, stream&gt;&gt;&gt;(params);</code></li>
+</ul>
+<p>注意，这里的<code>seqlen_q</code>并不是一开始的1了，实际上它等于<code>num_heads_per_head_k (seqlen_q = seqlen_q_ori * ngroups, 在MTP=1的情况下等于num_heads_per_head_k)</code>
+这样我们会发现：<code>num_m_block=cutlass::ceil_div(num_heads_per_head_k, block_size_m);</code></p>
+<p>回忆之前的SM分组公式，有</p>
+<pre tabindex="0"><code>SM数量 = num_sm_parts * num_heads_k * ceil_div(num_heads_per_head_k, block_size_m)
+       = num_sm_parts * ceil_div(num_heads_k * num_heads_per_head_k, block_size_m) 
+       = num_sm_parts * ceil_div(num_query_head, block_size_m)
+       = num_sm_parts * num_m_block
+</code></pre><p>因此SM的数量对应了thread-block的第一维和最后一维。</p>
+<p><code>dim3(num_m_block, params.h, params.num_sm_parts)</code>的这三个维度分别表示：</p>
+<ol>
+<li>这个thread-block处理哪一个block。</li>
+<li>这个thread-block应该处理哪的一个query head。</li>
+<li>这个thread-block在对应的SM Group内的编号。</li>
+</ol>
+<p>我们来看每个thread-block会计算什么，我们知道多个thread-block会共同完成分配给一个SM的block的计算。
+看代码发现这里其实有2重循环：</p>
+<ol>
+<li>外层循环会遍历所以分配给这个SM的query block。</li>
+<li>内层循环会遍历对应的KV cache block，计算出O的一个block。</li>
+</ol>
+<ul>
+<li>使用了Warp Specialization的策略，通过生产者&ndash;&gt;消费者的方式进行计算。
+<ul>
+<li>Warp Group 1：主要计算线程，负责大部分的注意力得分计算。</li>
+<li>Warp Group 2：使用double buffer的技术进行数据的加载，也参与一些计算。</li>
+</ul>
+</li>
+</ul>
+<p>这块代码比较复杂的，zhihu上有几篇文章写的挺清楚的，我就不一点点写分析了，画个图过来表示一下计算过程，对细节感兴趣的可以去看后面的几个参考的文章。</p>
+<img width="800"  src="/images/2025/20250503/flashmla_wap_spec.png" class="center" />
+<p>这里可以看到，Warp Group 0会计算GEMM1，但是GEMM2是由两个Warp Group共同计算的，每个Wrap计算其中一半。</p>
+<p>这里比较重要的几块逻辑：</p>
+<ol>
+<li>Warp Specialization</li>
+</ol>
+<pre tabindex="0"><code>  int warp_group_idx = cutlass::canonical_warp_group_idx();
+    if (warp_group_idx == 0) {
+        // 主要计算逻辑，包括矩阵乘法、归一化、概率矩阵的计算和输出
+        // thread 0 - 127
+        ....
+    } else {
+       // 主要负责加载数据
+       // thread 128 - 256
+    }
+</code></pre><ol start="2">
+<li>上面else逻辑中的双缓冲</li>
+</ol>
+<pre tabindex="0"><code>// 双缓冲区数据结构定义
+template&lt;typename Kernel_traits&gt;
+struct SharedStorageMLA {
+    union {
+        struct {
+               // 存储 Query、Key 和中间结果
+              ...
+              cute::array_aligned&lt;typename Kernel_traits::Element, 
+                  cute::cosize_v&lt;typename Kernel_traits::SmemLayoutK&gt; * 2&gt; smem_k;  // Double buffer
+              ...
+        }
+        ...
+    }
+}
+...
+
+ // 双缓冲策略(在warp group 1的代码里)：切换到第二个缓冲区
+if (n_block % 2 == 1) {           
+       // Double buffer for sK
+       constexpr int sK_offset = size(sK);
+       tSrK.data() = tSrK.data() + sK_offset / 8;
+       tOrVt.data() = tOrVt.data() + sK_offset / 8;
+}
+</code></pre><h2 id="flash_fwd_splitkv_mla_combine_kernel">flash_fwd_splitkv_mla_combine_kernel</h2>
+<p>最后的<code>flash_fwd_splitkv_mla_combine_kernel</code>比较简单，就是负责数据的合并：</p>
+<ol>
+<li>在Warp 0中计算各个block的Log-Sum-Exp最大值，获取全局归一化系数。</li>
+</ol>
+<pre tabindex="0"><code>for (int i = 0; i &lt; kNLsePerThread; ++i) max_lse = max(max_lse, local_lse[i]);
+</code></pre><ol start="2">
+<li>在Warp 0中计算缩放因子。</li>
+</ol>
+<pre tabindex="0"><code>for (int i = 0; i &lt; kNLsePerThread; ++i) {
+       const int split = i * 32 + tidx;
+       if (split &lt; actual_num_splits) sLseScale[split] = expf(local_lse[i] - global_lse);
+}
+</code></pre><ol start="3">
+<li>按照缩放因子，合并Output的输出，完成计算。</li>
+</ol>
+<pre tabindex="0"><code>for (int split = 0; split &lt; actual_num_splits; ++split) {
+       ...
+       ElementAccum lse_scale = sLseScale[split];
+       for (int i = 0; i &lt; size(tOrO); ++i) {
+              tOrO(i) += lse_scale * tOrOaccum(i);
+        }
+        ...
+}
+</code></pre><ol start="4">
+<li>把结果写回全局内存。</li>
+</ol>
+<h1 id="参考文章">参考文章：</h1>
+<ol>
+<li><a href="https://arxiv.org/abs/2405.04434">DeepSeek-V2: A Strong, Economical, and Efficient Mixture-of-Experts Language Model</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/26269071923">DeepSeek: FlashMLA代码解析</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/26080342823">flashMLA 深度解析</a></li>
+</ol>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">Last modified on 2025-05-03</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts">
+			Next<br>No newer posts.
+                </a>
+                
+                
+                
+                <a class="older-posts" href="/posts/2025/2025-04-20-vllm-paged-attention%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/">
+			Previous<br>vLLM Paged Attention代码分析
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://sword865.github.io/">
+    
+        <div class="nav-title">
+            悟剑阁
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+                
+            
+            
+            
+            <a class="a-block nav-link-item active" href="/posts">
+                Archive
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/about/">
+                关于
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	Copyright (c) 2015. All rights reserved.
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    <div class="toc-wrapper">
+        
+
+        
+        <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#get_mla_metadata" class="nav-get_mla_metadata">
+									get_mla_metadata
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#flash_mla_with_kvcache" class="nav-flash_mla_with_kvcache">
+									flash_mla_with_kvcache
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#flash_fwd_splitkv_mla_kernel" class="nav-flash_fwd_splitkv_mla_kernel">
+									flash_fwd_splitkv_mla_kernel
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#flash_fwd_splitkv_mla_combine_kernel" class="nav-flash_fwd_splitkv_mla_combine_kernel">
+									flash_fwd_splitkv_mla_combine_kernel
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%8f%82%e8%80%83%e6%96%87%e7%ab%a0" class="nav-参考文章">
+									参考文章：
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+        
+    </div>
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top"
+            :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+
+<div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	Copyright (c) 2015. All rights reserved.
+	
+</div>
+            </div>
+    
+    <script src="/js/journal.js"></script></body>
+</html>
