@@ -7,9 +7,157 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>Copyright (c) 2015. All rights reserved.</copyright>
-    <lastBuildDate>Sat, 03 May 2025 15:51:35 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 05 Jul 2025 15:03:26 +0800</lastBuildDate>
     
         <atom:link href="https://sword865.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>Tornado框架简析</title>
+        <link>https://sword865.github.io/posts/archives/2015-02-05-tornado%E6%A1%86%E6%9E%B6%E7%AE%80%E6%9E%90/</link>
+        <pubDate>Thu, 05 Feb 2015 00:00:00 +0000</pubDate>
+        
+        <guid>https://sword865.github.io/posts/archives/2015-02-05-tornado%E6%A1%86%E6%9E%B6%E7%AE%80%E6%9E%90/</guid>
+        <description>悟剑阁 https://sword865.github.io/posts/archives/2015-02-05-tornado%E6%A1%86%E6%9E%B6%E7%AE%80%E6%9E%90/ -&lt;p&gt;Tornado是一款轻量级的Web服务器，同时又是一个开发框架。采用单线程非阻塞I/O模型(epoll)，主要是为了应对高并发 访问量而被开发出来，尤其适用于comet应用。&lt;/p&gt;
+&lt;p&gt;Tornado服务器3大核心模块:&lt;/p&gt;
+&lt;p&gt;(1) IOLoop&lt;/p&gt;
+&lt;p&gt;Tornado为了实现高并发和高性能，使用了一个IOLoop来处理socket的读写事件，IOLoop基于epoll，可以高效的响应网络事件。这是Tornado高效的保证。&lt;/p&gt;
+&lt;p&gt;tornado.ioloop.IOLoop.instance().start()&lt;/p&gt;
+&lt;p&gt;IOLoop使用了单例模式，处理所有IO事件，&lt;/p&gt;
+&lt;p&gt;实现为EPollIOLoop-&amp;gt;PollIOLoop-&amp;gt;IOLoop-&amp;gt;Configurable&lt;/p&gt;
+&lt;p&gt;IOLoop中有四个重要的数据集： _events 和 _handlers 保存I/O事件和对应的处理器， _callbacks 和 _timeouts 保存（超时）回调。&lt;/p&gt;
+&lt;p&gt;关键函数：&lt;/p&gt;
+&lt;pre class=&#34;lang:python decode:true &#34;&gt;def initialize(self, impl, time_func=None):
+    super(PollIOLoop, self).initialize()
+    self._impl = impl
+    if hasattr(self._impl, &#39;fileno&#39;):
+        set_close_exec(self._impl.fileno())
+    self.time_func = time_func or time.time
+    #handlers 是一个函数集字典
+    self._handlers = {}
+    self._events = {}
+    #回调函数集合
+    self._callbacks = []
+    self._callback_lock = threading.Lock()
+    self._timeouts = []
+    self._cancellations = 0
+    self._running = False
+    self._stopped = False
+    self._closing = False
+    self._thread_ident = None
+    self._blocking_signal_threshold = None
+    self._timeout_counter = itertools.count()
+
+    # Create a pipe that we send bogus data to when we want to wake
+    # the I/O loop when it is idle
+    self._waker = Waker()
+    self.add_handler(self._waker.fileno(),
+                     lambda fd, events: self._waker.consume(),
+                     self.READ)&lt;/pre&gt;
+&lt;p&gt;其中，waker是一个发伪数据用的类，在需要时，我们可以用它唤醒空闲的I/O Loop。当我们调用add_callback时，为了让回调函数运行，可能会需要使用它发送一个伪数据。&lt;/p&gt;
+&lt;pre class=&#34;lang:python decode:true&#34;&gt;#将文件描述符发生相应的事件时的回调函数对应
+def add_handler(self, fd, handler, events):
+    &#34;&#34;&#34;Registers the given handler to receive the given events for fd.&#34;&#34;&#34;
+    self._handlers[fd] = stack_context.wrap(handler)
+    #在 epoll 中注册对应事件
+    #epoll_ctl
+    self._impl.register(fd, events | self.ERROR)
+&lt;/pre&gt;
+&lt;p&gt;其中stack_context.wrap()对handler进行封装，封装后记录了上下文信息。而_impl是对epoll的封装。&lt;/p&gt;
+&lt;p&gt;所以，只要把所有事件在IOLoop中进行注册，运行start函数后，就会进入进程的监听循环，循环监听所有的fd，并调用fd对应的handler。循环过程参考start()函数。&lt;/p&gt;
+&lt;pre class=&#34;lang:python decode:true&#34;&gt;def start(self):
+    while True:
+        with self._callback_lock:
+            callbacks = self._callbacks
+            self._callbacks = []
+        #运行所有callback
+        for callback in callbacks:
+            self._run_callback(callback)
+        #取事件
+        event_pairs = self._impl.poll(poll_timeout)
+        self._events.update(event_pairs)
+        while self._events:
+            fd, events = self._events.popitem()
+            try:
+                #调用事件handler
+                fd_obj, handler_func = self._handlers[fd]
+                handler_func(fd_obj, events)
+            except (OSError, IOError) as e:
+                if errno_from_exception(e) == errno.EPIPE:
+                    # Happens when the client closes the connection
+                    pass
+                else:
+                    self.handle_callback_exception(self._handlers.get(fd))
+            except Exception:
+                self.handle_callback_exception(self._handlers.get(fd))
+&lt;/pre&gt;
+&lt;p&gt;当poll中发现fp有read事件时，会调用对应的callback方法。如果fd是监听的fd，那么这个回调handler就是accept_handler函数(见下面HttpConnection的bind和add_scokets函数)。该方法会Accept连接并且紧跟着创建IOStream对象，read_until方法读完数据后，则调用_run_callback把处理函数（self._header_callback）加到IOLoop中，等到下次轮询时在最前面处理。&lt;/p&gt;
+&lt;p&gt;(2) IOStream&lt;/p&gt;
+&lt;p&gt;为了在处理请求的时候，实现对socket的异步读写， Tornado实现了IOStream类，用来处理socket的异步读写，负责异步通讯。&lt;/p&gt;
+&lt;p&gt;主要包括3个函数，&lt;/p&gt;
+&lt;p&gt;1.read_bytes(bytes,callback)在有固定的字节的数据到来的时候调用回调函数&lt;/p&gt;
+&lt;p&gt;2.read_until(delimiter,callback)在读取到固定的字符序列结尾后调用回调函数&lt;/p&gt;
+&lt;p&gt;3.write(data)：异步写&lt;/p&gt;
+&lt;p&gt;(3) HTTPConnection&lt;/p&gt;
+&lt;p&gt;这个类用来处理http的请求， 包括读取http请求头， 读取post过来的数据，调用用户自定义的处理方法。以及把响应数据写给客户端socket。&lt;/p&gt;
+&lt;pre class=&#34;lang:python decode:true&#34;&gt;def bind(self, port, address=None, family=socket.AF_UNSPEC, backlog=128): 
+    sockets = bind_sockets(port, address=address, family=family,backlog=backlog)
+        if self._started:
+            self.add_sockets(sockets)
+        else:
+            self._pending_sockets.extend(sockets)
+def add_sockets(self, sockets):
+    if self.io_loop is None:
+        self.io_loop = IOLoop.current()
+    for sock in sockets:
+        self._sockets[sock.fileno()] = sock
+        add_accept_handler(sock, self._handle_connection,io_loop=self.io_loop)
+&lt;/pre&gt;
+&lt;p&gt;socket启动后，监听各个sockets，事件到来时，调用_handle_connection。&lt;/p&gt;
+&lt;pre class=&#34;lang:python decode:true &#34;&gt;def _handle_connection(self, connection, address):
+    if self.ssl_options is not None:
+        connection = ssl_wrap_socket(connection,self.ssl_options,
+                                     server_side=True,
+                                     do_handshake_on_connect=False)
+        if self.ssl_options is not None:
+            stream = SSLIOStream(connection, io_loop=self.io_loop,
+                                 max_buffer_size=self.max_buffer_size,
+                                 read_chunk_size=self.read_chunk_size)
+        else:
+            stream = IOStream(connection, io_loop=self.io_loop,
+                              max_buffer_size=self.max_buffer_size,
+                              read_chunk_size=self.read_chunk_size)
+        self.handle_stream(stream, address)
+def handle_stream(self, stream, address):
+    context = _HTTPRequestContext(stream, address,
+                                  self.protocol)
+    conn = HTTP1ServerConnection(
+        stream, self.conn_params, context)
+    self._connections.add(conn)
+    conn.start_serving(self)
+def start_serving(self, delegate):
+    assert isinstance(delegate, httputil.HTTPServerConnectionDelegate)
+    self._serving_future = self._server_request_loop(delegate)
+    # Register the future on the IOLoop so its errors get logged.
+    self.stream.io_loop.add_future(self._serving_future,
+                                   lambda f: f.result())
+&lt;/pre&gt;
+&lt;p&gt;如前面所述，这里Accept连接并且紧跟着创建IOStream对象(不考虑https)，调用handle_stream-&amp;gt;start_serving-&amp;gt;_server_request_loop处理请求。最后会调用_read_message读取数据，并注册回调函数。&lt;/p&gt;
+&lt;p&gt;最后抄一张图过来：&lt;/p&gt;
+&lt;img class=&#34;alignnone wp-image-108 size-large&#34; src=&#34;https://sword865.github.io/wp-content/uploads/2015/02/QQ20150205-1@2x-1024x593.png&#34; alt=&#34;QQ20150205-1@2x&#34; width=&#34;615&#34; height=&#34;356&#34; /&gt;
+&lt;p&gt;参考：&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://www.cnblogs.com/Bozh/archive/2012/07/22/2603976.html&#34;&gt;http://www.cnblogs.com/Bozh/archive/2012/07/22/2603976.html&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://kenby.iteye.com/blog/1159621&#34;&gt;http://kenby.iteye.com/blog/1159621&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://www.nowamagic.net/academy/detail/13321030&#34;&gt;http://www.nowamagic.net/academy/detail/13321030&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://www.yeolar.com/note/2013/02/09/tornado-async-networking/&#34;&gt;http://www.yeolar.com/note/2013/02/09/tornado-async-networking/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/tornadoweb/tornado&#34;&gt;https://github.com/tornadoweb/tornado&lt;/a&gt;&lt;/p&gt;
+&lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
+  &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
+&lt;/p&gt;
+- https://sword865.github.io/posts/archives/2015-02-05-tornado%E6%A1%86%E6%9E%B6%E7%AE%80%E6%9E%90/ - Copyright (c) 2015. All rights reserved.</description>
+        </item>
     
     
     
@@ -663,129 +811,6 @@ ex&amp;lt;-data.frame(x1=200,x2=3000)
 predict(lm.sol,ex,interval=&#34;prediction&#34;,level=0.95)&lt;/pre&gt;
 &lt;p&gt; &lt;/p&gt;
 - https://sword865.github.io/posts/archives/2012-06-30-r%E8%AF%AD%E8%A8%80%E7%B3%BB%E5%88%97-%E5%9B%9E%E5%BD%92%E5%88%86%E6%9E%90/ - Copyright (c) 2015. All rights reserved.</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>简单讲一下使用MS3D为opengl建模</title>
-        <link>https://sword865.github.io/posts/archives/2011-03-16-%E4%BD%BF%E7%94%A8ms3d%E4%B8%BAopengl%E5%BB%BA%E6%A8%A1/</link>
-        <pubDate>Wed, 16 Mar 2011 00:00:00 +0000</pubDate>
-        
-        <guid>https://sword865.github.io/posts/archives/2011-03-16-%E4%BD%BF%E7%94%A8ms3d%E4%B8%BAopengl%E5%BB%BA%E6%A8%A1/</guid>
-        <description>悟剑阁 https://sword865.github.io/posts/archives/2011-03-16-%E4%BD%BF%E7%94%A8ms3d%E4%B8%BAopengl%E5%BB%BA%E6%A8%A1/ -&lt;p&gt;做毕设的时候写的东西，贴上来吧…………&lt;/p&gt;
-&lt;p&gt;由于在OPENGL只能通过程序语言绘制模型，远不能达到可见既可得的目的。因此，比起3DMAX、MAYA等可视化3D建模工具，OPENGL模型的建立就相当的困难，为了简化这一问题的处理，可以使用简单小巧的MS3D来完成可见即可得的绘制过程。&lt;/p&gt;
-&lt;p&gt;MS3D的文件有着非常简单良好的文件结构，可从该文件中完美读取在可视工具中绘制的3D图形模型包含的点、线、面等各项基本结构的参数与位置，并在OPENGL根据读取结果即可进行绘制重现该模型。&lt;/p&gt;
-&lt;p&gt;MS3D全名为MilkShape3D，是一款简单小巧的3D可视化图形建模工具，可以简单的使用各种点、线面等基本图形元素组合建立模型，并进行贴图，分组。进一步的，该工具还支持简单的骨骼动画制作，是一款非常好用的3D图形构建工具。&lt;/p&gt;
-&lt;p&gt;[&lt;img class=&#34;alignnone  wp-image-125&#34; src=&#34;https://sword865.github.io/wp-content/uploads/2015/02/ms3d-300x164.jpg&#34; alt=&#34;ms3d&#34; width=&#34;428&#34; height=&#34;234&#34; /&gt;][1]&lt;/p&gt;
-&lt;p&gt;在建立了MS3D中完成模型建立后可保存为.ms3d的文件格式，通过对该文件格式进行分析，就可以了解文件结构，以在程序中通过读取该文件重现所见模型。&lt;/p&gt;
-&lt;p&gt;该文件依次包括6段信息，除第一段文件头外，其它每段的开始位置都记录了该段中元素的数目，可用于计算该段的具体大小。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;文件头:大小固定为14字节。前10个字节为固定的标志 MS3D000000&amp;lt;-其中后6个字节就是字符0（即值为48）后4个字节为该模型格式的版本号，这4个字节为一个有符号整数，目前该版本号的值为3或4，两种版本的格式细节不同。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;点数据：紧接着文件头的就是模型的顶点数据部分，顶点部分的头两个字节为一个无符号整数，表示有多少个顶点。之后便是一个接一个的顶点的具体数据，包括可见性，x,y,z的坐标和绑定骨骼的ID编号(未绑定骨骼则为-1)。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;多边形数据: 紧接着顶点数据的是多边形数据（三角形），多边形部分头两个字节是一个无符号整数，表示有多少个三角形。之后便是一个接一个的三角形数据。主要记录了每个三角形结构，包括顶点索引，顶点法线（用于光照计算），纹理坐标和组信息。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;组信息：即网格信息，出于灵活性的考虑，模型的一个个三角形被按照网格或是组来划分。网格部分头两个字节是一个无符号整数，表示有得多少个网格。之后便是一个接一个的网格数据，每个网格结构的大小可能不同（因为他们拥有的三角形数不同）。主要包括网格的名字（字符串），三角形数量、三角形索引和材质索引（无材质则为-1）。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;材质信息：贴图、颜色等材质部分。头两个字节是一个无符号整数，表示有多少个材质。之后便是一个接一个的材质信息。包括材质名、环境光、漫射光、高光、自发光、发光值、透明度、贴图文件名、透明贴图文件名。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;骨骼信息： 动画、动作等。该结构是MS3D中的动态结构，仅当建立动态动画时存在，包括一种名为关键帧的结构，记录时间与对应的坐标系变换。骨骼信息，一开始是两个字节的无符号整数，表示一共有多少个骨骼，之后便是一个个的骨骼，骨骼的大小不是固定的。主要包括了骨骼名字，父骨骼名字，初始旋转与初始平移、以及之后的各个旋转与平移关键帧。&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;在分析了解了MS3D的文件格式后，就可以通过编写程序读取MS3D文件并根据该文件建立模型了，对应于MS3D的不同分段，可以依次建立6种结构体分别对应每段内容：&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;MS3DHeader     /\*包含ms3d文件的版本信息\*
-MS3DVertex     /\*顶点信息\*/
-MS3DMaterial   /\*材质(纹理贴图等)信息\*/
-MS3DTriangle   /\*绘制三角形信息\*/
-MS3DJoint      /\*节点(骨骼)信息\*/
-MS3DKeyframe   /\*关键窗口\*/
-//an example for vertex
-struct MS3DVertex
-{
-  unsigned char m_ucFlags;   //编辑器用标志
-  CVector3 m_vVert;        //x,y,z的坐标
-  char m_cBone;        //Bone ID （-1 ,没有骨头）
-  unsigned char m_mcUnused;      //保留，未使用
-};
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;(1)第一个成员表示了该顶点在编辑器中的状态（引擎中不是必须）其各个值的含义如下：&lt;/p&gt;
-&lt;p&gt;0：顶点可见，未选中状态&lt;/p&gt;
-&lt;p&gt;1：顶点可见，选中状态&lt;/p&gt;
-&lt;p&gt;2：顶点不可见，未选中状态&lt;/p&gt;
-&lt;p&gt;3：顶点不可见，选中状态&lt;/p&gt;
-&lt;p&gt;(2)第二个成员为顶点的坐标，CVector3为三个float型组成，总共12字节&lt;/p&gt;
-&lt;p&gt;(3)第三个成员为该顶点所绑定的骨骼的ID号，如果该值为-1 则代表没有绑定任何骨骼（静态）&lt;/p&gt;
-&lt;p&gt;(4)第四个成员不包含任何信息，直接略过。&lt;/p&gt;
-&lt;p&gt;将MS3D各段内容分别导入对应的结构体，将其读入内存。&lt;/p&gt;
-&lt;p&gt;多边形（三角形）结构读取示范：&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;//内存空间分配
-// pPtr为文件读取偏移指针
-int nTriangles = *( word* )pPtr;
-m_numTriangles = nTriangles;
-m_pTriangles = new Triangle[nTriangles];
-pPtr += sizeof( word );
-//读取每个三角型
-for ( i = 0; i &amp;amp;lt; nTriangles; i++ )
-{
-  MS3DTriangle *pTriangle = ( MS3DTriangle* )pPtr;
-  int vertexIndices[3] = {
-    pTriangle-&amp;amp;gt;m_vertexIndices[0], 
-    pTriangle-&amp;amp;gt;m_vertexIndices[1], 
-    pTriangle-&amp;amp;gt;m_vertexIndices[2] 
-  };
-  float t[3] = { 1.0f-pTriangle-&amp;amp;gt;m_t[0], 1.0f-pTriangle-&amp;amp;gt;m_t[1], 1.0f-pTriangle-&amp;amp;gt;m_t[2] };
-  //数据读取
-  memcpy( m_pTriangles[i].m_vertexNormals, pTriangle-&amp;amp;gt;m_vertexNormals, sizeof( float )*3*3 );
-  memcpy( m_pTriangles[i].m_s, pTriangle-&amp;amp;gt;m_s, sizeof( float )*3 );
-  memcpy( m_pTriangles[i].m_t, t, sizeof( float )*3 );
-  memcpy( m_pTriangles[i].m_vertexIndices, vertexIndices, sizeof( int )*3 );
-  //文件读取指针前进
-  pPtr += sizeof( MS3DTriangle );
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;要注意得是，因为MS3D使用窗口坐标系而OpenGL使用笛卡儿坐标系，所以需要反转每个顶点Y方向的纹理坐标。&lt;/p&gt;
-&lt;p&gt;除了读取模型信息外，还需要根据材质信息段中各种材质的贴图文件路径，读入对应的贴图文件，用以完成贴图。&lt;/p&gt;
-&lt;p&gt;通过对上一步中得到的各种结构体进行解析，可以得到以下以一些简单的基础结构：&lt;/p&gt;
-&lt;p&gt;Mesh   /*网格*/&lt;/p&gt;
-&lt;p&gt;Material  /*材质*/&lt;/p&gt;
-&lt;p&gt;Triangle  /*三角形*/&lt;/p&gt;
-&lt;p&gt;Vertex   /*定点*/&lt;/p&gt;
-&lt;p&gt;不同于以上结构体严格对应了MS3D各段存储结构，这些结构体仅仅包含了简单的图形信息，非常方便之后的绘制操作。&lt;/p&gt;
-&lt;p&gt;在读入MS3D文件后，可以使用OPENGL函数根据读入的数据与模型的信息，按网格分组，分别绘制每一组的数据。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;//按网格分组绘制
-for ( int i = 0; i &amp;amp;lt; m_numMeshes; i++ )
-{
-  //材质，贴图等
-  ………………………
-  //开始绘制多边形（三角形）
-  glBegin( GL_TRIANGLES );
-  {
-    for ( int j = 0; j &amp;amp;lt; m_pMeshes[i].m_numTriangles; j++ ){
-    ……………………….
-    //三角形所有顶点绘制
-    for ( int k = 0; k &amp;amp;lt; 3; k++ )
-    {
-      //单个点的绘制
-      ………………….
-    }
-  }
-  glEnd();
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;通过这种方法，就可以在程序中绘制一个个的具体模型：&lt;/p&gt;
-&lt;img class=&#34;alignnone  wp-image-127&#34; src=&#34;https://sword865.github.io/wp-content/uploads/2015/02/ballfight-300x168.jpg&#34; alt=&#34;ballfight&#34; width=&#34;352&#34; height=&#34;197&#34; /&gt;
-&lt;p&gt; &lt;/p&gt;
-&lt;p&gt;[1]&lt;a href=&#34;http://blog.sina.com.cn/s/blog_62d98a550100g5hh.html&#34;&gt;http://blog.sina.com.cn/s/blog_62d98a550100g5hh.html&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;[2]&lt;a href=&#34;http://www.yakergong.net/nehe/course/tutorial_31.html&#34;&gt;http://www.yakergong.net/nehe/course/tutorial_31.html&lt;/a&gt;&lt;/p&gt;
-- https://sword865.github.io/posts/archives/2011-03-16-%E4%BD%BF%E7%94%A8ms3d%E4%B8%BAopengl%E5%BB%BA%E6%A8%A1/ - Copyright (c) 2015. All rights reserved.</description>
         </item>
     
     

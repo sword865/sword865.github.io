@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<title>Ray Data反压机制</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5, user-scalable=5" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+      <script src="/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="/scss/dark-mode.min.cb53f1bee2b8900cb4f082afbf00175d6618f281cf9a2fe8619e3b52d20b5721.css" integrity="sha256-y1PxvuK4kAy08IKvvwAXXWYY8oHPmi/oYZ47UtILVyE=" media="screen">
+
+
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript"
+        async
+        src="https://cdn.bootcss.com/mathjax/2.7.3/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$'], ['\[\[','\]\]']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+});
+
+MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<style>
+code.has-jax {
+    font: inherit;
+    font-size: 100%;
+    background: inherit;
+    border: inherit;
+    color: #515151;
+}
+</style>
+
+
+</head>
+<body>
+    	<div id="app"><div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                    
+                
+                
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
+                    Archive
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/tags">
+                    Tags
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/about/">
+                    关于
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#ray-core-generator%e5%af%b9%e8%b1%a1%e6%95%b0%e9%87%8f%e5%8f%8d%e5%8e%8b" class="nav-ray-core-generator对象数量反压">
+									Ray Core Generator：对象数量反压
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#streaming-executor--resource-allocator" class="nav-streaming-executor--resource-allocator">
+									Streaming Executor &#43; Resource Allocator
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e9%a2%84%e7%ae%97%e5%88%86%e9%85%8d" class="nav-预算分配">
+									预算分配
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#reserved_for_op_outputs" class="nav-reserved_for_op_outputs">
+									reserved_for_op_outputs
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#_op_reserved%e5%92%8c_op_budgets" class="nav-_op_reserved和_op_budgets">
+									_op_reserved和_op_budgets
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%8d%95%e4%b8%aatask%e7%94%9f%e6%88%90%e9%80%9f%e5%ba%a6%e7%9a%84%e6%8e%a7%e5%88%b6" class="nav-单个task生成速度的控制">
+									单个Task生成速度的控制
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#task%e6%8f%90%e4%ba%a4%e9%80%9f%e5%ba%a6%e7%9a%84%e6%8e%a7%e5%88%b6" class="nav-task提交速度的控制">
+									Task提交速度的控制
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#backpressure-policies-%e5%85%b6%e4%bb%96%e5%85%b3%e4%ba%8e%e4%bb%bb%e5%8a%a1%e6%8f%90%e4%ba%a4%e7%9a%84%e5%8f%8d%e5%8e%8b%e8%a7%84%e5%88%99" class="nav-backpressure-policies-其他关于任务提交的反压规则">
+									Backpressure Policies: 其他关于任务提交的反压规则。
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://sword865.github.io/">
+            悟剑阁
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://sword865.github.io/">
+        <div class="single-column-header-title">悟剑阁</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+
+            <div class="post-head-wrapper-text-only"
+                
+            >
+                <div class="post-title">
+                    Ray Data反压机制
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2025-07-05 15:03
+                        </time>
+                        
+
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/ray">Ray</a>
+                                &nbsp;
+                            
+                                <a href="/tags/data">Data</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <p>做Ray Platform也快2年了，遇到过各种的问题，整理一些踩过的坑看一下。</p>
+<p>先从我们自己最常用的Ray Data开始，看看最常见的OOM/OOD问题，这个问题很多时候都是和反压相关的。</p>
+<p>说是Ray Data，不过这里的反压不止一层，大概包括下面几个地方：</p>
+<ol>
+<li><strong>Ray Core Generator</strong>：针对Ray Generators的控制，防止后台生成的数据过多导致OOM/OOD。</li>
+<li><strong>Streaming Executor + Resource Allocator</strong>:
+<ul>
+<li>针对正在执行的任务，控制生成结果的速度，避免单个任务生成的数据过多导致OOM/OOD。</li>
+<li>针对单个Operator，控制提交任务的数量，避免在资源紧张时提交新任务。</li>
+</ul>
+</li>
+<li><strong>Backpressure Policies</strong>: 其他关于任务提交的反压规则。</li>
+</ol>
+<p>下面我们逐层分析这些机制的实现。</p>
+<h2 id="ray-core-generator对象数量反压">Ray Core Generator：对象数量反压</h2>
+<p><a href="https://docs.ray.io/en/latest/ray-core/ray-generator.html">Ray Generator</a> 类似Python Generator，用来作为迭代器进行遍历，但是和Python Generator有一个很大的不同在于：Ray Generator使用<code>ObjectRefGenerator</code>在后台持续执行。也就是说如果Ray Data的单个read_task需要读取一个很大的文件时，没法通过控制拉取任务产出的速度来控制任务的内存占用。（不管下游是否主动拉取，都会持续读取新的数据block。）</p>
+<p>针对这个问题，Ray Generators支持手动配置一个threshold(_generator_backpressure_num_objects parameter)来对Generators进行反压。</p>
+<p>核心逻辑在<code>task_manager.cc</code>中的<code>HandleReportGeneratorItemReturns</code>这个方法里面。这个函数逻辑比较复杂，里面还有比如乱序/幂等等问题的处理，我们只看反压状态的管理：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>  <span style="color:#75715e">// 请求的item的index
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">int64_t</span> item_index <span style="color:#f92672">=</span> request.item_index();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 生成器已生产的对象数量
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">auto</span> total_generated <span style="color:#f92672">=</span> stream_it<span style="color:#f92672">-&gt;</span>second.TotalNumObjectWritten();
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">//已被消费的对象数量  
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">auto</span> total_consumed <span style="color:#f92672">=</span> stream_it<span style="color:#f92672">-&gt;</span>second.TotalNumObjectConsumed();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// item已经被消费了，说明消费速度足够快，不用反压。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">if</span> (stream_it<span style="color:#f92672">-&gt;</span>second.IsObjectConsumed(item_index)) {
+</span></span><span style="display:flex;"><span>    execution_signal_callback(Status<span style="color:#f92672">::</span>OK(), total_consumed);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> false;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// Otherwise, follow the regular backpressure logic.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#75715e">// NOTE, here we check `item_index - last_consumed_index &gt;= backpressure_threshold`,
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#75715e">// instead of the number of unconsumed items, because we may receive the
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#75715e">// `HandleReportGeneratorItemReturns` requests out of order.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">if</span> (backpressure_threshold <span style="color:#f92672">!=</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span> <span style="color:#f92672">&amp;&amp;</span>
+</span></span><span style="display:flex;"><span>      (item_index <span style="color:#f92672">-</span> stream_it<span style="color:#f92672">-&gt;</span>second.LastConsumedIndex()) <span style="color:#f92672">&gt;=</span> backpressure_threshold) {
+</span></span><span style="display:flex;"><span>    RAY_LOG(DEBUG) <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;Stream &#34;</span> <span style="color:#f92672">&lt;&lt;</span> generator_id
+</span></span><span style="display:flex;"><span>                   <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34; is backpressured. total_generated: &#34;</span> <span style="color:#f92672">&lt;&lt;</span> total_generated
+</span></span><span style="display:flex;"><span>                   <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;. total_consumed: &#34;</span> <span style="color:#f92672">&lt;&lt;</span> total_consumed
+</span></span><span style="display:flex;"><span>                   <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;. threshold: &#34;</span> <span style="color:#f92672">&lt;&lt;</span> backpressure_threshold;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">auto</span> signal_it <span style="color:#f92672">=</span> ref_stream_execution_signal_callbacks_.find(generator_id);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (signal_it <span style="color:#f92672">==</span> ref_stream_execution_signal_callbacks_.end()) {
+</span></span><span style="display:flex;"><span>      execution_signal_callback(Status<span style="color:#f92672">::</span>NotFound(<span style="color:#e6db74">&#34;Stream is deleted.&#34;</span>), <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>    } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>      signal_it<span style="color:#f92672">-&gt;</span>second.push_back(execution_signal_callback);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// No need to backpressure.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    execution_signal_callback(Status<span style="color:#f92672">::</span>OK(), total_consumed);
+</span></span><span style="display:flex;"><span>  }
+</span></span></code></pre></div><p>所以未消费对象数量达到阈值时，Ray Generator会暂停任务执行。</p>
+<p>在Ray Data中，taskpool和actor pool都默认设置了<code>_generator_backpressure_num_objects</code>参数来控制数据的生成，以<code>TaskPoolMapOperator</code>为例：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;_generator_backpressure_num_objects&#34;</span> <span style="color:#f92672">not</span> <span style="color:#f92672">in</span> dynamic_ray_remote_args
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">and</span> self<span style="color:#f92672">.</span>data_context<span style="color:#f92672">.</span>_max_num_blocks_in_streaming_gen_buffer <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> <span style="color:#66d9ef">None</span>
+</span></span><span style="display:flex;"><span>        ):
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># 2 objects for each block: the block and the block metadata.</span>
+</span></span><span style="display:flex;"><span>            dynamic_ray_remote_args[<span style="color:#e6db74">&#34;_generator_backpressure_num_objects&#34;</span>] <span style="color:#f92672">=</span> (
+</span></span><span style="display:flex;"><span>                <span style="color:#ae81ff">2</span> <span style="color:#f92672">*</span> self<span style="color:#f92672">.</span>data_context<span style="color:#f92672">.</span>_max_num_blocks_in_streaming_gen_buffer
+</span></span><span style="display:flex;"><span>            )
+</span></span></code></pre></div><h2 id="streaming-executor--resource-allocator">Streaming Executor + Resource Allocator</h2>
+<p>虽然Ray Core提供了基础反压的接口，但是运行Ray Data任务的时候，还是有其他问题，其中最核心的问题就是<em>是否需要消费上游算子生成的结果</em>？</p>
+<h3 id="预算分配">预算分配</h3>
+<p>Ray使用了预算预分配的方式，给Ray Data任务的每个operator都分配了一个预算，这个预算包括2部分：</p>
+<h4 id="reserved_for_op_outputs"><code>reserved_for_op_outputs</code></h4>
+<ul>
+<li>为算子输出数据预留的内存空间。</li>
+<li>用来保证有足够的内存来存储算子的输出数据，防止所有预算都被pending task outputs占用。</li>
+</ul>
+<h4 id="_op_reserved和_op_budgets"><code>_op_reserved</code>和<code>_op_budgets</code></h4>
+<ul>
+<li><code>_op_reserved</code>：每个算子的预留资源。</li>
+<li><code>_op_budgets</code>: 根据实际情况算出来的，算子可以使用的资源，大致上<code>op_budgets[op] = max(_op_reserved[op] - 当前使用量, 0) + 分配的共享资源</code></li>
+</ul>
+<p>预算分配的逻辑在<code>resource_manager.py</code>里，整个逻辑大概包括：</p>
+<ol>
+<li>把整个object store分为reserved资源(<code>op_total_reserved</code>)和shared资源(<code>_total_shared</code>)两部分。</li>
+<li>给每个算子分配一个初始的budget(<code>op_total_reserved</code>)。</li>
+<li>把budget分成2份：<code>reserved_for_op_outputs</code>和<code>_op_reserved</code></li>
+<li>根据算子实际使用的内存情况，计算每个算子剩余的budget数量。（从<code>_op_reserved</code>得到<code>_op_budgets</code>）。</li>
+<li>把共享资源按需分配到各个算子的<code>_op_budgets</code>。</li>
+<li>特殊算子处理：对materializing算子如AllToAllOperator不做任何限制。</li>
+</ol>
+<h3 id="单个task生成速度的控制">单个Task生成速度的控制</h3>
+<p>有了budget以后，就可以对Ray Data中的每个算子进行反压了，先看正在执行的Ray Generator Task的反压：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># ...</span>
+</span></span><span style="display:flex;"><span> <span style="color:#75715e"># 对有结果产生的任务，计算还可以输出的bytes，控制任务输出。</span>
+</span></span><span style="display:flex;"><span> <span style="color:#66d9ef">for</span> task <span style="color:#f92672">in</span> ready_tasks:
+</span></span><span style="display:flex;"><span>    bytes_read <span style="color:#f92672">=</span> task<span style="color:#f92672">.</span>on_data_ready(
+</span></span><span style="display:flex;"><span>        max_bytes_to_read_per_op<span style="color:#f92672">.</span>get(state, <span style="color:#66d9ef">None</span>)
+</span></span><span style="display:flex;"><span>    )
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> state <span style="color:#f92672">in</span> max_bytes_to_read_per_op:
+</span></span><span style="display:flex;"><span>        max_bytes_to_read_per_op[state] <span style="color:#f92672">-=</span> bytes_read
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># ...</span>
+</span></span></code></pre></div><p>其中<code>on_data_ready</code>会从Ray Generator消费数据，并且一旦消费的数据量达到预算限制就会停止消费：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">on_data_ready</span>(self, max_bytes_to_read: Optional[int]) <span style="color:#f92672">-&gt;</span> int:
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;当数据准备就绪时的回调&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    bytes_read <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> max_bytes_to_read <span style="color:#f92672">is</span> <span style="color:#66d9ef">None</span> <span style="color:#f92672">or</span> bytes_read <span style="color:#f92672">&lt;</span> max_bytes_to_read:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>            block_ref <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>_streaming_gen<span style="color:#f92672">.</span>_next_sync(<span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> block_ref<span style="color:#f92672">.</span>is_nil():
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">break</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">except</span> <span style="color:#a6e22e">StopIteration</span>:
+</span></span><span style="display:flex;"><span>            self<span style="color:#f92672">.</span>_task_done_callback(<span style="color:#66d9ef">None</span>)
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">break</span>
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 处理数据块并累计读取字节数</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># bytes_read += process_block(block_ref)</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> bytes_read
+</span></span></code></pre></div><p>预算的限制则来自<code>max_task_output_bytes_to_read</code>，计算逻辑就是分配的资源减去使用的资源。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">max_task_output_bytes_to_read</span>(self, op: PhysicalOperator) <span style="color:#f92672">-&gt;</span> Optional[int]:
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># ...</span>
+</span></span><span style="display:flex;"><span>        res <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>_op_budgets[op]<span style="color:#f92672">.</span>object_store_memory
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Add the remaining of `_reserved_for_op_outputs`.</span>
+</span></span><span style="display:flex;"><span>        op_outputs_usage <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>_get_op_outputs_usage_with_downstream(op)
+</span></span><span style="display:flex;"><span>        res <span style="color:#f92672">+=</span> max(self<span style="color:#f92672">.</span>_reserved_for_op_outputs[op] <span style="color:#f92672">-</span> op_outputs_usage, <span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> math<span style="color:#f92672">.</span>isinf(res):
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">None</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># corner case的处理，略。        </span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> res        
+</span></span></code></pre></div><p>这样就控制了每个task的Generator的消费速度，防止任何单个操作符占用过多内存。</p>
+<h3 id="task提交速度的控制">Task提交速度的控制</h3>
+<p>除了限制单个任务的消费，Ray Data还会控制任务的提交，即在算子budget不足时停止提交该算子的任务。</p>
+<p>这块逻辑比较简单，由streaming executor的<code>select_operator_to_run</code>方法控制</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>    ops <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> op, state <span style="color:#f92672">in</span> topology<span style="color:#f92672">.</span>items():
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">assert</span> resource_manager<span style="color:#f92672">.</span>op_resource_allocator_enabled(), topology
+</span></span><span style="display:flex;"><span>        under_resource_limits <span style="color:#f92672">=</span> (
+</span></span><span style="display:flex;"><span>            resource_manager<span style="color:#f92672">.</span>op_resource_allocator<span style="color:#f92672">.</span>can_submit_new_task(op)
+</span></span><span style="display:flex;"><span>        )
+</span></span><span style="display:flex;"><span>        in_backpressure <span style="color:#f92672">=</span> <span style="color:#f92672">not</span> under_resource_limits <span style="color:#f92672">or</span> any(
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">not</span> p<span style="color:#f92672">.</span>can_add_input(op) <span style="color:#66d9ef">for</span> p <span style="color:#f92672">in</span> backpressure_policies
+</span></span><span style="display:flex;"><span>        )
+</span></span></code></pre></div><p>其中<code>can_submit_new_task</code>就是在判断是否有足够的资源可以提交新的任务。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">can_submit_new_task</span>(self, op: PhysicalOperator) <span style="color:#f92672">-&gt;</span> bool:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> op <span style="color:#f92672">not</span> <span style="color:#f92672">in</span> self<span style="color:#f92672">.</span>_op_budgets:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">True</span>
+</span></span><span style="display:flex;"><span>        budget <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>_op_budgets[op]
+</span></span><span style="display:flex;"><span>        res <span style="color:#f92672">=</span> op<span style="color:#f92672">.</span>incremental_resource_usage()<span style="color:#f92672">.</span>satisfies_limit(budget)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> res
+</span></span></code></pre></div><h2 id="backpressure-policies-其他关于任务提交的反压规则"><strong>Backpressure Policies</strong>: 其他关于任务提交的反压规则。</h2>
+<p>最后一个<code>Backpressure Policies</code>其实就是前面<code>select_operator_to_run</code>方法里提到的<code>backpressure_policies</code>了：</p>
+<p>回顾一下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>        in_backpressure <span style="color:#f92672">=</span> <span style="color:#f92672">not</span> under_resource_limits <span style="color:#f92672">or</span> any(
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">not</span> p<span style="color:#f92672">.</span>can_add_input(op) <span style="color:#66d9ef">for</span> p <span style="color:#f92672">in</span> backpressure_policies
+</span></span><span style="display:flex;"><span>        )
+</span></span></code></pre></div><p>这里目前其实只有一个策略，就是并发度的控制策略，没什么好说的，就是看一下正在运行的任务数量是否达到设置的并发上限。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ConcurrencyCapBackpressurePolicy</span>(BackpressurePolicy):
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;A backpressure policy that caps the concurrency of each operator.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    The policy will limit the number of concurrently running tasks based on its
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    concurrency cap parameter.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    NOTE: Only support setting concurrency cap for `TaskPoolMapOperator` for now.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    TODO(chengsu): Consolidate with actor scaling logic of `ActorPoolMapOperator`.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># .....</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">can_add_input</span>(self, op: <span style="color:#e6db74">&#34;PhysicalOperator&#34;</span>) <span style="color:#f92672">-&gt;</span> bool:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> op<span style="color:#f92672">.</span>metrics<span style="color:#f92672">.</span>num_tasks_running <span style="color:#f92672">&lt;</span> self<span style="color:#f92672">.</span>_concurrency_caps[op]
+</span></span></code></pre></div>
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">Last modified on 2025-07-05</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts">
+			Next<br>No newer posts.
+                </a>
+                
+                
+                
+                <a class="older-posts" href="/posts/2025/2025-05-03-flashmla-kernel%E5%88%86%E6%9E%90/">
+			Previous<br>Flash MLA Kernel分析
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://sword865.github.io/">
+    
+        <div class="nav-title">
+            悟剑阁
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+                
+            
+            
+            
+            <a class="a-block nav-link-item active" href="/posts">
+                Archive
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/about/">
+                关于
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	Copyright (c) 2015. All rights reserved.
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    <div class="toc-wrapper">
+        
+
+        
+        <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#ray-core-generator%e5%af%b9%e8%b1%a1%e6%95%b0%e9%87%8f%e5%8f%8d%e5%8e%8b" class="nav-ray-core-generator对象数量反压">
+									Ray Core Generator：对象数量反压
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#streaming-executor--resource-allocator" class="nav-streaming-executor--resource-allocator">
+									Streaming Executor &#43; Resource Allocator
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e9%a2%84%e7%ae%97%e5%88%86%e9%85%8d" class="nav-预算分配">
+									预算分配
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#reserved_for_op_outputs" class="nav-reserved_for_op_outputs">
+									reserved_for_op_outputs
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#_op_reserved%e5%92%8c_op_budgets" class="nav-_op_reserved和_op_budgets">
+									_op_reserved和_op_budgets
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%8d%95%e4%b8%aatask%e7%94%9f%e6%88%90%e9%80%9f%e5%ba%a6%e7%9a%84%e6%8e%a7%e5%88%b6" class="nav-单个task生成速度的控制">
+									单个Task生成速度的控制
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#task%e6%8f%90%e4%ba%a4%e9%80%9f%e5%ba%a6%e7%9a%84%e6%8e%a7%e5%88%b6" class="nav-task提交速度的控制">
+									Task提交速度的控制
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#backpressure-policies-%e5%85%b6%e4%bb%96%e5%85%b3%e4%ba%8e%e4%bb%bb%e5%8a%a1%e6%8f%90%e4%ba%a4%e7%9a%84%e5%8f%8d%e5%8e%8b%e8%a7%84%e5%88%99" class="nav-backpressure-policies-其他关于任务提交的反压规则">
+									Backpressure Policies: 其他关于任务提交的反压规则。
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+        
+    </div>
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top"
+            :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+
+<div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	Copyright (c) 2015. All rights reserved.
+	
+</div>
+            </div>
+    
+    <script src="/js/journal.js"></script></body>
+</html>

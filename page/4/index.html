@@ -181,6 +181,66 @@ code.has-jax {
     <div class="post-list-container post-list-container-no-background">
         
         
+            <a href="/posts/archives/2009-09-05-%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%931-%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%88%86%E7%B1%BB%E5%99%A8/" class="a-block">
+                <div class="post-item-wrapper">
+                    <div class="post-item post-item-no-divider">
+                        <div class="post-item-info-wrapper">
+                            <div class="post-item-title">
+                                算法总结1—贝叶斯分类器
+                            </div>
+                            <div class="post-item-summary">
+                                
+                                    <p> 这几天以很快的速度翻完了&lt;集体智慧编程&gt;,因为只是对里面的算法感兴趣,对那些web2.0的应用没什么感觉,所以很多地方都是一扫而过,现在按最后一章的顺序来对所有相关的算法作一个详细的复习….</p>
+<p>这个是第一篇……贝叶斯分类器</p>
+<p><strong>数学基础：</strong></p>
+<p><strong>条件概率</strong></p>
+<p>定义：设A, B是两个事件，且P(A)&gt;0 称P(B∣A)=P(AB)/P(A)为在条件 A下发生的条件事件B发生的条件概率。</p>
+<p><strong>乘法公式</strong></p>
+<p>设P(A)&gt;0，则有P(AB)=P(B∣A)P(A)</p>
+<p><strong>全概率公式和贝叶斯公式</strong></p>
+<p>定义: 设S为试验E的样本空间，B1, B2, …Bn为E的一组事件，若BiBj=Ф, i≠j, i, j=1, 2, …,n; B1∪B2∪…∪Bn=S则称B1, B2, …, Bn为样本空间的一个划分。</p>
+<p><strong>定理</strong></p>
+<p>设试验E的样本空间为，A为E的事件，B1, B2, …,Bn为的一个划分，且P(Bi)&gt;0(i=1, 2, …n)，则P(A)=P(A∣B1)P(B1)+P(A∣B2)+ …+P(A∣Bn)P(Bn)称为全概率公式。</p>
+<p><strong>定理</strong></p>
+<p>设试验E的样本空间为S，A为E的事件，B1, B2, …,Bn为的一个划分，则P(Bi∣A)=P(A∣Bi)P(Bi)/∑P(B｜Aj)P(Aj)=P(B｜Ai)P(Ai)/P(B)称为贝叶斯公式。</p>
+<p>说明：i，j均为下标，求和均是1到n</p>
+<p><strong>贝叶斯分类器原理：</strong></p>
+<p>通过某些特征对不同的内容进行分类。</p>
+<p><strong>特征的定义</strong></p>
+<p>任何可以用来判断内容中具备或缺失的东西。如要对文档进行分类时，所谓的内容就是文档，特征就是文档中的单词(当然你也可以选择其他合理的东西)</p>
+<p>当向贝叶斯分类器输入一个要进行分类的样本后，分类器会先对该样本进行分析，确定其特征，然后将根据这些特征时，计算样本属于各分类的概率。</p>
+<p>朴素贝叶斯分类器的具体工作步骤：</p>
+<ol>
+<li>学习：向分类器输入一系列的训练数据，注意这些数据是包括其所属类别的，分类器将对训练数据进行分析，计算出</li>
+</ol>
+<p>1.各个特征在各个分类中出现的概率(=某分类中具有该特征的数据数目/该分类数目)如先计算出各个单词在各种分类的文档出现的概率。</p>
+<p>将该概率作为某分类下某特征出现的条件概率P(feature|category)</p>
+<p>2.任选一个样本属于某分类的概率(=某分类文章数 / 文章总数)</p>
+<p>记该概率为p(category)</p>
+<p>在朴素的贝叶斯分类器中，我们假设将要组合的各个概率相互独立(当然，很多时候并非如此。我们有时会发现，当样本拥有某一特征时，则它就更可能拥有另一项特征。)</p>
+<p>2)分类计算：在向分类器提供大量学习数据后，我们就可以用它对新的样本进行分类了。</p>
+<p>首先对样本进行分析，找出其具有的各种特征，利用这些特征，我们来计算各个分类中出现该样本的概率p(sample | category)。为了完成这一计算，我们只要简单将该分类下在该文档中出现过的特征出现的条件概率相乘即可。即∏P(feature | category) 这里的feature是该样本拥有的所有特征。</p>
+<p>但是，我们实际要计算的是P (category | sample),即给定样本属于某分类的条件概率。</p>
+<p>这里，就用到了贝叶斯定理：P(A | B)=P(B | A)P(A) / P(B)</p>
+<p>这里就是：P(category | sample)= P(sample | category)P(category) / P(sample)</p>
+                                
+                            </div>
+                            <div class="post-item-meta">
+    2009-09-05
+    &emsp;
+    
+    
+    
+    &emsp;
+    
+</div>
+
+                        </div>
+                        
+                        
+                    </div>
+                </div>
+        
             <a href="/posts/archives/2009-08-25-%E8%AF%BB%E4%BD%A0%E7%9A%84%E7%81%AF%E4%BA%AE%E8%BF%99%E4%B9%88-%E8%B5%B0%E5%87%BA%E9%97%AE%E9%A2%98%E7%9A%84%E4%B9%8C%E6%89%98%E9%82%A6/" class="a-block">
                 <div class="post-item-wrapper">
                     <div class="post-item post-item-no-divider">
@@ -778,244 +838,6 @@ for(i=1;i&lt;=m,i++){
                     </div>
                 </div>
         
-            <a href="/posts/archives/2009-03-14-%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%E8%99%8E%E4%B9%A6java%E7%89%88%E6%9C%AC-chapter-2-3/" class="a-block">
-                <div class="post-item-wrapper">
-                    <div class="post-item post-item-no-divider">
-                        <div class="post-item-info-wrapper">
-                            <div class="post-item-title">
-                                编译原理虎书java版本–Chapter 2-3
-                            </div>
-                            <div class="post-item-summary">
-                                
-                                    <p>文件：</p>
-<pre><code>options {
-    JAVA_UNICODE_ESCAPE = true;
-}
-PARSER_BEGIN(MiniJavaParser)
-public class MiniJavaParser {}
-PARSER_END(MiniJavaParser)
-// Insert a specification of a lexical analysis here.
-TOKEN :
-{
-    &lt; LPAREN: &quot;(&quot; &gt;
-        | &lt; RPAREN: &quot;)&quot; &gt;
-        | &lt; LSQPAREN: &quot;[&quot; &gt;
-        | &lt; RSQPAREN: &quot;]&quot; &gt;
-        | &lt; LBRACE: &quot;{&quot; &gt;
-        | &lt; RBRACE: &quot;}&quot; &gt;
-        | &lt; DOT: &quot;.&quot; &gt;
-        | &lt; ASSIGN: &quot;=&quot; &gt;
-        | &lt; LT: &quot;&lt;&quot; &gt;
-        | &lt; PLUS: &quot;+&quot; &gt;
-        | &lt; MINUS: &quot;-&quot; &gt;
-        | &lt; AND : &quot;&amp;&amp;&quot; &gt;
-        | &lt; NOT : &quot;!&quot; &gt;
-        | &lt; SEMICOLON: &quot;;&quot; &gt;
-        | &lt; PUBLIC: &quot;public&quot; &gt;
-        | &lt; RETURN: &quot;return&quot; &gt;
-        | &lt; BOOLEAN: &quot;boolean&quot; &gt;
-        | &lt; CLASS: &quot;class&quot; &gt;
-        | &lt; INTERFACE: &quot;interface&quot; &gt;
-        | &lt; ELSE: &quot;else&quot; &gt;
-        | &lt; EXTENDS: &quot;extends&quot; &gt;
-        | &lt; FALSE: &quot;false&quot; &gt;
-        | &lt; IF: &quot;if&quot; &gt;
-        | &lt; WHILE: &quot;while&quot; &gt;
-        | &lt; INTEGER: &quot;int&quot; &gt;
-        | &lt; LENGTH: &quot;length&quot; &gt;
-        | &lt; MAIN: &quot;main&quot; &gt;
-        | &lt; NEW: &quot;new&quot; &gt;
-        | &lt; STATIC: &quot;static&quot; &gt;
-        | &lt; STRING: &quot;String&quot; &gt;
-        | &lt; THIS: &quot;this&quot; &gt;
-        | &lt; TRUE: &quot;true&quot; &gt;
-        | &lt; PRINT: &quot;System.out.println&quot; &gt;
-        | &lt; VOID: &quot;void&quot; &gt;
-    }
-    TOKEN : /* LITERALS */
-    {
-        &lt; INTEGER_LITERAL: ( [&quot;1&quot;-&quot;9&quot;] ([&quot;0&quot;-&quot;9&quot;])* | &quot;0&quot; ) &gt;
-    }
-    TOKEN : /* IDENTIFIERS */
-    {
-        &lt; IDENTIFIER: (|)* &gt;
-        |
-        &lt; #LETTER:
-        [
-        &quot;u0024&quot;,
-        &quot;u0041&quot;-&quot;u005a&quot;,
-        &quot;u005f&quot;,
-        &quot;u0061&quot;-&quot;u007a&quot;,
-        &quot;u00c0&quot;-&quot;u00d6&quot;,
-        &quot;u00d8&quot;-&quot;u00f6&quot;,
-        &quot;u00f8&quot;-&quot;u00ff&quot;,
-        &quot;u0100&quot;-&quot;u1fff&quot;,
-        &quot;u3040&quot;-&quot;u318f&quot;,
-        &quot;u3300&quot;-&quot;u337f&quot;,
-        &quot;u3400&quot;-&quot;u3d2d&quot;,
-        &quot;u4e00&quot;-&quot;u9fff&quot;,
-        &quot;uf900&quot;-&quot;ufaff&quot;
-        ]
-        |
-        &lt; #DIGIT:
-        [
-        &quot;u0030&quot;-&quot;u0039&quot;,
-        &quot;u0660&quot;-&quot;u0669&quot;,
-        &quot;u06f0&quot;-&quot;u06f9&quot;,
-        &quot;u0966&quot;-&quot;u096f&quot;,
-        &quot;u09e6&quot;-&quot;u09ef&quot;,
-        &quot;u0a66&quot;-&quot;u0a6f&quot;,
-        &quot;u0ae6&quot;-&quot;u0aef&quot;,
-        &quot;u0b66&quot;-&quot;u0b6f&quot;,
-        &quot;u0be7&quot;-&quot;u0bef&quot;,
-        &quot;u0c66&quot;-&quot;u0c6f&quot;,
-        &quot;u0ce6&quot;-&quot;u0cef&quot;,
-        &quot;u0d66&quot;-&quot;u0d6f&quot;,
-        &quot;u0e50&quot;-&quot;u0e59&quot;,
-        &quot;u0ed0&quot;-&quot;u0ed9&quot;,
-        &quot;u1040&quot;-&quot;u1049&quot;
-        ]
-    }
-    SKIP :
-    {
-        &lt; &quot; &quot; &gt;
-        | &lt; &quot;t&quot; &gt;
-        | &lt; &quot;n&quot; &gt;
-        | &lt; &quot;r&quot; &gt;
-        | &lt; &quot;//&quot; (~[&quot;n&quot;])* &quot;n&quot; &gt;
-        | &lt;&quot;/*&quot; (~[&quot;*&quot;])* &quot;*&quot; (~[&quot;/&quot;] (~[&quot;*&quot;])* &quot;*&quot;)* &quot;/&quot;&gt;
-    }
-    // The following is a simple grammar that will allow you
-    // to test the generated lexer.
-    void Program() :
-    {}
-    {
-        MainClass() (ClassDecl())*
-    }
-    void MainClass() :
-    {}
-    {
-        &quot;class&quot; &quot;{&quot; &quot;public&quot; &quot;static&quot; &quot;void&quot; &quot;main&quot; &quot;(&quot; &quot;String&quot; &quot;[&quot; &quot;]&quot; &quot;{&quot; Statement() &quot;}&quot; &quot;}&quot;
-    }
-    void ext() :
-    {}
-    {
-        (&quot;extends&quot;  )?
-    }
-    void ClassDecl() :
-    {}
-    {
-        &quot;class&quot; ext()  &quot;{&quot; (VarDecl())* (MethodDecl())* &quot;}&quot;
-    }
-    void VarDecl():
-    {}
-    { Type() &quot;;&quot;}
-    void MethodDecl():
-    {}
-    {&quot;public&quot; Type()
-        &quot;(&quot; FormaList() &quot;)&quot;
-        &quot;{&quot; ( LOOKAHEAD(2) VarDecl() )* (Statement())*  &quot;return&quot; Exp() &quot;;&quot; &quot;}&quot;
-    }
-    void FormaList():
-    {}
-    {(Type()  &quot;FormalRest()&quot;)?}
-    void FormaRest():
-    {}
-    {&quot;,&quot; Type() }
-    void Type():
-    {}
-    {
-        |&quot;boolean&quot;
-        |LOOKAHEAD(2)
-        &quot;int&quot;
-        |&quot;int&quot; &quot;[&quot; &quot;]&quot;
-    }
-    void Statement():
-    {}
-    {&quot;{&quot; (Statement())* &quot;}&quot;
-    |&quot;while&quot; &quot;(&quot; Exp() &quot;)&quot; Statement()
-    |&quot;System.out.println&quot;  &quot;(&quot; Exp() &quot;)&quot;
-    | instat1() &quot;=&quot; Exp() &quot;;&quot;
-    |&quot;if&quot; &quot;(&quot; Exp() &quot;)&quot; Statement() inif()
-}
-void inif():
-{}
-{(LOOKAHEAD(2) &quot;else&quot; Statement())?}
-void instat1():
-{}
-{(&quot;[&quot; Exp() &quot;]&quot;)?}
-void Exp():
-{}
-{Expa() (LOOKAHEAD(2) (Expb()))?
-}
-void Expa():
-{}
-{&quot;true&quot;
-    |&quot;false&quot;
-    |
-    |&quot;this&quot;
-    |&quot;!&quot; Exp()
-    |&quot;(&quot; Exp() &quot;)&quot;
-    |LOOKAHEAD(2)
-    &quot;new&quot; &quot;int&quot; &quot;[&quot; Exp() &quot;]&quot;
-    |&quot;new&quot; &quot;(&quot; &quot;)&quot;
-}
-void Expb():
-{}
-{
-    op() Exp()
-    |&quot;[&quot; Exp() &quot;]&quot;Exp()
-    |LOOKAHEAD(2)
-    &quot;.&quot; &quot;length&quot;
-    |&quot;.&quot;
-}
-void op():
-{}
-{&quot;&amp;&amp;&quot;
-    |&quot;&lt;&quot;
-    |&quot;+&quot;
-    |&quot;-&quot;
-    |&quot;*&quot;}
-    void ExpList():
-    {}
-    {(Exp()  (ExpRest())*)?}
-    void ExpRest():
-    {}
-    {&quot;,&quot; Exp()}
-    void Goal() :
-    {}
-    {
-        ( MiniJavaToken() )*
-    }
-    void MiniJavaToken():
-    {}
-    {
-        &quot;class&quot;  |  | &quot;{&quot; | &quot;public&quot; | &quot;static&quot; | &quot;void&quot; |
-            &quot;main&quot; | &quot;(&quot; | &quot;String&quot;  | &quot;[&quot; | &quot;]&quot; | &quot;)&quot; | &quot;}&quot; | &quot;extends&quot; | &quot;;&quot;
-            | &quot;return&quot; | &quot;,&quot; | &quot;int&quot; | &quot;boolean&quot; | &quot;=&quot; | &quot;if&quot; | &quot;else&quot; | &quot;while&quot;
-            | &quot;System.out.println&quot; | &quot;&amp;&amp;&quot; | &quot;&lt;&quot; | &quot;+&quot; | &quot;-&quot; | &quot;*&quot; | &quot;.&quot; |
-            &quot;length&quot; | | &quot;true&quot; | &quot;false&quot; | &quot;this&quot; | &quot;new&quot; |
-            &quot;!&quot;
-    }
-</code></pre>
-                                
-                            </div>
-                            <div class="post-item-meta">
-    0001-01-01
-    &emsp;
-    
-    
-    
-    &emsp;
-    
-</div>
-
-                        </div>
-                        
-                        
-                    </div>
-                </div>
-        
         </a>
     </div>
 
@@ -1115,13 +937,12 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
         <div class="pagination-indicator">
             <span style="text-align: center">
                 4<br>
-                <div style="display: inline-block; transform: rotate(-28deg)">-</div><br>4
+                <div style="display: inline-block; transform: rotate(-28deg)">-</div><br>5
             </span>
         </div>
 
 
-        <a class="pagination-action" 
-            style="visibility:hidden">
+        <a class="pagination-action"  href="/page/5/">
             
             <i class="material-icons pagination-action-icon">
                 chevron_right
@@ -1143,11 +964,12 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
     </a>
 
         <div class="pagination-indicator">
-            <span>4/4</span>
+            <span>4/5</span>
         </div>
 
         
-            <a class="pagination-action" style="opacity:0">
+        <a class="pagination-action" href="/page/5/"
+           style="opacity:1">
         
                 <i class="material-icons pagination-action-icon">
                     chevron_right

@@ -1,0 +1,18 @@
+<?xml-stylesheet href="/rss.xsl" type="text/xsl"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>悟剑阁</title>
+    <link>https://sword865.github.io/</link>
+    <description>Recent content on 悟剑阁</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <copyright>Copyright (c) 2015. All rights reserved.</copyright>
+    <lastBuildDate>Sat, 05 Jul 2025 15:03:26 +0800</lastBuildDate>
+    
+        <atom:link href="https://sword865.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+    
+  </channel>
+</rss> 

@@ -181,6 +181,112 @@ code.has-jax {
     <div class="post-list-container post-list-container-no-background">
         
         
+            <a href="/posts/archives/2011-03-16-%E4%BD%BF%E7%94%A8ms3d%E4%B8%BAopengl%E5%BB%BA%E6%A8%A1/" class="a-block">
+                <div class="post-item-wrapper">
+                    <div class="post-item post-item-no-divider">
+                        <div class="post-item-info-wrapper">
+                            <div class="post-item-title">
+                                简单讲一下使用MS3D为opengl建模
+                            </div>
+                            <div class="post-item-summary">
+                                
+                                    <p>做毕设的时候写的东西，贴上来吧…………</p>
+<p>由于在OPENGL只能通过程序语言绘制模型，远不能达到可见既可得的目的。因此，比起3DMAX、MAYA等可视化3D建模工具，OPENGL模型的建立就相当的困难，为了简化这一问题的处理，可以使用简单小巧的MS3D来完成可见即可得的绘制过程。</p>
+<p>MS3D的文件有着非常简单良好的文件结构，可从该文件中完美读取在可视工具中绘制的3D图形模型包含的点、线、面等各项基本结构的参数与位置，并在OPENGL根据读取结果即可进行绘制重现该模型。</p>
+<p>MS3D全名为MilkShape3D，是一款简单小巧的3D可视化图形建模工具，可以简单的使用各种点、线面等基本图形元素组合建立模型，并进行贴图，分组。进一步的，该工具还支持简单的骨骼动画制作，是一款非常好用的3D图形构建工具。</p>
+<p>[<img class="alignnone  wp-image-125" src="/wp-content/uploads/2015/02/ms3d-300x164.jpg" alt="ms3d" width="428" height="234" />][1]</p>
+<p>在建立了MS3D中完成模型建立后可保存为.ms3d的文件格式，通过对该文件格式进行分析，就可以了解文件结构，以在程序中通过读取该文件重现所见模型。</p>
+<p>该文件依次包括6段信息，除第一段文件头外，其它每段的开始位置都记录了该段中元素的数目，可用于计算该段的具体大小。</p>
+<ul>
+<li>
+<p>文件头:大小固定为14字节。前10个字节为固定的标志 MS3D000000&lt;-其中后6个字节就是字符0（即值为48）后4个字节为该模型格式的版本号，这4个字节为一个有符号整数，目前该版本号的值为3或4，两种版本的格式细节不同。</p>
+</li>
+<li>
+<p>点数据：紧接着文件头的就是模型的顶点数据部分，顶点部分的头两个字节为一个无符号整数，表示有多少个顶点。之后便是一个接一个的顶点的具体数据，包括可见性，x,y,z的坐标和绑定骨骼的ID编号(未绑定骨骼则为-1)。</p>
+</li>
+<li>
+<p>多边形数据: 紧接着顶点数据的是多边形数据（三角形），多边形部分头两个字节是一个无符号整数，表示有多少个三角形。之后便是一个接一个的三角形数据。主要记录了每个三角形结构，包括顶点索引，顶点法线（用于光照计算），纹理坐标和组信息。</p>
+</li>
+<li>
+<p>组信息：即网格信息，出于灵活性的考虑，模型的一个个三角形被按照网格或是组来划分。网格部分头两个字节是一个无符号整数，表示有得多少个网格。之后便是一个接一个的网格数据，每个网格结构的大小可能不同（因为他们拥有的三角形数不同）。主要包括网格的名字（字符串），三角形数量、三角形索引和材质索引（无材质则为-1）。</p>
+</li>
+<li>
+<p>材质信息：贴图、颜色等材质部分。头两个字节是一个无符号整数，表示有多少个材质。之后便是一个接一个的材质信息。包括材质名、环境光、漫射光、高光、自发光、发光值、透明度、贴图文件名、透明贴图文件名。</p>
+</li>
+<li>
+<p>骨骼信息： 动画、动作等。该结构是MS3D中的动态结构，仅当建立动态动画时存在，包括一种名为关键帧的结构，记录时间与对应的坐标系变换。骨骼信息，一开始是两个字节的无符号整数，表示一共有多少个骨骼，之后便是一个个的骨骼，骨骼的大小不是固定的。主要包括了骨骼名字，父骨骼名字，初始旋转与初始平移、以及之后的各个旋转与平移关键帧。</p>
+</li>
+</ul>
+<p>在分析了解了MS3D的文件格式后，就可以通过编写程序读取MS3D文件并根据该文件建立模型了，对应于MS3D的不同分段，可以依次建立6种结构体分别对应每段内容：</p>
+<pre><code>MS3DHeader     /\*包含ms3d文件的版本信息\*
+MS3DVertex     /\*顶点信息\*/
+MS3DMaterial   /\*材质(纹理贴图等)信息\*/
+MS3DTriangle   /\*绘制三角形信息\*/
+MS3DJoint      /\*节点(骨骼)信息\*/
+MS3DKeyframe   /\*关键窗口\*/
+//an example for vertex
+struct MS3DVertex
+{
+  unsigned char m_ucFlags;   //编辑器用标志
+  CVector3 m_vVert;        //x,y,z的坐标
+  char m_cBone;        //Bone ID （-1 ,没有骨头）
+  unsigned char m_mcUnused;      //保留，未使用
+};
+</code></pre>
+<p>(1)第一个成员表示了该顶点在编辑器中的状态（引擎中不是必须）其各个值的含义如下：</p>
+<p>0：顶点可见，未选中状态</p>
+<p>1：顶点可见，选中状态</p>
+<p>2：顶点不可见，未选中状态</p>
+<p>3：顶点不可见，选中状态</p>
+<p>(2)第二个成员为顶点的坐标，CVector3为三个float型组成，总共12字节</p>
+<p>(3)第三个成员为该顶点所绑定的骨骼的ID号，如果该值为-1 则代表没有绑定任何骨骼（静态）</p>
+<p>(4)第四个成员不包含任何信息，直接略过。</p>
+<p>将MS3D各段内容分别导入对应的结构体，将其读入内存。</p>
+<p>多边形（三角形）结构读取示范：</p>
+<pre><code>//内存空间分配
+// pPtr为文件读取偏移指针
+int nTriangles = *( word* )pPtr;
+m_numTriangles = nTriangles;
+m_pTriangles = new Triangle[nTriangles];
+pPtr += sizeof( word );
+//读取每个三角型
+for ( i = 0; i &amp;lt; nTriangles; i++ )
+{
+  MS3DTriangle *pTriangle = ( MS3DTriangle* )pPtr;
+  int vertexIndices[3] = {
+    pTriangle-&amp;gt;m_vertexIndices[0], 
+    pTriangle-&amp;gt;m_vertexIndices[1], 
+    pTriangle-&amp;gt;m_vertexIndices[2] 
+  };
+  float t[3] = { 1.0f-pTriangle-&amp;gt;m_t[0], 1.0f-pTriangle-&amp;gt;m_t[1], 1.0f-pTriangle-&amp;gt;m_t[2] };
+  //数据读取
+  memcpy( m_pTriangles[i].m_vertexNormals, pTriangle-&amp;gt;m_vertexNormals, sizeof( float )*3*3 );
+  memcpy( m_pTriangles[i].m_s, pTriangle-&amp;gt;m_s, sizeof( float )*3 );
+  memcpy( m_pTriangles[i].m_t, t, sizeof( float )*3 );
+  memcpy( m_pTriangles[i].m_vertexIndices, vertexIndices, sizeof( int )*3 );
+  //文件读取指针前进
+  pPtr += sizeof( MS3DTriangle );
+}
+</code></pre>
+<p>要注意得是，因为MS3D使用窗口坐标系而OpenGL使用笛卡儿坐标系，所以需要反转每个顶点Y方向的纹理坐标。</p>
+                                
+                            </div>
+                            <div class="post-item-meta">
+    2011-03-16
+    &emsp;
+    
+    
+    
+    &emsp;
+    
+</div>
+
+                        </div>
+                        
+                        
+                    </div>
+                </div>
+        
             <a href="/posts/archives/2009-09-30-%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%939-%E4%BC%98%E5%8C%96/" class="a-block">
                 <div class="post-item-wrapper">
                     <div class="post-item post-item-no-divider">
@@ -683,66 +789,6 @@ ans=ent
                     </div>
                 </div>
         
-            <a href="/posts/archives/2009-09-05-%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%931-%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%88%86%E7%B1%BB%E5%99%A8/" class="a-block">
-                <div class="post-item-wrapper">
-                    <div class="post-item post-item-no-divider">
-                        <div class="post-item-info-wrapper">
-                            <div class="post-item-title">
-                                算法总结1—贝叶斯分类器
-                            </div>
-                            <div class="post-item-summary">
-                                
-                                    <p> 这几天以很快的速度翻完了&lt;集体智慧编程&gt;,因为只是对里面的算法感兴趣,对那些web2.0的应用没什么感觉,所以很多地方都是一扫而过,现在按最后一章的顺序来对所有相关的算法作一个详细的复习….</p>
-<p>这个是第一篇……贝叶斯分类器</p>
-<p><strong>数学基础：</strong></p>
-<p><strong>条件概率</strong></p>
-<p>定义：设A, B是两个事件，且P(A)&gt;0 称P(B∣A)=P(AB)/P(A)为在条件 A下发生的条件事件B发生的条件概率。</p>
-<p><strong>乘法公式</strong></p>
-<p>设P(A)&gt;0，则有P(AB)=P(B∣A)P(A)</p>
-<p><strong>全概率公式和贝叶斯公式</strong></p>
-<p>定义: 设S为试验E的样本空间，B1, B2, …Bn为E的一组事件，若BiBj=Ф, i≠j, i, j=1, 2, …,n; B1∪B2∪…∪Bn=S则称B1, B2, …, Bn为样本空间的一个划分。</p>
-<p><strong>定理</strong></p>
-<p>设试验E的样本空间为，A为E的事件，B1, B2, …,Bn为的一个划分，且P(Bi)&gt;0(i=1, 2, …n)，则P(A)=P(A∣B1)P(B1)+P(A∣B2)+ …+P(A∣Bn)P(Bn)称为全概率公式。</p>
-<p><strong>定理</strong></p>
-<p>设试验E的样本空间为S，A为E的事件，B1, B2, …,Bn为的一个划分，则P(Bi∣A)=P(A∣Bi)P(Bi)/∑P(B｜Aj)P(Aj)=P(B｜Ai)P(Ai)/P(B)称为贝叶斯公式。</p>
-<p>说明：i，j均为下标，求和均是1到n</p>
-<p><strong>贝叶斯分类器原理：</strong></p>
-<p>通过某些特征对不同的内容进行分类。</p>
-<p><strong>特征的定义</strong></p>
-<p>任何可以用来判断内容中具备或缺失的东西。如要对文档进行分类时，所谓的内容就是文档，特征就是文档中的单词(当然你也可以选择其他合理的东西)</p>
-<p>当向贝叶斯分类器输入一个要进行分类的样本后，分类器会先对该样本进行分析，确定其特征，然后将根据这些特征时，计算样本属于各分类的概率。</p>
-<p>朴素贝叶斯分类器的具体工作步骤：</p>
-<ol>
-<li>学习：向分类器输入一系列的训练数据，注意这些数据是包括其所属类别的，分类器将对训练数据进行分析，计算出</li>
-</ol>
-<p>1.各个特征在各个分类中出现的概率(=某分类中具有该特征的数据数目/该分类数目)如先计算出各个单词在各种分类的文档出现的概率。</p>
-<p>将该概率作为某分类下某特征出现的条件概率P(feature|category)</p>
-<p>2.任选一个样本属于某分类的概率(=某分类文章数 / 文章总数)</p>
-<p>记该概率为p(category)</p>
-<p>在朴素的贝叶斯分类器中，我们假设将要组合的各个概率相互独立(当然，很多时候并非如此。我们有时会发现，当样本拥有某一特征时，则它就更可能拥有另一项特征。)</p>
-<p>2)分类计算：在向分类器提供大量学习数据后，我们就可以用它对新的样本进行分类了。</p>
-<p>首先对样本进行分析，找出其具有的各种特征，利用这些特征，我们来计算各个分类中出现该样本的概率p(sample | category)。为了完成这一计算，我们只要简单将该分类下在该文档中出现过的特征出现的条件概率相乘即可。即∏P(feature | category) 这里的feature是该样本拥有的所有特征。</p>
-<p>但是，我们实际要计算的是P (category | sample),即给定样本属于某分类的条件概率。</p>
-<p>这里，就用到了贝叶斯定理：P(A | B)=P(B | A)P(A) / P(B)</p>
-<p>这里就是：P(category | sample)= P(sample | category)P(category) / P(sample)</p>
-                                
-                            </div>
-                            <div class="post-item-meta">
-    2009-09-05
-    &emsp;
-    
-    
-    
-    &emsp;
-    
-</div>
-
-                        </div>
-                        
-                        
-                    </div>
-                </div>
-        
         </a>
     </div>
 
@@ -842,7 +888,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
         <div class="pagination-indicator">
             <span style="text-align: center">
                 3<br>
-                <div style="display: inline-block; transform: rotate(-28deg)">-</div><br>4
+                <div style="display: inline-block; transform: rotate(-28deg)">-</div><br>5
             </span>
         </div>
 
@@ -869,7 +915,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
     </a>
 
         <div class="pagination-indicator">
-            <span>3/4</span>
+            <span>3/5</span>
         </div>
 
         

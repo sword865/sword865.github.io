@@ -2,6 +2,30 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://sword865.github.io/tags/data/</loc>
+    <lastmod>2025-07-05T15:03:26+08:00</lastmod>
+  </url><url>
+    <loc>https://sword865.github.io/posts/</loc>
+    <lastmod>2025-07-05T15:03:26+08:00</lastmod>
+  </url><url>
+    <loc>https://sword865.github.io/tags/ray/</loc>
+    <lastmod>2025-07-05T15:03:26+08:00</lastmod>
+  </url><url>
+    <loc>https://sword865.github.io/posts/2025/2025-07-05-ray-data%E5%8F%8D%E5%8E%8B%E6%9C%BA%E5%88%B6/</loc>
+    <lastmod>2025-07-05T15:03:26+08:00</lastmod>
+  </url><url>
+    <loc>https://sword865.github.io/tags/</loc>
+    <lastmod>2025-07-05T15:03:26+08:00</lastmod>
+  </url><url>
+    <loc>https://sword865.github.io/topics/</loc>
+    <lastmod>2025-07-05T15:03:26+08:00</lastmod>
+  </url><url>
+    <loc>https://sword865.github.io/topics/%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%A1%E7%AE%97/</loc>
+    <lastmod>2025-07-05T15:03:26+08:00</lastmod>
+  </url><url>
+    <loc>https://sword865.github.io/</loc>
+    <lastmod>2025-07-05T15:03:26+08:00</lastmod>
+  </url><url>
     <loc>https://sword865.github.io/tags/cuda/</loc>
     <lastmod>2025-05-03T15:51:35+08:00</lastmod>
   </url><url>
@@ -12,18 +36,6 @@
     <lastmod>2025-05-03T15:51:35+08:00</lastmod>
   </url><url>
     <loc>https://sword865.github.io/tags/llm/</loc>
-    <lastmod>2025-05-03T15:51:35+08:00</lastmod>
-  </url><url>
-    <loc>https://sword865.github.io/posts/</loc>
-    <lastmod>2025-05-03T15:51:35+08:00</lastmod>
-  </url><url>
-    <loc>https://sword865.github.io/tags/</loc>
-    <lastmod>2025-05-03T15:51:35+08:00</lastmod>
-  </url><url>
-    <loc>https://sword865.github.io/topics/</loc>
-    <lastmod>2025-05-03T15:51:35+08:00</lastmod>
-  </url><url>
-    <loc>https://sword865.github.io/</loc>
     <lastmod>2025-05-03T15:51:35+08:00</lastmod>
   </url><url>
     <loc>https://sword865.github.io/topics/%E6%8E%A8%E7%90%86%E4%BC%98%E5%8C%96/</loc>
