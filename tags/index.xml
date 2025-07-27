@@ -7,20 +7,34 @@
     <generator>Hugo</generator>
     <language>zh-CN</language>
     <copyright>Copyright (c) 2015. All rights reserved.</copyright>
-    <lastBuildDate>Sat, 05 Jul 2025 15:03:26 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 27 Jul 2025 14:53:26 +0800</lastBuildDate>
     <atom:link href="https://sword865.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Data</title>
-      <link>https://sword865.github.io/tags/data/</link>
-      <pubDate>Sat, 05 Jul 2025 15:03:26 +0800</pubDate>
-      <guid>https://sword865.github.io/tags/data/</guid>
+      <title>LLM</title>
+      <link>https://sword865.github.io/tags/llm/</link>
+      <pubDate>Sun, 27 Jul 2025 14:53:26 +0800</pubDate>
+      <guid>https://sword865.github.io/tags/llm/</guid>
       <description></description>
     </item>
     <item>
       <title>Ray</title>
       <link>https://sword865.github.io/tags/ray/</link>
-      <pubDate>Sat, 05 Jul 2025 15:03:26 +0800</pubDate>
+      <pubDate>Sun, 27 Jul 2025 14:53:26 +0800</pubDate>
       <guid>https://sword865.github.io/tags/ray/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>强化学习</title>
+      <link>https://sword865.github.io/tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/</link>
+      <pubDate>Sun, 27 Jul 2025 14:53:26 +0800</pubDate>
+      <guid>https://sword865.github.io/tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Data</title>
+      <link>https://sword865.github.io/tags/data/</link>
+      <pubDate>Sat, 05 Jul 2025 15:03:26 +0800</pubDate>
+      <guid>https://sword865.github.io/tags/data/</guid>
       <description></description>
     </item>
     <item>
@@ -35,13 +49,6 @@
       <link>https://sword865.github.io/tags/deepseek/</link>
       <pubDate>Sat, 03 May 2025 15:51:35 +0800</pubDate>
       <guid>https://sword865.github.io/tags/deepseek/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>LLM</title>
-      <link>https://sword865.github.io/tags/llm/</link>
-      <pubDate>Sat, 03 May 2025 15:51:35 +0800</pubDate>
-      <guid>https://sword865.github.io/tags/llm/</guid>
       <description></description>
     </item>
     <item>

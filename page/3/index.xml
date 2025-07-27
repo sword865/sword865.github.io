@@ -7,9 +7,91 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>Copyright (c) 2015. All rights reserved.</copyright>
-    <lastBuildDate>Sat, 05 Jul 2025 15:03:26 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 27 Jul 2025 14:53:26 +0800</lastBuildDate>
     
         <atom:link href="https://sword865.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>R语言系列—回归分析</title>
+        <link>https://sword865.github.io/posts/archives/2012-06-30-r%E8%AF%AD%E8%A8%80%E7%B3%BB%E5%88%97-%E5%9B%9E%E5%BD%92%E5%88%86%E6%9E%90/</link>
+        <pubDate>Sat, 30 Jun 2012 00:00:00 +0000</pubDate>
+        
+        <guid>https://sword865.github.io/posts/archives/2012-06-30-r%E8%AF%AD%E8%A8%80%E7%B3%BB%E5%88%97-%E5%9B%9E%E5%BD%92%E5%88%86%E6%9E%90/</guid>
+        <description>悟剑阁 https://sword865.github.io/posts/archives/2012-06-30-r%E8%AF%AD%E8%A8%80%E7%B3%BB%E5%88%97-%E5%9B%9E%E5%BD%92%E5%88%86%E6%9E%90/ -&lt;p&gt;**         **一元线形回归模型：有变量x,y。假设有关系y=c+bx+e,其中c+bx 是y随x变化的部分，e是随机误差。&lt;/p&gt;
+&lt;p&gt;可以很容易的用函数lm()求出回归参数b,c并作相应的假设检验，如：&lt;/p&gt;
+&lt;pre class=&#34;lang:r decode:true &#34;&gt;x&amp;lt;-c(0.10, 0.11, 0.12, 0.13, 0.14, 0.15,0.16, 0.17, 0.18, 0.20, 0.21, 0.23)
+y&amp;lt;-c(42.0, 43.5, 45.0, 45.5, 45.0, 47.5,49.0, 53.0, 50.0, 55.0, 55.0, 60.0)
+lm.sol&amp;lt;-lm(y ~ 1+x)
+summary(lm.sol)
+&lt;/pre&gt;
+&lt;p&gt;仅列出部分返回结果：&lt;/p&gt;
+&lt;p align=&#34;left&#34;&gt;
+  Residuals:
+&lt;/p&gt;
+&lt;p align=&#34;left&#34;&gt;
+    Min       1Q   Median    3Q     Max
+&lt;/p&gt;
+&lt;p align=&#34;left&#34;&gt;
+  -2.0431  -0.7056  0.1694  0.6633  2.2653
+&lt;/p&gt;
+&lt;p align=&#34;left&#34;&gt;
+  Coefficients:
+&lt;/p&gt;
+&lt;p align=&#34;left&#34;&gt;
+              Estimate Std. Error      t value   Pr(&gt;|t|)
+&lt;/p&gt;
+&lt;p align=&#34;left&#34;&gt;
+  (Intercept)   28.493      1.580   18.04    5.88e-09 ***
+&lt;/p&gt;
+&lt;p align=&#34;left&#34;&gt;
+  x            130.835      9.683   13.51 9.50e-08 ***
+&lt;/p&gt;
+&lt;p align=&#34;left&#34;&gt;
+  在我们的输入中，关键是lm.sol&lt;-lm(y ~ 1+x)的调用，这里可以看到，lm使用了参数y~1+x,即表示我们使用的是模型y=c+bx+e (1表示常数项)
+&lt;/p&gt;
+&lt;p align=&#34;left&#34;&gt;
+  然后我们使用summary查看了lm返回的结果。在Residuals:中，我们可以看到的是一些关于残差的信息：最小最大值，4分位数等。Coefficients:中则是最为关键的对c和b的相关估计。其中Estimate是与b,c值的估计，Std. Error 则是回归参数b和c的标准差：sd(b), sd(c)。剩下的两个参数则是对回归参数的假设检验： t value是对b,c进行假设检验的t值，以及P-值(用来与显著性水平比较决定是否接受该阿假设检验)Pr(&gt;|t|)。最后我们还可以看到3个* 号，这表明x和y有非常显著的线性关系(*可以有0—3个，越多则线性关系越显著)。
+&lt;/p&gt;
+&lt;p align=&#34;left&#34;&gt;
+  多元线形回归的计算也是这样，我们只要在加入一行数据x2，然后把lm的参数改为y ~ 1+x+x2，就可以得到模型y=d+cx2+bx+e的计算结果。其中返回值的意义和上面基本一致。
+&lt;/p&gt;
+&lt;p align=&#34;left&#34;&gt;
+  至此，我们就可以用R建立起一个简单的线形模型，接下来，我们就要用这个模型去对新的x进行预测，预测y的值与置信区间。
+&lt;/p&gt;
+&lt;p align=&#34;left&#34;&gt;
+  接着上面的程序，我们先建立要预测的数据集，然后用函数predict进行预测：
+&lt;/p&gt;
+&lt;pre class=&#34;lang:r decode:true&#34;&gt;point&amp;lt;-data.frame(x=0.24)
+predict(lm.sol,point,interval=&#34;prediction&#34;,level=0.95)&lt;/pre&gt;
+&lt;p align=&#34;left&#34;&gt;
+  返回结果
+&lt;/p&gt;
+&lt;p align=&#34;left&#34;&gt;
+         fit      lwr      upr
+&lt;/p&gt;
+&lt;p align=&#34;left&#34;&gt;
+  1 59.89318 56.36215 63.42421
+&lt;/p&gt;
+&lt;p align=&#34;left&#34;&gt;
+  分别表示了y的预测值和上下界。
+&lt;/p&gt;
+&lt;p align=&#34;left&#34;&gt;
+  在函数predict中，参数lm.sol是之前建立的线形模型，point是要预测的点，参数interval=&amp;#8221;prediction&amp;#8221;表示要求给出预测的区间(上下界)，level则是该区间的预测水平。
+&lt;/p&gt;
+&lt;p align=&#34;left&#34;&gt;
+  下面给出一个多元线形回归的完整程序：（不显示结果）
+&lt;/p&gt;
+&lt;pre class=&#34;lang:r decode:true &#34;&gt;y&amp;lt;-c(162,120,223,131,67,167,81,192,116,55,252,232,144,103,212)
+x1&amp;lt;-c(274,180,375,205,86,265,98,330,195,53,430,372,236,157,370)
+x2&amp;lt;-c(2450,3250,3802,2838,2347,3782,3008,2450,2137,2560,4020,4427,2660,2088,2605)
+lm.sol&amp;lt;-lm(y~1+x1+x2)
+ex&amp;lt;-data.frame(x1=200,x2=3000)
+predict(lm.sol,ex,interval=&#34;prediction&#34;,level=0.95)&lt;/pre&gt;
+&lt;p&gt; &lt;/p&gt;
+- https://sword865.github.io/posts/archives/2012-06-30-r%E8%AF%AD%E8%A8%80%E7%B3%BB%E5%88%97-%E5%9B%9E%E5%BD%92%E5%88%86%E6%9E%90/ - Copyright (c) 2015. All rights reserved.</description>
+        </item>
     
     
     
@@ -447,80 +529,6 @@ f为传递函数
 &lt;p&gt;神经网络是一种黑盒方法，这使得我们无法得知其处理输入和输出的方法与原因，尤其是较大的神经网络有数百的节点和上千的连接，更是如此。&lt;/p&gt;
 &lt;p&gt;在训练神经网络时，在选择训练数据的比例及与问题相适应的网络规模方面，没有明确的 规则。如果训练数据比率太大，可能导致网络对噪音数据产生过度归纳，而训练比率太低，网络就不够精准。&lt;/p&gt;
 - https://sword865.github.io/posts/archives/2009-09-07-%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%933-%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/ - Copyright (c) 2015. All rights reserved.</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>算法总结2—决策树分类器</title>
-        <link>https://sword865.github.io/posts/archives/2009-09-06-%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%932-%E5%86%B3%E7%AD%96%E6%A0%91%E5%88%86%E7%B1%BB%E5%99%A8/</link>
-        <pubDate>Sun, 06 Sep 2009 00:00:00 +0000</pubDate>
-        
-        <guid>https://sword865.github.io/posts/archives/2009-09-06-%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%932-%E5%86%B3%E7%AD%96%E6%A0%91%E5%88%86%E7%B1%BB%E5%99%A8/</guid>
-        <description>悟剑阁 https://sword865.github.io/posts/archives/2009-09-06-%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%932-%E5%86%B3%E7%AD%96%E6%A0%91%E5%88%86%E7%B1%BB%E5%99%A8/ -&lt;p&gt;&lt;strong&gt;数学基础：&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;树：树是一种数据结构，它是由n（n&amp;gt;=1）个有限结点组成一个具有层次关系的集合。把它叫做“树”是因为它看起来像一棵倒挂的树，也就是说它是根朝上，而叶朝下的。它具有以下的特点：&lt;/p&gt;
-&lt;p&gt;每个结点有零个或多个子结点；&lt;/p&gt;
-&lt;p&gt;每一个子结点只有一个父结点；&lt;/p&gt;
-&lt;p&gt;没有前驱的结点为根结点；&lt;/p&gt;
-&lt;p&gt;除了根结点外，每个子结点可以分为m个不相交的子树；&lt;/p&gt;
-&lt;p&gt;没有子节点的节点称为叶节点。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;决策树分类器原理：&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;决策树是一颗树，要分类的样本从树根进入，在树的每个节点通过对样本的某种属性的判断选择不同的路径逐步下降到底,得出其所属类别。&lt;/p&gt;
-&lt;p&gt;例图:&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://pic002.cnblogs.com/images/2012/52809/2012063021362216.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
-&lt;p&gt;为了建立一棵决策树,我们首先应向程序输入大量训练数据(包含所属类别的数据)，程序将根据训练数据按某一算法自动生成决策树。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;决策树生成算法:&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;   为了构造决策树，算法首先创建一个根节点，然后通过分析训练数据，逐步选出适合的变量对数据进行拆分(即逐步构造上图中的非叶子节点。)&lt;/p&gt;
-&lt;p&gt;   为了选择适合的变量对数据进行拆分，我们需要一个方法来评估一种拆分方案的好坏，&lt;strong&gt;其评估方法包括：&lt;/strong&gt;&lt;/p&gt;
-&lt;ol start=&#34;2&#34;&gt;
-&lt;li&gt;&lt;strong&gt;基尼不纯度：&lt;/strong&gt;&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;定义：基尼不存度是指来自集合的某种结果随机应用于集合中某一数据的预期误差。（如果集合中所有结果属于同一类，则误差为0）&lt;/p&gt;
-&lt;p&gt;使用：利用这一思想，我们可以将集合中每种类别的数据出现的次数除以数据总数计算相应概率，再将这些概率的乘积相加（所有概率两两相乘后在相加），这样就会得到某一数据被随机分配到错误结果的总概率。&lt;/p&gt;
-&lt;p&gt;伪代码：&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;imp=0
-for k1 in kinds
-    p1=count(k1) / total
-    for k2 in counts
-        if (k1==k2)continue
-        p2=count(k2) / total
-        imp+=p1*p2
-ans=imp
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p align=&#34;left&#34;&gt;
-  &amp;nbsp;&amp;nbsp; (p1*p2是一个p1类别的数据被当作p2的概率)
-&lt;/p&gt;
-&lt;ol start=&#34;2&#34;&gt;
-&lt;li&gt;**熵：**在信息论中，熵代表的是集合的无序程度—–基本上就相当于我们在此处所说的集合的混杂程度。&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;熵的值是遍历所有结果后得到的pi*log2(pi)的和的绝对值&lt;/p&gt;
-&lt;p&gt;伪代码：&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;ent=0.0
-for k in kinds
-    p=count(k) / total
-    ent=ent – p*log2(p)     // 因为0&amp;lt;p&amp;lt;=1，所以必有log2(p)&amp;lt;=0
-ans=ent
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;有了上述评估方法后，我们就可以不断尝试各种拆分方法，然后选出最好的拆分方法构造树中的节点了。我们将计算拆分前的熵（基尼不存度）值，与拆分后的熵（基尼不存度）的值的加权平均，将其差值作为&lt;strong&gt;信息增益&lt;/strong&gt;。最终对能得到最大信息增益的属性进行拆分。然后再分别对拆分后得集合选择属性进行拆分，直到最大信息增益为非正时停止拆分，这时决策树就构建完毕了。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;优化：&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;为了防止决策树变的过度拟合（过度针对训练数据），我们可以在信息增益小于某个值后就停止拆分。但是我们可能遇到这样的数据―――某次拆分信息增益很小，但下一次就会很大。为了防止这一状况，我们可以在用先前的方法构造整棵树后，在尝试消除多余的节点。这个过程就是&lt;strong&gt;剪枝&lt;/strong&gt;。&lt;/p&gt;
-&lt;p&gt;剪枝的过程就是对具有相同父节点的节点进行检查，判断将其合并后，信息增益是否会小于某个指定发值。若是，则合并这些节点。合并后节点包括所有可能的结果值。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;在处理数值型数据时，熵和基尼不存度并不是一个好的选择，因为有些数值相差很近，有些相差很远，不能简单用是否为同一类别进行判断。所以我们可以用方差代替它们。&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;决策树对缺失数据的处理：&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;当我们要判断类别的样本缺少某些决策树作判断时必须的数据时，我们可以选择同时走两个分支，不过我们不是平均统计各分支的结果值，而是进行加权统计。为了达到这一目标，决策树中每个节点都有一个值为１的权重，即观测数据对于数据向是否属于某个特定分类的概率具有１００％的影响，而如果走多个分支，我们将给每个分支一个权重，其值等于所有位于该分支的其他数据所占的比重。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;优点：&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;决策树最大的优势是它可以轻易对一个受训模型给予解释。（解释分类原理）&lt;/p&gt;
-&lt;p&gt;决策树可以同时接受分类型和数值型数据。&lt;/p&gt;
-&lt;p&gt;比起贝叶斯分类器（参考**[&amp;lt;集体智慧编程&amp;gt;算法总结1—贝叶斯分类器][2]**）决策树可以更好的处理变量间的相互影响。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;缺点：&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;决策树无法单独对某一数据进行训练。&lt;/p&gt;
-&lt;p&gt;面对有大量可能结果的数据集时，决策树不够有效。当可能的分类结果较多时，决策树就会过度复杂，预测效果也会较差。&lt;/p&gt;
-&lt;p&gt;另外，决策树不适合处理大量的数值型输入输出，因为它只能创建一些简单的&amp;gt; ，&amp;lt;，＝等节点，但数值之间可能存在更多更复杂的关系。&lt;/p&gt;
-&lt;p&gt;呼….这个写的不怎么累了….很多都是书上的原话哈，不像昨天那个几乎都是自己写的……&lt;/p&gt;
-&lt;p style=&#34;margin:0;padding:0;height:1px;overflow:hidden;&#34;&gt;
-  &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
-&lt;/p&gt;
-- https://sword865.github.io/posts/archives/2009-09-06-%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%932-%E5%86%B3%E7%AD%96%E6%A0%91%E5%88%86%E7%B1%BB%E5%99%A8/ - Copyright (c) 2015. All rights reserved.</description>
         </item>
     
     

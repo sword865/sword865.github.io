@@ -7,9 +7,109 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>Copyright (c) 2015. All rights reserved.</copyright>
-    <lastBuildDate>Sat, 05 Jul 2025 15:03:26 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 27 Jul 2025 14:53:26 +0800</lastBuildDate>
     
         <atom:link href="https://sword865.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>Ray与LLM强化学习框架设计</title>
+        <link>https://sword865.github.io/posts/2025/2025-07-26-ray%E4%B8%8Ellm-rl%E6%A1%86%E6%9E%B6%E8%AE%BE%E8%AE%A1/</link>
+        <pubDate>Sun, 27 Jul 2025 14:53:26 +0800</pubDate>
+        
+        <guid>https://sword865.github.io/posts/2025/2025-07-26-ray%E4%B8%8Ellm-rl%E6%A1%86%E6%9E%B6%E8%AE%BE%E8%AE%A1/</guid>
+        <description>悟剑阁 https://sword865.github.io/posts/2025/2025-07-26-ray%E4%B8%8Ellm-rl%E6%A1%86%E6%9E%B6%E8%AE%BE%E8%AE%A1/ -&lt;p&gt;最近LLM强化学习框架发展特别快，Ray作为被ChatGPT带火的框架，在LLM各个训练阶段中，RL阶段的应用应该是最多的。写篇文章记录一下这块发展的脉络和一些看法。&lt;/p&gt;
+&lt;h1 id=&#34;从google-pathways说起&#34;&gt;从Google Pathways说起&lt;/h1&gt;
+&lt;p&gt;讨论Ray和RL系统，得从Google的&lt;strong&gt;Pathways&lt;/strong&gt;系统开始：2021年Google提出了Pathways作为下一代AI架构和分布式ML平台，在相关文献中详细讨论了Single-Controller + MPMD的系统设计。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Single-Controller&lt;/strong&gt;（单控制器）是指用一个中央协调器来管理整个分布式计算流程的架构模式。在这种设计中，有一个&lt;strong&gt;主控制节点&lt;/strong&gt;负责整个计算图的执行，包括任务分发、资源调度、状态监控等。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Multiple-Controller&lt;/strong&gt;（多控制器）则是指使用多个分布式控制节点来协同管理计算任务的架构模式。在这种设计中，没有单一的中央协调器，而是由多个控制器节点分别负责不同的子系统或计算子图，通过分布式协调协议来实现全局一致性。&lt;/p&gt;
+&lt;p&gt;在Ray中的Driver Process就可以被作为一个典型的Single Controller来启动不同的任务程序，而通过torchrun运行的PyTorch DDP分布式计算则是在每个node上各自执行自己的程序则属于典型的Multiple Controller范式。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;MPMD&lt;/strong&gt;（Multiple Program, Multiple Data）是一种分布式计算范式，指在一个计算任务中，不同的节点运行不同的程序来处理不同的数据。这种模式下，各个计算节点执行的代码逻辑可能完全不同，每个节点都有自己特定的任务和职责。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;SPMD&lt;/strong&gt;（Single Program, Multiple Data）则是另一种常见的分布式计算范式，指所有节点运行相同的程序，但处理不同的数据分片。&lt;/p&gt;
+&lt;p&gt;典型的SPMD任务包括传统的分布式训练，比如PyTorch DDP，每个节点运行相同的程序来处理不同的数据，最多根据rank的值会有一些特别的处理（比如rank=0的节点负责checkpoint）。相比之下，大模型训练包括了流水并行这种更复杂的任务，每个节点组需要运行不同的程序，就更适合用MPMD的方式来实现了。&lt;/p&gt;
+&lt;p&gt;一般来说，MPMD系统由于包含众多异构组件，各组件间的协调和同步变得相当复杂。为了简化开发复杂度并确保系统执行的一致性，Single-Controller架构成为了自然的选择——通过引入中心化的控制器来统一管理整个分布式计算流程，包括任务调度、状态同步和异常处理等关键环节。&lt;/p&gt;
+&lt;p&gt;更多的细节就不多说了，有兴趣的话可以去看Oneflow团队当年写的两篇文章，非常深刻：&lt;a href=&#34;https://mp.weixin.qq.com/s/roQues5HhRXqGf26DuUOjQ&#34;&gt;解读谷歌Pathways架构（一）：Single-controller与Multi-controller&lt;/a&gt;和&lt;a href=&#34;https://mp.weixin.qq.com/s/N99dRgFYC9zOOcGlg0Ulsw&#34;&gt;解读谷歌 Pathways 架构（二）：向前一步是 OneFlow&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;这与LLM强化学习有什么关系呢？用RL训练LLM本质上是一个多阶段、多节点的复杂分布式任务。典型的RLHF流水线涉及多个不同模型，计算流程分为几个关键阶段：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;生成阶段&lt;/strong&gt;：当前策略模型（LLM）对一批输入提示生成响应文本&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;评估阶段&lt;/strong&gt;：这些响应由奖励模型评分，或通过人类/自动化偏好模型进行比较评估&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;训练阶段&lt;/strong&gt;：基于获得的奖励信号更新策略模型权重（可能还包括价值函数或评论家网络的更新）&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;这些阶段之间存在明确的数据依赖关系——训练更新必须依赖于生成的样本及其对应的奖励分数。在朴素的实现中，这些阶段只能串行执行，引入大量上下文切换的同时还要求所有的模型使用相同数量的GPU进行计算，计算效率是相当低下的。因此正如Pathways架构所启发的那样，我们希望在保证正确性的前提下，通过良好的系统设计，尽可能地重叠和并行化这些工作阶段，以最大化计算资源的利用效率。&lt;/p&gt;
+&lt;p&gt;直接说有点抽象，可以看下面这个从&lt;a href=&#34;http://arxiv.org/abs/2409.19256&#34;&gt;HybridFlow&lt;/a&gt;里截的表格，我截了两个最早的RLHF系统，左边的DeepSpeed-Chat实现了SPMD的串行方式，而右边的OpenRLHF则是典型的MPMD系统。&lt;/p&gt;
+&lt;img width=&#34;800&#34;  src=&#34;https://sword865.github.io/images/2025/20250726/RLHF_SPMD_MPMD.png&#34; class=&#34;center&#34; /&gt;
+&lt;h1 id=&#34;ray与llm强化学习框架&#34;&gt;Ray与LLM强化学习框架&lt;/h1&gt;
+&lt;p&gt;其实从前面的内容可以看出来，Ray的设计很适合用来开发Single-Controller + MPMD的程序，也就自然适合LLM强化学习的场景了。&lt;/p&gt;
+&lt;p&gt;实际上，社区也确实基于Ray开发了大量的强化学习框架，目前主要的设计包括两种：&lt;strong&gt;Colocated架构&lt;/strong&gt;和&lt;strong&gt;Disaggregated架构&lt;/strong&gt;。粗略地说，&lt;strong&gt;Colocated架构&lt;/strong&gt;意味着把生成阶段和训练阶段放在同样的节点上运行；而&lt;strong&gt;Disaggregated架构&lt;/strong&gt;则把它们放在不同的节点上：&lt;/p&gt;
+&lt;img width=&#34;800&#34;  src=&#34;https://sword865.github.io/images/2025/20250726/RL_architecture.png&#34; class=&#34;center&#34; /&gt;
+&lt;p&gt;一看这个图，我们会发现Disaggregated Architecture中存在大量的计算bubble，甚至可能比不上之前SPMD模式！这也是为什么很多框架如OpenRLHF、Nemo-aligner、VeRL都是按照Colocated架构来设计的。&lt;/p&gt;
+&lt;p&gt;需要注意的是，图里的Train和Gen代表的是RLHF的不同阶段，每个阶段内每个GPU可能在运行不同任务，因此整个过程仍然是MPMD的。&lt;/p&gt;
+&lt;p&gt;以经典的PPO算法为例，整个Train的阶段包括Actor Model(on training Framework)/Reference Model/Reward Model/Critic Model四个模型，Gen阶段包括Actor Model(on inference framework)一个模型，以&lt;a href=&#34;http://arxiv.org/abs/2405.11143&#34;&gt;OpenRLHF&lt;/a&gt;为例：&lt;/p&gt;
+&lt;img width=&#34;800&#34;  src=&#34;https://sword865.github.io/images/2025/20250726/RLHF_PPO.png&#34; class=&#34;center&#34; /&gt;
+&lt;p&gt;可以看到这里Actor Model会在Deepspeed和vLLM两个引擎间进行切换，因为实际算法需要保存的模型共有5个。&lt;/p&gt;
+&lt;h2 id=&#34;colocated-rl框架-解法和问题&#34;&gt;Colocated RL框架 (解法和问题)&lt;/h2&gt;
+&lt;p&gt;接下来继续看这个基于Ray的框架：OpenRLHF使用Ray启动和协调组件，但使用Ray的&lt;strong&gt;Placement group&lt;/strong&gt;实现了Colocated架构，在每个节点上在rollout和训练任务之间分割GPU资源。例如，在给定节点上，框架可能将每个GPU的0.75分配给训练actor，0.25分配给生成actor，这样有效地让一个训练进程和一个生成进程&amp;quot;共享&amp;quot;每个GPU而不互相干扰。&lt;/p&gt;
+&lt;p&gt;很容易从前面的图看出来，Colocated框架中的&lt;strong&gt;资源共享&lt;/strong&gt;是一个主要的优势，通过设计合适的分组方式，我们可以减少GPU的空闲时间，减少模型offload的频率，同时尽量并行化不同节点的执行，从而最大化提升资源利用效率。&lt;/p&gt;
+&lt;p&gt;然而，随着模型大小和集群大小的增长，Colocated框架也显示出了自己的局限性：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;第一个关键问题是&lt;a href=&#34;http://arxiv.org/abs/2504.15930&#34;&gt;StreamRL&lt;/a&gt;中提到的&lt;strong&gt;资源耦合&lt;/strong&gt;。虽然Colocated框架比起SPMD的程序提升了计算任务的并行性，并通过分组来允许每组model使用不同的资源，但是这并不能完全消除共享设备带来的问题：因为生成和训练同时共享相同设备，我们不能独立扩展或为每个阶段定制资源。同时训练任务（计算密集）和生成任务（IO密集）的瓶颈并不相同，这不利于GPU资源的利用。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;另一个问题是，LLM生成的文本长度是不固定的，尤其随着thinking model的大火，生成任务中不同组的模型生成结果的时间可能差异很大。比如我们有32块GPU，每4块GPU为一组进行生成，如果其中一组生成任务过长，会导致其他28块GPU空等造成资源浪费。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;总的来说，Colocated框架通过精细的资源管理实现了较高的GPU利用率，相对成熟和稳定，确实许多后续框架都借鉴了类似的设计思路。但是，正如前面提到的资源耦合问题，这种架构在可扩展性方面仍有局限。这也为下一代RL框架的发展指明了方向：能否通过打破严格的串行约束，让生成和训练阶段真正独立地并行执行？&lt;/p&gt;
+&lt;h2 id=&#34;online-policy和offline-policy&#34;&gt;Online Policy和Offline Policy&lt;/h2&gt;
+&lt;p&gt;本文的重点是Ray和LLM RL的框架设计，因此不会在这一部分内容做过多阐述，大概而言：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Online Policy&lt;/strong&gt;: 严格要求使用当前最新策略生成的数据进行训练。在RLHF中，这意味着每次训练迭代都必须等待当前actor模型完成新一轮的文本生成，然后立即使用这些&amp;quot;新鲜&amp;quot;的样本来更新模型权重。这种方式能保证训练数据与当前策略的完全一致性，但代价是强制的同步等待，导致前面提到的大量计算bubble。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Offline Policy&lt;/strong&gt;: 允许使用稍微&amp;quot;陈旧&amp;quot;的策略生成的数据进行训练。在实际系统中，这意味着训练阶段可以使用来自之前几个迭代版本的actor模型生成的样本，而不必严格等待当前版本的生成完成。虽然引入了一定的策略陈旧性（policy staleness），但这种设计允许生成和训练阶段真正并行化，大幅提升系统吞吐量。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Online Policy&lt;/strong&gt;算法正是前文中Disaggregated Architecture存在大量计算空泡的根本原因：训练阶段只能使用最新策略模型生成的样本，这就强制要求生成步骤必须在训练步骤完成后才能开始下一轮迭代。&lt;/p&gt;
+&lt;p&gt;从理论角度分析，Online Policy的样本效率确实优于Offline Policy，这主要源于其能够保证训练数据与当前策略分布的完全一致性。在LLM强化学习场景中，策略陈旧性（policy staleness）会引入分布偏移问题——生成数据的策略分布与当前训练策略产生偏差，这种不匹配可能降低训练样本的有效性，并对模型收敛的稳定性和效率产生负面影响。&lt;/p&gt;
+&lt;p&gt;不过在RL的工业实践中，这种理论差异往往被系统吞吐量的大幅提升所抵消。现代LLM RL系统通过以下几种方式来缓解策略陈旧性的影响：&lt;strong&gt;增加Experience Buffer的容量、优化batch sampling策略、以及采用更频繁的模型同步机制&lt;/strong&gt;。实际部署中，有团队发现通过合理的超参数调整（如学习率衰减、梯度裁剪），Offline Policy系统在保持训练稳定性的同时，能够获得成倍的训练吞吐量提升。这种工程权衡也推动了RLHF向多轮迭代和DPO向Iterative DPO等更适合并行化的算法变种演进。&lt;/p&gt;
+&lt;h2 id=&#34;disaggregated架构-从offline-policy到streaming-rl&#34;&gt;Disaggregated架构 (从offline policy到Streaming RL)&lt;/h2&gt;
+&lt;p&gt;自然地，业界开始探索在LLM强化学习中采用Offline Policy算法的可能性。&lt;a href=&#34;http://arxiv.org/abs/2410.18252&#34;&gt;ASYNCHRONOUS RLHF&lt;/a&gt;的研究为这一方向提供了积极的信号，该研究表明适度的&lt;strong&gt;策略陈旧性是可以接受的&lt;/strong&gt;，并且不会显著影响训练效果。这一重要发现随后在&lt;a href=&#34;http://arxiv.org/abs/2504.15930&#34;&gt;StreamRL&lt;/a&gt;的工作中得到了进一步的验证和扩展。
+类似的，Meta也在&lt;a href=&#34;http://arxiv.org/abs/2505.24034&#34;&gt;LlamaRL&lt;/a&gt;中提出了下面的计算流，我们得到了新的流式的&lt;strong&gt;Disaggregated架构&lt;/strong&gt;：&lt;/p&gt;
+&lt;img width=&#34;800&#34;  src=&#34;https://sword865.github.io/images/2025/20250726/RLHF_offlineRL.png&#34; class=&#34;center&#34; /&gt;
+&lt;p&gt;因此，我们观察到，最新的LLM强化学习系统正在移向&lt;strong&gt;Disaggregated架构 + Offline Policy&lt;/strong&gt;的实现，这与MPMD范式一致。想法是&lt;strong&gt;将生成和训练阶段分离为不同的服务&lt;/strong&gt;，它们并发在不同的GPU资源池上运行。我们有，比如说，一个专门用于生成新rollout的GPU资源池和另一个专门用于训练任务的资源池。两个任务在不同的GPU资源上并行操作，样本不断从生成端持续流向训练端。&lt;/p&gt;
+&lt;p&gt;相比传统的Colocated架构，Disaggregated架构能够真正实现&lt;strong&gt;异构资源的独立扩展&lt;/strong&gt;。举个例子，如果发现生成阶段成为瓶颈（比如复杂推理任务需要更长的生成时间），我们可以单独为生成服务增加更多GPU，而不影响训练集群的配置。相反，如果奖励模型计算或PPO更新成为瓶颈，我们可以针对性地扩展训练侧的资源。这种&lt;strong&gt;弹性伸缩&lt;/strong&gt;的能力在云环境和多租户场景中特别有价值。&lt;/p&gt;
+&lt;p&gt;通过接受一点&lt;strong&gt;陈旧策略&lt;/strong&gt;的数据，流式框架大大改善了&lt;strong&gt;资源利用率&lt;/strong&gt;。不需要所有GPU在迭代之间同步暂停；相反，生成和训练都可以达到稳定的吞吐量。StreamRL的设计明确解决了困扰同步设计的流水线&amp;quot;空泡&amp;quot;（空闲间隙）和落后任务的长尾。它们实现了完全异步流水线，其中权重更新、生成和训练尽可能重叠。此外，流式框架通常引入弹性优势：可以独立扩展生成服务和训练器服务。例如，如果生成长序列是慢的部分，系统可以为流生成服务分配更多GPU而不增加训练器GPU。或者相反，如果发现奖励模型评分是瓶颈，就扩展那个。这种解耦在多租户或云环境中很强大。&lt;/p&gt;
+&lt;p&gt;更进一步，为了更好的对训练集群和推理集群进行协调，我们可以引入通过某种数据缓冲区或队列连接来作为两个集群的交互点。这种设计可以实现生成和训练的&lt;strong&gt;近乎完美重叠&lt;/strong&gt;，从而消除流水线中的大部分空闲时间。这里的一个例子是&lt;a href=&#34;http://arxiv.org/abs/2507.01663&#34;&gt;AsyncFlow&lt;/a&gt;，这个框架基于&lt;code&gt;TransferQueue&lt;/code&gt;来传输数据，并控制训练的执行。&lt;/p&gt;
+&lt;img width=&#34;600&#34;  src=&#34;https://sword865.github.io/images/2025/20250726/stream_RL_with_Buffer.png&#34; class=&#34;center&#34; /&gt;
+&lt;p&gt;总之，流式RL框架将RL循环解耦为独立组件并利用异步执行来提升吞吐量。它们通过避免资源耦合并允许更细粒度的可扩展性来解决协同定位的缺点。成本是增加的系统复杂性和需要处理离线策略训练——但通过仔细设计（如AsyncFlow、StreamRL等），这些问题是可管理的。&lt;/p&gt;
+&lt;h1 id=&#34;无ray的rl&#34;&gt;无Ray的RL？&lt;/h1&gt;
+&lt;p&gt;随着LLM强化学习框架的不断演进，似乎有了一个新的趋势：框架&lt;strong&gt;对Ray的依赖正在逐渐减少&lt;/strong&gt;。回顾一下，Ray最初是这些框架快速原型化的理想选择——它能够轻松处理集群配置、进程启动，并提供简洁的远程函数调用和Actor类API。事实上，像OpenRLHF这样的早期项目，中期的VeRL，以及新的Slime和AsyncFlow，都将Ray作为关键的&amp;quot;胶水层&amp;quot;来协调复杂的训练循环。&lt;/p&gt;
+&lt;p&gt;然而，随着这些系统在生产环境中的大规模部署，Ray的一些固有限制开始显现：&lt;/p&gt;
+&lt;h2 id=&#34;ray的技术挑战&#34;&gt;Ray的技术挑战&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;调试复杂性&lt;/strong&gt;是Ray面临的首要问题。当某个远程Worker深层出现异常时，你往往只能收到一个经过序列化传输的模糊错误信息，很难追踪问题的真正根源。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;通信开销&lt;/strong&gt;同样是Ray架构中的一个关键瓶颈。Ray的核心设计依赖Python对象序列化和gRPC通信，这在RLHF场景下面临巨大压力。想象一下，每个experience batch可能包含数万个token的生成文本、完整的logits分布、以及各种奖励和价值函数的输出——这些数据的体积是相当可观的。当这样的大负载需要在生成阶段和训练阶段之间频繁传输时，序列化开销就变得不可忽视了。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;虽然Ray社区在通过各种优化手段（如&lt;a href=&#34;https://mp.weixin.qq.com/s/KehYVdkdEC-9H7jaDMIlow&#34;&gt;Ray Flow Insight&lt;/a&gt;、&lt;a href=&#34;https://docs.ray.io/en/latest/ray-core/compiled-graph/ray-compiled-graph.html&#34;&gt;Compiled Graph&lt;/a&gt;和&lt;a href=&#34;https://github.com/ray-project/ray/issues/51173&#34;&gt;GPU Objects&lt;/a&gt;等）尝试缓解这些问题，但目前这些技术并不成熟也不够好用。&lt;/p&gt;
+&lt;h2 id=&#34;缓冲区驱动的无ray架构趋势&#34;&gt;缓冲区驱动的无Ray架构趋势&lt;/h2&gt;
+&lt;p&gt;鉴于这些问题，我们已经在社区看到了很多关于&lt;strong&gt;无Ray&lt;/strong&gt;设计的讨论。Meta的LlamaRL完全建立在原生PyTorch上并在&lt;strong&gt;405B&lt;/strong&gt;的模型上做了验证。其他的框架也会有一些关于去Ray化的讨论，比如&lt;a href=&#34;https://github.com/volcengine/verl/discussions/2202&#34;&gt;VeRL&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;那么这个是否可行呢？仔细想想RL框架的发展趋势，新的Streaming based RL框架的核心概念&lt;strong&gt;数据缓冲区&lt;/strong&gt;——本质上是一个专用模块，它保存当前rollout集合并将它们提供给训练工作器。我们可以将其视为经验的消息队列或共享内存。框架在生成任务中不断将数据放入缓冲区，并在训练任务中不断从缓冲区拉取数据进行消费。两个阶段的解耦程度已经非常高了，我们似乎并不需要一个复杂的调度层来管理所有的任务。&lt;/p&gt;
+&lt;p&gt;不过，完全抛弃Ray也不是没有成本的。有些框架还是选择留着Ray，主要是因为它在一些地方确实挺好用的：&lt;strong&gt;集群管理、进程启动、故障恢复和资源调度&lt;/strong&gt;。拿字节跳动的HybridFlow团队来说，他们当时也想过用PyTorch原生的TorchRPC来替换Ray，而且确实也跑起来了。但真正部署的时候，他们发现TorchRPC的维护并不是很积极，还会有一些奇怪的边界情况问题：虽然通过精心的工程设计，我们可以得到更好的性能，但Ray在构建稳定的分布式应用时确实能省不少开发和维护的功夫。&lt;/p&gt;
+&lt;p&gt;此外，我觉得另一个问题是训练的规模，随着后训练算力的投入，Ray的核心作用也许会从控制流编排转向容错和动态的资源分配管理：RL比起预训练要灵活得多，我们在预训练中都有通过Ray来优化训练稳定性的例子（虽然用得不多），那么在RL中这个作用应该会变得愈加明显。不过可惜的是这种只有头部公司才玩得起了。&lt;/p&gt;
+&lt;h1 id=&#34;写在最后&#34;&gt;写在最后&lt;/h1&gt;
+&lt;p&gt;从技术演进的角度来看，LLM强化学习框架在过去一年多的发展轨迹清晰地展现了分布式系统设计的经典权衡。&lt;/p&gt;
+&lt;p&gt;早期的Colocated架构通过资源共享实现了较高的GPU利用率，但随着模型规模和集群规模的增长，资源耦合问题逐渐凸显。Streaming RL的出现标志着系统设计思路的根本性转变——通过系统和算法的co-design，从on-policy策略向off-policy策略迁移，通过接受有限的策略陈旧性来换取更好的可扩展性和资源利用效率。&lt;/p&gt;
+&lt;p&gt;Ray作为这一代框架的重要基础设施，在快速原型开发和集群管理方面发挥了关键作用。然而，随着系统复杂度的提升和性能要求的提高，其在调试复杂性和通信开销方面的局限性也日益明显。这促使社区开始探索更加专门化的解决方案，包括基于原生PyTorch的实现和混合架构设计。&lt;/p&gt;
+&lt;p&gt;从系统架构的发展趋势来看，未来的LLM强化学习框架可能会继续朝着更细粒度的解耦和专门化方向发展。核心计算组件将更多地依赖高效的原生实现，而集群管理和容错机制则可能继续依托成熟的分布式框架。这种分层设计既能满足性能要求，又能保持系统的可维护性。&lt;/p&gt;
+&lt;p&gt;值得注意的是，这个领域的快速迭代反映了LLM训练工程化的不断成熟。随着模型规模和训练复杂度的持续增长，我们预期会看到更多针对特定场景优化的专门化框架，以及更加标准化的系统接口和协议。&lt;/p&gt;
+- https://sword865.github.io/posts/2025/2025-07-26-ray%E4%B8%8Ellm-rl%E6%A1%86%E6%9E%B6%E8%AE%BE%E8%AE%A1/ - Copyright (c) 2015. All rights reserved.</description>
+        </item>
     
     
     
@@ -33,7 +133,7 @@
 &lt;li&gt;&lt;strong&gt;Backpressure Policies&lt;/strong&gt;: 其他关于任务提交的反压规则。&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;下面我们逐层分析这些机制的实现。&lt;/p&gt;
-&lt;h2 id=&#34;ray-core-generator对象数量反压&#34;&gt;Ray Core Generator：对象数量反压&lt;/h2&gt;
+&lt;h1 id=&#34;ray-core-generator对象数量反压&#34;&gt;Ray Core Generator：对象数量反压&lt;/h1&gt;
 &lt;p&gt;&lt;a href=&#34;https://docs.ray.io/en/latest/ray-core/ray-generator.html&#34;&gt;Ray Generator&lt;/a&gt; 类似Python Generator，用来作为迭代器进行遍历，但是和Python Generator有一个很大的不同在于：Ray Generator使用&lt;code&gt;ObjectRefGenerator&lt;/code&gt;在后台持续执行。也就是说如果Ray Data的单个read_task需要读取一个很大的文件时，没法通过控制拉取任务产出的速度来控制任务的内存占用。（不管下游是否主动拉取，都会持续读取新的数据block。）&lt;/p&gt;
 &lt;p&gt;针对这个问题，Ray Generators支持手动配置一个threshold(_generator_backpressure_num_objects parameter)来对Generators进行反压。&lt;/p&gt;
 &lt;p&gt;核心逻辑在&lt;code&gt;task_manager.cc&lt;/code&gt;中的&lt;code&gt;HandleReportGeneratorItemReturns&lt;/code&gt;这个方法里面。这个函数逻辑比较复杂，里面还有比如乱序/幂等等问题的处理，我们只看反压状态的管理：&lt;/p&gt;
@@ -81,16 +181,16 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            dynamic_ray_remote_args[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;_generator_backpressure_num_objects&amp;#34;&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;data_context&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;_max_num_blocks_in_streaming_gen_buffer
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            )
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;streaming-executor--resource-allocator&#34;&gt;Streaming Executor + Resource Allocator&lt;/h2&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;streaming-executor--resource-allocator&#34;&gt;Streaming Executor + Resource Allocator&lt;/h1&gt;
 &lt;p&gt;虽然Ray Core提供了基础反压的接口，但是运行Ray Data任务的时候，还是有其他问题，其中最核心的问题就是&lt;em&gt;是否需要消费上游算子生成的结果&lt;/em&gt;？&lt;/p&gt;
-&lt;h3 id=&#34;预算分配&#34;&gt;预算分配&lt;/h3&gt;
+&lt;h2 id=&#34;预算分配&#34;&gt;预算分配&lt;/h2&gt;
 &lt;p&gt;Ray使用了预算预分配的方式，给Ray Data任务的每个operator都分配了一个预算，这个预算包括2部分：&lt;/p&gt;
-&lt;h4 id=&#34;reserved_for_op_outputs&#34;&gt;&lt;code&gt;reserved_for_op_outputs&lt;/code&gt;&lt;/h4&gt;
+&lt;h3 id=&#34;reserved_for_op_outputs&#34;&gt;&lt;code&gt;reserved_for_op_outputs&lt;/code&gt;&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;为算子输出数据预留的内存空间。&lt;/li&gt;
 &lt;li&gt;用来保证有足够的内存来存储算子的输出数据，防止所有预算都被pending task outputs占用。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h4 id=&#34;_op_reserved和_op_budgets&#34;&gt;&lt;code&gt;_op_reserved&lt;/code&gt;和&lt;code&gt;_op_budgets&lt;/code&gt;&lt;/h4&gt;
+&lt;h3 id=&#34;_op_reserved和_op_budgets&#34;&gt;&lt;code&gt;_op_reserved&lt;/code&gt;和&lt;code&gt;_op_budgets&lt;/code&gt;&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;_op_reserved&lt;/code&gt;：每个算子的预留资源。&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;_op_budgets&lt;/code&gt;: 根据实际情况算出来的，算子可以使用的资源，大致上&lt;code&gt;op_budgets[op] = max(_op_reserved[op] - 当前使用量, 0) + 分配的共享资源&lt;/code&gt;&lt;/li&gt;
@@ -143,7 +243,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#75715e&#34;&gt;# corner case的处理，略。        &lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; res        
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这样就控制了每个task的Generator的消费速度，防止任何单个操作符占用过多内存。&lt;/p&gt;
-&lt;h3 id=&#34;task提交速度的控制&#34;&gt;Task提交速度的控制&lt;/h3&gt;
+&lt;h2 id=&#34;task提交速度的控制&#34;&gt;Task提交速度的控制&lt;/h2&gt;
 &lt;p&gt;除了限制单个任务的消费，Ray Data还会控制任务的提交，即在算子budget不足时停止提交该算子的任务。&lt;/p&gt;
 &lt;p&gt;这块逻辑比较简单，由streaming executor的&lt;code&gt;select_operator_to_run&lt;/code&gt;方法控制&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    ops &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; []
@@ -162,7 +262,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        budget &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;_op_budgets[op]
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        res &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; op&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;incremental_resource_usage()&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;satisfies_limit(budget)
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; res
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;backpressure-policies-其他关于任务提交的反压规则&#34;&gt;&lt;strong&gt;Backpressure Policies&lt;/strong&gt;: 其他关于任务提交的反压规则。&lt;/h2&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;backpressure-policies-其他关于任务提交的反压规则&#34;&gt;&lt;strong&gt;Backpressure Policies&lt;/strong&gt;: 其他关于任务提交的反压规则。&lt;/h1&gt;
 &lt;p&gt;最后一个&lt;code&gt;Backpressure Policies&lt;/code&gt;其实就是前面&lt;code&gt;select_operator_to_run&lt;/code&gt;方法里提到的&lt;code&gt;backpressure_policies&lt;/code&gt;了：&lt;/p&gt;
 &lt;p&gt;回顾一下：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        in_backpressure &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; under_resource_limits &lt;span style=&#34;color:#f92672&#34;&gt;or&lt;/span&gt; any(
@@ -965,118 +1065,6 @@ The RDD-based API is expected to be removed in Spark 3.0.
 &lt;p&gt;FM的另外一个缺点是有点耗费内存，对于每个特征都要用一个K维的向量表示导致参数数量是LR的K倍，这方面也是有一些研究的，比如李沐针对这个问题提出的DiFacto就是一个很好的能够降低内存消耗的优化方案。&lt;/p&gt;
 &lt;p&gt;最后，还有一种著名的策略是FFM模型，FFM模型被称为FM的升级版，把同一类的特征（比如一些用01向量编码的的离散特征）归到一个field里去，然后要求每个特征在每个field下都有一个不同的K维表示方式，这一下把参数的数量从K变成了FK(F是field的数量)，模型复杂度变的更高了。不过这样做的效果确实不错。&lt;/p&gt;
 - https://sword865.github.io/posts/2016/2016-11-04-%E8%B0%88%E8%B0%88factorization-machine/ - Copyright (c) 2015. All rights reserved.</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>Elasticsearch-HttpServerModule</title>
-        <link>https://sword865.github.io/posts/archives/2015-07-27-elasticsearch-httpservermodule/</link>
-        <pubDate>Mon, 27 Jul 2015 00:00:00 +0000</pubDate>
-        
-        <guid>https://sword865.github.io/posts/archives/2015-07-27-elasticsearch-httpservermodule/</guid>
-        <description>悟剑阁 https://sword865.github.io/posts/archives/2015-07-27-elasticsearch-httpservermodule/ -&lt;p&gt;HttpServerModule的请求主要由HttpServer中的HttpServerTransport （默认为NettyHttpServerTransport）类处理。&lt;/p&gt;
-&lt;p&gt;NettyHttpServerTransport基于netty框架，负责监听并建立连接，信息的处理由内部类HttpChannelPipelineFactory 完成。&lt;/p&gt;
-&lt;p&gt;每当产生一个连接时，都会发出一个ChannelEvent，该Event由一系列的ChannelHandler进行处理。&lt;/p&gt;
-&lt;p&gt;为了方便组织，这些ChannelHandler被放在一条“流(pipeline)”里，一个ChannelEvent并不会主动的”流”经所有的Handler，而是由上一个Handler显式的调用ChannelPipeline.sendUp(Down)stream产生，并交给下一个Handler处理。&lt;/p&gt;
-&lt;p&gt;换句话说，每个Handler接收到一个ChannelEvent，并处理结束后，如果需要继续处理，那么它需要调用sendUp(Down)stream新发起一个事件。如果它不再发起事件，那么处理就到此结束，即使它后面仍然有Handler没有执行。这个机制可以保证最大的灵活性，当然对Handler的先后顺序也有了更严格的要求。&lt;/p&gt;
-&lt;p&gt;在流Pipeline里有一个Map(name2ctx)和一个链表(记录head和tail)，pipeline里面会调度关联的多个channelhandler的运行。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://sword865.github.io/images/archives/0753391.png&#34;&gt;&lt;img src=&#34;https://sword865.github.io/images/archives/0753391.png&#34; alt=&#34;channel pipeline&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;在NettyHttpServerTransport中，会流过的channelhandler就包括解码http请求(把多个HttpChunk拼起来并按http协议进行解析)和http请求处理。&lt;/p&gt;
-&lt;p&gt;在处理http请求，数据流向为：HttpRequestHandler-&amp;gt;&lt;span class=&#34;s1&#34;&gt;NettyHttpServerTransport&lt;/span&gt;-&amp;gt;HttpServerAdapter(HttpServer的内部类Dispatche)-&amp;gt;RestController。&lt;/p&gt;
-&lt;p&gt;RestController中的处理代码为：&lt;/p&gt;
-&lt;pre class=&#34;lang:java decode:true &#34;&gt;
-void executeHandler(RestRequest request, RestChannel channel) throws Exception {
-        final RestHandler handler = getHandler(request);
-        if (handler != null) {
-            handler.handleRequest(request, channel);
-        } else {
-            if (request.method() == RestRequest.Method.OPTIONS) {
-                // when we have OPTIONS request, simply send OK by default 
-                // (with the Access Control Origin header which gets automatically added)
-                channel.sendResponse(new BytesRestResponse(OK));
-            } else {
-                channel.sendResponse(new BytesRestResponse(
-                    BAD_REQUEST, 
-                    &#34;No handler found for uri [&#34; + request.uri() + &#34;] and method [&#34; + request.method() + &#34;]&#34;
-                ));
-            }
-        }
-    }
-
-    private RestHandler getHandler(RestRequest request) {
-        String path = getPath(request);
-        RestRequest.Method method = request.method();
-        if (method == RestRequest.Method.GET) {
-            return getHandlers.retrieve(path, request.params());
-        } else if (method == RestRequest.Method.POST) {
-            return postHandlers.retrieve(path, request.params());
-        } else if (method == RestRequest.Method.PUT) {
-            return putHandlers.retrieve(path, request.params());
-        } else if (method == RestRequest.Method.DELETE) {
-            return deleteHandlers.retrieve(path, request.params());
-        } else if (method == RestRequest.Method.HEAD) {
-            return headHandlers.retrieve(path, request.params());
-        } else if (method == RestRequest.Method.OPTIONS) {
-            return optionsHandlers.retrieve(path, request.params());
-        } else {
-            return null;
-        }
-    }&lt;/pre&gt;
-&lt;p&gt;void executeHandler(RestRequest request, RestChannel channel) throws Exception {
-final RestHandler handler = getHandler(request);
-if (handler != null) {
-handler.handleRequest(request, channel);
-} else {
-if (request.method() == RestRequest.Method.OPTIONS) {
-// when we have OPTIONS request, simply send OK by default (with the Access Control Origin header which gets automatically added)
-channel.sendResponse(new BytesRestResponse(OK));
-} else {
-channel.sendResponse(new BytesRestResponse(BAD_REQUEST, &amp;ldquo;No handler found for uri [&amp;rdquo; + request.uri() + &amp;ldquo;] and method [&amp;rdquo; + request.method() + &amp;ldquo;]&amp;rdquo;));
-}
-}
-}&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;private RestHandler getHandler(RestRequest request) {
-    String path = getPath(request);
-    RestRequest.Method method = request.method();
-    if (method == RestRequest.Method.GET) {
-        return getHandlers.retrieve(path, request.params());
-    } else if (method == RestRequest.Method.POST) {
-        return postHandlers.retrieve(path, request.params());
-    } else if (method == RestRequest.Method.PUT) {
-        return putHandlers.retrieve(path, request.params());
-    } else if (method == RestRequest.Method.DELETE) {
-        return deleteHandlers.retrieve(path, request.params());
-    } else if (method == RestRequest.Method.HEAD) {
-        return headHandlers.retrieve(path, request.params());
-    } else if (method == RestRequest.Method.OPTIONS) {
-        return optionsHandlers.retrieve(path, request.params());
-    } else {
-        return null;
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;/pre&gt;&lt;/p&gt;
-&lt;p&gt;可以看到，这里会根据注册的handler，选择合适的处理逻辑。&lt;/p&gt;
-&lt;p&gt;这些handler由函数registerHandler进行注册，函数签名如下：&lt;/p&gt;
-&lt;p class=&#34;p1&#34;&gt;
-  &lt;span class=&#34;s1&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;void&lt;/span&gt; registerHandler(RestRequest.Method &lt;span class=&#34;s2&#34;&gt;method&lt;/span&gt;, String &lt;span class=&#34;s2&#34;&gt;path&lt;/span&gt;, RestHandler &lt;span class=&#34;s3&#34;&gt;handler&lt;/span&gt;)
-&lt;/p&gt;
-&lt;p class=&#34;p1&#34;&gt;
-  比如对RestGetIndicesAction类，有如下构造函数：
-&lt;/p&gt;
-&lt;pre class=&#34;lang:java decode:true&#34;&gt;public RestGetIndicesAction(Settings settings, RestController controller, Client client) {
-        super(settings, controller, client);
-        controller.registerHandler(GET, &#34;/{index}&#34;, this);
-        controller.registerHandler(GET, &#34;/{index}/{type}&#34;, this);
-    }&lt;/pre&gt;
-&lt;p&gt;netty参考：&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;http://my.oschina.net/flashsword/blog/162936&#34;&gt;http://my.oschina.net/flashsword/blog/162936&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;http://my.oschina.net/flashsword/blog/164237&#34;&gt;http://my.oschina.net/flashsword/blog/164237&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;http://my.oschina.net/flashsword/blog/169361&#34;&gt;http://my.oschina.net/flashsword/blog/169361&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;http://my.oschina.net/flashsword/blog/178561&#34;&gt;http://my.oschina.net/flashsword/blog/178561&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;http://my.oschina.net/flashsword/blog/197963&#34;&gt;http://my.oschina.net/flashsword/blog/197963&lt;/a&gt;&lt;/p&gt;
-- https://sword865.github.io/posts/archives/2015-07-27-elasticsearch-httpservermodule/ - Copyright (c) 2015. All rights reserved.</description>
         </item>
     
     

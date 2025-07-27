@@ -7,9 +7,121 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>Copyright (c) 2015. All rights reserved.</copyright>
-    <lastBuildDate>Sat, 05 Jul 2025 15:03:26 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 27 Jul 2025 14:53:26 +0800</lastBuildDate>
     
         <atom:link href="https://sword865.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>Elasticsearch-HttpServerModule</title>
+        <link>https://sword865.github.io/posts/archives/2015-07-27-elasticsearch-httpservermodule/</link>
+        <pubDate>Mon, 27 Jul 2015 00:00:00 +0000</pubDate>
+        
+        <guid>https://sword865.github.io/posts/archives/2015-07-27-elasticsearch-httpservermodule/</guid>
+        <description>悟剑阁 https://sword865.github.io/posts/archives/2015-07-27-elasticsearch-httpservermodule/ -&lt;p&gt;HttpServerModule的请求主要由HttpServer中的HttpServerTransport （默认为NettyHttpServerTransport）类处理。&lt;/p&gt;
+&lt;p&gt;NettyHttpServerTransport基于netty框架，负责监听并建立连接，信息的处理由内部类HttpChannelPipelineFactory 完成。&lt;/p&gt;
+&lt;p&gt;每当产生一个连接时，都会发出一个ChannelEvent，该Event由一系列的ChannelHandler进行处理。&lt;/p&gt;
+&lt;p&gt;为了方便组织，这些ChannelHandler被放在一条“流(pipeline)”里，一个ChannelEvent并不会主动的”流”经所有的Handler，而是由上一个Handler显式的调用ChannelPipeline.sendUp(Down)stream产生，并交给下一个Handler处理。&lt;/p&gt;
+&lt;p&gt;换句话说，每个Handler接收到一个ChannelEvent，并处理结束后，如果需要继续处理，那么它需要调用sendUp(Down)stream新发起一个事件。如果它不再发起事件，那么处理就到此结束，即使它后面仍然有Handler没有执行。这个机制可以保证最大的灵活性，当然对Handler的先后顺序也有了更严格的要求。&lt;/p&gt;
+&lt;p&gt;在流Pipeline里有一个Map(name2ctx)和一个链表(记录head和tail)，pipeline里面会调度关联的多个channelhandler的运行。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://sword865.github.io/images/archives/0753391.png&#34;&gt;&lt;img src=&#34;https://sword865.github.io/images/archives/0753391.png&#34; alt=&#34;channel pipeline&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;在NettyHttpServerTransport中，会流过的channelhandler就包括解码http请求(把多个HttpChunk拼起来并按http协议进行解析)和http请求处理。&lt;/p&gt;
+&lt;p&gt;在处理http请求，数据流向为：HttpRequestHandler-&amp;gt;&lt;span class=&#34;s1&#34;&gt;NettyHttpServerTransport&lt;/span&gt;-&amp;gt;HttpServerAdapter(HttpServer的内部类Dispatche)-&amp;gt;RestController。&lt;/p&gt;
+&lt;p&gt;RestController中的处理代码为：&lt;/p&gt;
+&lt;pre class=&#34;lang:java decode:true &#34;&gt;
+void executeHandler(RestRequest request, RestChannel channel) throws Exception {
+        final RestHandler handler = getHandler(request);
+        if (handler != null) {
+            handler.handleRequest(request, channel);
+        } else {
+            if (request.method() == RestRequest.Method.OPTIONS) {
+                // when we have OPTIONS request, simply send OK by default 
+                // (with the Access Control Origin header which gets automatically added)
+                channel.sendResponse(new BytesRestResponse(OK));
+            } else {
+                channel.sendResponse(new BytesRestResponse(
+                    BAD_REQUEST, 
+                    &#34;No handler found for uri [&#34; + request.uri() + &#34;] and method [&#34; + request.method() + &#34;]&#34;
+                ));
+            }
+        }
+    }
+
+    private RestHandler getHandler(RestRequest request) {
+        String path = getPath(request);
+        RestRequest.Method method = request.method();
+        if (method == RestRequest.Method.GET) {
+            return getHandlers.retrieve(path, request.params());
+        } else if (method == RestRequest.Method.POST) {
+            return postHandlers.retrieve(path, request.params());
+        } else if (method == RestRequest.Method.PUT) {
+            return putHandlers.retrieve(path, request.params());
+        } else if (method == RestRequest.Method.DELETE) {
+            return deleteHandlers.retrieve(path, request.params());
+        } else if (method == RestRequest.Method.HEAD) {
+            return headHandlers.retrieve(path, request.params());
+        } else if (method == RestRequest.Method.OPTIONS) {
+            return optionsHandlers.retrieve(path, request.params());
+        } else {
+            return null;
+        }
+    }&lt;/pre&gt;
+&lt;p&gt;void executeHandler(RestRequest request, RestChannel channel) throws Exception {
+final RestHandler handler = getHandler(request);
+if (handler != null) {
+handler.handleRequest(request, channel);
+} else {
+if (request.method() == RestRequest.Method.OPTIONS) {
+// when we have OPTIONS request, simply send OK by default (with the Access Control Origin header which gets automatically added)
+channel.sendResponse(new BytesRestResponse(OK));
+} else {
+channel.sendResponse(new BytesRestResponse(BAD_REQUEST, &amp;ldquo;No handler found for uri [&amp;rdquo; + request.uri() + &amp;ldquo;] and method [&amp;rdquo; + request.method() + &amp;ldquo;]&amp;rdquo;));
+}
+}
+}&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;private RestHandler getHandler(RestRequest request) {
+    String path = getPath(request);
+    RestRequest.Method method = request.method();
+    if (method == RestRequest.Method.GET) {
+        return getHandlers.retrieve(path, request.params());
+    } else if (method == RestRequest.Method.POST) {
+        return postHandlers.retrieve(path, request.params());
+    } else if (method == RestRequest.Method.PUT) {
+        return putHandlers.retrieve(path, request.params());
+    } else if (method == RestRequest.Method.DELETE) {
+        return deleteHandlers.retrieve(path, request.params());
+    } else if (method == RestRequest.Method.HEAD) {
+        return headHandlers.retrieve(path, request.params());
+    } else if (method == RestRequest.Method.OPTIONS) {
+        return optionsHandlers.retrieve(path, request.params());
+    } else {
+        return null;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;/pre&gt;&lt;/p&gt;
+&lt;p&gt;可以看到，这里会根据注册的handler，选择合适的处理逻辑。&lt;/p&gt;
+&lt;p&gt;这些handler由函数registerHandler进行注册，函数签名如下：&lt;/p&gt;
+&lt;p class=&#34;p1&#34;&gt;
+  &lt;span class=&#34;s1&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;void&lt;/span&gt; registerHandler(RestRequest.Method &lt;span class=&#34;s2&#34;&gt;method&lt;/span&gt;, String &lt;span class=&#34;s2&#34;&gt;path&lt;/span&gt;, RestHandler &lt;span class=&#34;s3&#34;&gt;handler&lt;/span&gt;)
+&lt;/p&gt;
+&lt;p class=&#34;p1&#34;&gt;
+  比如对RestGetIndicesAction类，有如下构造函数：
+&lt;/p&gt;
+&lt;pre class=&#34;lang:java decode:true&#34;&gt;public RestGetIndicesAction(Settings settings, RestController controller, Client client) {
+        super(settings, controller, client);
+        controller.registerHandler(GET, &#34;/{index}&#34;, this);
+        controller.registerHandler(GET, &#34;/{index}/{type}&#34;, this);
+    }&lt;/pre&gt;
+&lt;p&gt;netty参考：&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://my.oschina.net/flashsword/blog/162936&#34;&gt;http://my.oschina.net/flashsword/blog/162936&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://my.oschina.net/flashsword/blog/164237&#34;&gt;http://my.oschina.net/flashsword/blog/164237&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://my.oschina.net/flashsword/blog/169361&#34;&gt;http://my.oschina.net/flashsword/blog/169361&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://my.oschina.net/flashsword/blog/178561&#34;&gt;http://my.oschina.net/flashsword/blog/178561&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://my.oschina.net/flashsword/blog/197963&#34;&gt;http://my.oschina.net/flashsword/blog/197963&lt;/a&gt;&lt;/p&gt;
+- https://sword865.github.io/posts/archives/2015-07-27-elasticsearch-httpservermodule/ - Copyright (c) 2015. All rights reserved.</description>
+        </item>
     
     
     
@@ -729,88 +841,6 @@ kurtosis(x)&lt;/pre&gt;
   &lt;/p&gt;
 &lt;/div&gt;
 - https://sword865.github.io/posts/archives/2012-06-30-r%E8%AF%AD%E8%A8%80%E7%B3%BB%E5%88%97-%E6%95%B0%E6%8D%AE%E6%8F%8F%E8%BF%B0/ - Copyright (c) 2015. All rights reserved.</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>R语言系列—回归分析</title>
-        <link>https://sword865.github.io/posts/archives/2012-06-30-r%E8%AF%AD%E8%A8%80%E7%B3%BB%E5%88%97-%E5%9B%9E%E5%BD%92%E5%88%86%E6%9E%90/</link>
-        <pubDate>Sat, 30 Jun 2012 00:00:00 +0000</pubDate>
-        
-        <guid>https://sword865.github.io/posts/archives/2012-06-30-r%E8%AF%AD%E8%A8%80%E7%B3%BB%E5%88%97-%E5%9B%9E%E5%BD%92%E5%88%86%E6%9E%90/</guid>
-        <description>悟剑阁 https://sword865.github.io/posts/archives/2012-06-30-r%E8%AF%AD%E8%A8%80%E7%B3%BB%E5%88%97-%E5%9B%9E%E5%BD%92%E5%88%86%E6%9E%90/ -&lt;p&gt;**         **一元线形回归模型：有变量x,y。假设有关系y=c+bx+e,其中c+bx 是y随x变化的部分，e是随机误差。&lt;/p&gt;
-&lt;p&gt;可以很容易的用函数lm()求出回归参数b,c并作相应的假设检验，如：&lt;/p&gt;
-&lt;pre class=&#34;lang:r decode:true &#34;&gt;x&amp;lt;-c(0.10, 0.11, 0.12, 0.13, 0.14, 0.15,0.16, 0.17, 0.18, 0.20, 0.21, 0.23)
-y&amp;lt;-c(42.0, 43.5, 45.0, 45.5, 45.0, 47.5,49.0, 53.0, 50.0, 55.0, 55.0, 60.0)
-lm.sol&amp;lt;-lm(y ~ 1+x)
-summary(lm.sol)
-&lt;/pre&gt;
-&lt;p&gt;仅列出部分返回结果：&lt;/p&gt;
-&lt;p align=&#34;left&#34;&gt;
-  Residuals:
-&lt;/p&gt;
-&lt;p align=&#34;left&#34;&gt;
-    Min       1Q   Median    3Q     Max
-&lt;/p&gt;
-&lt;p align=&#34;left&#34;&gt;
-  -2.0431  -0.7056  0.1694  0.6633  2.2653
-&lt;/p&gt;
-&lt;p align=&#34;left&#34;&gt;
-  Coefficients:
-&lt;/p&gt;
-&lt;p align=&#34;left&#34;&gt;
-              Estimate Std. Error      t value   Pr(&gt;|t|)
-&lt;/p&gt;
-&lt;p align=&#34;left&#34;&gt;
-  (Intercept)   28.493      1.580   18.04    5.88e-09 ***
-&lt;/p&gt;
-&lt;p align=&#34;left&#34;&gt;
-  x            130.835      9.683   13.51 9.50e-08 ***
-&lt;/p&gt;
-&lt;p align=&#34;left&#34;&gt;
-  在我们的输入中，关键是lm.sol&lt;-lm(y ~ 1+x)的调用，这里可以看到，lm使用了参数y~1+x,即表示我们使用的是模型y=c+bx+e (1表示常数项)
-&lt;/p&gt;
-&lt;p align=&#34;left&#34;&gt;
-  然后我们使用summary查看了lm返回的结果。在Residuals:中，我们可以看到的是一些关于残差的信息：最小最大值，4分位数等。Coefficients:中则是最为关键的对c和b的相关估计。其中Estimate是与b,c值的估计，Std. Error 则是回归参数b和c的标准差：sd(b), sd(c)。剩下的两个参数则是对回归参数的假设检验： t value是对b,c进行假设检验的t值，以及P-值(用来与显著性水平比较决定是否接受该阿假设检验)Pr(&gt;|t|)。最后我们还可以看到3个* 号，这表明x和y有非常显著的线性关系(*可以有0—3个，越多则线性关系越显著)。
-&lt;/p&gt;
-&lt;p align=&#34;left&#34;&gt;
-  多元线形回归的计算也是这样，我们只要在加入一行数据x2，然后把lm的参数改为y ~ 1+x+x2，就可以得到模型y=d+cx2+bx+e的计算结果。其中返回值的意义和上面基本一致。
-&lt;/p&gt;
-&lt;p align=&#34;left&#34;&gt;
-  至此，我们就可以用R建立起一个简单的线形模型，接下来，我们就要用这个模型去对新的x进行预测，预测y的值与置信区间。
-&lt;/p&gt;
-&lt;p align=&#34;left&#34;&gt;
-  接着上面的程序，我们先建立要预测的数据集，然后用函数predict进行预测：
-&lt;/p&gt;
-&lt;pre class=&#34;lang:r decode:true&#34;&gt;point&amp;lt;-data.frame(x=0.24)
-predict(lm.sol,point,interval=&#34;prediction&#34;,level=0.95)&lt;/pre&gt;
-&lt;p align=&#34;left&#34;&gt;
-  返回结果
-&lt;/p&gt;
-&lt;p align=&#34;left&#34;&gt;
-         fit      lwr      upr
-&lt;/p&gt;
-&lt;p align=&#34;left&#34;&gt;
-  1 59.89318 56.36215 63.42421
-&lt;/p&gt;
-&lt;p align=&#34;left&#34;&gt;
-  分别表示了y的预测值和上下界。
-&lt;/p&gt;
-&lt;p align=&#34;left&#34;&gt;
-  在函数predict中，参数lm.sol是之前建立的线形模型，point是要预测的点，参数interval=&amp;#8221;prediction&amp;#8221;表示要求给出预测的区间(上下界)，level则是该区间的预测水平。
-&lt;/p&gt;
-&lt;p align=&#34;left&#34;&gt;
-  下面给出一个多元线形回归的完整程序：（不显示结果）
-&lt;/p&gt;
-&lt;pre class=&#34;lang:r decode:true &#34;&gt;y&amp;lt;-c(162,120,223,131,67,167,81,192,116,55,252,232,144,103,212)
-x1&amp;lt;-c(274,180,375,205,86,265,98,330,195,53,430,372,236,157,370)
-x2&amp;lt;-c(2450,3250,3802,2838,2347,3782,3008,2450,2137,2560,4020,4427,2660,2088,2605)
-lm.sol&amp;lt;-lm(y~1+x1+x2)
-ex&amp;lt;-data.frame(x1=200,x2=3000)
-predict(lm.sol,ex,interval=&#34;prediction&#34;,level=0.95)&lt;/pre&gt;
-&lt;p&gt; &lt;/p&gt;
-- https://sword865.github.io/posts/archives/2012-06-30-r%E8%AF%AD%E8%A8%80%E7%B3%BB%E5%88%97-%E5%9B%9E%E5%BD%92%E5%88%86%E6%9E%90/ - Copyright (c) 2015. All rights reserved.</description>
         </item>
     
     

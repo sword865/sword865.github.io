@@ -181,6 +181,88 @@ code.has-jax {
     <div class="post-list-container post-list-container-no-background">
         
         
+            <a href="/posts/archives/2009-09-06-%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%932-%E5%86%B3%E7%AD%96%E6%A0%91%E5%88%86%E7%B1%BB%E5%99%A8/" class="a-block">
+                <div class="post-item-wrapper">
+                    <div class="post-item post-item-no-divider">
+                        <div class="post-item-info-wrapper">
+                            <div class="post-item-title">
+                                算法总结2—决策树分类器
+                            </div>
+                            <div class="post-item-summary">
+                                
+                                    <p><strong>数学基础：</strong></p>
+<p>树：树是一种数据结构，它是由n（n&gt;=1）个有限结点组成一个具有层次关系的集合。把它叫做“树”是因为它看起来像一棵倒挂的树，也就是说它是根朝上，而叶朝下的。它具有以下的特点：</p>
+<p>每个结点有零个或多个子结点；</p>
+<p>每一个子结点只有一个父结点；</p>
+<p>没有前驱的结点为根结点；</p>
+<p>除了根结点外，每个子结点可以分为m个不相交的子树；</p>
+<p>没有子节点的节点称为叶节点。</p>
+<p><strong>决策树分类器原理：</strong></p>
+<p>决策树是一颗树，要分类的样本从树根进入，在树的每个节点通过对样本的某种属性的判断选择不同的路径逐步下降到底,得出其所属类别。</p>
+<p>例图:</p>
+<p><img src="http://pic002.cnblogs.com/images/2012/52809/2012063021362216.jpg" alt=""></p>
+<p>为了建立一棵决策树,我们首先应向程序输入大量训练数据(包含所属类别的数据)，程序将根据训练数据按某一算法自动生成决策树。</p>
+<p><strong>决策树生成算法:</strong></p>
+<p>   为了构造决策树，算法首先创建一个根节点，然后通过分析训练数据，逐步选出适合的变量对数据进行拆分(即逐步构造上图中的非叶子节点。)</p>
+<p>   为了选择适合的变量对数据进行拆分，我们需要一个方法来评估一种拆分方案的好坏，<strong>其评估方法包括：</strong></p>
+<ol start="2">
+<li><strong>基尼不纯度：</strong></li>
+</ol>
+<p>定义：基尼不存度是指来自集合的某种结果随机应用于集合中某一数据的预期误差。（如果集合中所有结果属于同一类，则误差为0）</p>
+<p>使用：利用这一思想，我们可以将集合中每种类别的数据出现的次数除以数据总数计算相应概率，再将这些概率的乘积相加（所有概率两两相乘后在相加），这样就会得到某一数据被随机分配到错误结果的总概率。</p>
+<p>伪代码：</p>
+<pre><code>imp=0
+for k1 in kinds
+    p1=count(k1) / total
+    for k2 in counts
+        if (k1==k2)continue
+        p2=count(k2) / total
+        imp+=p1*p2
+ans=imp
+</code></pre>
+<p align="left">
+  &nbsp;&nbsp; (p1*p2是一个p1类别的数据被当作p2的概率)
+</p>
+<ol start="2">
+<li>**熵：**在信息论中，熵代表的是集合的无序程度—–基本上就相当于我们在此处所说的集合的混杂程度。</li>
+</ol>
+<p>熵的值是遍历所有结果后得到的pi*log2(pi)的和的绝对值</p>
+<p>伪代码：</p>
+<pre><code>ent=0.0
+for k in kinds
+    p=count(k) / total
+    ent=ent – p*log2(p)     // 因为0&lt;p&lt;=1，所以必有log2(p)&lt;=0
+ans=ent
+</code></pre>
+<p>有了上述评估方法后，我们就可以不断尝试各种拆分方法，然后选出最好的拆分方法构造树中的节点了。我们将计算拆分前的熵（基尼不存度）值，与拆分后的熵（基尼不存度）的值的加权平均，将其差值作为<strong>信息增益</strong>。最终对能得到最大信息增益的属性进行拆分。然后再分别对拆分后得集合选择属性进行拆分，直到最大信息增益为非正时停止拆分，这时决策树就构建完毕了。</p>
+<p><strong>优化：</strong></p>
+<p>为了防止决策树变的过度拟合（过度针对训练数据），我们可以在信息增益小于某个值后就停止拆分。但是我们可能遇到这样的数据―――某次拆分信息增益很小，但下一次就会很大。为了防止这一状况，我们可以在用先前的方法构造整棵树后，在尝试消除多余的节点。这个过程就是<strong>剪枝</strong>。</p>
+<p>剪枝的过程就是对具有相同父节点的节点进行检查，判断将其合并后，信息增益是否会小于某个指定发值。若是，则合并这些节点。合并后节点包括所有可能的结果值。</p>
+<p><strong>在处理数值型数据时，熵和基尼不存度并不是一个好的选择，因为有些数值相差很近，有些相差很远，不能简单用是否为同一类别进行判断。所以我们可以用方差代替它们。</strong></p>
+<p><strong>决策树对缺失数据的处理：</strong></p>
+<p>当我们要判断类别的样本缺少某些决策树作判断时必须的数据时，我们可以选择同时走两个分支，不过我们不是平均统计各分支的结果值，而是进行加权统计。为了达到这一目标，决策树中每个节点都有一个值为１的权重，即观测数据对于数据向是否属于某个特定分类的概率具有１００％的影响，而如果走多个分支，我们将给每个分支一个权重，其值等于所有位于该分支的其他数据所占的比重。</p>
+<p><strong>优点：</strong></p>
+<p>决策树最大的优势是它可以轻易对一个受训模型给予解释。（解释分类原理）</p>
+<p>决策树可以同时接受分类型和数值型数据。</p>
+<p>比起贝叶斯分类器（参考**[&lt;集体智慧编程&gt;算法总结1—贝叶斯分类器][2]**）决策树可以更好的处理变量间的相互影响。</p>
+                                
+                            </div>
+                            <div class="post-item-meta">
+    2009-09-06
+    &emsp;
+    
+    
+    
+    &emsp;
+    
+</div>
+
+                        </div>
+                        
+                        
+                    </div>
+                </div>
+        
             <a href="/posts/archives/2009-09-05-%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%931-%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%88%86%E7%B1%BB%E5%99%A8/" class="a-block">
                 <div class="post-item-wrapper">
                     <div class="post-item post-item-no-divider">
@@ -792,34 +874,6 @@ for(i=1;i&lt;=m,i++){
 <div>
   <embed type="application/lingoes-npruntime-capture-word-plugin" width="0" height="0" id="lingoes_plugin_object" hidden="true" />
 </div>
-                                
-                            </div>
-                            <div class="post-item-meta">
-    0001-01-01
-    &emsp;
-    
-    
-    
-    &emsp;
-    
-</div>
-
-                        </div>
-                        
-                        
-                    </div>
-                </div>
-        
-            <a href="/about/" class="a-block">
-                <div class="post-item-wrapper">
-                    <div class="post-item post-item-no-divider">
-                        <div class="post-item-info-wrapper">
-                            <div class="post-item-title">
-                                关于
-                            </div>
-                            <div class="post-item-summary">
-                                
-                                    <p>这里是我的技术博客。</p>
                                 
                             </div>
                             <div class="post-item-meta">

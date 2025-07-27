@@ -161,12 +161,6 @@ code.has-jax {
 						
 						
 						
-							
-								
-									<ul>
-								
-							
-						
 						
 							<li>
 								<a href="#ray-core-generator%e5%af%b9%e8%b1%a1%e6%95%b0%e9%87%8f%e5%8f%8d%e5%8e%8b" class="nav-ray-core-generator对象数量反压">
@@ -268,10 +262,6 @@ code.has-jax {
 						
 						
 						
-							
-								</ul>
-							
-						
 						
 						
 							<li>
@@ -289,6 +279,10 @@ code.has-jax {
 					
 						
 						
+						
+							
+								</ul>
+							
 						
 						
 						
@@ -421,7 +415,7 @@ code.has-jax {
 <li><strong>Backpressure Policies</strong>: 其他关于任务提交的反压规则。</li>
 </ol>
 <p>下面我们逐层分析这些机制的实现。</p>
-<h2 id="ray-core-generator对象数量反压">Ray Core Generator：对象数量反压</h2>
+<h1 id="ray-core-generator对象数量反压">Ray Core Generator：对象数量反压</h1>
 <p><a href="https://docs.ray.io/en/latest/ray-core/ray-generator.html">Ray Generator</a> 类似Python Generator，用来作为迭代器进行遍历，但是和Python Generator有一个很大的不同在于：Ray Generator使用<code>ObjectRefGenerator</code>在后台持续执行。也就是说如果Ray Data的单个read_task需要读取一个很大的文件时，没法通过控制拉取任务产出的速度来控制任务的内存占用。（不管下游是否主动拉取，都会持续读取新的数据block。）</p>
 <p>针对这个问题，Ray Generators支持手动配置一个threshold(_generator_backpressure_num_objects parameter)来对Generators进行反压。</p>
 <p>核心逻辑在<code>task_manager.cc</code>中的<code>HandleReportGeneratorItemReturns</code>这个方法里面。这个函数逻辑比较复杂，里面还有比如乱序/幂等等问题的处理，我们只看反压状态的管理：</p>
@@ -469,16 +463,16 @@ code.has-jax {
 </span></span><span style="display:flex;"><span>            dynamic_ray_remote_args[<span style="color:#e6db74">&#34;_generator_backpressure_num_objects&#34;</span>] <span style="color:#f92672">=</span> (
 </span></span><span style="display:flex;"><span>                <span style="color:#ae81ff">2</span> <span style="color:#f92672">*</span> self<span style="color:#f92672">.</span>data_context<span style="color:#f92672">.</span>_max_num_blocks_in_streaming_gen_buffer
 </span></span><span style="display:flex;"><span>            )
-</span></span></code></pre></div><h2 id="streaming-executor--resource-allocator">Streaming Executor + Resource Allocator</h2>
+</span></span></code></pre></div><h1 id="streaming-executor--resource-allocator">Streaming Executor + Resource Allocator</h1>
 <p>虽然Ray Core提供了基础反压的接口，但是运行Ray Data任务的时候，还是有其他问题，其中最核心的问题就是<em>是否需要消费上游算子生成的结果</em>？</p>
-<h3 id="预算分配">预算分配</h3>
+<h2 id="预算分配">预算分配</h2>
 <p>Ray使用了预算预分配的方式，给Ray Data任务的每个operator都分配了一个预算，这个预算包括2部分：</p>
-<h4 id="reserved_for_op_outputs"><code>reserved_for_op_outputs</code></h4>
+<h3 id="reserved_for_op_outputs"><code>reserved_for_op_outputs</code></h3>
 <ul>
 <li>为算子输出数据预留的内存空间。</li>
 <li>用来保证有足够的内存来存储算子的输出数据，防止所有预算都被pending task outputs占用。</li>
 </ul>
-<h4 id="_op_reserved和_op_budgets"><code>_op_reserved</code>和<code>_op_budgets</code></h4>
+<h3 id="_op_reserved和_op_budgets"><code>_op_reserved</code>和<code>_op_budgets</code></h3>
 <ul>
 <li><code>_op_reserved</code>：每个算子的预留资源。</li>
 <li><code>_op_budgets</code>: 根据实际情况算出来的，算子可以使用的资源，大致上<code>op_budgets[op] = max(_op_reserved[op] - 当前使用量, 0) + 分配的共享资源</code></li>
@@ -531,7 +525,7 @@ code.has-jax {
 </span></span><span style="display:flex;"><span>        <span style="color:#75715e"># corner case的处理，略。        </span>
 </span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> res        
 </span></span></code></pre></div><p>这样就控制了每个task的Generator的消费速度，防止任何单个操作符占用过多内存。</p>
-<h3 id="task提交速度的控制">Task提交速度的控制</h3>
+<h2 id="task提交速度的控制">Task提交速度的控制</h2>
 <p>除了限制单个任务的消费，Ray Data还会控制任务的提交，即在算子budget不足时停止提交该算子的任务。</p>
 <p>这块逻辑比较简单，由streaming executor的<code>select_operator_to_run</code>方法控制</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>    ops <span style="color:#f92672">=</span> []
@@ -550,7 +544,7 @@ code.has-jax {
 </span></span><span style="display:flex;"><span>        budget <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>_op_budgets[op]
 </span></span><span style="display:flex;"><span>        res <span style="color:#f92672">=</span> op<span style="color:#f92672">.</span>incremental_resource_usage()<span style="color:#f92672">.</span>satisfies_limit(budget)
 </span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> res
-</span></span></code></pre></div><h2 id="backpressure-policies-其他关于任务提交的反压规则"><strong>Backpressure Policies</strong>: 其他关于任务提交的反压规则。</h2>
+</span></span></code></pre></div><h1 id="backpressure-policies-其他关于任务提交的反压规则"><strong>Backpressure Policies</strong>: 其他关于任务提交的反压规则。</h1>
 <p>最后一个<code>Backpressure Policies</code>其实就是前面<code>select_operator_to_run</code>方法里提到的<code>backpressure_policies</code>了：</p>
 <p>回顾一下：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>        in_backpressure <span style="color:#f92672">=</span> <span style="color:#f92672">not</span> under_resource_limits <span style="color:#f92672">or</span> any(
@@ -579,8 +573,8 @@ code.has-jax {
             <nav class="post-pagination">
 
                 
-                <a class="newer-posts">
-			Next<br>No newer posts.
+                <a class="newer-posts" href="/posts/2025/2025-07-26-ray%E4%B8%8Ellm-rl%E6%A1%86%E6%9E%B6%E8%AE%BE%E8%AE%A1/">
+			Next<br>Ray与LLM强化学习框架设计
                 </a>
                 
                 
@@ -698,12 +692,6 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 						
-							
-								
-									<ul>
-								
-							
-						
 						
 							<li>
 								<a href="#ray-core-generator%e5%af%b9%e8%b1%a1%e6%95%b0%e9%87%8f%e5%8f%8d%e5%8e%8b" class="nav-ray-core-generator对象数量反压">
@@ -805,10 +793,6 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 						
-							
-								</ul>
-							
-						
 						
 						
 							<li>
@@ -826,6 +810,10 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 					
 						
 						
+						
+							
+								</ul>
+							
 						
 						
 						

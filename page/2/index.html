@@ -181,6 +181,94 @@ code.has-jax {
     <div class="post-list-container post-list-container-no-background">
         
         
+            <a href="/posts/archives/2015-07-27-elasticsearch-httpservermodule/" class="a-block">
+                <div class="post-item-wrapper">
+                    <div class="post-item post-item-no-divider">
+                        <div class="post-item-info-wrapper">
+                            <div class="post-item-title">
+                                Elasticsearch-HttpServerModule
+                            </div>
+                            <div class="post-item-summary">
+                                
+                                    <p>HttpServerModule的请求主要由HttpServer中的HttpServerTransport （默认为NettyHttpServerTransport）类处理。</p>
+<p>NettyHttpServerTransport基于netty框架，负责监听并建立连接，信息的处理由内部类HttpChannelPipelineFactory 完成。</p>
+<p>每当产生一个连接时，都会发出一个ChannelEvent，该Event由一系列的ChannelHandler进行处理。</p>
+<p>为了方便组织，这些ChannelHandler被放在一条“流(pipeline)”里，一个ChannelEvent并不会主动的”流”经所有的Handler，而是由上一个Handler显式的调用ChannelPipeline.sendUp(Down)stream产生，并交给下一个Handler处理。</p>
+<p>换句话说，每个Handler接收到一个ChannelEvent，并处理结束后，如果需要继续处理，那么它需要调用sendUp(Down)stream新发起一个事件。如果它不再发起事件，那么处理就到此结束，即使它后面仍然有Handler没有执行。这个机制可以保证最大的灵活性，当然对Handler的先后顺序也有了更严格的要求。</p>
+<p>在流Pipeline里有一个Map(name2ctx)和一个链表(记录head和tail)，pipeline里面会调度关联的多个channelhandler的运行。</p>
+<p><a href="/images/archives/0753391.png"><img src="/images/archives/0753391.png" alt="channel pipeline" /></a></p>
+<p>在NettyHttpServerTransport中，会流过的channelhandler就包括解码http请求(把多个HttpChunk拼起来并按http协议进行解析)和http请求处理。</p>
+<p>在处理http请求，数据流向为：HttpRequestHandler-&gt;<span class="s1">NettyHttpServerTransport</span>-&gt;HttpServerAdapter(HttpServer的内部类Dispatche)-&gt;RestController。</p>
+<p>RestController中的处理代码为：</p>
+<pre class="lang:java decode:true ">
+void executeHandler(RestRequest request, RestChannel channel) throws Exception {
+        final RestHandler handler = getHandler(request);
+        if (handler != null) {
+            handler.handleRequest(request, channel);
+        } else {
+            if (request.method() == RestRequest.Method.OPTIONS) {
+                // when we have OPTIONS request, simply send OK by default 
+                // (with the Access Control Origin header which gets automatically added)
+                channel.sendResponse(new BytesRestResponse(OK));
+            } else {
+                channel.sendResponse(new BytesRestResponse(
+                    BAD_REQUEST, 
+                    "No handler found for uri [" + request.uri() + "] and method [" + request.method() + "]"
+                ));
+            }
+        }
+    }
+
+    private RestHandler getHandler(RestRequest request) {
+        String path = getPath(request);
+        RestRequest.Method method = request.method();
+        if (method == RestRequest.Method.GET) {
+            return getHandlers.retrieve(path, request.params());
+        } else if (method == RestRequest.Method.POST) {
+            return postHandlers.retrieve(path, request.params());
+        } else if (method == RestRequest.Method.PUT) {
+            return putHandlers.retrieve(path, request.params());
+        } else if (method == RestRequest.Method.DELETE) {
+            return deleteHandlers.retrieve(path, request.params());
+        } else if (method == RestRequest.Method.HEAD) {
+            return headHandlers.retrieve(path, request.params());
+        } else if (method == RestRequest.Method.OPTIONS) {
+            return optionsHandlers.retrieve(path, request.params());
+        } else {
+            return null;
+        }
+    }</pre>
+<p>void executeHandler(RestRequest request, RestChannel channel) throws Exception {
+final RestHandler handler = getHandler(request);
+if (handler != null) {
+handler.handleRequest(request, channel);
+} else {
+if (request.method() == RestRequest.Method.OPTIONS) {
+// when we have OPTIONS request, simply send OK by default (with the Access Control Origin header which gets automatically added)
+channel.sendResponse(new BytesRestResponse(OK));
+} else {
+channel.sendResponse(new BytesRestResponse(BAD_REQUEST, &ldquo;No handler found for uri [&rdquo; + request.uri() + &ldquo;] and method [&rdquo; + request.method() + &ldquo;]&rdquo;));
+}
+}
+}</p>
+                                
+                            </div>
+                            <div class="post-item-meta">
+    2015-07-27
+    &emsp;
+    
+    
+    
+    &emsp;
+    
+</div>
+
+                        </div>
+                        
+                        
+                    </div>
+                </div>
+        
             <a href="/posts/archives/2015-02-05-tornado%E6%A1%86%E6%9E%B6%E7%AE%80%E6%9E%90/" class="a-block">
                 <div class="post-item-wrapper">
                     <div class="post-item post-item-no-divider">
@@ -685,68 +773,6 @@ kurtosis(x)</pre>
   <p>
     就可以得到生成的随机数据的各种描述。
   </p>
-                                
-                            </div>
-                            <div class="post-item-meta">
-    2012-06-30
-    &emsp;
-    
-    
-    
-    &emsp;
-    
-</div>
-
-                        </div>
-                        
-                        
-                    </div>
-                </div>
-        
-            <a href="/posts/archives/2012-06-30-r%E8%AF%AD%E8%A8%80%E7%B3%BB%E5%88%97-%E5%9B%9E%E5%BD%92%E5%88%86%E6%9E%90/" class="a-block">
-                <div class="post-item-wrapper">
-                    <div class="post-item post-item-no-divider">
-                        <div class="post-item-info-wrapper">
-                            <div class="post-item-title">
-                                R语言系列—回归分析
-                            </div>
-                            <div class="post-item-summary">
-                                
-                                    <p>**         **一元线形回归模型：有变量x,y。假设有关系y=c+bx+e,其中c+bx 是y随x变化的部分，e是随机误差。</p>
-<p>可以很容易的用函数lm()求出回归参数b,c并作相应的假设检验，如：</p>
-<pre class="lang:r decode:true ">x&lt;-c(0.10, 0.11, 0.12, 0.13, 0.14, 0.15,0.16, 0.17, 0.18, 0.20, 0.21, 0.23)
-y&lt;-c(42.0, 43.5, 45.0, 45.5, 45.0, 47.5,49.0, 53.0, 50.0, 55.0, 55.0, 60.0)
-lm.sol&lt;-lm(y ~ 1+x)
-summary(lm.sol)
-</pre>
-<p>仅列出部分返回结果：</p>
-<p align="left">
-  Residuals:
-</p>
-<p align="left">
-    Min       1Q   Median    3Q     Max
-</p>
-<p align="left">
-  -2.0431  -0.7056  0.1694  0.6633  2.2653
-</p>
-<p align="left">
-  Coefficients:
-</p>
-<p align="left">
-              Estimate Std. Error      t value   Pr(>|t|)
-</p>
-<p align="left">
-  (Intercept)   28.493      1.580   18.04    5.88e-09 ***
-</p>
-<p align="left">
-  x            130.835      9.683   13.51 9.50e-08 ***
-</p>
-<p align="left">
-  在我们的输入中，关键是lm.sol<-lm(y ~ 1+x)的调用，这里可以看到，lm使用了参数y~1+x,即表示我们使用的是模型y=c+bx+e (1表示常数项)
-</p>
-<p align="left">
-  然后我们使用summary查看了lm返回的结果。在Residuals:中，我们可以看到的是一些关于残差的信息：最小最大值，4分位数等。Coefficients:中则是最为关键的对c和b的相关估计。其中Estimate是与b,c值的估计，Std. Error 则是回归参数b和c的标准差：sd(b), sd(c)。剩下的两个参数则是对回归参数的假设检验： t value是对b,c进行假设检验的t值，以及P-值(用来与显著性水平比较决定是否接受该阿假设检验)Pr(>|t|)。最后我们还可以看到3个* 号，这表明x和y有非常显著的线性关系(*可以有0—3个，越多则线性关系越显著)。
-</p>
                                 
                             </div>
                             <div class="post-item-meta">
