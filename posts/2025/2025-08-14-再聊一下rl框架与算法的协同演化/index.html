@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<title>再聊一下RL框架与算法的协同演化</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5, user-scalable=5" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+      <script src="/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="/scss/dark-mode.min.cb53f1bee2b8900cb4f082afbf00175d6618f281cf9a2fe8619e3b52d20b5721.css" integrity="sha256-y1PxvuK4kAy08IKvvwAXXWYY8oHPmi/oYZ47UtILVyE=" media="screen">
+
+
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript"
+        async
+        src="https://cdn.bootcss.com/mathjax/2.7.3/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$'], ['\[\[','\]\]']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+});
+
+MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<style>
+code.has-jax {
+    font: inherit;
+    font-size: 100%;
+    background: inherit;
+    border: inherit;
+    color: #515151;
+}
+</style>
+
+
+</head>
+<body>
+    	<div id="app"><div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                    
+                
+                
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
+                    Archive
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/tags">
+                    Tags
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/about/">
+                    关于
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%ae%97%e6%b3%95%e4%b8%8e%e6%a1%86%e6%9e%b6%e5%8d%8f%e5%90%8c%e6%bc%94%e5%8c%96%e7%9a%84%e5%85%b8%e5%9e%8b%e6%a1%88%e4%be%8b" class="nav-算法与框架协同演化的典型案例">
+									算法与框架协同演化的典型案例
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%a1%88%e4%be%8b%e4%b8%80%e6%8e%a8%e7%90%86%e6%a8%a1%e5%9e%8b%e9%a9%b1%e5%8a%a8%e7%9a%84%e5%88%86%e7%a6%bb%e5%bc%8f%e6%9e%b6%e6%9e%84%e8%ae%be%e8%ae%a1" class="nav-案例一推理模型驱动的分离式架构设计">
+									案例一：推理模型驱动的分离式架构设计
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%a1%88%e4%be%8b%e4%ba%8cmoe%e6%9e%b6%e6%9e%84%e4%b8%8e%e8%ae%ad%e7%bb%83%e6%8e%a8%e7%90%86%e5%bc%95%e6%93%8e%e7%9a%84%e7%b2%be%e5%ba%a6%e5%af%b9%e9%bd%90%e6%8c%91%e6%88%98" class="nav-案例二moe架构与训练推理引擎的精度对齐挑战">
+									案例二：MoE架构与训练推理引擎的精度对齐挑战
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%8f%af%e8%83%bd%e7%9a%84%e5%8f%91%e5%b1%95%e8%b6%8b%e5%8a%bf%e5%8d%8f%e5%90%8c%e8%ae%be%e8%ae%a1%e7%9a%84%e6%96%b0%e5%85%b4%e6%8c%91%e6%88%98%e4%b8%8e%e6%9c%ba%e9%81%87" class="nav-可能的发展趋势协同设计的新兴挑战与机遇">
+									（可能的）发展趋势：协同设计的新兴挑战与机遇
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%96%b9%e5%90%91%e4%b8%80agent-rl-%e6%a0%b7%e6%9c%ac%e6%95%88%e7%8e%87%e7%8e%af%e5%a2%83%e7%ae%a1%e7%90%86%e4%b8%8e%e8%bf%87%e7%a8%8b%e5%a5%96%e5%8a%b1" class="nav-方向一agent-rl-样本效率环境管理与过程奖励">
+									方向一：Agent RL: 样本效率、环境管理与过程奖励
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#1-%e5%a5%96%e5%8a%b1%e7%a8%80%e7%96%8f%e6%80%a7%e4%b8%8e%e5%bb%b6%e8%bf%9f%e9%97%ae%e9%a2%98" class="nav-1-奖励稀疏性与延迟问题">
+									1. 奖励稀疏性与延迟问题
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#2-%e5%a4%8d%e6%9d%82%e7%8a%b6%e6%80%81%e8%a1%a8%e7%a4%ba%e4%b8%8e%e7%ae%a1%e7%90%86" class="nav-2-复杂状态表示与管理">
+									2. 复杂状态表示与管理
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#3-%e7%8e%af%e5%a2%83%e5%8f%af%e8%a7%82%e6%b5%8b%e6%80%a7%e4%b8%8e%e5%b7%a5%e5%85%b7%e5%8f%af%e9%9d%a0%e6%80%a7" class="nav-3-环境可观测性与工具可靠性">
+									3. 环境可观测性与工具可靠性
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%96%b0%e7%9a%84rl%e5%9f%ba%e7%a1%80%e8%ae%be%e6%96%bd" class="nav-新的rl基础设施">
+									新的RL基础设施
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e6%96%b9%e5%90%91%e4%ba%8c%e7%94%9f%e6%88%90%e5%bc%8f%e5%a5%96%e5%8a%b1%e6%a8%a1%e5%9e%8b%e4%b8%8e%e8%bf%9b%e4%b8%80%e6%ad%a5%e7%9a%84%e5%88%86%e7%a6%bb%e5%bc%8f%e6%9e%b6%e6%9e%84" class="nav-方向二生成式奖励模型与进一步的分离式架构">
+									方向二：生成式奖励模型与进一步的分离式架构
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%86%99%e5%9c%a8%e6%9c%80%e5%90%8e" class="nav-写在最后">
+									写在最后
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://sword865.github.io/">
+            悟剑阁
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://sword865.github.io/">
+        <div class="single-column-header-title">悟剑阁</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+
+            <div class="post-head-wrapper-text-only"
+                
+            >
+                <div class="post-title">
+                    再聊一下RL框架与算法的协同演化
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2025-08-14 22:53
+                        </time>
+                        
+
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/ray">Ray</a>
+                                &nbsp;
+                            
+                                <a href="/tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0">强化学习</a>
+                                &nbsp;
+                            
+                                <a href="/tags/llm">LLM</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <p>上一篇文章我们聊了一下Ray与LLM强化学习框架设计，探讨了其架构的演进，但是没有提到为什么框架会往这个方向逐渐演进而不是一开始就使用现在的设计。这里面自然有实践中不断优化的结果，但是也是和整个LLM RL需求的变化密切相关的。</p>
+<p>因此，本文会主要讨论一下LLM强化学习中，算法与系统框架是如何相互影响、协同演化的。首先分析两个相对成熟的协同设计案例，然后讨论几个正在不够成熟、但是在笔者看来很有潜力的优化方向。</p>
+<h1 id="算法与框架协同演化的典型案例">算法与框架协同演化的典型案例</h1>
+<p>先讲两个目前已经相对得到了共识的问题：</p>
+<h2 id="案例一推理模型驱动的分离式架构设计">案例一：推理模型驱动的分离式架构设计</h2>
+<p>在前一篇文章中提到过，之前的强化学习还是希望尽量on-policy的，因此早期的强化学习系统倾向于采用on-policy算法配合co-located的架构设计。这种选择有其合理性：算法层面，on-policy确实具备样本效率优势；系统层面，在CoT和Test-time Scaling兴起之前，模型输出长度差异相对较小，推理引擎产生的计算空泡还算可控。尽管资源利用率的问题客观存在，但on-policy算法的优势在一定程度上抵消了这种系统层面的低效。</p>
+<p>不过，从去年o1发布开始，业界开始重视Test time scaling，加上R1的发布又给推理模型点了一把火，这种范式的改变打破了之前的平衡：模型在推理阶段生成的文本长度显著增加，且不同样本间的长度差异极为悬殊。在这种新的计算模式下，on-policy的算法优势已无法弥补系统资源的巨大浪费——所有并行环境必须等待最长推理任务完成才能进入下一轮迭代，这种同步约束造成了严重的吞吐量瓶颈和大量计算资源闲置。</p>
+<img width="800"  src="/images/2025/20250814/noCotToCot.png" class="center" />
+<p>正是因为这个挑战，业界逐渐开始转向异步RL框架设计。其核心思想是将Generation与Training完全解耦，构建生产者-消费者的流水线架构。以AsyncFlow和AReaL为例：</p>
+<ul>
+<li>
+<p><strong>推理引擎（Rollout Workers）</strong>：持续异步生成新的数据，彼此间无需同步等待。</p>
+</li>
+<li>
+<p><strong>训练引擎（Trainer Workers）</strong>：训练节点异步地从共享缓冲区获取数据进行模型更新。</p>
+</li>
+</ul>
+<p>这种<strong>流式RL</strong>设计有效避免了慢速推理任务对整体流程的阻塞，确保所有计算设备维持高利用率，从而实现训练吞吐量的显著提升。这正是算法演进与系统架构优化协同设计的一个典型案例：新的需求需要新的取舍，进一步催生了新的架构。</p>
+<h2 id="案例二moe架构与训练推理引擎的精度对齐挑战">案例二：MoE架构与训练推理引擎的精度对齐挑战</h2>
+<p>另一个挑战出现在系统层面，尤其是在使用超大模型或混合专家（MoE）模型时：训练引擎和推理引擎之间的不匹配。</p>
+<p>在RL的训练中，通常为了效率，模型的推理（生成）过程可能会在专门的推理引擎上执行（例如使用vLLM），而梯度计算则在训练后端（例如DeepSpeed）上进行。然而，两者在数值精度（如FP16 vs INT8）、算子融合、批处理调度或MoE门控行为上都可能存在差异，进而导致rollout数据和训练计算之间的分布漂移。</p>
+<p>实际上，这个问题并不是在MoE中才刚刚出现，以小红书为例，他们在去年的QCon演讲<a href="https://mp.weixin.qq.com/s/tG_ktQ0WbZHQavtoJtaXbw">从0到1构建RLHF系统——小红书大模型团队的探索与实践</a>中就提到了对训推一致性的要求，通过自研框架进行对齐。此外还有一些公司会选择使用推理引擎生产数据，然后通过训练引擎再次推理拿到logit进行概率计算。</p>
+<p>但是随着MoE的兴起和推理引擎加速技术的不断发展，精度对齐变得越来越困难，比如MoE的路由层引入的不一致可能远高于Dense Model中的精度不一致。同时由于数据的实际采样概率还是由推理引擎决定，通过训练框架再次对齐也更不够用了。</p>
+<p>为了解决这一问题，AREAL框架提出了<a href="http://arxiv.org/abs/2505.24298">Decoupled PPO</a>算法，采用了一种巧妙的双引擎协同策略：利用推理引擎输出的概率进行重要性采样（因为它反映了真实的数据采样分布），同时使用训练引擎输出的概率来计算置信域（Trust Region），确保训练引擎对模型更新仍在训练引擎原来的有效范围内进行。</p>
+<img width="800"  src="/images/2025/20250814/decoupledPPO.png" class="center" />
+<p>类似的，<a href="https://fengyao.notion.site/flash-rl">FlashRL</a> 也在他们的<a href="https://fengyao.notion.site/off-policy-rl">blog</a>中提出了一种截断重要性采样的技术<strong>TIS</strong>，通过对更新进行重新加权，来修正量化推理（用于采样）和全精度模型（用于优化）之间的策略差异。通过这一技术，即使是高度量化的rollout数据（如INT8/FP8）也能被用于训练，而不会损害最终效果。</p>
+<p>可以看到，在这个例子里，研究者们通过算法的设计，来弥合了系统设计导致的训练和推理之间的鸿沟。</p>
+<h1 id="可能的发展趋势协同设计的新兴挑战与机遇">（可能的）发展趋势：协同设计的新兴挑战与机遇</h1>
+<p>讲了有共识的，有相对公认的解决方案的案例以后，我们来看一看有些相对不那么得到共识，或者大家意识到但是解决方案还没有完全收敛的方向：</p>
+<h2 id="方向一agent-rl-样本效率环境管理与过程奖励">方向一：Agent RL: 样本效率、环境管理与过程奖励</h2>
+<p>随着Agent RL的发展，强化学习的过程中，LLM需要升级为能够调用工具、API，并与环境持续交互的自主智能体时，新的挑战也随之浮现。</p>
+<p>个人认为，根据当前研究趋势，Agent RL主要可归为两类典型范式：</p>
+<ol>
+<li>Sandbox + Browser：通常用来训练通用Agent，在受控沙箱或浏览器环境中进行任务执行与评估；</li>
+<li>MCP + Tooluse：常见于内部或垂直领域，增强模型使用工具集合使用能力。</li>
+</ol>
+<p>以实际场景为例，可以更清晰地看到Agent RL所面临的关键难题。</p>
+<h3 id="1-奖励稀疏性与延迟问题">1. 奖励稀疏性与延迟问题</h3>
+<p>在复杂任务中，类似o1的<strong>结果奖励</strong>机制效率极低。例如，Anthropic提到Claude Ops 4可在后台连续运行7小时完成软件开发任务，若仅在最终成败时给予奖励信号，这种延迟且稀疏的反馈使得样本的生成变得越加困难，同时单一的结果奖励几乎无法有效指导学习过程。因此，过程级奖励（Process-level Rewards）或者智能体引导机制（Agent Guidance）可能会重新变得重要。</p>
+<p>近期工作如<a href="https://arxiv.org/pdf/2506.11425">Agent-RLVR</a> 框架，在 RL 训练中引入高层指令提示、动态错误反馈等“教学式”奖励信号，显著提升了智能体在复杂编程任务中的成功率。这类方法模拟人类教学过程，通过中间反馈加速策略收敛。</p>
+<p>与之相关的，还有对样本效率的提高：一方面需要构建更高效的样本生成流水线，另一方面要探索高质量数据的重用机制以降低采样成本。相关研究也在逐步涌现，如<a href="https://arxiv.org/abs/2508.06412v1">Sample-efficient LLM Optimization with Reset Replay</a>，为解决Agent RL中的样本稀缺问题提供新的思路。</p>
+<h3 id="2-复杂状态表示与管理">2. 复杂状态表示与管理</h3>
+<p>Agent 的<strong>状态</strong>不仅包括对话历史，还涵盖工具调用输出、环境观测、以及内部思维链等多源异构信息。传统 RL 框架难以有效建模此类高维、长序列的状态空间。</p>
+<p>为此，新兴研究开始探索情景记忆模块与状态压缩技术。例如，<a href="https://arxiv.org/abs/2405.14751v2">AGILE</a> 框架表明，为智能体配备显式的记忆存储与反思机制，能显著增强其跨步推理能力和长期任务一致性。</p>
+<h3 id="3-环境可观测性与工具可靠性">3. 环境可观测性与工具可靠性</h3>
+<p>Agent RL 通常依赖多种外部工具或服务（如代码解释器、搜索 API等），但这些组件可能存在不可用、响应延迟或返回错误等问题。这使得环境状态难以准确观测，增加了训练的不稳定性和调试难度。如何实现对工具调用链的可观测性监控与容错恢复机制，也会成为系统设计中的关键挑战。</p>
+<h3 id="新的rl基础设施">新的RL基础设施</h3>
+<p>为应对上述挑战，RL 基础设施正朝着更高模块化、更强可扩展性的方向发展。个人认为，未来的 Agent RL 框架需具备：</p>
+<ul>
+<li>一个支持细粒度追踪的分布式训练引擎，以实现全流程可观测；</li>
+<li>推理引擎支持持续 partial rollout，即分阶段生成轨迹数据，便于中间干预与数据复用；</li>
+<li>更加高效的离线强化学习与数据重用机制，缓解采样成本高、高质量轨迹稀缺的问题。</li>
+</ul>
+<p>只有构建兼具灵活性、可解释性与工程鲁棒性的新型 RL 架构，才能支撑智能体在真实复杂环境中的持续学习与自主进化。</p>
+<h2 id="方向二生成式奖励模型与进一步的分离式架构">方向二：生成式奖励模型与进一步的分离式架构</h2>
+<p>在近期的对齐研究中，另一个相对显著的趋势是<strong>生成式奖励模型(GRM)</strong>，比如<a href="http://arxiv.org/abs/2504.02495">DeepSeek-GRM</a>。与传统奖励模型仅输出标量分数不同，生成式奖励模型——本质上也是一个大语言模型——能够生成详细的评估文本或推理轨迹来表达其判断，通过test scaling的方式大大提升了奖励模型的鲁棒性。</p>
+<img width="800"  src="/images/2025/20250814/deepseekGRM.png" class="center" />
+<p>实际上，在几年前OpenAI在<a href="http://arxiv.org/abs/2210.10760">Scaling Laws for Reward Model Overoptimization</a>中就强调了scale reward model的重要性，GRM正是这一技术的延伸。</p>
+<p>类似于o1/R1放大了Disaggregated架构的重要性，生成式奖励模型的引入会进一步推动RL训练流水线向更加<strong>分布式、多模型协同</strong>的方向演进。不同于传统的单一策略模型训练模式，新的架构需要支持策略模型、价值模型、奖励模型等多个大型模型的并行交互与动态调度。这对底层框架的资源管理、任务编排以及模型间通信机制提出了更高要求。</p>
+<p>可以预见，生成式奖励模型代表了RL与LLM内在推理能力的深度融合，它不仅是算法层面的创新，更是对整个RL基础设施提出的系统性挑战。</p>
+<h1 id="写在最后">写在最后</h1>
+<p>从技术演进的角度来看，本文讨论的这些案例展现了LLM强化学习领域中算法与系统协同演化的规律。这种演化并非偶然，而是技术发展中系统性约束与算法创新相互作用的必然结果。</p>
+<p><strong>成熟案例的启示</strong>：异步RL架构与推理时长不确定性的矛盾、MoE模型训推一致性挑战，都体现了一个共同特征——当系统约束成为瓶颈时，算法创新往往会寻找新的理论基础来突破这些限制。Decoupled PPO和截断重要性采样等方法的出现，本质上是将系统工程中的&quot;分治&quot;思想引入算法设计。</p>
+<p><strong>新兴趋势的挑战</strong>：Agent RL中的环境管理复杂性、生成式奖励模型的多模型协同需求，则预示着未来系统设计将面临更高维度的权衡。过程级奖励机制需要更精细的状态管理，而GRM的引入则要求框架具备更强的多模型编排能力。</p>
+<p><strong>协同演化的深层逻辑</strong>：这种算法与系统的紧密耦合反映了LLM强化学习的本质特征——它不仅是一个计算问题，更是一个分布式系统工程问题。算法的有效性往往取决于系统能否提供相应的基础设施支撑，而系统的演进方向也会被算法的需求所引导。</p>
+<p>从更宏观的视角来看，这种协同演化正在重新定义强化学习系统的边界。传统的单机RL框架设计原则在大规模分布式环境中需要根本性的重新思考。我们未来应该会看到更多<strong>系统感知</strong>的算法设计，以及更多<strong>算法优化</strong>的系统架构。</p>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">Last modified on 2025-08-14</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts">
+			Next<br>No newer posts.
+                </a>
+                
+                
+                
+                <a class="older-posts" href="/posts/2025/2025-07-26-ray%E4%B8%8Ellm-rl%E6%A1%86%E6%9E%B6%E8%AE%BE%E8%AE%A1/">
+			Previous<br>Ray与LLM强化学习框架设计
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://sword865.github.io/">
+    
+        <div class="nav-title">
+            悟剑阁
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+                
+            
+            
+            
+            <a class="a-block nav-link-item active" href="/posts">
+                Archive
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/about/">
+                关于
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	Copyright (c) 2015. All rights reserved.
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    <div class="toc-wrapper">
+        
+
+        
+        <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%ae%97%e6%b3%95%e4%b8%8e%e6%a1%86%e6%9e%b6%e5%8d%8f%e5%90%8c%e6%bc%94%e5%8c%96%e7%9a%84%e5%85%b8%e5%9e%8b%e6%a1%88%e4%be%8b" class="nav-算法与框架协同演化的典型案例">
+									算法与框架协同演化的典型案例
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%a1%88%e4%be%8b%e4%b8%80%e6%8e%a8%e7%90%86%e6%a8%a1%e5%9e%8b%e9%a9%b1%e5%8a%a8%e7%9a%84%e5%88%86%e7%a6%bb%e5%bc%8f%e6%9e%b6%e6%9e%84%e8%ae%be%e8%ae%a1" class="nav-案例一推理模型驱动的分离式架构设计">
+									案例一：推理模型驱动的分离式架构设计
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%a1%88%e4%be%8b%e4%ba%8cmoe%e6%9e%b6%e6%9e%84%e4%b8%8e%e8%ae%ad%e7%bb%83%e6%8e%a8%e7%90%86%e5%bc%95%e6%93%8e%e7%9a%84%e7%b2%be%e5%ba%a6%e5%af%b9%e9%bd%90%e6%8c%91%e6%88%98" class="nav-案例二moe架构与训练推理引擎的精度对齐挑战">
+									案例二：MoE架构与训练推理引擎的精度对齐挑战
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%8f%af%e8%83%bd%e7%9a%84%e5%8f%91%e5%b1%95%e8%b6%8b%e5%8a%bf%e5%8d%8f%e5%90%8c%e8%ae%be%e8%ae%a1%e7%9a%84%e6%96%b0%e5%85%b4%e6%8c%91%e6%88%98%e4%b8%8e%e6%9c%ba%e9%81%87" class="nav-可能的发展趋势协同设计的新兴挑战与机遇">
+									（可能的）发展趋势：协同设计的新兴挑战与机遇
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%96%b9%e5%90%91%e4%b8%80agent-rl-%e6%a0%b7%e6%9c%ac%e6%95%88%e7%8e%87%e7%8e%af%e5%a2%83%e7%ae%a1%e7%90%86%e4%b8%8e%e8%bf%87%e7%a8%8b%e5%a5%96%e5%8a%b1" class="nav-方向一agent-rl-样本效率环境管理与过程奖励">
+									方向一：Agent RL: 样本效率、环境管理与过程奖励
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#1-%e5%a5%96%e5%8a%b1%e7%a8%80%e7%96%8f%e6%80%a7%e4%b8%8e%e5%bb%b6%e8%bf%9f%e9%97%ae%e9%a2%98" class="nav-1-奖励稀疏性与延迟问题">
+									1. 奖励稀疏性与延迟问题
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#2-%e5%a4%8d%e6%9d%82%e7%8a%b6%e6%80%81%e8%a1%a8%e7%a4%ba%e4%b8%8e%e7%ae%a1%e7%90%86" class="nav-2-复杂状态表示与管理">
+									2. 复杂状态表示与管理
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#3-%e7%8e%af%e5%a2%83%e5%8f%af%e8%a7%82%e6%b5%8b%e6%80%a7%e4%b8%8e%e5%b7%a5%e5%85%b7%e5%8f%af%e9%9d%a0%e6%80%a7" class="nav-3-环境可观测性与工具可靠性">
+									3. 环境可观测性与工具可靠性
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%96%b0%e7%9a%84rl%e5%9f%ba%e7%a1%80%e8%ae%be%e6%96%bd" class="nav-新的rl基础设施">
+									新的RL基础设施
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e6%96%b9%e5%90%91%e4%ba%8c%e7%94%9f%e6%88%90%e5%bc%8f%e5%a5%96%e5%8a%b1%e6%a8%a1%e5%9e%8b%e4%b8%8e%e8%bf%9b%e4%b8%80%e6%ad%a5%e7%9a%84%e5%88%86%e7%a6%bb%e5%bc%8f%e6%9e%b6%e6%9e%84" class="nav-方向二生成式奖励模型与进一步的分离式架构">
+									方向二：生成式奖励模型与进一步的分离式架构
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%86%99%e5%9c%a8%e6%9c%80%e5%90%8e" class="nav-写在最后">
+									写在最后
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+        
+    </div>
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top"
+            :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+
+<div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	Copyright (c) 2015. All rights reserved.
+	
+</div>
+            </div>
+    
+    <script src="/js/journal.js"></script></body>
+</html>

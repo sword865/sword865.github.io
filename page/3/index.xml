@@ -7,9 +7,131 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>Copyright (c) 2015. All rights reserved.</copyright>
-    <lastBuildDate>Sun, 27 Jul 2025 14:53:26 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 14 Aug 2025 22:53:26 +0800</lastBuildDate>
     
         <atom:link href="https://sword865.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>R语言系列—-数据描述</title>
+        <link>https://sword865.github.io/posts/archives/2012-06-30-r%E8%AF%AD%E8%A8%80%E7%B3%BB%E5%88%97-%E6%95%B0%E6%8D%AE%E6%8F%8F%E8%BF%B0/</link>
+        <pubDate>Sat, 30 Jun 2012 00:00:00 +0000</pubDate>
+        
+        <guid>https://sword865.github.io/posts/archives/2012-06-30-r%E8%AF%AD%E8%A8%80%E7%B3%BB%E5%88%97-%E6%95%B0%E6%8D%AE%E6%8F%8F%E8%BF%B0/</guid>
+        <description>悟剑阁 https://sword865.github.io/posts/archives/2012-06-30-r%E8%AF%AD%E8%A8%80%E7%B3%BB%E5%88%97-%E6%95%B0%E6%8D%AE%E6%8F%8F%E8%BF%B0/ -&lt;p&gt;简单来说，R语言是一种主要用于统计分析、绘图的语言和操作环境。的源代码可自由下载使用，亦有已编译的执行档版本可以下载，可在多种平台下运行，包括UNIX（也包括FreeBSD和Linux）、Windows和MacOS。R主要是以命令行操作，同时有人开发了几种图形用户界面。&lt;/p&gt;
+&lt;div&gt;
+  &lt;p&gt;
+           为什么我会使用R语言呢？毕竟我们还有SPSS,SAS，S等其他工具。就我个人而言(其实对很多人也是这样)有两个原因&amp;#8212;-R的开源与其极高的自由度。
+  &lt;/p&gt;
+  &lt;p&gt;
+    R是开源的，是属于GNU系统的一个自由、免费、源代码开放的软件因此在使用它时我们不用担心使用的资格问题。（当然对人一般人来说其他软件也可以使用盗版…起码国内是这样）另外作为一种语言，R拥有极高的自由度&amp;#8212;-对于，很多新的统计学模型，也许SPSS等软件根本无法处理&amp;#8212;你只能使用系统提供的有限选项。但是在R语言中，你可以自己去实现它。这也是学术界对R如此关注的原因。
+  &lt;/p&gt;
+  &lt;p&gt;
+    敲了这么多废话，进入正题。
+  &lt;/p&gt;
+  &lt;p&gt;
+    这一篇的内容是数据描述，就冲R中内嵌的一些简单分布开始吧。
+  &lt;/p&gt;
+  &lt;p&gt;
+    R语言中提供了四类有关统计分布的函数（密度函数，累计分布函数，分位函数，随机数函数）。分别在代表该分布的R函数前加上相应前缀获得(d，p，q，r)。如正态分布的函数是norm，命令dnorm(0)就可以获得正态分布的密度函数在0处的值(0.3989)(默认为标准正态分布)。同理pnorm(0)是0.5就是正态分布的累计密度函数在0处的值。而qnorm(0.5)则得到的是0，即标准正态分布在0.5处的分位数是0（在来个比较常用的：qnorm(0.975)就是那个估计中经常用到的1.96了）。最后一个rnorm(n)则是按正态分布随机产生n个数据。上面正态分布的参数平均值和方差都是默认的0和１，你可以通过在函数里显示指定这些参数对其进行更改。如dnorm(0,1,2)则得出的是均值为1，标准差为2的正态分布在0处的概率值。要注意的是()内的顺序不能颠倒。
+  &lt;/p&gt;
+  &lt;p align=&#34;left&#34;&gt;
+           接下来我们用R来生成一个二项分布分布的图形吧。
+  &lt;/p&gt;
+  &lt;p align=&#34;left&#34;&gt;
+           binom是二项分布。
+  &lt;/p&gt;
+  &lt;pre class=&#34;lang:r decode:true &#34;&gt;n&amp;lt;-20
+p&amp;lt;-0.2
+k&amp;lt;-seq(0,n)
+plot(k,dbinom(k,n,p))&lt;/pre&gt;
+  &lt;p&gt;
+    R语言中用&lt;-给变量赋值，我们先让n=20，p=0.2然后用函数seq生成一个向量(1,2,3&amp;#8230;20)并将其赋于k。然后用polt函数画图。
+  &lt;/p&gt;
+  &lt;p align=&#34;left&#34;&gt;
+           在这里，我们用dbinom(k,n,p)生成了参数为n，p的二项分布在1….20处的概率值，然后以k的各个值为横坐标，dbinom(k,n,p)的各个值为纵坐标，绘图。
+  &lt;/p&gt;
+  &lt;p&gt;
+    然后我们来看一些R对数据性质的描述。
+  &lt;/p&gt;
+  &lt;p&gt;
+    &lt;strong&gt;绘制直方图：&lt;/strong&gt;hist(x),横轴表示变量取值，纵轴表示频率。
+  &lt;/p&gt;
+  &lt;pre class=&#34;lang:r decode:true&#34;&gt;x&amp;lt;-c(1,2,3,4,5)
+hist(x)&lt;/pre&gt;
+  &lt;p&gt;
+    (R语言中的向量前要求加c进行说明，故第一步是让x为一个值为(1,2,3,4,5)的向量，当然也可以看成一个值为1,2,3,4,5的样本)
+  &lt;/p&gt;
+  &lt;p&gt;
+    我们来画二项分布的直方图吧
+  &lt;/p&gt;
+  &lt;pre class=&#34;lang:r decode:true &#34;&gt;N&amp;lt;-10000
+n&amp;lt;-100
+p&amp;lt;-0.9
+x&amp;lt;-rbinom(x,n,p)
+hist(x)&lt;/pre&gt;
+  &lt;p&gt;
+    思考一下,上面的代码是怎样运作的?
+  &lt;/p&gt;
+  &lt;p&gt;
+    &lt;strong&gt;绘制茎叶图&lt;/strong&gt;： stem(x)
+  &lt;/p&gt;
+  &lt;pre class=&#34;lang:r decode:true&#34;&gt;x&amp;lt;-c(11,12,13,21,22,23)
+stem(x)&lt;/pre&gt;
+  &lt;p&gt;
+    结果如下：
+  &lt;/p&gt;
+  &lt;p align=&#34;left&#34;&gt;
+    The decimal point is 1 digit(s) to the right of the |
+  &lt;/p&gt;
+  &lt;p align=&#34;left&#34;&gt;
+      1 | 123
+  &lt;/p&gt;
+  &lt;p align=&#34;left&#34;&gt;
+      1 |
+  &lt;/p&gt;
+  &lt;p align=&#34;left&#34;&gt;
+    2 | 123
+  &lt;/p&gt;
+  &lt;p align=&#34;left&#34;&gt;
+    另外还有
+  &lt;/p&gt;
+  &lt;p align=&#34;left&#34;&gt;
+    &lt;strong&gt;盒图：&lt;/strong&gt;boxplot(x)
+  &lt;/p&gt;
+  &lt;p align=&#34;left&#34;&gt;
+    在各种图形之后，就是对数据的数值型描述了，包括
+  &lt;/p&gt;
+  &lt;p align=&#34;left&#34;&gt;
+    最大值max(x)，最小值min(x),中位数median(x)，五个分位数fivenum(x)，平均数mean(x),样本方差var(x)，样本标准差sd(x)，样本偏度系数skewness(x)，峰度系数kurtosis(x)等等。
+  &lt;/p&gt;
+  &lt;pre class=&#34;lang:r decode:true &#34;&gt;N&amp;lt;-10000
+n&amp;lt;-100
+p&amp;lt;-0.9
+x&amp;lt;-rbinom(x,n,p)
+max(x)
+min(x)
+median(x)
+fivenum(x)
+mean(x)
+var(x)
+sd(x)
+library(fBasics)
+skewness(x)
+kurtosis(x)&lt;/pre&gt;
+  &lt;p&gt;
+    就可以得到生成的随机数据的各种描述。
+  &lt;/p&gt;
+  &lt;p align=&#34;left&#34;&gt;
+    注意：skewness函数和kurtosis函数属于一个并非默认的fBasics的包，所以需要先用library(fBasics)引入该包才能使用这两个函数。
+  &lt;/p&gt;
+  &lt;p align=&#34;left&#34;&gt;
+     基本的就是这些了，当然还可以更加复杂，比如多组数据的图形与数值描述等等。即使是我们在上面使用的函数其实也是非常强大的，只是我们在上面使用了很多的默认的参数而简化了它们的调用而已。
+  &lt;/p&gt;
+&lt;/div&gt;
+- https://sword865.github.io/posts/archives/2012-06-30-r%E8%AF%AD%E8%A8%80%E7%B3%BB%E5%88%97-%E6%95%B0%E6%8D%AE%E6%8F%8F%E8%BF%B0/ - Copyright (c) 2015. All rights reserved.</description>
+        </item>
     
     
     
@@ -460,75 +582,6 @@ for ( int i = 0; i &amp;amp;lt; m_numMeshes; i++ )
   &lt;a href=&#34;http://www.wumii.com/widget/relatedItems&#34; style=&#34;border:0;&#34;&gt;&lt;img src=&#34;http://static.wumii.cn/images/pixel.png&#34; alt=&#34;无觅相关文章插件，快速提升流量&#34; style=&#34;border:0;padding:0;margin:0;&#34; /&gt;&lt;/a&gt;
 &lt;/p&gt;
 - https://sword865.github.io/posts/archives/2009-09-08-%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%934-%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA/ - Copyright (c) 2015. All rights reserved.</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>算法总结3—神经网络</title>
-        <link>https://sword865.github.io/posts/archives/2009-09-07-%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%933-%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/</link>
-        <pubDate>Mon, 07 Sep 2009 00:00:00 +0000</pubDate>
-        
-        <guid>https://sword865.github.io/posts/archives/2009-09-07-%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%933-%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/</guid>
-        <description>悟剑阁 https://sword865.github.io/posts/archives/2009-09-07-%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%933-%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/ -&lt;p&gt;&lt;strong&gt;生物神经网络：&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;    &lt;/strong&gt; 在生物的神经网络中的基本单位是神经元，神经元与神经元之间是由突触的相互联系来传递信息的，在静止息状态时，神经元的膜的内外电压保持一种稳定状态（膜内电压低于膜外电压），当神经元受到刺激后，在被刺激的部分周围，这种平衡状态会被打破，电压改变，与没有受到刺激的部分形成电流传递信息，电流的强弱取决于受刺激部位电压的改变量。&lt;/p&gt;
-&lt;p&gt;     前一个神经元的轴突末梢作用于下一个神经元的胞体、树突或轴突等处组成突触。不同的轴突末梢可以释放不同的化学物质对下一个神经元产生不同的影响。也就是说会使下一个神经元的受刺激部分产生不同的电压，也就导致了不同程度的电流，最终也就传递了完全不同的信息。&lt;/p&gt;
-&lt;p&gt;     一个神经元可以通过轴突作用于成千上万的神经元，也可以通过树突从成千上万的神经元接受信息。当多个神经元同时对一个神经元产生作用时，结果这些神经元的作用强度共同决定。&lt;/p&gt;
-&lt;p&gt;     神经系统按功能可大致分为传入神经（感觉神经）、中间神经（脑：延脑、脑桥、小脑、中脑、间脑、大脑脊髓）与传出神经（运动神经）三类。&lt;/p&gt;
-&lt;p&gt;     感受神经的作用是接受外界信息（输入），中间神经则起到了信息传递与计算分析的作用，最用，传出神经会负责对外界信息作出相应的反应（输出）。&lt;/p&gt;
-&lt;p&gt;     模仿这一过程，我们就可以建立人工神经网络。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;人工神经网络：&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;     人工神经网络的基本单位是人工神经元（以下简称神经元）。一个神经元可以有多个输入，每个输入有一个相应权值。&lt;/p&gt;
-&lt;p&gt;图示如下：&lt;/p&gt;
-&lt;img class=&#34;alignnone  wp-image-125&#34; src=&#34;http://upload.wikimedia.org/wikipedia/commons/9/97/Ncell.png&#34; alt=&#34;nn&#34; /&gt;
-&lt;pre&gt;&lt;code&gt;a1~an为神经元的输入值
-w1~wn为神经元各个的输入所拥有的权值
-b为偏移量
-sum对各个输入与其权值的积求和(含偏移量)。
-f为传递函数，接受sum的输出，通过一个函数变换，输出t
-t为神经元输出
-数学表示 t=f(WA&#39;+b)
-W为权向量
-A为输入向量，A&#39;为A向量的转置
-b为偏移量
-f为传递函数
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;在人工神经网络中，神经元之间相互连接，在连接点将前者的输出作为后者的输出，形成错综复杂的网状结构，进行信息的传递与计算。&lt;/p&gt;
-&lt;p&gt;我们这里要介绍的是其中比较简单的一种模型，称为“多层感知机（MLP）”网络。&lt;/p&gt;
-&lt;p&gt;为了简化模型，我们假设偏移量b=0.&lt;/p&gt;
-&lt;p&gt;多层感知机网络由3部分组成：&lt;/p&gt;
-&lt;p&gt;输入层：功能类似感受神经，每个节点接受外界的直接输入。这里的模型中，每个节点接受单一输入，权值为1。&lt;/p&gt;
-&lt;p&gt;输出层：功能类似运动神经，该层输出就是神经网络的输出。&lt;/p&gt;
-&lt;p&gt;隐藏层：是输入层和输出层之间的多层神经网络，可以有1或多层。&lt;/p&gt;
-&lt;p&gt;因此，MLP网络中至少有3个层次。&lt;/p&gt;
-&lt;img class=&#34;alignnone  wp-image-125&#34; src=&#34;https://sword865.github.io/images/archives/2012063021381464.jpg&#34; alt=&#34;mlp&#34; /&gt;
-&lt;p&gt;这些层次中，每层的每个神经元的输出都会作为下一层的每个神经元的输入，因此当我们对输入层进行输入后，该信息会一层层传递下去，最终从输出层输出。&lt;/p&gt;
-&lt;p&gt;神经网络建立后，我们需要设法确定每个神经元的各个输入的权重w，并选择合适的函数f对输入进行变换，只有完成以上工作后，我们才能使用神经网络完成相应的工作。&lt;/p&gt;
-&lt;p&gt;我们一般会选择过关于源点对称的S形函数作为函数f，该种函数特点是:输入接近0时，函数对输入的变化有敏感的反应，这一敏感度将随输入绝对值的增大而下降，最终趋于0。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;权重的获取：&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;选择合适的函数后，我们就要去确定各权重w了，权重的选择取决于我们想要神经网络完成的任务，我们首先会给每个输入一个初始化的默认值，该值可任意选取。&lt;/p&gt;
-&lt;p&gt;完成初始化后，我们就要开始训练神经网络了，即给神经网络大量的已知的正确的输入及其对应的输出，神经网络会将自己得到到的输出与正确输出向比较，然后根据某一算法调整自身的权重，使自身输出更接近正确答案。&lt;/p&gt;
-&lt;p&gt;我们这里要介绍的调整算法称为&lt;strong&gt;反向传播法&lt;/strong&gt;，因为该算法是沿网络反向调整权值的。&lt;/p&gt;
-&lt;p&gt;这一算法中，我们会分析输出与正确答案，并将将输出向正确答案推进，为了了解如何推进，我们需要一个函数来计算函数f的斜率，设该函数为g。根据该函数，我们可以计算sum因改变的值。&lt;/p&gt;
-&lt;p&gt;整个算法如下：&lt;/p&gt;
-&lt;p&gt;从后向前对输出层和所有隐含层：&lt;/p&gt;
-&lt;p&gt;1）  计算节点当前输出与期望结果的差值d。(期望结果t – 实际输出 y)&lt;/p&gt;
-&lt;p&gt;对输出层: t在输入训练数据时一同输入。&lt;/p&gt;
-&lt;p&gt;对隐含层: t = sum ( 前一层的每个节点的差值di * 这两个节点间连线的权值 )&lt;/p&gt;
-&lt;p&gt;2）  利用函数g确定函数f在节点输出值y处的改变速率v。v=g(y)&lt;/p&gt;
-&lt;p&gt;3）  改变每个输入链接的权值，其改变量与链接的当前输入强度与学习速率rate（自己定义的属于(0,1)的常量）成正比。&lt;/p&gt;
-&lt;p&gt;（每个wi的改变量为（v&lt;em&gt;d&lt;/em&gt;rate*输入ai））&lt;/p&gt;
-&lt;p&gt;这样一层层的从后向前反推，最终完成对一个训练样本的学习。&lt;/p&gt;
-&lt;p&gt;当对所有样本完成训练后，我们就可以使用这个神经网络了。&lt;/p&gt;
-&lt;p&gt;比如，我们想用神经网络模拟一个数学函数，我们先向网络提供大量的正确的输入输出进行训练，然后就可以用神经网络作模拟这个函数进行计算了。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;优点：&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;神经网络可以处理复杂的非线性函数，发现不同输入的隐含关系。&lt;/p&gt;
-&lt;p&gt;神经网络也允许增量式训练，并且不需要大量的空间保存数据模型。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;缺点：&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;神经网络只能接受数值输入输出，因此我们在处理非数值数据时，必须以一种方法把其每个取值映射到一个数值上。&lt;/p&gt;
-&lt;p&gt;神经网络是一种黑盒方法，这使得我们无法得知其处理输入和输出的方法与原因，尤其是较大的神经网络有数百的节点和上千的连接，更是如此。&lt;/p&gt;
-&lt;p&gt;在训练神经网络时，在选择训练数据的比例及与问题相适应的网络规模方面，没有明确的 规则。如果训练数据比率太大，可能导致网络对噪音数据产生过度归纳，而训练比率太低，网络就不够精准。&lt;/p&gt;
-- https://sword865.github.io/posts/archives/2009-09-07-%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%933-%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/ - Copyright (c) 2015. All rights reserved.</description>
         </item>
     
     
