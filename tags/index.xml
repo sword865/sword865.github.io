@@ -7,13 +7,27 @@
     <generator>Hugo</generator>
     <language>zh-CN</language>
     <copyright>Copyright (c) 2015. All rights reserved.</copyright>
-    <lastBuildDate>Thu, 14 Aug 2025 22:53:26 +0800</lastBuildDate>
+    <lastBuildDate>Mon, 15 Sep 2025 23:43:26 +0800</lastBuildDate>
     <atom:link href="https://sword865.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>LLM</title>
       <link>https://sword865.github.io/tags/llm/</link>
-      <pubDate>Thu, 14 Aug 2025 22:53:26 +0800</pubDate>
+      <pubDate>Mon, 15 Sep 2025 23:43:26 +0800</pubDate>
       <guid>https://sword865.github.io/tags/llm/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Reasoning</title>
+      <link>https://sword865.github.io/tags/reasoning/</link>
+      <pubDate>Mon, 15 Sep 2025 23:43:26 +0800</pubDate>
+      <guid>https://sword865.github.io/tags/reasoning/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>VLM</title>
+      <link>https://sword865.github.io/tags/vlm/</link>
+      <pubDate>Mon, 15 Sep 2025 23:43:26 +0800</pubDate>
+      <guid>https://sword865.github.io/tags/vlm/</guid>
       <description></description>
     </item>
     <item>

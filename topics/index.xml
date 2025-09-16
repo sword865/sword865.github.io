@@ -7,8 +7,22 @@
     <generator>Hugo</generator>
     <language>zh-CN</language>
     <copyright>Copyright (c) 2015. All rights reserved.</copyright>
-    <lastBuildDate>Thu, 14 Aug 2025 22:53:26 +0800</lastBuildDate>
+    <lastBuildDate>Mon, 15 Sep 2025 23:43:26 +0800</lastBuildDate>
     <atom:link href="https://sword865.github.io/topics/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>LLM</title>
+      <link>https://sword865.github.io/topics/llm/</link>
+      <pubDate>Mon, 15 Sep 2025 23:43:26 +0800</pubDate>
+      <guid>https://sword865.github.io/topics/llm/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Reasoning</title>
+      <link>https://sword865.github.io/topics/reasoning/</link>
+      <pubDate>Mon, 15 Sep 2025 23:43:26 +0800</pubDate>
+      <guid>https://sword865.github.io/topics/reasoning/</guid>
+      <description></description>
+    </item>
     <item>
       <title>分布式计算</title>
       <link>https://sword865.github.io/topics/%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%A1%E7%AE%97/</link>

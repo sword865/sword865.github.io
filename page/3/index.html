@@ -181,6 +181,61 @@ code.has-jax {
     <div class="post-list-container post-list-container-no-background">
         
         
+            <a href="/posts/archives/2012-06-30-r%E8%AF%AD%E8%A8%80%E7%B3%BB%E5%88%97-%E5%8C%BA%E9%97%B4%E4%BC%B0%E8%AE%A1/" class="a-block">
+                <div class="post-item-wrapper">
+                    <div class="post-item post-item-no-divider">
+                        <div class="post-item-info-wrapper">
+                            <div class="post-item-title">
+                                R语言系列—-区间估计
+                            </div>
+                            <div class="post-item-summary">
+                                
+                                    <p>这一篇讲的是区间估计…..因为这不是一个关于统计学的系列，所以对文中出现的公式不会给予任何证明…..就是这样。</p>
+<p>就从一个最简单的正态分布的方差已知时，求均值的置信区间开始吧。</p>
+<p>书上的公式告诉我们这个区间是 $$\overline{x}\pm(\sigma/\sqrt{n})z_{(1-\sigma/2)}$$ ,其中Z<sub>p</sub>表示的是正态分布N(0,1)下侧的p分位数。</p>
+<p>我们用R来实现求得这一结果的过程。下面设x里存储了给出的样本，sigma表示已知的方差，n表示样本的个数， alpha则是(1-置信水平)</p>
+<pre class="lang:r decode:true">mean&lt;-mean(x)
+ans&lt;-c(mean-sigma*qnorm(1-alpha / 2)/sqrt(n) , mean+sigma*qnorm(1-alpha / 2)/sqrt(n))
+</pre>
+<p>这样,ans就存储了要求的置信区间。</p>
+<p>来解释一下吧，先用mean(x)求出样本的平均值，然后用qnorm(1-alpha / 2)求出Z<sub>1-a/2</sub>，（还记得么？前缀q是分位数函数，）剩下的就是套公式的加减法了。</p>
+<p>这里的qnorm(1-alpha / 2)其实省略了很多参数，完整一些的写法是</p>
+<pre class="lang:r decode:true">qnorm(1-alpha/2,mean=0,sd=1,lower.tail=TRUE)</pre>
+<p>第一个参数就不用解释了，第二,三个参数mean=0,sd=1，表示这是一个标准正态分布(不同于前面，这里增加了mean=和sd=，这种做法的好处是可以改变参数的顺序，但是结果是一样的)，最后一个参数lower.tail这个参数的意思就比较有意思了，官方解释如下：</p>
+<p>if TRUE (default), probabilities are $P[X &lt;= x]$, otherwise, $P[X &gt; x]$.</p>
+<p>明白了么?等于真的话，得出的就是X&lt;=x的分位数，为假的话就是从X&gt;x的方法寻找这个值。一般我们用默认的真就可以了。</p>
+<p>接下来我们把它整理成一个函数，方便使用</p>
+<pre class="lang:r decode:true">z.test&lt;-function(x,n,sigma,alpha){
+mean&lt;-mean(x)
+ans&lt;-c(
+  mean-sigma*qnorm(1-alpha/2,mean=0,sd=1,lower.tail=TRUE)/sqrt(n),
+    mean+sigma*qnorm(1-alpha/2,mean=0,sd=1,lower.tail=TRUE)/sqrt(n))
+ans
+}</pre>
+<p>这样我们就可以直接使用z.test()完成对u的置信区间的计算。</p>
+<p>比如，有10个样本，分别是175,176,173,175,174,173,173,176,173,179。标准差为1.5，求均值95%的置信区间：</p>
+<pre class="lang:r decode:true  ">x&lt;-c(175,176,173,175,174,173,173,176,173,179)
+z.test(x,10,1.5,0.05)</pre>
+<p>则返回置信区间：</p>
+<p>[1]173.7703 175.6297</p>
+                                
+                            </div>
+                            <div class="post-item-meta">
+    2012-06-30
+    &emsp;
+    
+    
+    
+    &emsp;
+    
+</div>
+
+                        </div>
+                        
+                        
+                    </div>
+                </div>
+        
             <a href="/posts/archives/2012-06-30-r%E8%AF%AD%E8%A8%80%E7%B3%BB%E5%88%97-%E6%95%B0%E6%8D%AE%E6%8F%8F%E8%BF%B0/" class="a-block">
                 <div class="post-item-wrapper">
                     <div class="post-item post-item-no-divider">
@@ -728,85 +783,6 @@ for ( i = 0; i &amp;lt; nTriangles; i++ )
                             </div>
                             <div class="post-item-meta">
     2009-09-10
-    &emsp;
-    
-    
-    
-    &emsp;
-    
-</div>
-
-                        </div>
-                        
-                        
-                    </div>
-                </div>
-        
-            <a href="/posts/archives/2009-09-08-%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%934-%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA/" class="a-block">
-                <div class="post-item-wrapper">
-                    <div class="post-item post-item-no-divider">
-                        <div class="post-item-info-wrapper">
-                            <div class="post-item-title">
-                                算法总结4—支持向量机
-                            </div>
-                            <div class="post-item-summary">
-                                
-                                    <p>支持向量机……复杂的东西，书里讲得也不怎么详细，起码具体算法没有说……所以又去查了些资料……</p>
-<p>支持向量机是用来对数据进行分类的。</p>
-<p>首先从最简单的情况开始吧：</p>
-<p>如果有一条直线，我们把它看成一条数轴，上面有一些样本点，其中坐标大于某个值的点都属于一类，坐标小于某个值的点都属于一类，那么我们就可以用这个值来做分分界点，它点把直线上的点分为了两类。因为样本点是有限可数的。所以这个分类点的取法不唯一。选好后，随便给我们一个点，我们就可以根据这个随机给出的点是在分界点的左侧还是右侧来判断这个点的类别。</p>
-<p>同样，一个平面上有很多样本点，这些点也分为2类，如果我们在平面上可以找到这样一条直线满足这两类样本点分别分布在直线的两侧，那么我们就可以用这个平面作分界面，来对之后随机给出的点进行分类。</p>
-<p>仍然用同样的方法，我们可以用一个平面给分布在一个3维立体空间中的点分类。</p>
-<p>总结起来就是说：在n维空间中有很多样本点，如果我们能找到一个n-1维的超平面，这个平面恰好把空间中的样本点分在它的两侧，那么我们就可以用这个n-1维的超平面来对之后随机给出点分类。</p>
-<p>这种方法有两个问题：</p>
-<p>1）  因为那个n-1维的超平面选法往往是不唯一的，我们要选哪一个?</p>
-<p>2）  更多情况下，我们找不到这样一个n-1维超平面，你可以想象更多情况下，我们要分类的数据是“混合”在一起的，很难简单的用一个点，一条线，或者一个更高纬度的线性分类器把它分开。</p>
-<p>接下来我们就要来解决这个问题。</p>
-<p><strong>最优超平面的确定:</strong></p>
-<p>如果选择合适的分界超平面呢？直观的来说，我们因该选择一个距离两组数据“最远”的超平面。首先每个点都和这个超平面有一个距离（该距离可以通过把n维空间放入一个n维坐标系后用代数的方法计算出来，具体计算过程此处就不说了。不过1维２维３维的情况你应该能自己算出来吧～～～，理解就好）我们选择的超平面要让所有这些距离中最小的一个值最大。</p>
-<p>我们在n维空间空建立一个n维坐标系</p>
-<p>在这个n维坐标系中，每个n-1维超平面都可一个用一个方程表示出来，这里设为。</p>
-<div>$$H(x)=a_{0}+\sum_{i=1}^{n}(a_{i}*x_{i})$$</div>
-<p>我们用一个变量Y表示一个点相对超平面的关系，在一侧为1.另一侧为-1.</p>
-<p>可以证明:（证明过程略）</p>
-<p>该平面在满足下面的约束时：</p>
-<div>$Y_{i}H_(x_{i})\geq 1$</div>
-<p>极小化函数</p>
-<div>$\frac{1}{2}\sum_{j=1}^{n}(a_{j}^{2})$</div>
-<p>这是一个二次规划问题，我们对它求解就可以得到最优平面。</p>
-<p>有时我们找不到这样一个超平面，这时，我们可以把超平面的约束条件放的宽松一点，也就是在超平面附近允许两种分类的点的重叠，可以同过把改为（e&gt;0）来实现这一目的。</p>
-<p>（具体证明与求解参考《统计学完全教程》 科学出版社 P290的支持向量机一节）</p>
-<p><strong>第二个问题的解决—核方法</strong></p>
-<p>很多时候，我们是找不到一个简单的超平面对样本进行划分的，这个时候，我们可以通过坐标变换，把样本点映射到一个可以线形划分的空间中。</p>
-<p>这个映射可以是同维度的，即映射前后样本空间的纬度相同，比如：</p>
-<p><img src="http://pic002.cnblogs.com/images/2012/52809/2012063021394557.jpg" alt=""></p>
-<p>就可以通过一个简单的<strong>求平方</strong>运算，把数据从线性不可划分变为线性可分—我们可以很容易的找到一条直线把后者的样本点分成两个部分。</p>
-<p>但是很多时候，问题没有这么简单，我们就需要用另外一种映射，即把样本点映射到更高纬度的空间去。</p>
-<p>比如上面的左图还可以做这么一种变换：</p>
-<p>$$z_1=x_1x_1, z_2=\sqrt{2}x_1x_2, z_3=x_2x_2$$</p>
-<p>这样我们就可以在新的样本空间中很简单的找到一个平面把这些点分开了．仔细分析，你可以发现，这个平面其实是左图中的一个椭圆的经过上述变换后得到的．</p>
-<p><strong>较高维空间的线性分类器对应于原空间的一个非线性分类器．</strong></p>
-<p>这就是<strong>核方法</strong>的核心。</p>
-<p>通过找到一个合适的映射，我们就可以前面的问题(2)了</p>
-<p>这种映射称为核函数，核函数的选择是很有技巧的，它也有一些常见的模型，很多时候我们只要选择合适的模型并计算适当的参数就可以了。具体方法这里不说了，有兴趣的可以参见《<a href="http://download.csdn.net/source/1353188">RBF核函数的支持向量机参数选择</a>》一文。</p>
-<p>找到核函数后，我们就完全解决上述问题了。</p>
-<p>（其实这里还有一些简化计算的技巧，这些技巧与其它更具体的东西还是可以去看《统计学完全教程》 科学出版社，真是一本非常强大的书。）</p>
-<p><strong>优点:</strong></p>
-<p>可以很快的判断一个样本的种类。</p>
-<p><strong>缺点:</strong></p>
-<p>由于对每个数据集的最佳核变换及相应参数都不一样，所以对每个数据集都要重新学习确定函数与参数。</p>
-<p>一般而言，支持向量机更适合包含大量数据的问题，而其他方法如决策树，更适合小规模的数据集。</p>
-<p>支持向量机也是一种黑盒技术，由于存在像高维空间的判断，我们很难解释分类的具体标准与原因。</p>
-<div>
-  <embed id="lingoes_plugin_object" width="0" height="0" type="application/lingoes-npruntime-capture-word-plugin" hidden="true" />
-</div>
-<p style="margin:0;padding:0;height:1px;overflow:hidden;">
-  <a href="http://www.wumii.com/widget/relatedItems" style="border:0;"><img src="http://static.wumii.cn/images/pixel.png" alt="无觅相关文章插件，快速提升流量" style="border:0;padding:0;margin:0;" /></a>
-</p>
-                                
-                            </div>
-                            <div class="post-item-meta">
-    2009-09-08
     &emsp;
     
     

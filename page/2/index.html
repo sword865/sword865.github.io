@@ -181,6 +181,34 @@ code.has-jax {
     <div class="post-list-container post-list-container-no-background">
         
         
+            <a href="/posts/2017/2017-01-19-%E6%AF%94%E8%BE%83%E4%B8%80%E4%B8%8Bspark2%E7%9A%84dataframe%E5%92%8Crdd/" class="a-block">
+                <div class="post-item-wrapper">
+                    <div class="post-item post-item-no-divider">
+                        <div class="post-item-info-wrapper">
+                            <div class="post-item-title">
+                                比较一下spark2的DataFrame和RDD
+                            </div>
+                            <div class="post-item-summary">
+                                
+                                    研究一下Spark2.x中成为主流的DataSet,DataFrame与原来的RDD之间的差别
+                                
+                            </div>
+                            <div class="post-item-meta">
+    2017-03-12
+    &emsp;
+    
+    
+    
+    &emsp;
+    
+</div>
+
+                        </div>
+                        
+                        
+                    </div>
+                </div>
+        
             <a href="/posts/2016/2016-11-04-%E8%B0%88%E8%B0%88factorization-machine/" class="a-block">
                 <div class="post-item-wrapper">
                     <div class="post-item post-item-no-divider">
@@ -619,61 +647,6 @@ channel.sendResponse(new BytesRestResponse(BAD_REQUEST, &ldquo;No handler found 
                             </div>
                             <div class="post-item-meta">
     2013-04-25
-    &emsp;
-    
-    
-    
-    &emsp;
-    
-</div>
-
-                        </div>
-                        
-                        
-                    </div>
-                </div>
-        
-            <a href="/posts/archives/2012-06-30-r%E8%AF%AD%E8%A8%80%E7%B3%BB%E5%88%97-%E5%8C%BA%E9%97%B4%E4%BC%B0%E8%AE%A1/" class="a-block">
-                <div class="post-item-wrapper">
-                    <div class="post-item post-item-no-divider">
-                        <div class="post-item-info-wrapper">
-                            <div class="post-item-title">
-                                R语言系列—-区间估计
-                            </div>
-                            <div class="post-item-summary">
-                                
-                                    <p>这一篇讲的是区间估计…..因为这不是一个关于统计学的系列，所以对文中出现的公式不会给予任何证明…..就是这样。</p>
-<p>就从一个最简单的正态分布的方差已知时，求均值的置信区间开始吧。</p>
-<p>书上的公式告诉我们这个区间是 $$\overline{x}\pm(\sigma/\sqrt{n})z_{(1-\sigma/2)}$$ ,其中Z<sub>p</sub>表示的是正态分布N(0,1)下侧的p分位数。</p>
-<p>我们用R来实现求得这一结果的过程。下面设x里存储了给出的样本，sigma表示已知的方差，n表示样本的个数， alpha则是(1-置信水平)</p>
-<pre class="lang:r decode:true">mean&lt;-mean(x)
-ans&lt;-c(mean-sigma*qnorm(1-alpha / 2)/sqrt(n) , mean+sigma*qnorm(1-alpha / 2)/sqrt(n))
-</pre>
-<p>这样,ans就存储了要求的置信区间。</p>
-<p>来解释一下吧，先用mean(x)求出样本的平均值，然后用qnorm(1-alpha / 2)求出Z<sub>1-a/2</sub>，（还记得么？前缀q是分位数函数，）剩下的就是套公式的加减法了。</p>
-<p>这里的qnorm(1-alpha / 2)其实省略了很多参数，完整一些的写法是</p>
-<pre class="lang:r decode:true">qnorm(1-alpha/2,mean=0,sd=1,lower.tail=TRUE)</pre>
-<p>第一个参数就不用解释了，第二,三个参数mean=0,sd=1，表示这是一个标准正态分布(不同于前面，这里增加了mean=和sd=，这种做法的好处是可以改变参数的顺序，但是结果是一样的)，最后一个参数lower.tail这个参数的意思就比较有意思了，官方解释如下：</p>
-<p>if TRUE (default), probabilities are $P[X &lt;= x]$, otherwise, $P[X &gt; x]$.</p>
-<p>明白了么?等于真的话，得出的就是X&lt;=x的分位数，为假的话就是从X&gt;x的方法寻找这个值。一般我们用默认的真就可以了。</p>
-<p>接下来我们把它整理成一个函数，方便使用</p>
-<pre class="lang:r decode:true">z.test&lt;-function(x,n,sigma,alpha){
-mean&lt;-mean(x)
-ans&lt;-c(
-  mean-sigma*qnorm(1-alpha/2,mean=0,sd=1,lower.tail=TRUE)/sqrt(n),
-    mean+sigma*qnorm(1-alpha/2,mean=0,sd=1,lower.tail=TRUE)/sqrt(n))
-ans
-}</pre>
-<p>这样我们就可以直接使用z.test()完成对u的置信区间的计算。</p>
-<p>比如，有10个样本，分别是175,176,173,175,174,173,173,176,173,179。标准差为1.5，求均值95%的置信区间：</p>
-<pre class="lang:r decode:true  ">x&lt;-c(175,176,173,175,174,173,173,176,173,179)
-z.test(x,10,1.5,0.05)</pre>
-<p>则返回置信区间：</p>
-<p>[1]173.7703 175.6297</p>
-                                
-                            </div>
-                            <div class="post-item-meta">
-    2012-06-30
     &emsp;
     
     
