@@ -316,24 +316,24 @@ DeepEyes 在局部裁剪后解决文本模型无法回答的细节问题；O1 �
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;总的来说，Colocated框架通过精细的资源管理实现了较高的GPU利用率，相对成熟和稳定，确实许多后续框架都借鉴了类似的设计思路。但是，正如前面提到的资源耦合问题，这种架构在可扩展性方面仍有局限。这也为下一代RL框架的发展指明了方向：能否通过打破严格的串行约束，让生成和训练阶段真正独立地并行执行？&lt;/p&gt;
-&lt;h2 id=&#34;online-policy和offline-policy&#34;&gt;Online Policy和Offline Policy&lt;/h2&gt;
+&lt;h2 id=&#34;on-policy和off-policy&#34;&gt;On-Policy和Off-Policy&lt;/h2&gt;
 &lt;p&gt;本文的重点是Ray和LLM RL的框架设计，因此不会在这一部分内容做过多阐述，大概而言：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;strong&gt;Online Policy&lt;/strong&gt;: 严格要求使用当前最新策略生成的数据进行训练。在RLHF中，这意味着每次训练迭代都必须等待当前actor模型完成新一轮的文本生成，然后立即使用这些&amp;quot;新鲜&amp;quot;的样本来更新模型权重。这种方式能保证训练数据与当前策略的完全一致性，但代价是强制的同步等待，导致前面提到的大量计算bubble。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;On-Policy&lt;/strong&gt;: 严格要求使用当前最新策略生成的数据进行训练。在RLHF中，这意味着每次训练迭代都必须等待当前actor模型完成新一轮的文本生成，然后立即使用这些&amp;quot;新鲜&amp;quot;的样本来更新模型权重。这种方式能保证训练数据与当前策略的完全一致性，但代价是强制的同步等待，导致前面提到的大量计算bubble。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;strong&gt;Offline Policy&lt;/strong&gt;: 允许使用稍微&amp;quot;陈旧&amp;quot;的策略生成的数据进行训练。在实际系统中，这意味着训练阶段可以使用来自之前几个迭代版本的actor模型生成的样本，而不必严格等待当前版本的生成完成。虽然引入了一定的策略陈旧性（policy staleness），但这种设计允许生成和训练阶段真正并行化，大幅提升系统吞吐量。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Off-Policy&lt;/strong&gt;: 允许使用稍微&amp;quot;陈旧&amp;quot;的策略生成的数据进行训练。在实际系统中，这意味着训练阶段可以使用来自之前几个迭代版本的actor模型生成的样本，而不必严格等待当前版本的生成完成。虽然引入了一定的策略陈旧性（policy staleness），但这种设计允许生成和训练阶段真正并行化，大幅提升系统吞吐量。&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;Online Policy&lt;/strong&gt;算法正是前文中Disaggregated Architecture存在大量计算空泡的根本原因：训练阶段只能使用最新策略模型生成的样本，这就强制要求生成步骤必须在训练步骤完成后才能开始下一轮迭代。&lt;/p&gt;
-&lt;p&gt;从理论角度分析，Online Policy的样本效率确实优于Offline Policy，这主要源于其能够保证训练数据与当前策略分布的完全一致性。在LLM强化学习场景中，策略陈旧性（policy staleness）会引入分布偏移问题——生成数据的策略分布与当前训练策略产生偏差，这种不匹配可能降低训练样本的有效性，并对模型收敛的稳定性和效率产生负面影响。&lt;/p&gt;
-&lt;p&gt;不过在RL的工业实践中，这种理论差异往往被系统吞吐量的大幅提升所抵消。现代LLM RL系统通过以下几种方式来缓解策略陈旧性的影响：&lt;strong&gt;增加Experience Buffer的容量、优化batch sampling策略、以及采用更频繁的模型同步机制&lt;/strong&gt;。实际部署中，有团队发现通过合理的超参数调整（如学习率衰减、梯度裁剪），Offline Policy系统在保持训练稳定性的同时，能够获得成倍的训练吞吐量提升。这种工程权衡也推动了RLHF向多轮迭代和DPO向Iterative DPO等更适合并行化的算法变种演进。&lt;/p&gt;
-&lt;h2 id=&#34;disaggregated架构-从offline-policy到streaming-rl&#34;&gt;Disaggregated架构 (从offline policy到Streaming RL)&lt;/h2&gt;
-&lt;p&gt;自然地，业界开始探索在LLM强化学习中采用Offline Policy算法的可能性。&lt;a href=&#34;http://arxiv.org/abs/2410.18252&#34;&gt;ASYNCHRONOUS RLHF&lt;/a&gt;的研究为这一方向提供了积极的信号，该研究表明适度的&lt;strong&gt;策略陈旧性是可以接受的&lt;/strong&gt;，并且不会显著影响训练效果。这一重要发现随后在&lt;a href=&#34;http://arxiv.org/abs/2504.15930&#34;&gt;StreamRL&lt;/a&gt;的工作中得到了进一步的验证和扩展。
+&lt;p&gt;&lt;strong&gt;On-Policy&lt;/strong&gt;算法正是前文中Disaggregated Architecture存在大量计算空泡的根本原因：训练阶段只能使用最新策略模型生成的样本，这就强制要求生成步骤必须在训练步骤完成后才能开始下一轮迭代。&lt;/p&gt;
+&lt;p&gt;从理论角度分析，On-Policy的样本效率确实优于Off-Policy，这主要源于其能够保证训练数据与当前策略分布的完全一致性。在LLM强化学习场景中，策略陈旧性（policy staleness）会引入分布偏移问题——生成数据的策略分布与当前训练策略产生偏差，这种不匹配可能降低训练样本的有效性，并对模型收敛的稳定性和效率产生负面影响。&lt;/p&gt;
+&lt;p&gt;不过在RL的工业实践中，这种理论差异往往被系统吞吐量的大幅提升所抵消。现代LLM RL系统通过以下几种方式来缓解策略陈旧性的影响：&lt;strong&gt;增加Experience Buffer的容量、优化batch sampling策略、以及采用更频繁的模型同步机制&lt;/strong&gt;。实际部署中，有团队发现通过合理的超参数调整（如学习率衰减、梯度裁剪），Off-Policy系统在保持训练稳定性的同时，能够获得成倍的训练吞吐量提升。这种工程权衡也推动了RLHF向多轮迭代和DPO向Iterative DPO等更适合并行化的算法变种演进。&lt;/p&gt;
+&lt;h2 id=&#34;disaggregated架构-从off-policy到streaming-rl&#34;&gt;Disaggregated架构 (从Off-Policy到Streaming RL)&lt;/h2&gt;
+&lt;p&gt;自然地，业界开始探索在LLM强化学习中采用Off-Policy算法的可能性。&lt;a href=&#34;http://arxiv.org/abs/2410.18252&#34;&gt;ASYNCHRONOUS RLHF&lt;/a&gt;的研究为这一方向提供了积极的信号，该研究表明适度的&lt;strong&gt;策略陈旧性是可以接受的&lt;/strong&gt;，并且不会显著影响训练效果。这一重要发现随后在&lt;a href=&#34;http://arxiv.org/abs/2504.15930&#34;&gt;StreamRL&lt;/a&gt;的工作中得到了进一步的验证和扩展。
 类似的，Meta也在&lt;a href=&#34;http://arxiv.org/abs/2505.24034&#34;&gt;LlamaRL&lt;/a&gt;中提出了下面的计算流，我们得到了新的流式的&lt;strong&gt;Disaggregated架构&lt;/strong&gt;：&lt;/p&gt;
 &lt;img width=&#34;800&#34;  src=&#34;https://sword865.github.io/images/2025/20250726/RLHF_offlineRL.png&#34; class=&#34;center&#34; /&gt;
-&lt;p&gt;因此，我们观察到，最新的LLM强化学习系统正在移向&lt;strong&gt;Disaggregated架构 + Offline Policy&lt;/strong&gt;的实现，这与MPMD范式一致。想法是&lt;strong&gt;将生成和训练阶段分离为不同的服务&lt;/strong&gt;，它们并发在不同的GPU资源池上运行。我们有，比如说，一个专门用于生成新rollout的GPU资源池和另一个专门用于训练任务的资源池。两个任务在不同的GPU资源上并行操作，样本不断从生成端持续流向训练端。&lt;/p&gt;
+&lt;p&gt;因此，我们观察到，最新的LLM强化学习系统正在移向&lt;strong&gt;Disaggregated架构 + Off-Policy&lt;/strong&gt;的实现，这与MPMD范式一致。想法是&lt;strong&gt;将生成和训练阶段分离为不同的服务&lt;/strong&gt;，它们并发在不同的GPU资源池上运行。我们有，比如说，一个专门用于生成新rollout的GPU资源池和另一个专门用于训练任务的资源池。两个任务在不同的GPU资源上并行操作，样本不断从生成端持续流向训练端。&lt;/p&gt;
 &lt;p&gt;相比传统的Colocated架构，Disaggregated架构能够真正实现&lt;strong&gt;异构资源的独立扩展&lt;/strong&gt;。举个例子，如果发现生成阶段成为瓶颈（比如复杂推理任务需要更长的生成时间），我们可以单独为生成服务增加更多GPU，而不影响训练集群的配置。相反，如果奖励模型计算或PPO更新成为瓶颈，我们可以针对性地扩展训练侧的资源。这种&lt;strong&gt;弹性伸缩&lt;/strong&gt;的能力在云环境和多租户场景中特别有价值。&lt;/p&gt;
 &lt;p&gt;通过接受一点&lt;strong&gt;陈旧策略&lt;/strong&gt;的数据，流式框架大大改善了&lt;strong&gt;资源利用率&lt;/strong&gt;。不需要所有GPU在迭代之间同步暂停；相反，生成和训练都可以达到稳定的吞吐量。StreamRL的设计明确解决了困扰同步设计的流水线&amp;quot;空泡&amp;quot;（空闲间隙）和落后任务的长尾。它们实现了完全异步流水线，其中权重更新、生成和训练尽可能重叠。此外，流式框架通常引入弹性优势：可以独立扩展生成服务和训练器服务。例如，如果生成长序列是慢的部分，系统可以为流生成服务分配更多GPU而不增加训练器GPU。或者相反，如果发现奖励模型评分是瓶颈，就扩展那个。这种解耦在多租户或云环境中很强大。&lt;/p&gt;
 &lt;p&gt;更进一步，为了更好的对训练集群和推理集群进行协调，我们可以引入通过某种数据缓冲区或队列连接来作为两个集群的交互点。这种设计可以实现生成和训练的&lt;strong&gt;近乎完美重叠&lt;/strong&gt;，从而消除流水线中的大部分空闲时间。这里的一个例子是&lt;a href=&#34;http://arxiv.org/abs/2507.01663&#34;&gt;AsyncFlow&lt;/a&gt;，这个框架基于&lt;code&gt;TransferQueue&lt;/code&gt;来传输数据，并控制训练的执行。&lt;/p&gt;
