@@ -219,7 +219,7 @@ DeepEyes 在局部裁剪后解决文本模型无法回答的细节问题；O1 �
 &lt;p&gt;另一个挑战出现在系统层面，尤其是在使用超大模型或混合专家（MoE）模型时：训练引擎和推理引擎之间的不匹配。&lt;/p&gt;
 &lt;p&gt;在RL的训练中，通常为了效率，模型的推理（生成）过程可能会在专门的推理引擎上执行（例如使用vLLM），而梯度计算则在训练后端（例如DeepSpeed）上进行。然而，两者在数值精度（如FP16 vs INT8）、算子融合、批处理调度或MoE门控行为上都可能存在差异，进而导致rollout数据和训练计算之间的分布漂移。&lt;/p&gt;
 &lt;p&gt;实际上，这个问题并不是在MoE中才刚刚出现，以小红书为例，他们在去年的QCon演讲&lt;a href=&#34;https://mp.weixin.qq.com/s/tG_ktQ0WbZHQavtoJtaXbw&#34;&gt;从0到1构建RLHF系统——小红书大模型团队的探索与实践&lt;/a&gt;中就提到了对训推一致性的要求，通过自研框架进行对齐。此外还有一些公司会选择使用推理引擎生产数据，然后通过训练引擎再次推理拿到logit进行概率计算。&lt;/p&gt;
-&lt;p&gt;但是随着MoE的兴起和推理引擎加速技术的不断发展，精度对齐变得越来越困难，比如MoE的路由层引入的不一致可能远高于Dense Model中的精度不一致。同时由于数据的实际采样概率还是由推理引擎决定，通过训练框架再次对齐也更不够用了。&lt;/p&gt;
+&lt;p&gt;但是随着MoE的兴起和推理引擎加速技术的不断发展，精度对齐变得越来越困难，比如MoE的路由层引入的不一致可能远高于Dense Model中的精度不一致。同时由于数据的实际采样概率还是由推理引擎决定，以前主要是不同引擎计算的概率不同，但是现在可能连采样出的token都会有巨大的变化，这让通过训练框架再次对齐也更不够用了。&lt;/p&gt;
 &lt;p&gt;为了解决这一问题，AREAL框架提出了&lt;a href=&#34;http://arxiv.org/abs/2505.24298&#34;&gt;Decoupled PPO&lt;/a&gt;算法，采用了一种巧妙的双引擎协同策略：利用推理引擎输出的概率进行重要性采样（因为它反映了真实的数据采样分布），同时使用训练引擎输出的概率来计算置信域（Trust Region），确保训练引擎对模型更新仍在训练引擎原来的有效范围内进行。&lt;/p&gt;
 &lt;img width=&#34;800&#34;  src=&#34;https://sword865.github.io/images/2025/20250814/decoupledPPO.png&#34; class=&#34;center&#34; /&gt;
 &lt;p&gt;类似的，&lt;a href=&#34;https://fengyao.notion.site/flash-rl&#34;&gt;FlashRL&lt;/a&gt; 也在他们的&lt;a href=&#34;https://fengyao.notion.site/off-policy-rl&#34;&gt;blog&lt;/a&gt;中提出了一种截断重要性采样的技术&lt;strong&gt;TIS&lt;/strong&gt;，通过对更新进行重新加权，来修正量化推理（用于采样）和全精度模型（用于优化）之间的策略差异。通过这一技术，即使是高度量化的rollout数据（如INT8/FP8）也能被用于训练，而不会损害最终效果。&lt;/p&gt;
@@ -323,13 +323,13 @@ DeepEyes 在局部裁剪后解决文本模型无法回答的细节问题；O1 �
 &lt;p&gt;&lt;strong&gt;On-Policy&lt;/strong&gt;: 严格要求使用当前最新策略生成的数据进行训练。在RLHF中，这意味着每次训练迭代都必须等待当前actor模型完成新一轮的文本生成，然后立即使用这些&amp;quot;新鲜&amp;quot;的样本来更新模型权重。这种方式能保证训练数据与当前策略的完全一致性，但代价是强制的同步等待，导致前面提到的大量计算bubble。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;strong&gt;Off-Policy&lt;/strong&gt;: 允许使用稍微&amp;quot;陈旧&amp;quot;的策略生成的数据进行训练。在实际系统中，这意味着训练阶段可以使用来自之前几个迭代版本的actor模型生成的样本，而不必严格等待当前版本的生成完成。虽然引入了一定的策略陈旧性（policy staleness），但这种设计允许生成和训练阶段真正并行化，大幅提升系统吞吐量。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;OffPolicy&lt;/strong&gt;: 允许使用稍微&amp;quot;陈旧&amp;quot;的策略生成的数据进行训练。在实际系统中，这意味着训练阶段可以使用来自之前几个迭代版本的actor模型生成的样本，而不必严格等待当前版本的生成完成。虽然引入了一定的策略陈旧性（policy staleness），但这种设计允许生成和训练阶段真正并行化，大幅提升系统吞吐量。&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;&lt;strong&gt;On-Policy&lt;/strong&gt;算法正是前文中Disaggregated Architecture存在大量计算空泡的根本原因：训练阶段只能使用最新策略模型生成的样本，这就强制要求生成步骤必须在训练步骤完成后才能开始下一轮迭代。&lt;/p&gt;
 &lt;p&gt;从理论角度分析，On-Policy的样本效率确实优于Off-Policy，这主要源于其能够保证训练数据与当前策略分布的完全一致性。在LLM强化学习场景中，策略陈旧性（policy staleness）会引入分布偏移问题——生成数据的策略分布与当前训练策略产生偏差，这种不匹配可能降低训练样本的有效性，并对模型收敛的稳定性和效率产生负面影响。&lt;/p&gt;
 &lt;p&gt;不过在RL的工业实践中，这种理论差异往往被系统吞吐量的大幅提升所抵消。现代LLM RL系统通过以下几种方式来缓解策略陈旧性的影响：&lt;strong&gt;增加Experience Buffer的容量、优化batch sampling策略、以及采用更频繁的模型同步机制&lt;/strong&gt;。实际部署中，有团队发现通过合理的超参数调整（如学习率衰减、梯度裁剪），Off-Policy系统在保持训练稳定性的同时，能够获得成倍的训练吞吐量提升。这种工程权衡也推动了RLHF向多轮迭代和DPO向Iterative DPO等更适合并行化的算法变种演进。&lt;/p&gt;
-&lt;h2 id=&#34;disaggregated架构-从off-policy到streaming-rl&#34;&gt;Disaggregated架构 (从Off-Policy到Streaming RL)&lt;/h2&gt;
+&lt;h2 id=&#34;disaggregated架构-从off-policy到streaming-rl&#34;&gt;Disaggregated架构 (从off-policy到Streaming RL)&lt;/h2&gt;
 &lt;p&gt;自然地，业界开始探索在LLM强化学习中采用Off-Policy算法的可能性。&lt;a href=&#34;http://arxiv.org/abs/2410.18252&#34;&gt;ASYNCHRONOUS RLHF&lt;/a&gt;的研究为这一方向提供了积极的信号，该研究表明适度的&lt;strong&gt;策略陈旧性是可以接受的&lt;/strong&gt;，并且不会显著影响训练效果。这一重要发现随后在&lt;a href=&#34;http://arxiv.org/abs/2504.15930&#34;&gt;StreamRL&lt;/a&gt;的工作中得到了进一步的验证和扩展。
 类似的，Meta也在&lt;a href=&#34;http://arxiv.org/abs/2505.24034&#34;&gt;LlamaRL&lt;/a&gt;中提出了下面的计算流，我们得到了新的流式的&lt;strong&gt;Disaggregated架构&lt;/strong&gt;：&lt;/p&gt;
 &lt;img width=&#34;800&#34;  src=&#34;https://sword865.github.io/images/2025/20250726/RLHF_offlineRL.png&#34; class=&#34;center&#34; /&gt;

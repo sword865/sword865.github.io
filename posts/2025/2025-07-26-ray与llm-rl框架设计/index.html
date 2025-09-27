@@ -242,7 +242,7 @@ code.has-jax {
 						
 							<li>
 								<a href="#disaggregated%e6%9e%b6%e6%9e%84-%e4%bb%8eoff-policy%e5%88%b0streaming-rl" class="nav-disaggregated架构-从off-policy到streaming-rl">
-									Disaggregated架构 (从Off-Policy到Streaming RL)
+									Disaggregated架构 (从off-policy到Streaming RL)
 								</a>
 							</li>
 						
@@ -471,13 +471,13 @@ code.has-jax {
 <p><strong>On-Policy</strong>: 严格要求使用当前最新策略生成的数据进行训练。在RLHF中，这意味着每次训练迭代都必须等待当前actor模型完成新一轮的文本生成，然后立即使用这些&quot;新鲜&quot;的样本来更新模型权重。这种方式能保证训练数据与当前策略的完全一致性，但代价是强制的同步等待，导致前面提到的大量计算bubble。</p>
 </li>
 <li>
-<p><strong>Off-Policy</strong>: 允许使用稍微&quot;陈旧&quot;的策略生成的数据进行训练。在实际系统中，这意味着训练阶段可以使用来自之前几个迭代版本的actor模型生成的样本，而不必严格等待当前版本的生成完成。虽然引入了一定的策略陈旧性（policy staleness），但这种设计允许生成和训练阶段真正并行化，大幅提升系统吞吐量。</p>
+<p><strong>OffPolicy</strong>: 允许使用稍微&quot;陈旧&quot;的策略生成的数据进行训练。在实际系统中，这意味着训练阶段可以使用来自之前几个迭代版本的actor模型生成的样本，而不必严格等待当前版本的生成完成。虽然引入了一定的策略陈旧性（policy staleness），但这种设计允许生成和训练阶段真正并行化，大幅提升系统吞吐量。</p>
 </li>
 </ul>
 <p><strong>On-Policy</strong>算法正是前文中Disaggregated Architecture存在大量计算空泡的根本原因：训练阶段只能使用最新策略模型生成的样本，这就强制要求生成步骤必须在训练步骤完成后才能开始下一轮迭代。</p>
 <p>从理论角度分析，On-Policy的样本效率确实优于Off-Policy，这主要源于其能够保证训练数据与当前策略分布的完全一致性。在LLM强化学习场景中，策略陈旧性（policy staleness）会引入分布偏移问题——生成数据的策略分布与当前训练策略产生偏差，这种不匹配可能降低训练样本的有效性，并对模型收敛的稳定性和效率产生负面影响。</p>
 <p>不过在RL的工业实践中，这种理论差异往往被系统吞吐量的大幅提升所抵消。现代LLM RL系统通过以下几种方式来缓解策略陈旧性的影响：<strong>增加Experience Buffer的容量、优化batch sampling策略、以及采用更频繁的模型同步机制</strong>。实际部署中，有团队发现通过合理的超参数调整（如学习率衰减、梯度裁剪），Off-Policy系统在保持训练稳定性的同时，能够获得成倍的训练吞吐量提升。这种工程权衡也推动了RLHF向多轮迭代和DPO向Iterative DPO等更适合并行化的算法变种演进。</p>
-<h2 id="disaggregated架构-从off-policy到streaming-rl">Disaggregated架构 (从Off-Policy到Streaming RL)</h2>
+<h2 id="disaggregated架构-从off-policy到streaming-rl">Disaggregated架构 (从off-policy到Streaming RL)</h2>
 <p>自然地，业界开始探索在LLM强化学习中采用Off-Policy算法的可能性。<a href="http://arxiv.org/abs/2410.18252">ASYNCHRONOUS RLHF</a>的研究为这一方向提供了积极的信号，该研究表明适度的<strong>策略陈旧性是可以接受的</strong>，并且不会显著影响训练效果。这一重要发现随后在<a href="http://arxiv.org/abs/2504.15930">StreamRL</a>的工作中得到了进一步的验证和扩展。
 类似的，Meta也在<a href="http://arxiv.org/abs/2505.24034">LlamaRL</a>中提出了下面的计算流，我们得到了新的流式的<strong>Disaggregated架构</strong>：</p>
 <img width="800"  src="/images/2025/20250726/RLHF_offlineRL.png" class="center" />
@@ -723,7 +723,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 							<li>
 								<a href="#disaggregated%e6%9e%b6%e6%9e%84-%e4%bb%8eoff-policy%e5%88%b0streaming-rl" class="nav-disaggregated架构-从off-policy到streaming-rl">
-									Disaggregated架构 (从Off-Policy到Streaming RL)
+									Disaggregated架构 (从off-policy到Streaming RL)
 								</a>
 							</li>
 						
