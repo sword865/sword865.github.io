@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Attention on 悟剑阁</title>
+    <link>https://sword865.github.io/tags/attention/</link>
+    <description>Recent content in Attention on 悟剑阁</description>
+    <generator>Hugo</generator>
+    <language>zh-CN</language>
+    <copyright>Copyright (c) 2015. All rights reserved.</copyright>
+    <lastBuildDate>Tue, 16 Dec 2025 22:09:11 +0800</lastBuildDate>
+    <atom:link href="https://sword865.github.io/tags/attention/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Linear Attention基础-理论篇</title>
+      <link>https://sword865.github.io/posts/2025/2025-12-16-linear-attention%E5%9F%BA%E7%A1%80-%E7%90%86%E8%AE%BA%E7%AF%87/</link>
+      <pubDate>Tue, 16 Dec 2025 22:09:11 +0800</pubDate>
+      <guid>https://sword865.github.io/posts/2025/2025-12-16-linear-attention%E5%9F%BA%E7%A1%80-%E7%90%86%E8%AE%BA%E7%AF%87/</guid>
+      <description>&lt;p&gt;准备写一些关于线性注意力的文章，对相关理论和工程(Kernel)做一些梳理，这一篇是关于基础理论的。&lt;/p&gt;&#xA;&lt;h1 id=&#34;softmax-attention到线性注意力&#34;&gt;Softmax Attention到线性注意力&lt;/h1&gt;&#xA;&lt;h2 id=&#34;softmax-attention与on2复杂度&#34;&gt;Softmax Attention与O(N^2)复杂度&lt;/h2&gt;&#xA;&lt;p&gt;标准的Transformer使用的是Softmax Attention。给定查询（Query）、键（Key）、值（Value）矩阵 $Q, K, V \in \mathbb{R}^{N \times d}$，其中 $N$ 是序列长度，$d$ 是特征维度（通常 $d \ll N$）。Attention的计算公式为：&lt;/p&gt;&#xA;&lt;p&gt;$$ Attention(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d}}\right)V $$&lt;/p&gt;&#xA;&lt;p&gt;让我们仔细分析一下这个计算过程的维度变化：&lt;/p&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;&lt;strong&gt;计算相似度矩阵&lt;/strong&gt;：$QK^T$。&#xA;&lt;ul&gt;&#xA;&lt;li&gt;$Q$ 是 $N \times d$，$K^T$ 是 $d \times N$。&lt;/li&gt;&#xA;&lt;li&gt;相乘得到 $N \times N$ 的矩阵。这一步的计算复杂度是 $O(N^2 d)$。&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;应用Softmax&lt;/strong&gt;：对每一行进行归一化，维度不变，仍为 $N \times N$。&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;加权求和&lt;/strong&gt;：乘以 $V$。&#xA;&lt;ul&gt;&#xA;&lt;li&gt;$N \times N$ 的矩阵乘以 $N \times d$ 的矩阵 $V$。&lt;/li&gt;&#xA;&lt;li&gt;结果是 $N \times d$。这一步的计算复杂度也是 $O(N^2 d)$。&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;p&gt;&lt;strong&gt;瓶颈所在&lt;/strong&gt;：&#xA;由于Softmax是非线性的，我们必须先完整地计算出 $N \times N$ 的Attention Matrix。&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

@@ -7,9 +7,33 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>Copyright (c) 2015. All rights reserved.</copyright>
-    <lastBuildDate>Mon, 15 Sep 2025 23:43:26 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 16 Dec 2025 22:09:11 +0800</lastBuildDate>
     
         <atom:link href="https://sword865.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>统计,逻辑与智能</title>
+        <link>https://sword865.github.io/posts/archives/2009-09-10-%E7%BB%9F%E8%AE%A1%E9%80%BB%E8%BE%91%E4%B8%8E%E6%99%BA%E8%83%BD/</link>
+        <pubDate>Thu, 10 Sep 2009 00:00:00 +0000</pubDate>
+        
+        <guid>https://sword865.github.io/posts/archives/2009-09-10-%E7%BB%9F%E8%AE%A1%E9%80%BB%E8%BE%91%E4%B8%8E%E6%99%BA%E8%83%BD/</guid>
+        <description>悟剑阁 https://sword865.github.io/posts/archives/2009-09-10-%E7%BB%9F%E8%AE%A1%E9%80%BB%E8%BE%91%E4%B8%8E%E6%99%BA%E8%83%BD/ -&lt;p&gt;      今天上了开学的第一节统计学，开了很久的小差，想了不少东西。&lt;/p&gt;
+&lt;p&gt;      以前虽然自学过概率论与数理统计，但是也只是了解了一些公式与原理，一直对于统计学的一些应用不甚理解(或者说不能接受)，尤其是基于统计的机器学习，一直不能接受它作为一种实现的人工智能的手段。因为我心中的人工智能是绝对理性，严谨，逻辑的。虽然我可以接受统计学的理论，却不能把它作为一种严谨的逻辑。&lt;/p&gt;
+&lt;p&gt;　 但是，今天突然想到了感性，是的，人是理性的，但是人的思维中也充满了感性的，当然，这是早已熟知的事实。&lt;/p&gt;
+&lt;p&gt;　 先给感性下一个定义吧。&lt;/p&gt;
+&lt;p&gt;　 感性：作用于人的感觉器官而产生的感觉，知觉和表象等直观认识，相对与‘理性’”&lt;/p&gt;
+&lt;p&gt;　 是的，感性一种直观的认识，那么这种认识从哪里来呢？过去的经验。人们的感性是在经验的基础上建立的，是一种仅仅由经验得出而没有任何逻辑背景的判断。&lt;/p&gt;
+&lt;p&gt;　 统计学不也是这样么？将大量的样本作为过去的经验，仅仅由这些经验而不带任何逻辑推断的去快速做出一种“感性”的判断。只是这种感性比人的感性更加严谨，不会受到类似“小概率事件经常发生”这种错觉的影响，但也可以算是一种理性的感性了。&lt;/p&gt;
+&lt;p&gt;      对应的，我又想起了逻辑学，如果统计是根据经验快速简单的做出判断的话，那么逻辑学就是通过严谨的逻辑推理去寻找正确的答案，这个过程会很繁琐，但是它使绝对严谨理性的，比我们的大脑更加严谨，理性——那何不把它看成一种是理性的理性呢？&lt;/p&gt;
+&lt;p&gt;     但是仅仅有统计与逻辑，我们无法建立一个系统，因此也许还需要一个驱动吧？在完成一个任务、解决一个问题时，这个驱动不断的让感性提供可能解，然后让理性验证它——突然我发现，这不就是“启发式搜索”所作的事情么？&lt;/p&gt;
+&lt;p&gt;     以前翻过一些人工智能的书，总是觉的虽然那些方法可以达到目的，但是却没有触及到智能的本质，因此总是有些失望的，可是现在，我释然了。什么是智能的本质？好像是在《与众不同的心理学》这本书上，我看到过类似问题(也许问得是别的什么，不过差不多)。书里说，这是不可验证的，如果我们甚至不能解释，验证它，我们为什么可以凭借自己的主观推断去确定一个机器是否拥有智能？我们凭什么可以认为，这些机器，当他们把现在这些技术发挥到一定程度后就不可以拥有智能？也许我们自己的自我认知也只是一种数学的算法对自身产生的作用呢？（是不是有谁说过，这个宇宙，连同我们的存在，都只是一种错觉？记不清了…..不过看来这句话还是很有意思的。）&lt;/p&gt;
+&lt;p&gt;　 想到了这些之后，我对“人工智能最难的是处理常识”第一次有了很深的认同，以前总是不能充分认识常识的作用，但是如果直觉，经验在智能中占了如此重要的一部分，那么我们就必须去处理常识――其中的困难自然不用多说了。&lt;/p&gt;
+&lt;p&gt;     最后，把我上课时写在书上的话记录下来吧：&lt;/p&gt;
+&lt;p&gt;     统计学—以理性研究感性，我们的直觉从过去的经验去推导未来，这种推断不能解释结果的原因。（因为它在历史上倾向于如此，所以它很可能如此。）统计学将这种感性理性化，并出除了一些直觉上的错误（如：小概率事件经常发生），但其根本上还是一种感性的判断，因此解释这种感性推断背后的原因，事物呈现这种状态的原因，就是人的工作了。所以统计学也可以用来在没有线索时，作为一种“事后诸葛亮”式的推断的第一步（即先找出最可能答案，在设法解释它，不过这种方法具有不可证伪性，所以不是科学严谨的――毕竟是直觉么）。同时，统计的机器学习可以就可用来模拟人的直觉学习了（而且是一种没有错误的直觉）。&lt;/p&gt;
+- https://sword865.github.io/posts/archives/2009-09-10-%E7%BB%9F%E8%AE%A1%E9%80%BB%E8%BE%91%E4%B8%8E%E6%99%BA%E8%83%BD/ - Copyright (c) 2015. All rights reserved.</description>
+        </item>
     
     
     
@@ -854,165 +878,6 @@ int main() {
         <description>悟剑阁 https://sword865.github.io/posts/archives/2009-03-08-%E7%BB%88%E4%BA%8E%E8%BF%98%E6%98%AF%E5%BC%80%E4%BA%86%E4%B8%AAblog/ -&lt;p&gt;RT&lt;br&gt;
 以后常来看看吧&lt;/p&gt;
 - https://sword865.github.io/posts/archives/2009-03-08-%E7%BB%88%E4%BA%8E%E8%BF%98%E6%98%AF%E5%BC%80%E4%BA%86%E4%B8%AAblog/ - Copyright (c) 2015. All rights reserved.</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>编译原理虎书java版本–Chapter 1</title>
-        <link>https://sword865.github.io/posts/archives/2009-03-08-%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%E8%99%8E%E4%B9%A6java%E7%89%88%E6%9C%AC-chapter-1/</link>
-        <pubDate>Sun, 08 Mar 2009 00:00:00 +0000</pubDate>
-        
-        <guid>https://sword865.github.io/posts/archives/2009-03-08-%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%E8%99%8E%E4%B9%A6java%E7%89%88%E6%9C%AC-chapter-1/</guid>
-        <description>悟剑阁 https://sword865.github.io/posts/archives/2009-03-08-%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%E8%99%8E%E4%B9%A6java%E7%89%88%E6%9C%AC-chapter-1/ -&lt;p&gt;Count.java&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;public class  Count
-{
-    int resolveStm(Stm stm){
-        int temp1=0,temp2=0;
-        if(stm.kind==1){
-            temp1=resolveStm(((CompoundStm)stm).stm1);
-            temp2=resolveStm(((CompoundStm)stm).stm2);
-            return temp1&amp;gt;temp2? temp1:temp2;
-        }else if(stm.kind==2){
-            return resolveExp(((AssignStm)stm).exp);
-        }else if (stm.kind==3){
-            return countExpInExpList(((PrintStm)stm).exps);
-        }else{
-            return 0;
-        }
-    }
-    int countExpInExpList(ExpList expList){
-        if(expList.kind==1){
-            return 1;
-        }else if(expList.kind==2){
-            return 1+countExpInExpList(((PairExpList)expList).tail);
-        }else{
-            return 0;
-        }
-    }
-    int resolveExp(Exp exp){
-        int temp1,temp2;
-        if(exp.kind==1){
-            return 0;
-        }else if(exp.kind==2){
-            return 0;
-        }else if(exp.kind==3){
-            temp1 = resolveExp(((OpExp)exp).left);
-            temp2 = resolveExp(((OpExp)exp).right);
-            return temp1&amp;gt;temp2?temp1:temp2;
-        }else if(exp.kind==4){
-            temp1=resolveStm(((EseqExp)exp).stm);
-            temp2=resolveExp(((EseqExp)exp).exp);
-            return temp1&amp;gt;temp2?temp1:temp2;
-        }else{
-            return 0;
-        }
-    }
-    int resolveExpList(ExpList expList){
-        int temp1,temp2;
-        if(expList.kind==2){
-            temp1 = resolveExp(((PairExpList)expList).head);
-            temp2 = resolveExpList(((PairExpList)expList).tail);
-            return temp1&amp;gt;temp2?temp1:temp2;
-        }else if(expList.kind==1){
-            return resolveExp(((LastExpList)expList).last);
-        }else{
-            return 0;
-        }
-    }
-}
-Interp.java
-public class  Interp
-{
-    void startinterpStm(Stm stm){
-        Table t=new Table(null,0,null);
-        interpStm(stm,t);
-    }
-    Table interpStm(Stm stm,Table t){
-        if(stm.kind==1){
-            Table t1=interpStm(((CompoundStm)stm).stm1,t);
-            Table t2=interpStm(((CompoundStm)stm).stm2,t1);
-            return t2;
-        }else if(stm.kind==2){
-            IntAndTable it1 = interExp(((AssignStm)stm).exp,t);
-            Table t1=update(it1.t,((AssignStm)stm).id,it1.i);
-            return t1;
-        }else if(stm.kind==3){
-            printExplist(((PrintStm)stm).exps,t);
-            return t;
-        }else{
-            return t;
-        }
-    }
-    IntAndTable interExp(Exp exp,Table t){
-        if(exp.kind==1){
-            int temp=lookup(t,((IdExp)exp).id);
-            return new IntAndTable(temp,t);
-        }else if(exp.kind==2){
-            return new IntAndTable(((NumExp)exp).num,t);
-        }else if(exp.kind==3){
-            IntAndTable it1= interExp(((OpExp)exp).left,t);
-            IntAndTable it2= interExp(((OpExp)exp).right,it1.t);
-            int x1,x2,result;
-            x1=it1.i;
-            x2=it2.i;
-            if(((OpExp)exp).oper==1){
-                result=x1+x2;
-            }else if(((OpExp)exp).oper==2){
-                result=x1-x2;
-            }else if(((OpExp)exp).oper==3){
-                result=x1*x2;
-            }else if(((OpExp)exp).oper==4){
-                result=x1/x2;
-            }else{
-                result=0;
-            }
-            return new IntAndTable(result,t);
-        }else if(exp.kind==4){
-            Table t1=interpStm(((EseqExp)exp).stm,t);
-            IntAndTable t3= interExp(((EseqExp)exp).exp,t1);
-            return t3;
-        }else{
-            return new IntAndTable(0,t);
-        }
-    }
-    Table update(Table t1,String i,int v){
-        Table t2=new Table(i,v,t1);
-        return t2;
-    }
-    int lookup(Table t,String key){
-        if(key.compareTo(t.id)==0){
-            return t.value;
-        }else return lookup(t.tail,key);
-    }
-    void printExplist(ExpList exps,Table t){
-        if(exps.kind==1){
-            IntAndTable temp=interExp(((LastExpList)exps).last,t);
-            System.out.println(temp.i);
-        }else if(exps.kind==2){
-            IntAndTable temp=interExp(((PairExpList)exps).head,t);
-            System.out.print(temp.i+&amp;quot;&amp;quot;);
-            printExplist(((PairExpList)exps).tail,t);
-        }else return;
-    }
-// IntAndTable interExpList(ExpList explist,Table t){
-// }
-}
-class Table
-{
-    String id;
-    int value;
-    Table tail;
-    Table(String i,int v,Table t){id=i;value=v;tail=t;}
-}
-class IntAndTable
-{
-    int i;
-    Table t;
-    IntAndTable(int ii,Table tt){i=ii;t=tt;};
-}
-&lt;/code&gt;&lt;/pre&gt;
-- https://sword865.github.io/posts/archives/2009-03-08-%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%E8%99%8E%E4%B9%A6java%E7%89%88%E6%9C%AC-chapter-1/ - Copyright (c) 2015. All rights reserved.</description>
         </item>
     
     

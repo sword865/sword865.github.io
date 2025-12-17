@@ -2,14 +2,35 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://sword865.github.io/tags/attention/</loc>
+    <lastmod>2025-12-16T22:09:11+08:00</lastmod>
+  </url><url>
+    <loc>https://sword865.github.io/topics/efficient-attention/</loc>
+    <lastmod>2025-12-16T22:09:11+08:00</lastmod>
+  </url><url>
+    <loc>https://sword865.github.io/tags/linear-attention/</loc>
+    <lastmod>2025-12-16T22:09:11+08:00</lastmod>
+  </url><url>
+    <loc>https://sword865.github.io/posts/2025/2025-12-16-linear-attention%E5%9F%BA%E7%A1%80-%E7%90%86%E8%AE%BA%E7%AF%87/</loc>
+    <lastmod>2025-12-16T22:09:11+08:00</lastmod>
+  </url><url>
     <loc>https://sword865.github.io/tags/llm/</loc>
-    <lastmod>2025-09-15T23:43:26+08:00</lastmod>
+    <lastmod>2025-12-16T22:09:11+08:00</lastmod>
   </url><url>
     <loc>https://sword865.github.io/topics/llm/</loc>
-    <lastmod>2025-09-15T23:43:26+08:00</lastmod>
+    <lastmod>2025-12-16T22:09:11+08:00</lastmod>
   </url><url>
     <loc>https://sword865.github.io/posts/</loc>
-    <lastmod>2025-09-15T23:43:26+08:00</lastmod>
+    <lastmod>2025-12-16T22:09:11+08:00</lastmod>
+  </url><url>
+    <loc>https://sword865.github.io/tags/</loc>
+    <lastmod>2025-12-16T22:09:11+08:00</lastmod>
+  </url><url>
+    <loc>https://sword865.github.io/topics/</loc>
+    <lastmod>2025-12-16T22:09:11+08:00</lastmod>
+  </url><url>
+    <loc>https://sword865.github.io/</loc>
+    <lastmod>2025-12-16T22:09:11+08:00</lastmod>
   </url><url>
     <loc>https://sword865.github.io/tags/reasoning/</loc>
     <lastmod>2025-09-15T23:43:26+08:00</lastmod>
@@ -17,19 +38,10 @@
     <loc>https://sword865.github.io/topics/reasoning/</loc>
     <lastmod>2025-09-15T23:43:26+08:00</lastmod>
   </url><url>
-    <loc>https://sword865.github.io/tags/</loc>
-    <lastmod>2025-09-15T23:43:26+08:00</lastmod>
-  </url><url>
-    <loc>https://sword865.github.io/topics/</loc>
-    <lastmod>2025-09-15T23:43:26+08:00</lastmod>
-  </url><url>
     <loc>https://sword865.github.io/tags/vlm/</loc>
     <lastmod>2025-09-15T23:43:26+08:00</lastmod>
   </url><url>
     <loc>https://sword865.github.io/posts/2025/2025-09-15-vlm%E4%B8%8E%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B%E7%9A%84%E8%BF%9B%E5%8C%96/</loc>
-    <lastmod>2025-09-15T23:43:26+08:00</lastmod>
-  </url><url>
-    <loc>https://sword865.github.io/</loc>
     <lastmod>2025-09-15T23:43:26+08:00</lastmod>
   </url><url>
     <loc>https://sword865.github.io/tags/ray/</loc>

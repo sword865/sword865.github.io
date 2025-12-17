@@ -7,9 +7,341 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>Copyright (c) 2015. All rights reserved.</copyright>
-    <lastBuildDate>Mon, 15 Sep 2025 23:43:26 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 16 Dec 2025 22:09:11 +0800</lastBuildDate>
     
         <atom:link href="https://sword865.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>Linear Attention基础-理论篇</title>
+        <link>https://sword865.github.io/posts/2025/2025-12-16-linear-attention%E5%9F%BA%E7%A1%80-%E7%90%86%E8%AE%BA%E7%AF%87/</link>
+        <pubDate>Tue, 16 Dec 2025 22:09:11 +0800</pubDate>
+        
+        <guid>https://sword865.github.io/posts/2025/2025-12-16-linear-attention%E5%9F%BA%E7%A1%80-%E7%90%86%E8%AE%BA%E7%AF%87/</guid>
+        <description>悟剑阁 https://sword865.github.io/posts/2025/2025-12-16-linear-attention%E5%9F%BA%E7%A1%80-%E7%90%86%E8%AE%BA%E7%AF%87/ -&lt;p&gt;准备写一些关于线性注意力的文章，对相关理论和工程(Kernel)做一些梳理，这一篇是关于基础理论的。&lt;/p&gt;
+&lt;h1 id=&#34;softmax-attention到线性注意力&#34;&gt;Softmax Attention到线性注意力&lt;/h1&gt;
+&lt;h2 id=&#34;softmax-attention与on2复杂度&#34;&gt;Softmax Attention与O(N^2)复杂度&lt;/h2&gt;
+&lt;p&gt;标准的Transformer使用的是Softmax Attention。给定查询（Query）、键（Key）、值（Value）矩阵 $Q, K, V \in \mathbb{R}^{N \times d}$，其中 $N$ 是序列长度，$d$ 是特征维度（通常 $d \ll N$）。Attention的计算公式为：&lt;/p&gt;
+&lt;p&gt;$$ Attention(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d}}\right)V $$&lt;/p&gt;
+&lt;p&gt;让我们仔细分析一下这个计算过程的维度变化：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;计算相似度矩阵&lt;/strong&gt;：$QK^T$。
+&lt;ul&gt;
+&lt;li&gt;$Q$ 是 $N \times d$，$K^T$ 是 $d \times N$。&lt;/li&gt;
+&lt;li&gt;相乘得到 $N \times N$ 的矩阵。这一步的计算复杂度是 $O(N^2 d)$。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;应用Softmax&lt;/strong&gt;：对每一行进行归一化，维度不变，仍为 $N \times N$。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;加权求和&lt;/strong&gt;：乘以 $V$。
+&lt;ul&gt;
+&lt;li&gt;$N \times N$ 的矩阵乘以 $N \times d$ 的矩阵 $V$。&lt;/li&gt;
+&lt;li&gt;结果是 $N \times d$。这一步的计算复杂度也是 $O(N^2 d)$。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;瓶颈所在&lt;/strong&gt;：
+由于Softmax是非线性的，我们必须先完整地计算出 $N \times N$ 的Attention Matrix。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;计算复杂度&lt;/strong&gt;：$O(N^2 d)$。随着序列长度 $N$ 的增加，计算量呈平方级增长。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;显存占用&lt;/strong&gt;：$O(N^2)$（如果不使用FlashAttention等优化）。需要存储 $N \times N$ 的矩阵。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;KV Cache&lt;/strong&gt;：在推理时，为了避免重复计算，我们需要缓存所有的 $K$ 和 $V$，显存占用为 $O(Nd)$。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;对于长序列（Long Context）场景，这个 $O(N^2)$ 的复杂度是不可接受的。&lt;/p&gt;
+&lt;h2 id=&#34;线性注意力-linear-attention&#34;&gt;线性注意力 (Linear Attention)&lt;/h2&gt;
+&lt;p&gt;线性注意力的核心思想是：&lt;strong&gt;如果我们能去掉Softmax，或者将其替换为某种核函数 $\phi(\cdot)$，我们就可以利用矩阵乘法的结合律优化计算。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;假设我们将相似度函数定义为 $\text{sim}(q, k) = \phi(q)^T \phi(k)$，其中 $\phi(\cdot)$ 是一个特征映射函数（Feature Map），将输入映射到某个特征空间。那么Attention公式变为：&lt;/p&gt;
+&lt;p&gt;$$ Attention(Q, K, V) = \left( \phi(Q) \phi(K)^T \right) V $$&lt;/p&gt;
+&lt;p&gt;这里 $\phi(Q)$ 和 $\phi(K)$ 的维度仍然是 $N \times d$（假设特征映射不改变维度，或者映射到 $D$ 维）。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;利用结合律 (Associative Property)&lt;/strong&gt;：
+矩阵乘法满足结合律 $(AB)C = A(BC)$。我们可以改变计算顺序：&lt;/p&gt;
+&lt;p&gt;$$ Attention(Q, K, V) = \phi(Q) \left( \phi(K)^T V \right) $$&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;(注：标准的Linear Attention公式通常包含一个分母归一化项 $\phi(Q) (\phi(K)^T \mathbf{1})$ 以保持数值尺度，此处为了简化推导过程省略了该项。)&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;让我们看看现在的计算过程：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;先计算 $\phi(K)^T V$&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;$\phi(K)^T$ 是 $d \times N$，$V$ 是 $N \times d$。&lt;/li&gt;
+&lt;li&gt;相乘得到一个 $d \times d$ 的矩阵。我们称之为 &lt;strong&gt;状态矩阵 (State Matrix)&lt;/strong&gt; 或 &lt;strong&gt;KV Memory&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;计算复杂度：$O(N d^2)$。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;再左乘 $\phi(Q)$&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;$\phi(Q)$ 是 $N \times d$，状态矩阵是 $d \times d$。&lt;/li&gt;
+&lt;li&gt;相乘得到 $N \times d$ 的结果。&lt;/li&gt;
+&lt;li&gt;计算复杂度：$O(N d^2)$。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;优势&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;总复杂度&lt;/strong&gt;：$O(N d^2)$。由于 $d$ 通常是一个较小的常数（如64, 128），这相对于序列长度 $N$ 是&lt;strong&gt;线性&lt;/strong&gt;的。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;显存占用&lt;/strong&gt;：我们只需要维护一个 $d \times d$ 的状态矩阵，与 $N$ 无关。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;循环神经网络-rnn-view&#34;&gt;循环神经网络 (RNN View)&lt;/h2&gt;
+&lt;p&gt;线性注意力不仅计算高效，而且可以写成RNN的形式，这对于自回归生成（Inference）非常友好。&lt;/p&gt;
+&lt;p&gt;我们可以将上述矩阵运算写成累加的形式。对于第 $t$ 个时刻的输出 $o_t$：&lt;/p&gt;
+&lt;p&gt;$$ o_t = \sum_{i=1}^t \text{sim}(q_t, k_i) v_i = \sum_{i=1}^t (\phi(q_t)^T \phi(k_i)) v_i $$&lt;/p&gt;
+&lt;p&gt;提取出与 $i$ 无关的项 $\phi(q_t)$：&lt;/p&gt;
+&lt;p&gt;$$ o_t = \phi(q_t)^T \sum_{i=1}^t \phi(k_i) v_i^T $$&lt;/p&gt;
+&lt;p&gt;我们可以定义状态 $S_t = \sum_{i=1}^t \phi(k_i) v_i^T$。这个状态 $S_t$ 是一个 $d \times d$ 的矩阵。
+显然，它可以递归地计算：&lt;/p&gt;
+&lt;p&gt;$$ S_t = S_{t-1} + \phi(k_t) \phi(v_t)^T $$
+$$ o_t = \phi(q_t)^T S_t $$&lt;/p&gt;
+&lt;p&gt;这就是线性注意力的RNN形式：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;更新 (Update)&lt;/strong&gt;：用当前的 $k_t$ 和 $v_t$ 更新状态 $S$。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;查询 (Query)&lt;/strong&gt;：用当前的 $q_t$ 从状态 $S$ 中提取信息。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;这解释了为什么线性注意力在推理时极其高效：它不需要像Softmax Attention那样重新访问所有的历史KV Cache，只需要维护一个固定大小的状态 $S$。&lt;/p&gt;
+&lt;h1 id=&#34;线性注意力的设计思路与框架&#34;&gt;线性注意力的设计思路与框架&lt;/h1&gt;
+&lt;p&gt;经典的线性注意力虽然看上去可行，但是效果并不好，需要找到一些入手点，在整个公式的这个基础上进行进一步的优化。&lt;/p&gt;
+&lt;p&gt;常见的线性注意力有多种不同的叙事方式，这里用比较有名的Mamba(SSM)和DeltaNet举例说明：&lt;/p&gt;
+&lt;h2 id=&#34;状态空间模型-ssm&#34;&gt;状态空间模型 (SSM)&lt;/h2&gt;
+&lt;p&gt;状态空间模型（State Space Models, SSM）起源于控制理论，最近在深度学习中复兴（如S4, Mamba）。它提供了一个统一的框架来理解RNN和CNN。&lt;/p&gt;
+&lt;h3 id=&#34;mamba-ssm-architecture&#34;&gt;Mamba SSM Architecture&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;连续时序空间&lt;/strong&gt;：SSM通常定义在连续时间上，描述了一个系统如何根据输入 $x(t)$ 更新其内部状态 $h(t)$ 并产生输出 $y(t)$：
+$$ h&amp;rsquo;(t) = A h(t) + B x(t) $$
+$$ y(t) = C h(t) $$
+其中 $A$ 是状态转移矩阵，$B$ 是输入投影，$C$ 是输出投影。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;离散化 (Discretization)&lt;/strong&gt;：为了在计算机上处理离散的序列数据（如文本），我们需要将连续系统离散化。常用的方法是&lt;strong&gt;零阶保持 (Zero-Order Hold, ZOH)&lt;/strong&gt;。
+离散化后，公式变为递归形式：
+$$ h_t = \bar{A}&lt;em&gt;t h&lt;/em&gt;{t-1} + \bar{B}_t x_t $$
+$$ y_t = C_t h_t $$
+其中 $\bar{A}_t$ 和 $\bar{B}_t$ 是 $A, B$ 和采样步长 $\Delta_t$ 的函数。例如，在ZOH下，$\bar{A}_t = \exp(\Delta_t A)$。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;与Linear Attention的联系&lt;/strong&gt;：
+仔细观察离散化后的SSM公式，它与Linear Attention的RNN形式惊人地相似：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Linear Attention: $S_t = I \cdot S_{t-1} + \phi(k_t) \phi(v_t)^T$&lt;/li&gt;
+&lt;li&gt;SSM: $h_t = \bar{A} h_{t-1} + \bar{B} x_t$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;如果我们将Linear Attention中的状态衰减看作 $\bar{A}$，将键值对的更新看作输入项，两者在数学形式上是高度统一的。
+&lt;strong&gt;Mamba&lt;/strong&gt; 的创新之处在于引入了&lt;strong&gt;选择性机制（Selection Mechanism）&lt;/strong&gt;，让参数 $B, C, \Delta$ 成为输入 $x_t$ 的函数（即 $B(x_t), C(x_t), \Delta(x_t)$）。这使得模型能够根据当前的内容动态地决定“记住什么”和“忽略什么”，从而解决了传统LTI（线性时不变）系统无法进行上下文推理的问题。&lt;/p&gt;
+&lt;h3 id=&#34;半可分离矩阵-semiseparable-matrix&#34;&gt;半可分离矩阵 (Semiseparable Matrix)&lt;/h3&gt;
+&lt;p&gt;接下来我们对Mamba架构进行进一步推导：&lt;/p&gt;
+&lt;p&gt;对于整个序列 $x = [x_1, \dots, x_L]$ 和输出 $y = [y_1, \dots, y_L]$，把Mamba的公式展开，我们会发现这个变换可以写成 $y = M x$，其中 $M$ 是一个下三角矩阵。&lt;/p&gt;
+&lt;p&gt;可以得到一个&lt;strong&gt;半可分离矩阵 (Semiseparable Matrix)&lt;/strong&gt; 的形式。（推导过程略）&lt;/p&gt;
+&lt;p&gt;$$
+M = \begin{pmatrix}
+C_0 B_0 &amp;amp; 0 &amp;amp; \dots &amp;amp; 0 \\
+C_1 A_1 B_0 &amp;amp; C_1 B_1 &amp;amp; \dots &amp;amp; 0 \\
+\vdots &amp;amp; \vdots &amp;amp; \ddots &amp;amp; \vdots \\
+C_L A_L \dots A_1 B_0 &amp;amp; \dots &amp;amp; \dots &amp;amp; C_L B_L
+\end{pmatrix}
+$$&lt;/p&gt;
+&lt;p&gt;矩阵 $M$ 的第 $(i, j)$ 个元素（$i \ge j$）表示第 $j$ 个输入对第 $i$ 个输出的影响：
+$$ M_{ij} = C_i (A_i A_{i-1} \dots A_{j+1}) B_j $$&lt;/p&gt;
+&lt;p&gt;在Mamba中，为了计算效率，矩阵 $A$ 通常被设计为&lt;strong&gt;对角矩阵 (Diagonal)&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;当 $A_t$ 是对角矩阵时，矩阵乘法满足交换律。我们可以把累乘项 $A_{i} \dots A_{j+1}$ 分解。
+定义 $L_t = \prod_{k=1}^t A_k$ 为从时刻 1 到 $t$ 的累积衰减。那么对于 $i &amp;gt; j$，有：
+$$ A_{i} \dots A_{j+1} = L_i L_j^{-1} $$&lt;/p&gt;
+&lt;p&gt;代入 $M_{ij}$ 的公式：
+$$ M_{ij} = C_i (L_i L_j^{-1}) B_j = (C_i L_i) (L_j^{-1} B_j) $$&lt;/p&gt;
+&lt;p&gt;如果我们定义：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$Q_i = C_i L_i$&lt;/li&gt;
+&lt;li&gt;$K_j = (L_j^{-1} B_j)^T$&lt;/li&gt;
+&lt;li&gt;$V_j = x_j$ (这里输入 $x$ 扮演 Value 的角色)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;那么输出 $y_i = \sum_{j=0}^i M_{ij} x_j$ 就可以写成：
+$$ y_i = \sum_{j=0}^i (Q_i K_j^T) V_j $$&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;这正是前文线性注意力的形式！&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;通过这种变换，Mamba2揭示了 &lt;strong&gt;SSM (State Space Models)&lt;/strong&gt; 和 &lt;strong&gt;Attention&lt;/strong&gt; 之间的对偶性（State Space Duality, SSD）：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;SSM视角&lt;/strong&gt;：通过递归公式 $h_t = A_t h_{t-1} + B_t x_t$ 进行 $O(N)$ 的推理。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Attention视角&lt;/strong&gt;：通过矩阵乘法 $Y = \text{CausalMask}(QK^T)V$ 进行并行训练。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;mamba2-ssd-architecture&#34;&gt;Mamba2 SSD Architecture&lt;/h3&gt;
+&lt;p&gt;虽然从公式外观上看，Mamba2延续了Mamba的基本形式，但它通过引入更严格的结构约束，对底层架构进行了重构。基于前述的可分离矩阵的理论，Mamba2的核心设计目标是最大化硬件效率，特别是针对GPU Tensor Cores的利用率。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;与Mamba1 (S6) 的关键区别&lt;/strong&gt;：&lt;/p&gt;
+&lt;p&gt;Mamba2的架构被称为SSD，可以认为是SSM的一种特例：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;矩阵 $A$ 的约束&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Mamba1&lt;/strong&gt;: 通常每个 $A_t$ 都是&lt;strong&gt;对角矩阵&lt;/strong&gt;，每个特征维度（Channel）拥有独立的衰减参数。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Mamba2&lt;/strong&gt;: 将每个 $A_t$ 进一步限制为&lt;strong&gt;标量&lt;/strong&gt;（Scalar），即在每个Head内部，所有特征维度共享同一个衰减参数 ($A_t = a_t I$)。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;计算范式 (Scan vs. Matmul)&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Mamba1&lt;/strong&gt;: 主要依赖&lt;strong&gt;并行扫描 (Parallel Scan)&lt;/strong&gt; 算法。这是一种内存密集型（Memory-bound）操作，难以利用GPU上专为矩阵乘法设计的Tensor Cores。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Mamba2&lt;/strong&gt;: 得益于 $A$ 的标量化和SSD对偶性，Mamba2可以将计算重写为&lt;strong&gt;分块矩阵乘法 (Block Matrix Multiplication)&lt;/strong&gt;。这使得计算可以运行在Tensor Cores上，极大地提高了训练吞吐量。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;总结&lt;/strong&gt;：
+Mamba2是为了&lt;strong&gt;算法-硬件协同设计&lt;/strong&gt;优化硬件利用效率，对Mamba1表达能力的“简化”（从对角矩阵简化为标量）。虽然Mamba2牺牲了一些自由度，但是换取了的工程效率提升可以用来扩展状态的维度d，因此在实践中性能反而会有所提高，也使得模型能够扩展到更大的参数规模和更长的序列长度。&lt;/p&gt;
+&lt;h2 id=&#34;key的正交假设与delta-rule&#34;&gt;Key的正交假设与Delta Rule&lt;/h2&gt;
+&lt;p&gt;Delta Rule从另一个角度对线性注意力进行了推演。&lt;/p&gt;
+&lt;p&gt;在标准的线性Attention更新规则 $S_t = S_{t-1} + k_t v_t^T$ 中，我们简单地将新的键值对叠加到状态矩阵中。
+这种更新方式类似于神经科学中的 &lt;strong&gt;Hebbian Learning&lt;/strong&gt;（赫布学习规则）：&amp;ldquo;Cells that fire together, wire together&amp;rdquo;。我们简单地增加 $k_t$ 和 $v_t$ 之间的关联强度。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;潜在问题&lt;/strong&gt;：
+这隐含了一个假设：Key之间是正交的。
+如果 $k_t$ 与之前的 $k_{t-1}$ 高度相似（不正交），那么 $S_{t-1} k_t$（即模型对当前Key的旧预测）将不为零。简单的叠加会导致信息的冗余和干扰，使得检索时出现噪声。这里有两种常见的信息冲突：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;单个Key的多义性 (Polysemy of a Single Key)&lt;/strong&gt;：
+在长序列中，同一个Key（或者语义上非常相似的Key）可能会出现多次，但对应不同的Value。例如，单词 &amp;ldquo;Apple&amp;rdquo; 可能在一段话中指代水果，在另一段话中指代公司。
+在简单的线性叠加 $S_t = \sum k_i v_i^T$ 中，这些不同的Value会被直接相加。当我们用 &amp;ldquo;Apple&amp;rdquo; 去查询时，得到的是所有历史Value的混合（平均），而不是特定上下文下的那个Value。这导致了语义的模糊。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;不同Key的相关性 (Correlation between Different Keys)&lt;/strong&gt;：
+理想情况下，我们希望Key之间是正交的，这样更新一个Key不会影响其他Key。但实际上，Key向量通常存在复杂的协方差结构（Covariance）。
+如果 $k_t$ 与之前的 $k_{j}$ 高度相关（非正交），那么向状态 $S$ 中添加 $k_t v_t^T$ 不仅更新了 $k_t$ 的方向，也会改变 $k_{j}$ 方向上的投影。这意味着，新信息的写入会干扰旧信息的读取，产生“串扰” (Crosstalk)。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;transformer的处理方式&#34;&gt;Transformer的处理方式&lt;/h3&gt;
+&lt;p&gt;标准的Softmax Attention通过&lt;strong&gt;加权平均&lt;/strong&gt;来处理这种冲突。它显式地计算 Query 与所有历史 Key 的相似度，然后对 Value 进行加权。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;对于多义性，Softmax可以通过上下文（Query）和位置编码来区分同一个Key的不同实例，给予不同的权重。&lt;/li&gt;
+&lt;li&gt;对于相关性，Softmax是非线性的，它不需要将历史压缩成一个线性算子，因此不存在“写入新Key破坏旧Key结构”的问题（它只是增加了一个新的参考点）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;而Linear Attention试图将所有历史压缩进一个固定大小的线性算子 $S$，就必须面对这种压缩带来的冲突。&lt;/p&gt;
+&lt;h3 id=&#34;delta-rule-deltanet&#34;&gt;Delta Rule (DeltaNet)&lt;/h3&gt;
+&lt;p&gt;为了解决这个问题，&lt;strong&gt;DeltaNet&lt;/strong&gt; 等工作引入了 &lt;strong&gt;Delta Rule&lt;/strong&gt;（也称为Widrow-Hoff规则或LMS算法）。
+更新公式变为：
+$$ S_t = S_{t-1} + \beta_t (v_t - S_{t-1} k_t) k_t^T $$&lt;/p&gt;
+&lt;p&gt;让我们分解这个公式：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;预测 (Prediction)&lt;/strong&gt;：$S_{t-1} k_t$ 是模型根据旧状态对当前Key $k_t$ 的预测值（Retrieve Value）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;误差 (Error)&lt;/strong&gt;：$e_t = v_t - S_{t-1} k_t$ 是真实值 $v_t$ 与预测值之间的差异。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;修正 (Correction)&lt;/strong&gt;：我们只将这个“误差”部分更新到状态矩阵中。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;在下一个章节中，我们会提到：这本质上是在进行一步&lt;strong&gt;在线梯度下降 (Online Gradient Descent)&lt;/strong&gt;，试图最小化当前输入下的重构误差。这使得模型在有限的容量（$d \times d$）下，能够更精确地存储和检索信息，避免了重复信息的累积。&lt;/p&gt;
+&lt;h4 id=&#34;类似的加权平均&#34;&gt;类似的加权平均&lt;/h4&gt;
+&lt;p&gt;如果我们观察状态 $S$ 在 $k_t$ 方向上的投影（假设 $k_t$ 是单位向量），更新公式可以近似理解为：
+$$ \text{NewValue} \approx (1 - \beta_t) \cdot \text{OldValue} + \beta_t \cdot v_t $$
+这实际上是一个&lt;strong&gt;指数移动平均 (Exponential Moving Average, EMA)&lt;/strong&gt;。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Softmax Attention&lt;/strong&gt;：是&lt;strong&gt;空间上的加权平均&lt;/strong&gt;。在推理时（Query Time），它同时看到所有历史，并根据相似度分配权重。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Delta Rule&lt;/strong&gt;：是&lt;strong&gt;时间上的加权平均&lt;/strong&gt;。在更新时（Update Time），它通过 $\beta_t$（类似于学习率或卡尔曼增益）动态决定是“保持旧记忆”还是“重写为新记忆”。
+&lt;ul&gt;
+&lt;li&gt;当同一个Key出现多次（多义性）时，Delta Rule 允许模型根据 $\beta_t$ 逐渐遗忘旧的含义，聚焦于最新的含义，从而在效果上实现了对不同Value的“选择”或“加权”。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;状态的遗忘机制&#34;&gt;状态的遗忘机制&lt;/h2&gt;
+&lt;p&gt;标准的线性Attention（如Linear Transformer）通常对所有历史一视同仁，即 $S_t = \sum k_i v_i^T$，通过位置编码来解决不同位置的重要性问题。而在线性注意力中，通常会使用衰减的机制达成类似的效果：在语言建模中，&lt;strong&gt;局部性 (Locality)&lt;/strong&gt; 通常很重要：最近的上下文往往比遥远的上下文更相关。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;RetNet和Gated DeltaNet&lt;/strong&gt; 引入了指数衰减（Exponential Decay）机制：
+$$ S_t = \gamma S_{t-1} + k_t v_t^T $$
+其中 $\gamma \in (0, 1)$ 是衰减因子。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;直观理解&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;相对位置编码 (Relative Positional Encoding)&lt;/strong&gt;：这种机制巧妙地编码了相对位置信息。对于第 $n$ 个位置的查询 $q_n$ 和第 $m$ 个位置的键 $k_m$ ($m &amp;lt; n$)，它们之间的相互作用会被乘以 $\gamma^{n-m}$。这自然地表达了“距离越远，影响越弱”的归纳偏置。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;软滑动窗口 (Soft Sliding Window)&lt;/strong&gt;：这相当于给历史信息加了一个指数衰减的权重窗口。越久远的信息，权重越小（$\gamma^k$），逐渐被“遗忘”。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;这种遗忘机制不仅提高了模型对局部信息的关注度，还增强了数值稳定性，防止状态 $S_t$ 的值无限增长。&lt;/p&gt;
+&lt;p&gt;此外，我们还可以通过对不同的head引入不同的衰减系数来捕捉不同的时间尺度敏感性。&lt;/p&gt;
+&lt;h1 id=&#34;test-time-regression-ttr-框架&#34;&gt;Test Time Regression (TTR) 框架&lt;/h1&gt;
+&lt;p&gt;关于TTR视角有一篇很好的论文：《Test-time regression: a unifying framework for designing sequence models with  associative memory》，该视角将Attention机制视为在测试时（Inference time）进行的回归任务。这个框架帮助我们理解为什么Linear Attention在某些任务上表现不如Softmax Attention。&lt;/p&gt;
+&lt;p&gt;我们将Attention看作是学习一个函数 $f: \mathbb{R}^d \to \mathbb{R}^d$，使得 $f(k_i) \approx v_i$。&lt;/p&gt;
+&lt;h2 id=&#34;nonparametric-regression-softmax-attention&#34;&gt;Nonparametric Regression (Softmax Attention)&lt;/h2&gt;
+&lt;p&gt;Softmax Attention对应于&lt;strong&gt;非参数回归（Nonparametric Regression）&lt;/strong&gt;，或者称为&lt;strong&gt;对偶形式 (Dual Form)&lt;/strong&gt;。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;机制&lt;/strong&gt;：模型显式地存储了所有的历史训练样本 $(K, V)$。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;预测&lt;/strong&gt;：当一个新的查询 $q$ 到来时，它通过计算 $q$ 与所有样本 $k_i$ 的相似度（核函数 $K(q, k_i)$）来加权平均 $v_i$。
+$$ o = \sum_i \frac{K(q, k_i)}{\sum_j K(q, k_j)} v_i $$&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;特点&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;背诵&lt;/strong&gt;：直接利用原始数据不进行任何压缩。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;容量&lt;/strong&gt;：随着序列长度 $N$ 线性增长。理论上，只要 $N$ 足够大，它可以完美回忆起任何见过的细节。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;代价&lt;/strong&gt;：推理成本高昂 ($O(N)$)，因为每次都要遍历所有样本。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;parametric-regression-linear-attention&#34;&gt;Parametric Regression (Linear Attention)&lt;/h2&gt;
+&lt;p&gt;Linear Attention对应于&lt;strong&gt;参数回归（Parametric Regression）&lt;/strong&gt;，或者称为&lt;strong&gt;原始形式 (Primal Form)&lt;/strong&gt;。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;机制&lt;/strong&gt;：我们不再存储所有的原始数据，而是维护一个固定大小的参数矩阵 $S$（即RNN状态）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;学习&lt;/strong&gt;：这个过程可以看作是使用在线梯度下降（Online Gradient Descent）或最小二乘法来更新模型参数 $S$，使其能够拟合历史数据 $(k, v)$ 的映射关系。
+$$ S_t = S_{t-1} + k_t v_t^T $$&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;预测&lt;/strong&gt;：当查询 $q$ 到来时，我们直接使用学习到的模型进行预测：
+$$ o = S q $$&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;特点&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;拟合&lt;/strong&gt;：它试图将所有历史信息压缩进一个固定大小的矩阵 $S$ 中，学习一个函数来通过key来提取value。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;容量&lt;/strong&gt;：受限于状态 $S$ 的大小（$d \times d$）。如果历史信息过于复杂或庞大，状态矩阵可能会饱和，导致旧信息的灾难性遗忘。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;代价&lt;/strong&gt;：推理成本固定 ($O(1)$)，极其高效。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;梯度下降视角的详细推导&#34;&gt;梯度下降视角的详细推导&lt;/h3&gt;
+&lt;p&gt;为了更深入地理解这一点，我们可以显式地写出优化目标。
+假设我们的目标是学习一个矩阵 $S$，使得对于所有的历史时刻 $i$，都有 $S k_i \approx v_i$。
+我们可以定义在时刻 $t$ 的瞬时损失函数为最小二乘误差：
+$$ L_t(S) = \frac{1}{2} | S k_t - v_t |^2 $$&lt;/p&gt;
+&lt;p&gt;我们使用&lt;strong&gt;随机梯度下降 (SGD)&lt;/strong&gt; 来更新 $S$：
+$$ S_t = S_{t-1} - \eta \nabla_S L_t(S_{t-1}) $$&lt;/p&gt;
+&lt;p&gt;计算梯度：
+$$ \nabla_S L_t(S) = (S k_t - v_t) k_t^T $$&lt;/p&gt;
+&lt;p&gt;代入更新公式（设学习率 $\eta$ 为步长）：
+$$ S_t = S_{t-1} + \eta (v_t - S_{t-1} k_t) k_t^T $$&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;这正是Delta Rule的形式！&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;标准Linear Attention的特例&lt;/strong&gt;：
+如果我们假设 $S_{t-1}$ 初始化为0，或者更强地假设 &lt;strong&gt;Key之间是正交的&lt;/strong&gt;（即 $S_{t-1} k_t \approx 0$，旧状态对当前Key没有响应），那么公式简化为：
+$$ S_t = S_{t-1} + \eta v_t k_t^T $$
+这正是标准的Linear Attention更新规则（通常 $\eta=1$）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;结论&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Standard Linear Attention&lt;/strong&gt; 对应于假设了Key正交性的“懒惰”更新。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;DeltaNet / Linear Recurrent Unit&lt;/strong&gt; 对应于完整的梯度下降更新，它显式地计算并消除了预测误差（残差）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;RWKV-7 与 TTT (Test-Time Training)&lt;/strong&gt;：
+最新的 &lt;strong&gt;RWKV-7&lt;/strong&gt; 和 &lt;strong&gt;TTT-Linear&lt;/strong&gt; 等架构进一步深化了这个视角。它们将RNN的推理过程明确建模为&lt;strong&gt;测试时的训练过程&lt;/strong&gt;。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;TTT框架&lt;/strong&gt;认为，Hidden State本质上是一个小模型的参数（Weights），而处理序列的过程就是在这个小模型上进行梯度下降。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;RWKV-7&lt;/strong&gt; 引入了更加动态的状态演化机制，其状态更新不再是简单的线性累加，而是包含了更复杂的、数据依赖的衰减和更新项。这可以被理解为一种广义的、带有自适应学习率的在线优化过程，使得模型在处理长上下文时，能够更智能地决定哪些信息该“学进”状态里，哪些该忽略。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;实际上，从这个视角出发，使用不同的优化算法如带动量的SGD、L2正则化等策略，可以推导出其他一些linear attention的算法架构。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;总结&lt;/strong&gt;：
+这个视角解释了Linear Attention在处理“大海捞针”（Needle In A Haystack）任务时的劣势。因为压缩必然带来有损，当需要精确检索某个特定的历史细节时，参数化的Linear Attention可能无法从压缩的状态中完美还原，而非参数化的Softmax Attention则可以直接查阅原始记录。&lt;/p&gt;
+&lt;h1 id=&#34;一些常见的trick&#34;&gt;一些常见的Trick&lt;/h1&gt;
+&lt;p&gt;最后聊一聊为了弥补Linear Attention相对于Softmax Attention的不足（如缺乏局部关注能力、数值稳定性等），研究者们引入的一些Trick。&lt;/p&gt;
+&lt;h2 id=&#34;因果卷积-causal-convolution&#34;&gt;因果卷积 (Causal Convolution)&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;问题&lt;/strong&gt;：
+Softmax Attention由于指数函数的存在，天然倾向于关注局部（最近的邻居通常相似度较高）。而Linear Attention的关注分布通常比较平滑，容易忽略局部的细节。
+此外，RNN形式的状态 $S_t$ 只能捕捉到 $t$ 时刻之前的信息，对于“当前时刻”的局部特征捕捉能力较弱。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;解决方案&lt;/strong&gt;：
+像&lt;strong&gt;Mamba&lt;/strong&gt;、&lt;strong&gt;RWKV&lt;/strong&gt;和&lt;strong&gt;RetNet&lt;/strong&gt;等模型通常会在进入状态空间之前，先对输入进行一个短窗口的&lt;strong&gt;因果卷积（Causal Conv1d）&lt;/strong&gt;。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;RWKV-4 (Token Shift)&lt;/strong&gt;: RWKV-4率先引入了极其轻量级的 &lt;strong&gt;Token Shift&lt;/strong&gt; 机制（也称为Time Mixing的一部分）。它简单地将当前时刻的输入 $x_t$ 与上一时刻的输入 $x_{t-1}$ 进行线性插值：$x&amp;rsquo;&lt;em&gt;t = \mu x_t + (1-\mu) x&lt;/em&gt;{t-1}$。这可以看作是核大小为2的因果卷积，极低成本地实现了相邻Token的信息交互。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Mamba&lt;/strong&gt;: 使用了显式的1D卷积层（通常kernel size=4），在进入SSM状态方程之前混合局部信息。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;$$ x&amp;rsquo;&lt;em&gt;t = \text{Conv1d}(x&lt;/em&gt;{t-k:t}) $$&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;作用&lt;/strong&gt;：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;增强局部性&lt;/strong&gt;：这相当于显式地让模型“看到”最近的几个Token。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;平移不变性&lt;/strong&gt;：卷积操作具有平移不变性，有助于捕捉局部的n-gram特征。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;弥补RNN缺陷&lt;/strong&gt;：它充当了一个“预处理”步骤，捕捉高频的局部特征，而让RNN状态专注于捕捉低频的全局依赖。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;dplr-diagonal-plus-low-rank-矩阵&#34;&gt;DPLR (Diagonal-Plus-Low-Rank) 矩阵&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;问题&lt;/strong&gt;：
+在SSM中，我们需要处理长序列。如果状态转移矩阵 $A$ 初始化不当，梯度可能会在反向传播中消失或爆炸（Vanishing/Exploding Gradients）。此外，计算 $A$ 的幂次或卷积核需要高效的算法。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;解决方案&lt;/strong&gt;：
+HiPPO理论指出，特定的矩阵结构可以最优地记忆历史。S4模型提出将 $A$ 参数化为**对角矩阵加上低秩矩阵（Diagonal Plus Low Rank, DPLR）*&lt;em&gt;的形式：
+$$ A = \Lambda - pp^&lt;/em&gt; $$&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;作用&lt;/strong&gt;：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;计算效率&lt;/strong&gt;：这种结构允许我们利用Woodbury矩阵恒等式和Cauchy Kernel，将矩阵向量乘法和卷积核的计算复杂度降低到 $O(N \log N)$ 或 $O(N)$。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;数值稳定性&lt;/strong&gt;：它使得矩阵 $A$ 的特征值分布在左半复平面，保证了系统的稳定性（不会发散）。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;虽然在Mamba中，为了硬件效率（GPU Tensor Cores），作者简化为了纯对角矩阵（Diagonal），但DPLR在理论推导和早期SSM模型中起到了至关重要的作用。&lt;/p&gt;
+&lt;h2 id=&#34;位置编码-positional-encoding&#34;&gt;位置编码 (Positional Encoding)&lt;/h2&gt;
+&lt;p&gt;现在的Linear Attention都是使用NoPE的策略，但是这不意味着Linear Attention就一定不可以使用位置编码：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;RetNet&lt;/strong&gt; 提出了一种巧妙的方法，将位置编码融入到状态的衰减中。通过给 $S_t$ 乘以一个复数衰减因子 $e^{i\theta}$，实现了类似RoPE的效果，同时保持了递归形式的高效性。
+$$ S_t = \gamma e^{i\theta} S_{t-1} + k_t v_t^T $$
+这种方法被称为 &lt;strong&gt;xPos&lt;/strong&gt; 的变体或其在RNN中的自然延伸。它使得模型能够根据Token之间的相对距离动态调整关注强度。&lt;/p&gt;
+- https://sword865.github.io/posts/2025/2025-12-16-linear-attention%E5%9F%BA%E7%A1%80-%E7%90%86%E8%AE%BA%E7%AF%87/ - Copyright (c) 2015. All rights reserved.</description>
+        </item>
     
     
     
@@ -1170,78 +1502,6 @@ if (n_block % 2 == 1) {
 &lt;li&gt;使用一些算法（比如XXHash32）对过长的特征名(比如&lt;code&gt;spu$realtime$orders_last_2w$spu_id&lt;/code&gt;)进行压缩&lt;/li&gt;
 &lt;/ul&gt;
 - https://sword865.github.io/posts/2021/2021-03-07-%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F%E5%91%A8%E8%BE%B9%E8%AE%BE%E6%96%BD--%E7%89%B9%E5%BE%81%E5%95%86%E5%BA%97/ - Copyright (c) 2015. All rights reserved.</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>NPE问题与一些语言中的解决方案</title>
-        <link>https://sword865.github.io/posts/2018/2018-11-08-npe%E9%97%AE%E9%A2%98%E4%B8%8E%E4%B8%80%E4%BA%9B%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/</link>
-        <pubDate>Thu, 08 Nov 2018 23:51:35 +0800</pubDate>
-        
-        <guid>https://sword865.github.io/posts/2018/2018-11-08-npe%E9%97%AE%E9%A2%98%E4%B8%8E%E4%B8%80%E4%BA%9B%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/</guid>
-        <description>悟剑阁 https://sword865.github.io/posts/2018/2018-11-08-npe%E9%97%AE%E9%A2%98%E4%B8%8E%E4%B8%80%E4%BA%9B%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/ -&lt;p&gt;NPE(NullPointerException)是一个很烦人的问题，这里简单列举了一些语言中对NPE的处理。&lt;/p&gt;
-&lt;h2 id=&#34;1-通过语法标记进行检查&#34;&gt;1. 通过语法标记进行检查&lt;/h2&gt;
-&lt;h3 id=&#34;kotlin&#34;&gt;Kotlin&lt;/h3&gt;
-&lt;p&gt;Kotlin要求可以为null的变量必需在定义时声明，同时在读取该类型变量属性时必须进行空值判断。例：String 和 String?&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;var&lt;/span&gt; a: String = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;abc&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;a = &lt;span style=&#34;color:#66d9ef&#34;&gt;null&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;// compilation error, a can not be null
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;var&lt;/span&gt; b: String? = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;abc&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;b = &lt;span style=&#34;color:#66d9ef&#34;&gt;null&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;// ok
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;val&lt;/span&gt; l = b.length &lt;span style=&#34;color:#75715e&#34;&gt;// compiler error: variable &amp;#39;b&amp;#39; can be null
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;val&lt;/span&gt; l = &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; (b &lt;span style=&#34;color:#f92672&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;null&lt;/span&gt;) b.length &lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt; -&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;// ok
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;jetbrains-annotations-for-java&#34;&gt;Jetbrains annotations for Java&lt;/h3&gt;
-&lt;p&gt;IntelliJ IDEA提供了一些工具，比如可以对@NotNull的参数进行检查，当出现null赋值时在IDE中会给出提示。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; org.jetbrains.annotations.NotNull;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; java.util.ArrayList;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Test&lt;/span&gt;{
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;foo&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;@NotNull&lt;/span&gt; Object param){
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; param.&lt;span style=&#34;color:#a6e22e&#34;&gt;hashCode&lt;/span&gt;();
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;test&lt;/span&gt;(){
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        foo(&lt;span style=&#34;color:#66d9ef&#34;&gt;null&lt;/span&gt;); &lt;span style=&#34;color:#75715e&#34;&gt;// warn in IntelliJ IDEA&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;（类似的，FindBugs也提供了@Nonnull注释，用于检查）&lt;/p&gt;
-&lt;h3 id=&#34;lombok-for-java&#34;&gt;Lombok for Java&lt;/h3&gt;
-&lt;p&gt;Lombok通过在编译时改写字节码对原始代码进行优化，其中的@NonNull，会自动插入运行时检查代码，发现错误抛出异常。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;NonNullExample&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;@NonNull&lt;/span&gt; Person person) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#66d9ef&#34;&gt;super&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Hello&amp;#34;&lt;/span&gt;);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#66d9ef&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;name&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; person.&lt;span style=&#34;color:#a6e22e&#34;&gt;getName&lt;/span&gt;();
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;等价于&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;NonNullExample&lt;/span&gt;(Person person) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; (person &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;null&lt;/span&gt;) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;throw&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;new&lt;/span&gt; NullPointerException(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;person is marked @NonNull but is null&amp;#34;&lt;/span&gt;);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#66d9ef&#34;&gt;super&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Hello&amp;#34;&lt;/span&gt;);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#66d9ef&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;name&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; person.&lt;span style=&#34;color:#a6e22e&#34;&gt;getName&lt;/span&gt;();
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;2-用更好的错误处理代替null&#34;&gt;2. 用更好的错误处理代替null&lt;/h2&gt;
-&lt;p&gt;空值通常都是由错误导致的无法赋值，因此更好的错误处理也是NPE的一种应对。&lt;/p&gt;
-&lt;h3 id=&#34;rust基于result错误处理&#34;&gt;Rust：基于Result错误处理&lt;/h3&gt;
-&lt;p&gt;Rust通过Result类型提供了强大的错误处理机制。&lt;/p&gt;
-&lt;h3 id=&#34;基于monad处理错误&#34;&gt;基于Monad处理错误&lt;/h3&gt;
-&lt;p&gt;Scala等FP语言基于Monad(Option, Either, Try&amp;hellip;)提供了错误处理，其中Optional是最基础的一种。在Option中，定义了专门的None来表示计算失败。这样，在得不到结果时，就会得到None，因此在后续的使用中可以使用isDefined先判断是否有值，再进行处理：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-scala&#34; data-lang=&#34;scala&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;val&lt;/span&gt; name&lt;span style=&#34;color:#66d9ef&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Option&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;String&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;=&lt;/span&gt; request getParameter &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;name&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;name&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;isDefined&lt;span style=&#34;color:#f92672&#34;&gt;){&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;//do some stuff with name.get
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;但是这么写很不方便，还是更推荐使用flatMap乃至for推导式来进行计算。(for-yield推导式其实就是flatmap和map的语法糖)&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-scala&#34; data-lang=&#34;scala&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;val&lt;/span&gt; upper &lt;span style=&#34;color:#66d9ef&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  name &lt;span style=&#34;color:#66d9ef&#34;&gt;&amp;lt;-&lt;/span&gt; request getParameter &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;name&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  trimmed &lt;span style=&#34;color:#66d9ef&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Some&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;name&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;trim&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  upper &lt;span style=&#34;color:#66d9ef&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Some&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;trimmed&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;toUpperCase&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; trimmed&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;length &lt;span style=&#34;color:#f92672&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;}&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;yield&lt;/span&gt; upper
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;println&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;upper getOrElse &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;由于Option只能用None表示失败，不能记录错误信息，所以scala中还提供了Either用来携带更多的信息。&lt;/p&gt;
-&lt;h3 id=&#34;optional-in-java&#34;&gt;Optional in Java&lt;/h3&gt;
-&lt;p&gt;Java中的Optional跟scala里的Option是很相似的，同样提供了flatMap操作。但是因为没有for推导式，用起来就感觉不太方便。另外，Java中也缺少可以携带错误信息的Either。&lt;/p&gt;
-- https://sword865.github.io/posts/2018/2018-11-08-npe%E9%97%AE%E9%A2%98%E4%B8%8E%E4%B8%80%E4%BA%9B%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/ - Copyright (c) 2015. All rights reserved.</description>
         </item>
     
     

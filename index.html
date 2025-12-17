@@ -181,6 +181,56 @@ code.has-jax {
     <div class="post-list-container post-list-container-no-background">
         
         
+            <a href="/posts/2025/2025-12-16-linear-attention%E5%9F%BA%E7%A1%80-%E7%90%86%E8%AE%BA%E7%AF%87/" class="a-block">
+                <div class="post-item-wrapper">
+                    <div class="post-item post-item-no-divider">
+                        <div class="post-item-info-wrapper">
+                            <div class="post-item-title">
+                                Linear Attention基础-理论篇
+                            </div>
+                            <div class="post-item-summary">
+                                
+                                    <p>准备写一些关于线性注意力的文章，对相关理论和工程(Kernel)做一些梳理，这一篇是关于基础理论的。</p>
+<h1 id="softmax-attention到线性注意力">Softmax Attention到线性注意力</h1>
+<h2 id="softmax-attention与on2复杂度">Softmax Attention与O(N^2)复杂度</h2>
+<p>标准的Transformer使用的是Softmax Attention。给定查询（Query）、键（Key）、值（Value）矩阵 $Q, K, V \in \mathbb{R}^{N \times d}$，其中 $N$ 是序列长度，$d$ 是特征维度（通常 $d \ll N$）。Attention的计算公式为：</p>
+<p>$$ Attention(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d}}\right)V $$</p>
+<p>让我们仔细分析一下这个计算过程的维度变化：</p>
+<ol>
+<li><strong>计算相似度矩阵</strong>：$QK^T$。
+<ul>
+<li>$Q$ 是 $N \times d$，$K^T$ 是 $d \times N$。</li>
+<li>相乘得到 $N \times N$ 的矩阵。这一步的计算复杂度是 $O(N^2 d)$。</li>
+</ul>
+</li>
+<li><strong>应用Softmax</strong>：对每一行进行归一化，维度不变，仍为 $N \times N$。</li>
+<li><strong>加权求和</strong>：乘以 $V$。
+<ul>
+<li>$N \times N$ 的矩阵乘以 $N \times d$ 的矩阵 $V$。</li>
+<li>结果是 $N \times d$。这一步的计算复杂度也是 $O(N^2 d)$。</li>
+</ul>
+</li>
+</ol>
+<p><strong>瓶颈所在</strong>：
+由于Softmax是非线性的，我们必须先完整地计算出 $N \times N$ 的Attention Matrix。</p>
+                                
+                            </div>
+                            <div class="post-item-meta">
+    2025-12-16
+    &emsp;
+    
+    
+    
+    &emsp;
+    
+</div>
+
+                        </div>
+                        
+                        
+                    </div>
+                </div>
+        
             <a href="/posts/2025/2025-09-15-vlm%E4%B8%8E%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B%E7%9A%84%E8%BF%9B%E5%8C%96/" class="a-block">
                 <div class="post-item-wrapper">
                     <div class="post-item post-item-no-divider">
@@ -670,60 +720,6 @@ tile_scheduler_metadata, num_splits = get_mla_metadata(cache_seqlens, s_q * h_q 
                             </div>
                             <div class="post-item-meta">
     2021-03-07
-    &emsp;
-    
-    
-    
-    &emsp;
-    
-</div>
-
-                        </div>
-                        
-                        
-                    </div>
-                </div>
-        
-            <a href="/posts/2018/2018-11-08-npe%E9%97%AE%E9%A2%98%E4%B8%8E%E4%B8%80%E4%BA%9B%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" class="a-block">
-                <div class="post-item-wrapper">
-                    <div class="post-item post-item-no-divider">
-                        <div class="post-item-info-wrapper">
-                            <div class="post-item-title">
-                                NPE问题与一些语言中的解决方案
-                            </div>
-                            <div class="post-item-summary">
-                                
-                                    <p>NPE(NullPointerException)是一个很烦人的问题，这里简单列举了一些语言中对NPE的处理。</p>
-<h2 id="1-通过语法标记进行检查">1. 通过语法标记进行检查</h2>
-<h3 id="kotlin">Kotlin</h3>
-<p>Kotlin要求可以为null的变量必需在定义时声明，同时在读取该类型变量属性时必须进行空值判断。例：String 和 String?</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> a: String = <span style="color:#e6db74">&#34;abc&#34;</span>
-</span></span><span style="display:flex;"><span>a = <span style="color:#66d9ef">null</span> <span style="color:#75715e">// compilation error, a can not be null
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> b: String? = <span style="color:#e6db74">&#34;abc&#34;</span>
-</span></span><span style="display:flex;"><span>b = <span style="color:#66d9ef">null</span> <span style="color:#75715e">// ok
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">val</span> l = b.length <span style="color:#75715e">// compiler error: variable &#39;b&#39; can be null
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">val</span> l = <span style="color:#66d9ef">if</span> (b <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) b.length <span style="color:#66d9ef">else</span> -<span style="color:#ae81ff">1</span> <span style="color:#75715e">// ok
-</span></span></span></code></pre></div><h3 id="jetbrains-annotations-for-java">Jetbrains annotations for Java</h3>
-<p>IntelliJ IDEA提供了一些工具，比如可以对@NotNull的参数进行检查，当出现null赋值时在IDE中会给出提示。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#f92672">import</span> org.jetbrains.annotations.NotNull;
-</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> java.util.ArrayList;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Test</span>{
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">foo</span>(<span style="color:#a6e22e">@NotNull</span> Object param){
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> param.<span style="color:#a6e22e">hashCode</span>();
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">test</span>(){
-</span></span><span style="display:flex;"><span>        foo(<span style="color:#66d9ef">null</span>); <span style="color:#75715e">// warn in IntelliJ IDEA</span>
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>（类似的，FindBugs也提供了@Nonnull注释，用于检查）</p>
-                                
-                            </div>
-                            <div class="post-item-meta">
-    2018-11-08
     &emsp;
     
     
