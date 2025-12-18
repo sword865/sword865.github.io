@@ -105,11 +105,11 @@ $$ o_t = \phi(q_t)^T S_t $$&lt;/p&gt;
 $$ h&amp;rsquo;(t) = A h(t) + B x(t) $$
 $$ y(t) = C h(t) $$
 其中 $A$ 是状态转移矩阵，$B$ 是输入投影，$C$ 是输出投影。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;离散化 (Discretization)&lt;/strong&gt;：为了在计算机上处理离散的序列数据（如文本），我们需要将连续系统离散化。常用的方法是&lt;strong&gt;零阶保持 (Zero-Order Hold, ZOH)&lt;/strong&gt;。
+&lt;p&gt;&lt;strong&gt;离散化 (Discretization)&lt;/strong&gt;：为了在计算机上处理离散的序列数据（如文本），我们需要将连续系统离散化。常用的方法是&lt;strong&gt;零阶保持 (ZOH)&lt;/strong&gt;。
 离散化后，公式变为递归形式：
-$$ h_t = \bar{A}&lt;em&gt;t h&lt;/em&gt;{t-1} + \bar{B}_t x_t $$
-$$ y_t = C_t h_t $$
-其中 $\bar{A}_t$ 和 $\bar{B}_t$ 是 $A, B$ 和采样步长 $\Delta_t$ 的函数。例如，在ZOH下，$\bar{A}_t = \exp(\Delta_t A)$。&lt;/p&gt;
+$$ h_t = \bar{A}_t h_t + \bar{B}_t x_t $$
+$$ y_t = C h_t $$&lt;/p&gt;
+&lt;p&gt;其中 $\bar{A}_t$ 和 $\bar{B}_t$ 是 $A, B$ 和采样步长 $\Delta_t$ 的函数。例如，在ZOH下，$\bar{A}_t = \exp(\Delta_t A)$。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;与Linear Attention的联系&lt;/strong&gt;：
 仔细观察离散化后的SSM公式，它与Linear Attention的RNN形式惊人地相似：&lt;/p&gt;
 &lt;ul&gt;
@@ -118,9 +118,9 @@ $$ y_t = C_t h_t $$
 &lt;/ul&gt;
 &lt;p&gt;如果我们将Linear Attention中的状态衰减看作 $\bar{A}$，将键值对的更新看作输入项，两者在数学形式上是高度统一的。
 &lt;strong&gt;Mamba&lt;/strong&gt; 的创新之处在于引入了&lt;strong&gt;选择性机制（Selection Mechanism）&lt;/strong&gt;，让参数 $B, C, \Delta$ 成为输入 $x_t$ 的函数（即 $B(x_t), C(x_t), \Delta(x_t)$）。这使得模型能够根据当前的内容动态地决定“记住什么”和“忽略什么”，从而解决了传统LTI（线性时不变）系统无法进行上下文推理的问题。&lt;/p&gt;
-&lt;h3 id=&#34;半可分离矩阵-semiseparable-matrix&#34;&gt;半可分离矩阵 (Semiseparable Matrix)&lt;/h3&gt;
+&lt;h3 id=&#34;半可分离矩阵&#34;&gt;半可分离矩阵&lt;/h3&gt;
 &lt;p&gt;接下来我们对Mamba架构进行进一步推导：&lt;/p&gt;
-&lt;p&gt;对于整个序列 $x = [x_1, \dots, x_L]$ 和输出 $y = [y_1, \dots, y_L]$，把Mamba的公式展开，我们会发现这个变换可以写成 $y = M x$，其中 $M$ 是一个下三角矩阵。&lt;/p&gt;
+&lt;p&gt;先不考虑随着时间变化的$\Delta(x_t)$，对于整个序列 $x = [x_1, \dots, x_L]$ 和输出 $y = [y_1, \dots, y_L]$，把Mamba的公式展开，我们会发现这个变换可以写成 $y = M x$，其中 $M$ 是一个下三角矩阵。&lt;/p&gt;
 &lt;p&gt;可以得到一个&lt;strong&gt;半可分离矩阵 (Semiseparable Matrix)&lt;/strong&gt; 的形式。（推导过程略）&lt;/p&gt;
 &lt;p&gt;$$
 M = \begin{pmatrix}
@@ -146,6 +146,7 @@ $$ M_{ij} = C_i (L_i L_j^{-1}) B_j = (C_i L_i) (L_j^{-1} B_j) $$&lt;/p&gt;
 &lt;/ul&gt;
 &lt;p&gt;那么输出 $y_i = \sum_{j=0}^i M_{ij} x_j$ 就可以写成：
 $$ y_i = \sum_{j=0}^i (Q_i K_j^T) V_j $$&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;：该推导对于随着时间变换的 $\Delta(x_t)$ 同样有效： $\Delta(x_t)$ 是scalar或这里这里使用点乘，而对角矩阵的exp仍然是对角矩阵。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;这正是前文线性注意力的形式！&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;通过这种变换，Mamba2揭示了 &lt;strong&gt;SSM (State Space Models)&lt;/strong&gt; 和 &lt;strong&gt;Attention&lt;/strong&gt; 之间的对偶性（State Space Duality, SSD）：&lt;/p&gt;
 &lt;ul&gt;
@@ -174,6 +175,22 @@ $$ y_i = \sum_{j=0}^i (Q_i K_j^T) V_j $$&lt;/p&gt;
 &lt;/ol&gt;
 &lt;p&gt;&lt;strong&gt;总结&lt;/strong&gt;：
 Mamba2是为了&lt;strong&gt;算法-硬件协同设计&lt;/strong&gt;优化硬件利用效率，对Mamba1表达能力的“简化”（从对角矩阵简化为标量）。虽然Mamba2牺牲了一些自由度，但是换取了的工程效率提升可以用来扩展状态的维度d，因此在实践中性能反而会有所提高，也使得模型能够扩展到更大的参数规模和更长的序列长度。&lt;/p&gt;
+&lt;h3 id=&#34;mamba3进一步优化&#34;&gt;Mamba3进一步优化&lt;/h3&gt;
+&lt;p&gt;Mamba3是对SSM的进一步优化，旨在解决Mamba2为了硬件效率（标量化A）而牺牲的部分表达能力。它主要引入了以下几个关键改进（本文只阐述思路，细节可以参考论文）：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;复数状态空间&lt;/strong&gt;：
+Mamba2中的状态转移矩阵 $A$ 是实数标量，只能表达&lt;strong&gt;指数衰减&lt;/strong&gt;。Mamba3将 $A$ 扩展为复数，引入了&lt;strong&gt;旋转&lt;/strong&gt;机制。这使得状态不仅能衰减，还能像RoPE一样在复平面上旋转，从而更好地捕捉周期性模式和长距离依赖。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;梯形法则离散化&lt;/strong&gt;：
+之前的SSM通常使用&lt;strong&gt;零阶保持 (ZOH)&lt;/strong&gt; 假设（假设信号在采样间隔内不变）。Mamba3改用了精度更高的&lt;strong&gt;梯形法则&lt;/strong&gt;（假设信号线性变化），能够更准确地追踪快速变化的信号。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Multi-Input Multi-Output&lt;/strong&gt;：
+Mamba2在SSM层面上是&lt;strong&gt;SISO&lt;/strong&gt;的，即各个通道间独立演化。Mamba3通过把状态更新中的外积换成矩阵乘来允许不同通道的信息交互实现&lt;strong&gt;MIMO&lt;/strong&gt;。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
 &lt;h2 id=&#34;key的正交假设与delta-rule&#34;&gt;Key的正交假设与Delta Rule&lt;/h2&gt;
 &lt;p&gt;Delta Rule从另一个角度对线性注意力进行了推演。&lt;/p&gt;
 &lt;p&gt;在标准的线性Attention更新规则 $S_t = S_{t-1} + k_t v_t^T$ 中，我们简单地将新的键值对叠加到状态矩阵中。
@@ -340,6 +357,11 @@ $$ A = \Lambda - pp^&lt;/em&gt; $$&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;RetNet&lt;/strong&gt; 提出了一种巧妙的方法，将位置编码融入到状态的衰减中。通过给 $S_t$ 乘以一个复数衰减因子 $e^{i\theta}$，实现了类似RoPE的效果，同时保持了递归形式的高效性。
 $$ S_t = \gamma e^{i\theta} S_{t-1} + k_t v_t^T $$
 这种方法被称为 &lt;strong&gt;xPos&lt;/strong&gt; 的变体或其在RNN中的自然延伸。它使得模型能够根据Token之间的相对距离动态调整关注强度。&lt;/p&gt;
+&lt;h2 id=&#34;rosa&#34;&gt;ROSA&lt;/h2&gt;
+&lt;p&gt;ROSA是RWKV-8提出的策略，其目的是通过外挂历史输入数据库的方式帮助模型检索历史信息。
+由于RWKV-8的论文尚未发表，目前只能通过一些零散的信息和github上的代码（话说还有上周的RWKV Devday活动）来对这个方案给出一些描述。&lt;/p&gt;
+&lt;p&gt;不同于传统 RNN 仅依赖隐状态压缩历史信息，ROSA 在推理过程中在线构建后缀自动机。它不仅作用于输入 Token，更通过二值化机制在每个隐藏层建立特征索引————相当于每一层都维护了一套动态的“特征码表”。&lt;/p&gt;
+&lt;p&gt;在推理时，ROSA 能够利用自动机特性，瞬间检索出当前上下文在历史中最长的匹配片段，并将当时的后续状态直接用于下一个token的预测。&lt;/p&gt;
 - https://sword865.github.io/posts/2025/2025-12-16-linear-attention%E5%9F%BA%E7%A1%80-%E7%90%86%E8%AE%BA%E7%AF%87/ - Copyright (c) 2015. All rights reserved.</description>
         </item>
     
