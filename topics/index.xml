@@ -7,20 +7,27 @@
     <generator>Hugo</generator>
     <language>zh-CN</language>
     <copyright>Copyright (c) 2015. All rights reserved.</copyright>
-    <lastBuildDate>Tue, 16 Dec 2025 22:09:11 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 01 Jan 2026 15:23:41 +0800</lastBuildDate>
     <atom:link href="https://sword865.github.io/topics/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Efficient Attention</title>
       <link>https://sword865.github.io/topics/efficient-attention/</link>
-      <pubDate>Tue, 16 Dec 2025 22:09:11 +0800</pubDate>
+      <pubDate>Thu, 01 Jan 2026 15:23:41 +0800</pubDate>
       <guid>https://sword865.github.io/topics/efficient-attention/</guid>
       <description></description>
     </item>
     <item>
       <title>LLM</title>
       <link>https://sword865.github.io/topics/llm/</link>
-      <pubDate>Tue, 16 Dec 2025 22:09:11 +0800</pubDate>
+      <pubDate>Thu, 01 Jan 2026 15:23:41 +0800</pubDate>
       <guid>https://sword865.github.io/topics/llm/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Triton</title>
+      <link>https://sword865.github.io/topics/triton/</link>
+      <pubDate>Thu, 01 Jan 2026 15:23:41 +0800</pubDate>
+      <guid>https://sword865.github.io/topics/triton/</guid>
       <description></description>
     </item>
     <item>

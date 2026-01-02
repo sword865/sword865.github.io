@@ -7,8 +7,15 @@
     <generator>Hugo</generator>
     <language>zh-CN</language>
     <copyright>Copyright (c) 2015. All rights reserved.</copyright>
-    <lastBuildDate>Tue, 16 Dec 2025 22:09:11 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 01 Jan 2026 15:23:41 +0800</lastBuildDate>
     <atom:link href="https://sword865.github.io/tags/linear-attention/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Linear Attention基础-工程篇</title>
+      <link>https://sword865.github.io/posts/2025/2026-01-01-linear-attention-%E5%B7%A5%E7%A8%8B%E7%AF%87/</link>
+      <pubDate>Thu, 01 Jan 2026 15:23:41 +0800</pubDate>
+      <guid>https://sword865.github.io/posts/2025/2026-01-01-linear-attention-%E5%B7%A5%E7%A8%8B%E7%AF%87/</guid>
+      <description>&lt;p&gt;本文重点参考了文章&lt;a href=&#34;https://srush.github.io/annotated-mamba/hard.html&#34;&gt;Mamba: The Hard Way&lt;/a&gt;和开源项目&lt;a href=&#34;https://github.com/fla-org/flash-linear-attention&#34;&gt;flash-linear-attention&lt;/a&gt;。&lt;/p&gt;&#xA;&lt;h1 id=&#34;prefill与decoding&#34;&gt;Prefill与Decoding&lt;/h1&gt;&#xA;&lt;p&gt;我们都知道，在Attention的计算中，Prefill和Decoding是两个不同的场景，具体特性如下：&lt;/p&gt;&#xA;&lt;table&gt;&#xA;  &lt;thead&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;th style=&#34;text-align: left&#34;&gt;特性&lt;/th&gt;&#xA;          &lt;th style=&#34;text-align: left&#34;&gt;Prefill&lt;/th&gt;&#xA;          &lt;th style=&#34;text-align: left&#34;&gt;Decoding&lt;/th&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/thead&gt;&#xA;  &lt;tbody&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td style=&#34;text-align: left&#34;&gt;输入&lt;/td&gt;&#xA;          &lt;td style=&#34;text-align: left&#34;&gt;长序列（长度 $L$）&lt;/td&gt;&#xA;          &lt;td style=&#34;text-align: left&#34;&gt;1 个新 token + 历史状态&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td style=&#34;text-align: left&#34;&gt;常见瓶颈&lt;/td&gt;&#xA;          &lt;td style=&#34;text-align: left&#34;&gt;Compute bound（Tensor Core 利用）&lt;/td&gt;&#xA;          &lt;td style=&#34;text-align: left&#34;&gt;Memory/Latency bound（状态读写 + 小矩阵计算）&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/tbody&gt;&#xA;&lt;/table&gt;&#xA;&lt;p&gt;在回忆一下理论篇的介绍，特别是关于Mamba章节中的推导，常见的Linear Attention有两种表示格式：&lt;/p&gt;&#xA;&lt;p&gt;矩阵格式（Attention视角）：&lt;/p&gt;&#xA;&lt;p&gt;$$ y_i = \sum_{j=0}^i (CausalMask(Q_i K_j^T)) V_j $$&lt;/p&gt;&#xA;&lt;p&gt;递推格式（SSM视角）：&lt;/p&gt;&#xA;&lt;p&gt;$$ h_t = A_t h_{t-1} + B_t x_t $$&#xA;$$ y_t = C h_t $$&lt;/p&gt;&#xA;&lt;p&gt;其中Decoding的算子可以比较直接的使用递归格式进行计算，因此我们本文重点还是看Prefill的实现。&lt;/p&gt;&#xA;&lt;h1 id=&#34;linear-attention常见算法&#34;&gt;Linear Attention常见算法&lt;/h1&gt;&#xA;&lt;p&gt;在Linear Attention的计算中，有一些常见的思路，本章结合&lt;code&gt;flash-linear-attention&lt;/code&gt;的实现，对这些思路进行讲解。&lt;/p&gt;&#xA;&lt;h2 id=&#34;prefix-scan--cumsum-前缀和&#34;&gt;Prefix Scan / Cumsum 前缀和&lt;/h2&gt;&#xA;&lt;h3 id=&#34;算法简介&#34;&gt;算法简介&lt;/h3&gt;&#xA;&lt;p&gt;先讲一下什么是Prefix Scan算法，简单来说Prefix是针对有结合性的算子提出的一种优化方式&lt;/p&gt;&#xA;&lt;p&gt;假设有 $y_t = x_1 ⊗ x_2 ⊗ x_3 &amp;hellip; ⊗ x_t$, 如果⊗支持结合律，那么y_t就可以用一个简单的Reduce进行求解&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Linear Attention基础-理论篇</title>
       <link>https://sword865.github.io/posts/2025/2025-12-16-linear-attention%E5%9F%BA%E7%A1%80-%E7%90%86%E8%AE%BA%E7%AF%87/</link>
