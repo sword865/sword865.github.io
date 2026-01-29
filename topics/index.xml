@@ -7,20 +7,48 @@
     <generator>Hugo</generator>
     <language>zh-CN</language>
     <copyright>Copyright (c) 2015. All rights reserved.</copyright>
-    <lastBuildDate>Thu, 01 Jan 2026 15:23:41 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 29 Jan 2026 21:55:26 +0800</lastBuildDate>
     <atom:link href="https://sword865.github.io/topics/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Efficient Attention</title>
-      <link>https://sword865.github.io/topics/efficient-attention/</link>
-      <pubDate>Thu, 01 Jan 2026 15:23:41 +0800</pubDate>
-      <guid>https://sword865.github.io/topics/efficient-attention/</guid>
+      <title>Inference</title>
+      <link>https://sword865.github.io/topics/inference/</link>
+      <pubDate>Thu, 29 Jan 2026 21:55:26 +0800</pubDate>
+      <guid>https://sword865.github.io/topics/inference/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>KV Cache</title>
+      <link>https://sword865.github.io/topics/kv-cache/</link>
+      <pubDate>Thu, 29 Jan 2026 21:55:26 +0800</pubDate>
+      <guid>https://sword865.github.io/topics/kv-cache/</guid>
       <description></description>
     </item>
     <item>
       <title>LLM</title>
       <link>https://sword865.github.io/topics/llm/</link>
-      <pubDate>Thu, 01 Jan 2026 15:23:41 +0800</pubDate>
+      <pubDate>Thu, 29 Jan 2026 21:55:26 +0800</pubDate>
       <guid>https://sword865.github.io/topics/llm/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Llm-D</title>
+      <link>https://sword865.github.io/topics/llm-d/</link>
+      <pubDate>Thu, 29 Jan 2026 21:55:26 +0800</pubDate>
+      <guid>https://sword865.github.io/topics/llm-d/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Vllm</title>
+      <link>https://sword865.github.io/topics/vllm/</link>
+      <pubDate>Thu, 29 Jan 2026 21:55:26 +0800</pubDate>
+      <guid>https://sword865.github.io/topics/vllm/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Efficient Attention</title>
+      <link>https://sword865.github.io/topics/efficient-attention/</link>
+      <pubDate>Thu, 01 Jan 2026 15:23:41 +0800</pubDate>
+      <guid>https://sword865.github.io/topics/efficient-attention/</guid>
       <description></description>
     </item>
     <item>

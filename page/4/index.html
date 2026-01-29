@@ -181,6 +181,69 @@ code.has-jax {
     <div class="post-list-container post-list-container-no-background">
         
         
+            <a href="/posts/archives/2009-09-20-%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%937-%E5%A4%9A%E7%BB%B4%E7%BC%A9%E6%94%BE/" class="a-block">
+                <div class="post-item-wrapper">
+                    <div class="post-item post-item-no-divider">
+                        <div class="post-item-info-wrapper">
+                            <div class="post-item-title">
+                                算法总结7—多维缩放
+                            </div>
+                            <div class="post-item-summary">
+                                
+                                    <p>一直没有时间写…..唉</p>
+<p>这个东西好像是属于数据可视化？反正就是把多维的数据降到低维空间但是仍然尽可能的保持原来数据之间的距离关系(就是在原来维度下离的远的点仍然离得远，接近的点仍然接近) 。最常见的应该就是降到2维以方便打印和屏幕输出。</p>
+<p>算法的输入是所有数据在高维情况下两两之间的距离（记i与j的距离为Dij）。现在以降到2维为例说明这个算法。</p>
+<p>首先我们把所有数据点随机绘制在一张二维图像上，然后计算它们两两之间的距离dij，然后我们计算出它与高维距离Dij的误差，根据这些误差，我们将每对数据点按比例移近或移远，然后重新计算所有dij，不断重复到我们没法减少误差为止。</p>
+<p>还是来具体说明一下吧，假设有n个点</p>
+<ol>
+<li>输入每一对点之间的距离Dij。</li>
+<li>随机在2维平面生成n个点，点i坐标记为x[i]、y[i]，计算它们两之间的距离，记为dij.</li>
+<li>对所有i 和j计算：eij=(dij-Dij) / Dij，每个点用一个二维的值grad[k]来表示它要移动的距离的比例因子(初始为0,0)。在计算出每个eij后，计算 ((x[i]-x[j]) / dij)* eij，然后把它加到grad[i][x]上，同样把((y[i]-y[j]) / dij)* eij加到grad[i][y]上。</li>
+<li>把所有eij的绝对值相加，为总误差，与前一次的总误差比较(初始化为无穷大)，大于前一次的话就停止。否则把它作为上一次总误差，继续。</li>
+<li>对每个点，新的坐标为x[i] -= rate * grad[i][x]  y[i] -= rate*grad[i][y]，其中rate是开始时自己定义的一个常数参数，该参数影响了点的移动速度。重新计算各个dij，回到3。</li>
+</ol>
+<p>伪码：</p>
+<pre tabindex="0"><code>    for m = 1 to 1000{
+      for i=1 to n
+        for  j = 1 to n
+          dij=sqrt((x[i] – x[j])^2+(y[i]-y[j])^2)
+      for i=1 to n
+        gradi=0
+      totale=0
+      for i= 1 to n
+        for j= 1 to n{
+           if(j==i) continue
+             eij=(dij-Dij) / Dij
+             grad[i][0]+= ((x[i] - x[j]) / dij)* eij
+             grad[i][1]+=((y[i] - y[j]) / dij)* eij
+             totale+=abs(eij)
+           }
+      if (laste &amp;lt; totale) break;
+      laste=totale
+      for i=1 to n{
+        x[i] -= rate * grad[i][x]
+        y[i] - = rate* grad[i][y]
+      }
+    }
+</code></pre><p> </p>
+                                
+                            </div>
+                            <div class="post-item-meta">
+    2009-09-20
+    &emsp;
+    
+    
+    
+    &emsp;
+    
+</div>
+
+                        </div>
+                        
+                        
+                    </div>
+                </div>
+        
             <a href="/posts/archives/2009-09-14-%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%9356-k-%E6%9C%80%E8%BF%91%E9%82%BB%E4%B8%8E%E8%81%9A%E7%B1%BB/" class="a-block">
                 <div class="post-item-wrapper">
                     <div class="post-item post-item-no-divider">
@@ -802,55 +865,6 @@ void union(int x,int y,int d){
                             </div>
                             <div class="post-item-meta">
     2009-08-19
-    &emsp;
-    
-    
-    
-    &emsp;
-    
-</div>
-
-                        </div>
-                        
-                        
-                    </div>
-                </div>
-        
-            <a href="/posts/archives/2009-04-02-%E6%9C%89%E9%87%8D%E5%A4%8D%E7%BB%84%E5%90%88%E6%95%B0/" class="a-block">
-                <div class="post-item-wrapper">
-                    <div class="post-item post-item-no-divider">
-                        <div class="post-item-info-wrapper">
-                            <div class="post-item-title">
-                                有重复组合数
-                            </div>
-                            <div class="post-item-summary">
-                                
-                                    <p>从n个元素中有重复地取r个，不计顺序，则不同的取法有多少种？<br>
-这个问题的答案被称为有重复组合数。结果很简洁，是C(n+r-1,r)。(注：这表示从n+r-1个数中取出r个数的组合数)<br>
-【证明1】<br>
-我们先把原命题具体化。假设这n个元素就是1<del>n这n个数:       <br>
-对于每一种选出来的组合a1，a2，a3，&hellip; ，am，我们要求：a1&lt;=a2&lt;=a3&lt;=&hellip;&lt;=ar，那么最终的目的就是找出这样的a(i)组数。<br>
-这里我们构造b1=a1，b2= a2+1，&hellip; ，b(i)= a(i)+(i-1)，&hellip; ，b(r)= a(r)+(r-1)<br>
-于是b(i)和a(i)一一对应，即所求a(i)组数对应于b(i)组数<br>
-又因为 b1 &lt; b2 &lt; b3 &lt; &hellip; &lt; br 且b(i)取值于1</del> n+(r-1)<br>
-亦即原命题等价于从1~ n+r-1中取得r个不重复排列数<br>
-来源：<a href="http://zhidao.baidu.com/question/16706714.html">http://zhidao.baidu.com/question/16706714.html</a><br>
-【证明2】<br>
-将n个元素看做n个盒子,r看作r个无区别的球,则相当于:<br>
-把r个同样的球放入n个顺次排列的盒子,求不计放球顺序的放法种数<br>
-用0表示盒子,1表示球<br>
-我们把这n个0和r个1写在一行上。<br>
-由于球必须放在盒子中,规定某个0之前,到上一个0为止的1的个数,表示该盒子中装的球数<br>
-注意到最后一个数必须是0<br>
-所以相当于从前面n+r-1个位置中挑出r个位置放1，其余n-1个位置放0<br>
-来源：<a href="http://pengzhe0302.spaces.live.com/blog/cns!529d86ea9ec40ca2!113.entry">http://pengzhe0302.spaces.live.com/blog/cns!529d86ea9ec40ca2!113.entry</a></p>
-<div>
-  <embed id="lingoes_plugin_object" width="0" height="0" type="application/lingoes-npruntime-capture-word-plugin" hidden="true" />
-</div>
-                                
-                            </div>
-                            <div class="post-item-meta">
-    2009-04-02
     &emsp;
     
     

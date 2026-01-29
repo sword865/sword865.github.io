@@ -7,8 +7,43 @@
     <generator>Hugo</generator>
     <language>zh-CN</language>
     <copyright>Copyright (c) 2015. All rights reserved.</copyright>
-    <lastBuildDate>Thu, 01 Jan 2026 15:23:41 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 29 Jan 2026 21:55:26 +0800</lastBuildDate>
     <atom:link href="https://sword865.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Inference</title>
+      <link>https://sword865.github.io/tags/inference/</link>
+      <pubDate>Thu, 29 Jan 2026 21:55:26 +0800</pubDate>
+      <guid>https://sword865.github.io/tags/inference/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>KV Cache</title>
+      <link>https://sword865.github.io/tags/kv-cache/</link>
+      <pubDate>Thu, 29 Jan 2026 21:55:26 +0800</pubDate>
+      <guid>https://sword865.github.io/tags/kv-cache/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>LLM</title>
+      <link>https://sword865.github.io/tags/llm/</link>
+      <pubDate>Thu, 29 Jan 2026 21:55:26 +0800</pubDate>
+      <guid>https://sword865.github.io/tags/llm/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Llm-D</title>
+      <link>https://sword865.github.io/tags/llm-d/</link>
+      <pubDate>Thu, 29 Jan 2026 21:55:26 +0800</pubDate>
+      <guid>https://sword865.github.io/tags/llm-d/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Vllm</title>
+      <link>https://sword865.github.io/tags/vllm/</link>
+      <pubDate>Thu, 29 Jan 2026 21:55:26 +0800</pubDate>
+      <guid>https://sword865.github.io/tags/vllm/</guid>
+      <description></description>
+    </item>
     <item>
       <title>Attention</title>
       <link>https://sword865.github.io/tags/attention/</link>
@@ -21,13 +56,6 @@
       <link>https://sword865.github.io/tags/linear-attention/</link>
       <pubDate>Thu, 01 Jan 2026 15:23:41 +0800</pubDate>
       <guid>https://sword865.github.io/tags/linear-attention/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>LLM</title>
-      <link>https://sword865.github.io/tags/llm/</link>
-      <pubDate>Thu, 01 Jan 2026 15:23:41 +0800</pubDate>
-      <guid>https://sword865.github.io/tags/llm/</guid>
       <description></description>
     </item>
     <item>
@@ -84,13 +112,6 @@
       <link>https://sword865.github.io/tags/deepseek/</link>
       <pubDate>Sat, 03 May 2025 15:51:35 +0800</pubDate>
       <guid>https://sword865.github.io/tags/deepseek/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>VLLM</title>
-      <link>https://sword865.github.io/tags/vllm/</link>
-      <pubDate>Sun, 20 Apr 2025 15:51:35 +0800</pubDate>
-      <guid>https://sword865.github.io/tags/vllm/</guid>
       <description></description>
     </item>
     <item>

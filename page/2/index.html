@@ -181,6 +181,52 @@ code.has-jax {
     <div class="post-list-container post-list-container-no-background">
         
         
+            <a href="/posts/2021/2021-03-08-google-small-towers%E4%B8%AD%E5%A4%9A%E7%9B%AE%E6%A0%87%E4%BC%98%E5%8C%96%E7%9A%84%E6%8E%A2%E7%B4%A2/" class="a-block">
+                <div class="post-item-wrapper">
+                    <div class="post-item post-item-no-divider">
+                        <div class="post-item-info-wrapper">
+                            <div class="post-item-title">
+                                Google Small Towers中多目标优化的探索
+                            </div>
+                            <div class="post-item-summary">
+                                
+                                    <h2 id="背景">背景</h2>
+<p>多目标优化中有一个很常见的跷跷板问题，就是说在训练时，多个目标会相互影响，导致震荡&mdash;你降我升，我升你降。有时间还会出现Nan的结果，需要很仔细的调参测试+清洗数据才能训练出一个理想的模型。</p>
+<p>针对这种问题，自然就有了一些尝试，比如从帕累托最优的角度寻找优化方向（阿里PEA），修改模型结构使Shared部分存储更泛化的信息（腾讯PLE）。不过这两个写的人都挺多了，就写一下Google Small Towers的这篇文章吧。</p>
+<h2 id="主要问题讨论">主要问题讨论</h2>
+<p>文章首先讨论了两个问题：</p>
+<h3 id="1-over-parameterization对多任务模型的适用性">1. Over-parameterization对多任务模型的适用性</h3>
+<p>我们都知道over-parameterization对单任务模型是有价值的，那边对多任务模型是否成立？</p>
+<p>这里以将多个目标的线性组合作为优化目标的例子，认为over-parameterization能够帮助处理各任务优化目标之间的冲突问题（既减少跷跷板问题的出现）。</p>
+<h3 id="2-大型模型和小型模型的多目标学习表现对比">2. 大型模型和小型模型的多目标学习表现对比</h3>
+<p>通过实验对比了大型模型和小型模型进行多目标学习中的不同表现。</p>
+<p>实验中，不论是增加任务相关结构的复杂度，还是增加任务共享结构的复杂度，Pareto frontier都会呈现先变好在变差的趋势。</p>
+<p>因此，文章认为over-parameterization并不利于多目标学习中的共享性，进而伤害了多目标学习中的泛化能力。因此，在多目标学习中，模型大小实质上是对模型有效性和泛化能力的一种平衡。</p>
+<blockquote>
+<p>To summarize our insights, for a multi-task learning model, small models benefit from good multi-task generalization but hurts Pareto efficiency; big models theoretically have better Pareto efficiency but could suffer from loss of generalization.</p></blockquote>
+<h2 id="under-parameterized-self-auxiliaries模型结构">Under-parameterized Self-auxiliaries模型结构</h2>
+<p>文章提出了under-parameterized self-auxiliaries的模型结构：</p>
+<p>首先假设模型的共享方式是所有任务共享最下面的表示层（Hard Sharded，MMOE这种，PLE就不行）,既对任务t，有：</p>
+<p>$$f_{t}(x; \theta_{sh}, \theta_{t})=f_{t}(h(x; \theta_{sh}); \theta_{t}), \forall t$$</p>
+<p>其中 $\theta_t$ 是任务相关的参数， $\theta_sh$ 为共享参数， $h(x;\theta_sh)$ 既为共享的表示层输出。</p>
+                                
+                            </div>
+                            <div class="post-item-meta">
+    2021-03-08
+    &emsp;
+    
+    
+    
+    &emsp;
+    
+</div>
+
+                        </div>
+                        
+                        
+                    </div>
+                </div>
+        
             <a href="/posts/2021/2021-03-07-%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F%E5%91%A8%E8%BE%B9%E8%AE%BE%E6%96%BD--%E7%89%B9%E5%BE%81%E5%95%86%E5%BA%97/" class="a-block">
                 <div class="post-item-wrapper">
                     <div class="post-item post-item-no-divider">
@@ -597,47 +643,6 @@ channel.sendResponse(new BytesRestResponse(BAD_REQUEST, &ldquo;No handler found 
                             </div>
                             <div class="post-item-meta">
     2014-11-17
-    &emsp;
-    
-    
-    
-    &emsp;
-    
-</div>
-
-                        </div>
-                        
-                        
-                    </div>
-                </div>
-        
-            <a href="/posts/archives/2013-08-03-google%E5%9C%A8kdd2013%E4%B8%8A%E5%85%B3%E4%BA%8Ectr%E7%9A%84%E4%B8%80%E7%AF%87%E8%AE%BA%E6%96%87/" class="a-block">
-                <div class="post-item-wrapper">
-                    <div class="post-item post-item-no-divider">
-                        <div class="post-item-info-wrapper">
-                            <div class="post-item-title">
-                                Google在KDD2013上关于CTR的一篇论文
-                            </div>
-                            <div class="post-item-summary">
-                                
-                                    <p>最近在做CTR，刚好Google在KDD发了一篇文章，讲了他们的一些尝试，总结一下：</p>
-<p>先是一些公式的符号说明：</p>
-<p>[<img style="background-image: none; padding-top: 0px; padding-left: 0px; display: inline; padding-right: 0px; border-width: 0px;" title="image" src="/images/archives/04011358-949b9f116ca94563ab5a0efa047697db.png" alt="image" width="447" height="98" border="0" />][1]</p>
-<p>一、优化算法</p>
-<p>CTR中经常用Logistic regression进行训练，一个常用的Loss Function为</p>
-<p><a href="/images/archives/04011358-9e64ee86e7f14dbd8a3da9f8a2bb7c13.png"><img style="background-image: none; padding-top: 0px; padding-left: 0px; display: inline; padding-right: 0px; border-width: 0px;" title="image" src="/images/archives/04011358-03407ff016d04735b28103abc573d428.png" alt="image" width="329" height="34" border="0" /></a></p>
-<p>Online gradient descent(OGD)是一个常用的优化方法，但是在加上L1正则化后，这种方法不能产生有效的稀疏模型。相比之下 Regularized Dual Averaging (RDA)拥有更好的稀疏性，但是精度不如OGD好。</p>
-<p>FTRL-Proximal 方法可以同时得到稀疏性与精确性，不同于OGD的迭代步骤：</p>
-<p><a href="/images/archives/04011358-2e856d4483c64ef0a668ee8c8df2a548.png"><img style="background-image: none; padding-top: 0px; padding-left: 0px; display: inline; padding-right: 0px; border-width: 0px;" title="image" src="/images/archives/04011359-6f55d3e1f55f4389979bec14102120b5.png" alt="image" width="187" height="39" border="0" /></a></p>
-<p>其中$\eta_t$是一个非增的学习率</p>
-<p>FTRL-Proximal通过下式迭代：</p>
-<p><a href="/images/archives/04011359-900ea01f64a547bd99cefe8e375a3a9d.png"><img style="background-image: none; padding-top: 0px; padding-left: 0px; display: inline; padding-right: 0px; border-width: 0px;" title="image" src="/images/archives/04011359-37b635900b57402a9efc1d0fbf12e7d2.png" alt="image" width="482" height="60" border="0" /></a></p>
-<p> </p>
-<p>参数$\sigma$是学习率，一般我们有 ${\sum_{s=1}^t\sigma_s=\frac{1}{\eta_t}}$。</p>
-                                
-                            </div>
-                            <div class="post-item-meta">
-    2013-08-03
     &emsp;
     
     
