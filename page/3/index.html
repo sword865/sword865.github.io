@@ -181,6 +181,61 @@ code.has-jax {
     <div class="post-list-container post-list-container-no-background">
         
         
+            <a href="/posts/archives/2014-11-17-%E5%9F%BA%E4%BA%8E%E6%A0%87%E7%AD%BE%E7%9A%84%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/" class="a-block">
+                <div class="post-item-wrapper">
+                    <div class="post-item post-item-no-divider">
+                        <div class="post-item-info-wrapper">
+                            <div class="post-item-title">
+                                基于标签的推荐系统
+                            </div>
+                            <div class="post-item-summary">
+                                
+                                    <p>一、基于图模型的推荐</p>
+<p>在不考虑标签时，基于二项图有两种随机游走的图推荐算法：</p>
+<p>1.probability spreading</p>
+<p>随机游走算法，在游走中，每个目标得到权重是基于归属者的边计算出来的。</p>
+<p>每次传播(item-&gt;user-&gt;item)后用户Ui的兴趣向量：</p>
+<div>$$f_j^p=\sum_{l=1}^{n}\sum_{s=1}^{m}\frac{a_{lj}a_{ls}a_{is}}{K(U_l)K(I_s)},j=1…m$$</div>
+<p>2.heat spreading</p>
+<p>规则与ProbS相反，在游走中，每个目标得到权重是基于自己的边计算出来的。</p>
+<p>每次传播后用户Ui的兴趣向量：</p>
+<div>$$f_h^p=\frac{1}{K(I_j)}\sum_{l=1}^{n}\sum_{s=1}^{m}\frac{a_{lj}a_{ls}a_{is}}{K(U_l)},j=1…m$$</div>
+<p>其中：</p>
+<div>$$K(I_j)=\sum_{l=1}^{m}a_{lj}$$</div>
+<p>是节目j的邻域大小，</p>
+<div>$$K(U_l)=\sum_{l=1}^{n}a_{ls}$$</div>
+<p>是用户l的邻域大小。</p>
+<p>$a_{ij}$是表示用户i和物品j之间是否有边存在的二元向量。</p>
+<p>相比之下，Heats算法倾向于降低热门item的权重，而Probs中与增强对热门item的推荐。</p>
+<p> </p>
+<p>在随机游走算法的基础上，有基于<span style="color: #333333; font-family: arial; font-size: 13px; line-height: 20.0200004577637px;">三分图的标签推荐算法：</span></p>
+<img title="NewImage.png" src="/images/archives/171255254884996.png" alt="NewImage" width="600" height="305" border="0" />
+<p>图中，用户i的每个item的权重（1 or 0）会同时像用户和标签进行传播，这样每次传播后的兴趣向量：</p>
+<p>$f_j^t=\lambda f_j^p + (1-\lambda) f_j^{pt}$，其中$f_j^p$和$f_j^{pt}$分别是从(item-&gt;user-&gt;item)和(item-&gt;tag-&gt;item)传播后得到的权重。</p>
+<p><span style="font-size: 14px;">二、矩阵分解的张量模型</span></p>
+<p>对三元阵$Y_{(n\times m\times t)}$进行矩阵分解，C为核张量，U,I,T为用户特征，物品特征和标签特征矩阵。</p>
+<p>根据分解结果对Y进行填充。</p>
+<img title="NewImage.png" src="/images/archives/171508548949009.png" alt="NewImage" width="600" height="260" border="0" />
+<p>填充后即得到评分矩阵</p>
+<p><span style="font-size: 14px;"> </span></p>
+                                
+                            </div>
+                            <div class="post-item-meta">
+    2014-11-17
+    &emsp;
+    
+    
+    
+    &emsp;
+    
+</div>
+
+                        </div>
+                        
+                        
+                    </div>
+                </div>
+        
             <a href="/posts/archives/2013-08-03-google%E5%9C%A8kdd2013%E4%B8%8A%E5%85%B3%E4%BA%8Ectr%E7%9A%84%E4%B8%80%E7%AF%87%E8%AE%BA%E6%96%87/" class="a-block">
                 <div class="post-item-wrapper">
                     <div class="post-item post-item-no-divider">
@@ -737,59 +792,6 @@ for ( i = 0; i &amp;lt; nTriangles; i++ )
                             </div>
                             <div class="post-item-meta">
     2009-09-30
-    &emsp;
-    
-    
-    
-    &emsp;
-    
-</div>
-
-                        </div>
-                        
-                        
-                    </div>
-                </div>
-        
-            <a href="/posts/archives/2009-09-25-%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%938-%E9%9D%9E%E8%B4%9F%E7%9F%A9%E9%98%B5%E5%9B%A0%E5%BC%8F%E5%88%86%E8%A7%A3/" class="a-block">
-                <div class="post-item-wrapper">
-                    <div class="post-item post-item-no-divider">
-                        <div class="post-item-info-wrapper">
-                            <div class="post-item-title">
-                                算法总结8—非负矩阵因式分解
-                            </div>
-                            <div class="post-item-summary">
-                                
-                                    <p><strong>数学基础:</strong></p>
-<p>线性代数的矩阵乘法运算。</p>
-<p>   非负矩阵分解是一种特征提取的算法，它尝试从数据集中寻找新的数据行，将这些新找到的数据行加以组合，就可以重新构造出数据集。</p>
-<p>   算法要求输入多个样本数据，每个样本数据都是一个m维数值向量，首先把我们的数据集用矩阵的形式写出来，每一列是一个数据，而每一行是这些数据对应维度的数值。于是我们就有了一个大小为m*n的输入矩阵。而算法的目标就是将这个矩阵分解为另外两个非负矩阵的积。</p>
-<div>$$M_{m,n}=A_{m,r}B_{r,n}$$</div>
-<p>   我们将分解矩阵后新得出的一个维度称为特征，那么在前一个m*r的矩阵中，第i行第j列的值就代表属性i对第j种特征的贡献值，而后一个矩阵的第i行第j列则代表第i种特征对第j个样本的贡献值。这样我们就找出了输入样本的r种特征。</p>
-<p>   r的大小应该依照需要进行选择，比如如果是希望找到某些共性特征，则就要选择较小的r。当我们确定了一个较为合适的r值后，就要想办法确定后面两个矩阵具体的值了。</p>
-<p>   书中给出的算法大致如下：</p>
-<ol>
-<li>定义一个函数计算用来两个矩阵的差异程度（每个对应元素相减后平方的和）</li>
-<li>随机生成2个矩阵(m<em>r维和r</em>n维)记为A（权重矩阵）,B（特征矩阵）</li>
-<li>计算A<em>B与输入的m</em>n的数据矩阵的差异，足够小则停止，否则继续</li>
-<li>按一定规则调整A，B的值后转3.</li>
-</ol>
-<p>对于调整的方法，可以用模拟退火（下一篇文章中会提到）等多种算法，书里使用的是乘法更新法则，该法则我没有认真去看….感兴趣的可以去看论文….英文的…</p>
-<p><a href="http://hebb.mit.edu/people/seung/papers/nmfconverge.pdf">http://hebb.mit.edu/people/seung/papers/nmfconverge.pdf</a>.</p>
-<p>算法如下：</p>
-<p>hn 转置后的权重矩阵和数据矩阵相乘的结果</p>
-<p>hd 转置后的权重矩阵和原权重矩阵相乘再乘特征矩阵的结果</p>
-<p>wn数据矩阵与转置后的特征矩阵相乘的结果</p>
-<p>wd权重矩阵与特征矩阵相乘，再与转置后的特诊矩阵相乘得到的矩阵</p>
-<p>为了更新特征矩阵和权重矩阵，我们先把上面所有矩阵变为数组．然后把特征矩阵中每一个值与hn中对应值相乘，并除以hd中对应的值．类似的，我们再将权重矩阵中每一个值与wn中的对应值相乘，并除以wd中对应的值．</p>
-<p>最近的算法都很好理解的样子…不过写起来还是挺麻烦的….还有最后一篇优化了，内容挺多，包括模拟退火和遗传算法….恩</p>
-<div>
-  <embed id="lingoes_plugin_object" width="0" height="0" type="application/lingoes-npruntime-capture-word-plugin" hidden="true" />
-</div>
-                                
-                            </div>
-                            <div class="post-item-meta">
-    2009-09-25
     &emsp;
     
     

@@ -181,6 +181,53 @@ code.has-jax {
     <div class="post-list-container post-list-container-no-background">
         
         
+            <a href="/posts/2025/2026-02-10-linear-attention%E5%9F%BA%E7%A1%80-%E9%83%A8%E7%BD%B2%E7%AF%87/" class="a-block">
+                <div class="post-item-wrapper">
+                    <div class="post-item post-item-no-divider">
+                        <div class="post-item-info-wrapper">
+                            <div class="post-item-title">
+                                Linear Attention基础-部署篇
+                            </div>
+                            <div class="post-item-summary">
+                                
+                                    <p>系列的前两篇文章写了线性注意力基本的理论和工程(Kernel)，但是相关的内容只是针对开发环境的一些讨论，实际上在大规模部署时，我们为了更好地利用资源，往往需要做很多优化，这篇文章就从这些落地优化的角度聊一下线性注意力，以及为什么我们会认为现在线性注意力的infra只是在初级阶段。</p>
+<h1 id="量化">量化</h1>
+<h2 id="llmint8-和-massive-activations">LLM.int8() 和 Massive Activations</h2>
+<p>早在ChatGPT爆火前，就有一些研究讨论了Full-Attention架构在量化时遇到的问题，在<a href="https://arxiv.org/pdf/2208.07339">LLM.int8()</a>这篇论文中，就提到在Full-Attention的激活值中有部分离群点会影响量化效果，因此建议把离群点和其他值分开处理：</p>
+<img width="800"  src="/images/2026/20260210/llm_int8.png" class="center" />
+<p>这一现象被称为Massive Activations，目前业界对这个现象进行了大量的研究，其中两个主要因素就是Softmax 和 RoPE。</p>
+<p><strong>Softmax 归一化</strong>：Softmax有着强制要求“总和为1”的特性，但是在实际的LLM运算中，我们往往有更复杂的需求（比如有时我们输入模型的问题比较简单，一个60层的网络可能在前40层就已经完成了计算，对于后面层我们需要的是一个什么都不做的操作，那么在残差网络的帮助下我们其实需要一个0输出），为了满足这种需求就会出现类似Attention Sink的现象，导致注意力集中于单一无关标记，同时产生<strong>massive activation</strong>。</p>
+<p><strong>RoPE位置编码</strong>：在文章<a href="https://arxiv.org/pdf/2502.01563">Massive Values in Self-Attention Modules are the Key to Contextual Knowledge Understanding</a>就提到：RoPE在Query/Key的通道维度对上应用了带有频率性角度参数的旋转变换，该变换依赖相对位置，同时在某些维度的投影上显著放大或缩小分量，从而导致部分维度“成簇集中”，出现了异常的spike值。 实际上，该文章也在实验中发现凡是采用 RoPE 的模型（如 LLaMA、Qwen、Gemma、Falcon 等）都会展示这种 massive values stripes，而不使用 RoPE 的模型（如 GPT-2、OPT、Jamba）则没有这一现象。</p>
+<h2 id="linear-attention量化">Linear Attention量化</h2>
+<p>虽然在Linear Attention中没有了Softmax和RoPE的干扰，大大缓解了上面提到的问题。比如<a href="https://arxiv.org/pdf/2601.22966v1">A Unified View of Attention and Residual Sinks</a>研究发现：将Full(Softmax) Attention替换为Linear-Attention后，隐藏状态的峰值激活从6000降到510，问题的复杂度似乎减少了很多。</p>
+<p>但是，其实问题并没有被彻底解决，在不同的Linear Attention架构中仍然有着不同的问题：</p>
+<ol>
+<li><strong>状态累积</strong>：Linear Attention的递归特性导致数值误差或特定模式在时间步上不断累积。例如Mamba的<strong>PScan</strong>，在长序列下容易产生“长度诱导”的数值退化。</li>
+<li><strong>门控放大效应</strong>：GLA/Mamba 等架构大量使用的门控机制，其权重往往呈现“稀疏-极端”的双边分布，在不同的channel间拉大值的范围差异。</li>
+</ol>
+<p>因此，针对Full-Attention设计的量化方案有些（如LLM.int8()）可以用于Linear-Attention，但是也有些（如 SmoothQuant）难以直接迁移到Linear Attention领域，我们会需要针对不同架构设计架构感知的专用量化策略。</p>
+<p>不过，相比下面两个领域，Linear Attention在模型量化领域的研究还是最多，相对最成熟的一个。</p>
+<h1 id="prefix-cache">Prefix Cache</h1>
+<p>如果说量化并非LLM部署时的必选项，那么Prefix Cache（前缀缓存）一定是大规模部署时绕不过的一个策略。它允许复用之前的计算结果（KV Cache），对于多轮对话或Shared System Prompt场景，能极大地提升首字延迟TTFT和系统吞吐。</p>
+<p>然而，Linear Attention并不能直接无缝的集成这一功能：</p>
+                                
+                            </div>
+                            <div class="post-item-meta">
+    2026-02-10
+    &emsp;
+    
+    
+    
+    &emsp;
+    
+</div>
+
+                        </div>
+                        
+                        
+                    </div>
+                </div>
+        
             <a href="/posts/2025/2026-01-29-%E6%A8%A1%E5%9E%8B%E5%88%86%E7%89%87kv-cache%E5%92%8C%E6%8E%A8%E7%90%86%E5%8A%A0%E9%80%9F%E7%9A%84%E4%B8%80%E4%BA%9B%E6%80%9D%E8%80%83/" class="a-block">
                 <div class="post-item-wrapper">
                     <div class="post-item post-item-no-divider">
@@ -676,58 +723,6 @@ tile_scheduler_metadata, num_splits = get_mla_metadata(cache_seqlens, s_q * h_q 
                             </div>
                             <div class="post-item-meta">
     2025-05-03
-    &emsp;
-    
-    
-    
-    &emsp;
-    
-</div>
-
-                        </div>
-                        
-                        
-                    </div>
-                </div>
-        
-            <a href="/posts/2025/2025-04-20-vllm-paged-attention%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/" class="a-block">
-                <div class="post-item-wrapper">
-                    <div class="post-item post-item-no-divider">
-                        <div class="post-item-info-wrapper">
-                            <div class="post-item-title">
-                                vLLM Paged Attention代码分析
-                            </div>
-                            <div class="post-item-summary">
-                                
-                                    <p>3月底整理了一个关于经典Paged Attention算法的ppt, 想起这个几年没写过的blog，把PPT改成一篇文章证明我还活着(-_-)。</p>
-<img width="500"  src="/images/2025/20250420/paged_attention.png" class="center" />
-<h2 id="vllm-的-paged-attention">vLLM 的 Paged Attention</h2>
-<p>开始前先说明一下，vLLM里的Paged Attention Kernel是有好几个不同的版本的，大概是下面这样子：</p>
-<p>vLLM早期版本：</p>
-<ul>
-<li>Prefilling -&gt; Flash Attention的flash_attn_varlen_func</li>
-<li>Dedocding -&gt; 自己实现的Paged Attention
-<ul>
-<li>paged_attention_v1 : 用于比较短的sequence</li>
-<li>paged_attention_v2 : 用于不想用v1的情况 :)</li>
-</ul>
-</li>
-</ul>
-<p>源码大概是这样的：</p>
-<pre tabindex="0"><code>    # NOTE(woosuk): We use a simple heuristic to decide whether to use
-    # PagedAttention V1 or V2. If the number of partitions is 1, we use
-    # V1 to avoid the overhead of reduction. Also, if the number of
-    # sequences or heads is large, we use V1 since there is enough work
-    # to parallelize.
-    # TODO(woosuk): Tune this heuristic.
-    # For context len &gt; 8192, use V2 kernel to avoid shared memory
-    # shortage.
-    use_v1 = (max_seq_len &lt;= 8192 and (max_num_partitions == 1 or num_seqs * num_heads &gt; 512))
-</code></pre><p>vLLM 最新版本就已经全部转向Flash Attention， 用cutlass实现了。</p>
-                                
-                            </div>
-                            <div class="post-item-meta">
-    2025-04-20
     &emsp;
     
     

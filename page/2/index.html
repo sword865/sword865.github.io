@@ -181,6 +181,58 @@ code.has-jax {
     <div class="post-list-container post-list-container-no-background">
         
         
+            <a href="/posts/2025/2025-04-20-vllm-paged-attention%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/" class="a-block">
+                <div class="post-item-wrapper">
+                    <div class="post-item post-item-no-divider">
+                        <div class="post-item-info-wrapper">
+                            <div class="post-item-title">
+                                vLLM Paged Attention代码分析
+                            </div>
+                            <div class="post-item-summary">
+                                
+                                    <p>3月底整理了一个关于经典Paged Attention算法的ppt, 想起这个几年没写过的blog，把PPT改成一篇文章证明我还活着(-_-)。</p>
+<img width="500"  src="/images/2025/20250420/paged_attention.png" class="center" />
+<h2 id="vllm-的-paged-attention">vLLM 的 Paged Attention</h2>
+<p>开始前先说明一下，vLLM里的Paged Attention Kernel是有好几个不同的版本的，大概是下面这样子：</p>
+<p>vLLM早期版本：</p>
+<ul>
+<li>Prefilling -&gt; Flash Attention的flash_attn_varlen_func</li>
+<li>Dedocding -&gt; 自己实现的Paged Attention
+<ul>
+<li>paged_attention_v1 : 用于比较短的sequence</li>
+<li>paged_attention_v2 : 用于不想用v1的情况 :)</li>
+</ul>
+</li>
+</ul>
+<p>源码大概是这样的：</p>
+<pre tabindex="0"><code>    # NOTE(woosuk): We use a simple heuristic to decide whether to use
+    # PagedAttention V1 or V2. If the number of partitions is 1, we use
+    # V1 to avoid the overhead of reduction. Also, if the number of
+    # sequences or heads is large, we use V1 since there is enough work
+    # to parallelize.
+    # TODO(woosuk): Tune this heuristic.
+    # For context len &gt; 8192, use V2 kernel to avoid shared memory
+    # shortage.
+    use_v1 = (max_seq_len &lt;= 8192 and (max_num_partitions == 1 or num_seqs * num_heads &gt; 512))
+</code></pre><p>vLLM 最新版本就已经全部转向Flash Attention， 用cutlass实现了。</p>
+                                
+                            </div>
+                            <div class="post-item-meta">
+    2025-04-20
+    &emsp;
+    
+    
+    
+    &emsp;
+    
+</div>
+
+                        </div>
+                        
+                        
+                    </div>
+                </div>
+        
             <a href="/posts/2021/2021-03-08-google-small-towers%E4%B8%AD%E5%A4%9A%E7%9B%AE%E6%A0%87%E4%BC%98%E5%8C%96%E7%9A%84%E6%8E%A2%E7%B4%A2/" class="a-block">
                 <div class="post-item-wrapper">
                     <div class="post-item post-item-no-divider">
@@ -588,61 +640,6 @@ channel.sendResponse(new BytesRestResponse(BAD_REQUEST, &ldquo;No handler found 
                             </div>
                             <div class="post-item-meta">
     2015-02-04
-    &emsp;
-    
-    
-    
-    &emsp;
-    
-</div>
-
-                        </div>
-                        
-                        
-                    </div>
-                </div>
-        
-            <a href="/posts/archives/2014-11-17-%E5%9F%BA%E4%BA%8E%E6%A0%87%E7%AD%BE%E7%9A%84%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/" class="a-block">
-                <div class="post-item-wrapper">
-                    <div class="post-item post-item-no-divider">
-                        <div class="post-item-info-wrapper">
-                            <div class="post-item-title">
-                                基于标签的推荐系统
-                            </div>
-                            <div class="post-item-summary">
-                                
-                                    <p>一、基于图模型的推荐</p>
-<p>在不考虑标签时，基于二项图有两种随机游走的图推荐算法：</p>
-<p>1.probability spreading</p>
-<p>随机游走算法，在游走中，每个目标得到权重是基于归属者的边计算出来的。</p>
-<p>每次传播(item-&gt;user-&gt;item)后用户Ui的兴趣向量：</p>
-<div>$$f_j^p=\sum_{l=1}^{n}\sum_{s=1}^{m}\frac{a_{lj}a_{ls}a_{is}}{K(U_l)K(I_s)},j=1…m$$</div>
-<p>2.heat spreading</p>
-<p>规则与ProbS相反，在游走中，每个目标得到权重是基于自己的边计算出来的。</p>
-<p>每次传播后用户Ui的兴趣向量：</p>
-<div>$$f_h^p=\frac{1}{K(I_j)}\sum_{l=1}^{n}\sum_{s=1}^{m}\frac{a_{lj}a_{ls}a_{is}}{K(U_l)},j=1…m$$</div>
-<p>其中：</p>
-<div>$$K(I_j)=\sum_{l=1}^{m}a_{lj}$$</div>
-<p>是节目j的邻域大小，</p>
-<div>$$K(U_l)=\sum_{l=1}^{n}a_{ls}$$</div>
-<p>是用户l的邻域大小。</p>
-<p>$a_{ij}$是表示用户i和物品j之间是否有边存在的二元向量。</p>
-<p>相比之下，Heats算法倾向于降低热门item的权重，而Probs中与增强对热门item的推荐。</p>
-<p> </p>
-<p>在随机游走算法的基础上，有基于<span style="color: #333333; font-family: arial; font-size: 13px; line-height: 20.0200004577637px;">三分图的标签推荐算法：</span></p>
-<img title="NewImage.png" src="/images/archives/171255254884996.png" alt="NewImage" width="600" height="305" border="0" />
-<p>图中，用户i的每个item的权重（1 or 0）会同时像用户和标签进行传播，这样每次传播后的兴趣向量：</p>
-<p>$f_j^t=\lambda f_j^p + (1-\lambda) f_j^{pt}$，其中$f_j^p$和$f_j^{pt}$分别是从(item-&gt;user-&gt;item)和(item-&gt;tag-&gt;item)传播后得到的权重。</p>
-<p><span style="font-size: 14px;">二、矩阵分解的张量模型</span></p>
-<p>对三元阵$Y_{(n\times m\times t)}$进行矩阵分解，C为核张量，U,I,T为用户特征，物品特征和标签特征矩阵。</p>
-<p>根据分解结果对Y进行填充。</p>
-<img title="NewImage.png" src="/images/archives/171508548949009.png" alt="NewImage" width="600" height="260" border="0" />
-<p>填充后即得到评分矩阵</p>
-<p><span style="font-size: 14px;"> </span></p>
-                                
-                            </div>
-                            <div class="post-item-meta">
-    2014-11-17
     &emsp;
     
     
